@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mask {
+    @apply fixed top-0 right-0 bottom-0 left-0 bg-black opacity-50 h-full flex z-0
+}
+
+.title {
+    @apply font-bold text-xl dark:text-white
+}
+
+.theme-cursor-blue {
+    @apply cursor-pointer hover:bg-hover-light-blue dark:hover:bg-hover-dark-blue rounded hover:bg-opacity-80 dark:hover:bg-opacity-80
+}
+
+.button-theme-cursor-blue {
+    @apply cursor-pointer hover:bg-light-blue dark:hover:bg-black-blue rounded hover:bg-opacity-80 dark:hover:bg-opacity-80
+}
+
+.theme-cursor-pink {
+    @apply cursor-pointer hover:bg-hover-light-pink dark:hover:bg-hover-dark-pink rounded hover:bg-opacity-80 dark:hover:bg-opacity-80
+}
+
+.center {
+    @apply flex justify-center items-center
+}
+
+/*需要自行设置线的颜色(background)、位置(transform: translateX(%) left right...)*/
+.before-line {
+    @apply before:content-[''] before:block before:absolute before:bottom-0 before:h-0.5 before:w-0 before:transform before:duration-300
+}
+
+.after-line {
+    @apply after:content-[''] after:block after:absolute after:bottom-0 after:h-0.5 after:w-0 after:transform after:duration-300
+}
+
+/*分隔线*/
+.border-line-between {
+    @apply border-b border-b-light-line-between dark:border-b-dark-line-between
+}
