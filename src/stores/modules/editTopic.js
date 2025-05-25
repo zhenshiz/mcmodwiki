@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { modList } from '@/assets/mod/mod.js'
+import { language } from '@/assets/translatable/translatable.js'
 
 export const useEditTopicStore = defineStore(
   'edit-topic',
@@ -47,9 +49,7 @@ export const useEditTopicStore = defineStore(
     const resetTopicInfo = () => {
       content.value = ''
       mcVersion.value = ''
-      modLoader.value = ''
       modVersion.value = ''
-      language.value = ''
       mode.value = 'preview'
       textCount.value = 0
       autosaveCount.value = 0

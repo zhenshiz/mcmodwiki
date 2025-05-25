@@ -1,3 +1,5 @@
+//代码来自 https://github.com/KUN1007/kun-galgame-nuxt3
+
 import { linkSchema } from '@milkdown/preset-commonmark'
 import { $command } from '@milkdown/utils'
 

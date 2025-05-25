@@ -13,6 +13,7 @@ import { modList, moreUtilList } from '@/assets/mod/mod.js'
 const router = useRouter()
 const pageStore = usePageStore()
 const isDark = computed(() => pageStore.isDark)
+const lang = computed(() => pageStore.setting.language)
 const smSettingVisible = ref(false)
 const searchVisible = ref(false)
 //移动端
@@ -25,7 +26,7 @@ const languageList = ref(language.values())
 const search = ref('')
 const searchList = ref([])
 const change = () => {
-  searchList.value = modList.filter(item => translatable(item.lang).toLowerCase().includes(search.value.toLowerCase()))
+  searchList.value = modList.filter(item => translatable(lang, item.lang).toLowerCase().includes(search.value.toLowerCase()))
 }
 
 const toggleTheme = () => {
@@ -50,7 +51,7 @@ const closeSmSetting = () => {
 }
 
 const gotoModWiki = item => {
-  router.push(`/wiki/${translatable(item.lang)}`)
+  router.push(`/wiki/${translatable(lang, item.lang)}`)
 }
 
 const openWeb = (url) => {
@@ -140,7 +141,7 @@ onBeforeUnmount(() => {
                     @click="()=>searchVisible=true" />
             </template>
             <div class="text-[#3487d5] text-center text-sm p-1">
-              {{ translatableArg('layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
+              {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
               }}
             </div>
           </Popover>
@@ -148,15 +149,15 @@ onBeforeUnmount(() => {
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
                 hoverLineType="toFlanks"
                 :href="`/main`">
-            {{ translatable('layout.link.1') }}
+            {{ translatable(lang, 'layout.link.1') }}
           </Link>
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks"
                 :href="`/author`">
-            {{ translatable('layout.link.2') }}
+            {{ translatable(lang, 'layout.link.2') }}
           </Link>
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks"
                 :href="`/editor`">
-            {{ translatable('layout.link.3') }}
+            {{ translatable(lang, 'layout.link.3') }}
           </Link>
           <Popover
             v-if="modList.length"
@@ -164,14 +165,14 @@ onBeforeUnmount(() => {
           >
             <template #trigger>
               <div class="cursor-pointer m-2 text-lg text-text-blue whitespace-nowrap">
-                {{ translatable('layout.link.4') }}
+                {{ translatable(lang, 'layout.link.4') }}
               </div>
             </template>
             <div class="size-full flex flex-col">
               <Link v-for="item in modList" class="m-2 text-lg text-text-blue"
-                    :href="`/wiki/${translatable(item.lang)}`"
+                    :href="`/wiki/${translatable(lang,item.lang)}`"
                     hoverLineType="toFlanks">
-                {{ translatable(item.lang) }}
+                {{ translatable(lang, item.lang) }}
               </Link>
             </div>
           </Popover>
@@ -181,14 +182,14 @@ onBeforeUnmount(() => {
           >
             <template #trigger>
               <div class="cursor-pointer text-lg text-text-blue m-2 whitespace-nowrap">
-                {{ translatable('layout.link.5') }}
+                {{ translatable(lang, 'layout.link.5') }}
               </div>
             </template>
             <div class="size-full flex flex-col">
               <Link v-for="item in moreUtilList" class="m-2 text-lg text-text-blue"
                     :href="item.link"
                     hoverLineType="toFlanks">
-                {{ translatable(item.lang) }}
+                {{ translatable(lang,item.lang) }}
               </Link>
             </div>
           </Popover>
@@ -202,16 +203,19 @@ onBeforeUnmount(() => {
               </template>
               <div class="size-full flex flex-col dark:bg-dark-blue">
                 <div
-                  @click="pageStore.setSetting({ language: item.value })"
+                  @click="()=>{
+                    pageStore.setSetting({ language: item.value })
+                    console.log(translatable(lang,'main.title.1'))
+                  }"
                   class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue"
                   v-for="item in languageList">
-                  {{ item.text }}
+                  {{ item.label }}
                 </div>
                 <div class="flex flex-row items-center p-2 dark:text-white theme-cursor-blue"
                      @click="openWeb(webHref.translatable)">
                   <div>
-                    {{ translatable('layout.translatable.1') }}<br>
-                    {{ translatable('layout.translatable.2') }}
+                    {{ translatable(lang, 'layout.translatable.1') }}<br>
+                    {{ translatable(lang, 'layout.translatable.2') }}
                   </div>
                   <Icon class="ml-2 cursor-pointer" width="25"
                         height="25" icon="quill:link-out" />
@@ -242,7 +246,7 @@ onBeforeUnmount(() => {
                     @click="()=>searchVisible=true" />
             </template>
             <div class="text-[#3487d5] text-center text-sm p-1">
-              {{ translatableArg('layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
+              {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
               }}
             </div>
           </Popover>
@@ -260,25 +264,25 @@ onBeforeUnmount(() => {
         <div class="w-[80%] flex items-start">
           <Link class="m-2 mt-10 text-lg text-text-blue whitespace-nowrap"
                 :href="`/main`">
-            {{ translatable('layout.link.1') }}
+            {{ translatable(lang, 'layout.link.1') }}
           </Link>
         </div>
         <div class="w-[80%] flex items-start">
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
                 :href="`/author`">
-            {{ translatable('layout.link.2') }}
+            {{ translatable(lang, 'layout.link.2') }}
           </Link>
         </div>
         <div class="w-[80%] flex items-start">
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
                 :href="`/editor`">
-            {{ translatable('layout.link.3') }}
+            {{ translatable(lang, 'layout.link.3') }}
           </Link>
         </div>
         <div class="w-[80%] flex items-start justify-between text-text-blue"
              @click="()=>modVisible = !modVisible">
           <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
-            {{ translatable('layout.link.5') }}
+            {{ translatable(lang, 'layout.link.5') }}
           </div>
           <div class="m-2">
             +
@@ -286,15 +290,15 @@ onBeforeUnmount(() => {
         </div>
         <div v-show="modVisible" class="w-[95%] flex flex-col border border-text-blue">
           <Link v-for="item in modList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(item.lang)}`">
-            {{ translatable(item.lang) }}
+                :href="`/wiki/${translatable(lang,item.lang)}`">
+            {{ translatable(lang,item.lang) }}
           </Link>
         </div>
 
         <div class="w-[80%] flex items-start justify-between text-text-blue"
              @click="()=>moreVisible = !moreVisible">
           <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
-            {{ translatable('layout.link.4') }}
+            {{ translatable(lang, 'layout.link.4') }}
           </div>
           <div class="m-2">
             +
@@ -302,8 +306,8 @@ onBeforeUnmount(() => {
         </div>
         <div v-show="moreVisible" class="w-[95%] flex flex-col border border-text-blue">
           <Link v-for="item in moreUtilList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(item.lang)}`">
-            {{ translatable(item.lang) }}
+                :href="`/wiki/${translatable(lang,item.lang)}`">
+            {{ translatable(lang,item.lang) }}
           </Link>
         </div>
 
@@ -321,8 +325,8 @@ onBeforeUnmount(() => {
             class="flex flex-row items-center justify-around p-2 dark:text-white theme-cursor-blue"
             @click="openWeb(webHref.translatable)">
             <div>
-              {{ translatable('layout.translatable.1') }}<br>
-              {{ translatable('layout.translatable.2') }}
+              {{ translatable(lang, 'layout.translatable.1') }}<br>
+              {{ translatable(lang, 'layout.translatable.2') }}
             </div>
             <Icon class="ml-2 cursor-pointer" width="25"
                   height="25" icon="quill:link-out" />
@@ -367,7 +371,7 @@ onBeforeUnmount(() => {
     <template #content>
       <div class="flex flex-col size-full">
         <Input v-model="search" @update:modelValue="change"
-               :placeholder="translatable('layout.search.2')"
+               :placeholder="translatable(lang,'layout.search.2')"
                default-model="search" is-debounce>
           <template #header>
             <div class="w-[25px] h-[25px] center dark:text-white">
@@ -381,9 +385,9 @@ onBeforeUnmount(() => {
           <div class="flex flex-row size-full">
             #&nbsp;
             <div class="flex flex-row justify-between size-full">
-              <div>{{ translatable(item.lang) }}</div>
+              <div>{{ translatable(lang,item.lang) }}</div>
               <div class="ellipsis w-[300px] text-end">
-                {{ translatable(item.description) }}
+                {{ translatable(lang,item.description) }}
               </div>
             </div>
           </div>

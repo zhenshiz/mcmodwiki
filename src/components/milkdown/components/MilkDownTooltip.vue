@@ -17,6 +17,15 @@ const [loading, get] = useInstance()
 
 const divRef = ref()
 let tooltipProvider
+
+const tooltipList = ref([
+  { icon: 'lucide:bold', key: toggleStrongCommand.key },
+  { icon: 'lucide:italic', key: toggleEmphasisCommand.key },
+  { icon: 'lucide:strikethrough', key: toggleStrikethroughCommand.key },
+  { icon: 'lucide:code-xml', key: toggleInlineCodeCommand.key },
+  { icon: 'lucide:link', key: toggleLinkCommand.key }
+])
+
 onMounted(() => {
   tooltipProvider = new TooltipProvider({
     content: divRef.value
@@ -39,22 +48,10 @@ const call = (command, payload = '') => {
 </script>
 
 <template>
-  <div v-if="loading" ref="divRef"
+  <div ref="divRef"
        class="absolute flex bg-white border border-text-blue rounded backdrop-blur-[10px] z-[9999] data-[show=false]:hidden dark:bg-dark-blue">
-    <button @click="call(toggleStrongCommand.key)">
-      <Icon icon="lucide:bold" class="dark:text-white"></Icon>
-    </button>
-    <button @click="call(toggleEmphasisCommand.key)">
-      <Icon icon="lucide:italic" class="dark:text-white"></Icon>
-    </button>
-    <button @click="call(toggleStrikethroughCommand.key)">
-      <Icon icon="lucide:strikethrough" class="dark:text-white"></Icon>
-    </button>
-    <button @click="call(toggleInlineCodeCommand.key)">
-      <Icon icon="lucide:code-xml" class="dark:text-white"></Icon>
-    </button>
-    <button @click="call(toggleLinkCommand.key)">
-      <Icon icon="lucide:link" class="dark:text-white"></Icon>
+    <button v-for="item in tooltipList" @click="call(item.key)">
+      <Icon :icon="item.icon" class="dark:text-white" />
     </button>
   </div>
 </template>

@@ -9,11 +9,11 @@ const props = defineProps({
   content: String,
   positiveText: {
     type: String,
-    default: translatable('component.dialog.positive')
+    default: translatable(usePageStore().setting.language,'component.dialog.positive')
   },
   negativeText: {
     type: String,
-    default: translatable('component.dialog.negative')
+    default: translatable(usePageStore().setting.language,'component.dialog.negative')
   },
   type: {
     type: String,

@@ -1,5 +1,7 @@
 //复制文字到剪切板
 import { useMessage } from '@/components/register/useMessage.js'
+import { translatable } from '@/assets/translatable/translatable.js'
+import { throttle } from 'lodash'
 
 export const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text)
@@ -82,7 +84,7 @@ export const fullScreen = (function() {
     } else if (element.msRequestFullscreen) { // Internet Explorer/Edge
       element.msRequestFullscreen()
     } else {
-      useMessage().warning('浏览器不支持全屏 API')
+      useMessage().warning(translatable('message.error.no.full'))
     }
   }
 })()
@@ -100,4 +102,3 @@ export const getOperatingSystem = () => {
   }
   return 'Unknown'
 }
-

@@ -48,6 +48,7 @@ import sql from 'refractor/lang/sql'
 import tsx from 'refractor/lang/tsx'
 import typescript from 'refractor/lang/typescript'
 import markdown from 'refractor/lang/markdown'
+import { video } from '@/components/milkdown/plugin/video.js'
 
 const props = defineProps({
   valueMarkdown: String,
@@ -83,6 +84,7 @@ const editorInfo = useEditor((root) => {
       })
 
       ctx.set(prismConfig.key, {
+        /*** @param {Refractor} refractor*/
         configureRefractor: (refractor) => {
           refractor.register(c)
           refractor.register(bash)
@@ -133,8 +135,6 @@ const editorInfo = useEditor((root) => {
     .use(indent)
     //上传和创建图像
     .use(upload)
-    //数学
-    .use(math)
     //对codeBlock的高亮支持
     .use(prism)
     //自动检测和应用 Markdown 语法
@@ -147,10 +147,12 @@ const editorInfo = useEditor((root) => {
     .use(linkUpdatePopup)
     //新增链接
     .use(insertLinkPlugin)
+    //视频
+    .use(video)
+    //数学
+    .use(math)
     //图
     .use(diagram)
-    //视频
-    // .use(video)
     //自动修改字数
   return props.mode ? editor.use(
       $prose(
@@ -169,7 +171,7 @@ const editorInfo = useEditor((root) => {
 <template>
   <div ref="container">
     <MilkDownMenu v-if="isShowMenu" :editor-info="editorInfo"
-                  :is-show-upload-image="true" :mode="mode" @update:mode="arg=>emit('update:mode',arg)" />
+                  :mode="mode" @update:mode="arg=>emit('update:mode',arg)" />
     <Milkdown class="content" :style="{minHeight:editorHeight}" />
   </div>
 </template>
@@ -186,7 +188,7 @@ const editorInfo = useEditor((root) => {
     margin-right: auto;
     margin-top: 20px;
 
-    h1, h2 {
+    h1, h2, h3, h4, h5, h6 {
       line-height: 1.5; /* 设置行高，确保文本不会与下一行重叠 */
     }
 
@@ -207,13 +209,77 @@ const editorInfo = useEditor((root) => {
     }
 
     h2 {
-      font-size: 25px;
+      font-size: 28px;
       font-weight: 600;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 20px;
+        font-size: 23px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 21px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h4 {
+      font-size: 24px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 19px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h5 {
+      font-size: 22px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 17px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h6 {
+      font-size: 20px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 15px;
         font-weight: 600;
         font-style: italic;
         margin-right: 10px;

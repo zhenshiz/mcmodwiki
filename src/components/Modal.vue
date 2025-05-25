@@ -27,11 +27,11 @@ const props = defineProps({
   },
   negativeText: {
     type: String,
-    default: translatable('component.modal.negative')
+    default: translatable(usePageStore().setting.language, 'component.modal.negative')
   },
   positiveText: {
     type: String,
-    default: translatable('component.modal.positive')
+    default: translatable(usePageStore().setting.language, 'component.modal.positive')
   },
   //start | center | end
   buttonJustify: {

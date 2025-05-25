@@ -16,20 +16,22 @@ import {
   wrapInHeadingCommand,
   wrapInOrderedListCommand
 } from '@milkdown/preset-commonmark'
-import { insertTableCommand, toggleStrikethroughCommand } from '@milkdown/preset-gfm'
+import { toggleStrikethroughCommand } from '@milkdown/preset-gfm'
 import { useMessage } from '@/components/register/useMessage.js'
 import { insertLinkPlugin } from '@/components/milkdown/plugin/hyperlinkInsert.js'
 import Modal from '@/components/Modal.vue'
 import Input from '@/components/Input.vue'
 import { generateUUID } from '@/utils/format.js'
 import { translatable } from '@/assets/translatable/translatable.js'
+import { insertVideoCommand } from '@/components/milkdown/plugin/video.js'
+import { usePageStore } from '@/stores/index.js'
 
 const message = useMessage()
+const lang = computed(() => usePageStore().setting.language)
 const props = defineProps({
   editorInfo: {
     required: true
   },
-  isShowUploadImage: Boolean,
   isPersistence: {
     type: Boolean,
     default: true
@@ -40,6 +42,7 @@ const { get } = props.editorInfo
 const isShowInsertLink = ref(false)
 const isShowUploadPic = ref(false)
 const isShowTable = ref(false)
+const isShowVideo = ref(false)
 const url = ref({
   href: '',
   text: ''
@@ -49,6 +52,7 @@ const tableModal = ref({
   row: 0,
   col: 0
 })
+const videoUrl = ref('')
 const emit = defineEmits(['update:mode'])
 
 const call = (command, payload = {}, callback = () => {
@@ -60,7 +64,7 @@ const call = (command, payload = {}, callback = () => {
 
 const uploadUrlPic = async () => {
   if (picUrl.value === '') {
-    message.warning(translatable('message.warn.url.empty'))
+    message.warning(translatable(lang, 'message.warn.url.empty'))
     return
   }
   const fileName = generateUUID()
@@ -72,6 +76,67 @@ const uploadUrlPic = async () => {
   })
   isShowUploadPic.value = false
 }
+
+const commandList = ref([
+  { icon: 'lucide:bold', lang: 'milkdown.menu.bold', click: () => call(toggleStrongCommand.key) },
+  {
+    icon: 'lucide:italic',
+    lang: 'milkdown.menu.italic',
+    click: () => call(toggleEmphasisCommand.key)
+  },
+  {
+    icon: 'lucide:strikethrough',
+    lang: 'milkdown.menu.strikethrough',
+    click: () => call(toggleStrikethroughCommand.key)
+  },
+  {
+    icon: 'lucide:list',
+    lang: 'milkdown.menu.list',
+    click: () => call(wrapInBulletListCommand.key)
+  },
+  {
+    icon: 'lucide:list-ordered',
+    lang: 'milkdown.menu.list.ordered',
+    click: () => call(wrapInOrderedListCommand.key)
+  },
+  {
+    icon: 'lucide:quote',
+    lang: 'milkdown.menu.quote',
+    click: () => call(wrapInBlockquoteCommand.key)
+  },
+  { icon: 'lucide:minus', lang: 'milkdown.menu.minus', click: () => call(insertHrCommand.key) },
+  {
+    icon: 'lucide:link', lang: 'milkdown.menu.link', click: () => {
+      isShowInsertLink.value = true
+      url.value = { href: '', text: '' }
+    }
+  },
+  {
+    icon: 'lucide:square-code',
+    lang: 'milkdown.menu.square.code',
+    click: () => call(createCodeBlockCommand.key, 'javascript')
+  },
+  {
+    icon: 'lucide:code-xml',
+    lang: 'milkdown.menu.code.xml',
+    click: () => call(toggleInlineCodeCommand.key)
+  },
+  {
+    icon: 'lucide:image-plus',
+    lang: 'milkdown.menu.image',
+    click: () => isShowUploadPic.value = true
+  },
+  {
+    icon: 'material-symbols:table-outline',
+    lang: 'milkdown.menu.table.outline',
+    click: () => isShowTable.value = true
+  },
+  {
+    icon: 'icon-park-outline:video',
+    lang: 'milkdown.menu.video',
+    click: () => isShowVideo.value = true
+  }
+])
 </script>
 
 <template>
@@ -85,120 +150,22 @@ const uploadUrlPic = async () => {
         </template>
         <div class="center flex-col p-2 dark:bg-dark-blue">
           <div
+            v-for="item in [1, 2, 3, 4, 5, 6]"
             class="flex flex-row items-center justify-between button-theme-cursor-blue dark:text-white hover:text-text-blue"
-            @click="call(wrapInHeadingCommand.key,'1')">
-            <Icon icon="codex:h1" width="25" height="25" />
-            <div class="p-1">大标题</div>
-          </div>
-          <div
-            class="flex flex-row items-center justify-between button-theme-cursor-blue dark:text-white hover:text-text-blue"
-            @click="call(wrapInHeadingCommand.key,'2')">
-            <Icon icon="codex:h2" width="25" height="25" />
-            <div class="p-1">小标题</div>
+            @click="call(wrapInHeadingCommand.key,item)">
+            <Icon :icon="`codex:h${item}`" width="25" height="25" />
+            <div class="p-1">{{ translatable(lang, `milkdown.menu.h${item}`) }}</div>
           </div>
         </div>
       </Popover>
       <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
+               :is-popover-trigger="false" v-for="item in commandList"
       >
         <template #trigger>
-          <Icon @click="call(toggleStrongCommand.key)" class="icon dark:text-white"
-                icon="lucide:bold" />
+          <Icon @click="item.click" class="icon dark:text-white"
+                :icon="item.icon" />
         </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">加粗</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(toggleEmphasisCommand.key)" class="icon dark:text-white"
-                icon="lucide:italic" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">斜体</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(toggleStrikethroughCommand.key)" class="icon dark:text-white"
-                icon="lucide:strikethrough" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">删除线</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(wrapInBulletListCommand.key)" class="icon dark:text-white"
-                icon="lucide:list" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">无序列表</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(wrapInOrderedListCommand.key)" class="icon dark:text-white"
-                icon="lucide:list-ordered" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">有序列表</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(wrapInBlockquoteCommand.key)" class="icon dark:text-white"
-                icon="lucide:quote" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">引用块</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(insertHrCommand.key)" class="icon dark:text-white"
-                icon="lucide:minus" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">水平线</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="()=>{
-            isShowInsertLink = true
-            url={href: '',text:''}
-          }" class="icon dark:text-white" icon="lucide:link" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">插入链接</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(createCodeBlockCommand.key, 'javascript')" class="icon dark:text-white"
-                icon="lucide:square-code" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">代码块</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="call(toggleInlineCodeCommand.key)" class="icon dark:text-white"
-                icon="lucide:code-xml" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">行内代码</div>
-      </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover">
-        <template #trigger>
-          <Icon class="icon dark:text-white" icon="lucide:image-plus" />
-        </template>
-        <div class="p-2 dark:bg-dark-blue">
-          <div class="p-1 button-theme-cursor-blue dark:text-white hover:text-text-blue"
-               @click="()=>isShowUploadPic=true">在线链接图片
-          </div>
-        </div>
+        <div class="dark:bg-dark-blue text-text-blue p-1">{{ translatable(lang, item.lang) }}</div>
       </Popover>
       <Popover class="w-[40px] h-[40px]" trigger="hover">
         <template #trigger>
@@ -208,31 +175,15 @@ const uploadUrlPic = async () => {
           <MilkDownEmoji :editor-info="editorInfo" />
         </div>
       </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
-               :is-popover-trigger="false"
-      >
-        <template #trigger>
-          <Icon @click="()=>isShowTable=true" class="icon dark:text-white"
-                icon="material-symbols:table-outline" />
-        </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1">表格</div>
-      </Popover>
-      <!--      <Popover class="w-[40px] h-[40px]" trigger="hover"-->
-      <!--               :is-popover-trigger="false"-->
-      <!--      >-->
-      <!--        <template #trigger>-->
-      <!--          <Icon @click="call(insertDiagramCommand.key)" class="icon dark:text-white" icon="bi:diagram-3" />-->
-      <!--        </template>-->
-      <!--        <div class="dark:bg-dark-blue text-text-blue p-1">图</div>-->
-      <!--      </Popover>-->
     </div>
   </div>
 
-  <Modal :show="isShowInsertLink" title="插入超链接" positive-text="插入"
+  <Modal :show="isShowInsertLink" :title="translatable(lang,'milkdown.modal.insert.link.title')"
+         :positive-text="translatable(lang,'milkdown.modal.insert.link.positive')"
          @default-close="() => isShowInsertLink=false"
          @on-positive-click="call(insertLinkPlugin.key,url,() => {
                   if(url.href===''){
-                    message.warning(translatable('message.warn.url.empty'))
+                    message.warning(translatable(lang,'message.warn.url.empty'))
                     return
                   }
                   isShowInsertLink = false
@@ -240,18 +191,23 @@ const uploadUrlPic = async () => {
                 })">
     <template #content>
       <div class="flex-col size-full flex">
-        <Input class="my-5" v-model="url.href" default-model="search" placeholder="链接URL" />
-        <Input v-model="url.text" default-model="search" placeholder="链接文字（可选）" />
+        <Input class="my-5" v-model="url.href" default-model="search"
+               :placeholder="translatable(lang,'milkdown.input.url.href')" />
+        <Input v-model="url.text" default-model="search"
+               :placeholder="translatable(lang,'milkdown.input.url.text')" />
       </div>
     </template>
   </Modal>
-  <Modal :show="isShowUploadPic" title="插入外部链接图片" positive-text="插入"
+  <Modal :show="isShowUploadPic" :title="translatable(lang,'milkdown.modal.insert.pic.title')"
+         :positive-text="translatable(lang,'milkdown.modal.insert.pic.positive')"
          @default-close="() => isShowUploadPic=false" @on-positive-click="uploadUrlPic">
     <template #content>
-      <Input class="my-5" v-model="picUrl" default-model="search" placeholder="外部图片链接" />
+      <Input class="my-5" v-model="picUrl" default-model="search"
+             :placeholder="translatable(lang,'milkdown.input.pic.url')" />
     </template>
   </Modal>
-  <Modal :show="isShowTable" title="插入表格" positive-text="插入"
+  <Modal :show="isShowTable" :title="translatable(lang,'milkdown.modal.insert.table.title')"
+         :positive-text="translatable(lang,'milkdown.modal.insert.table.positive')"
          @default-close="() => isShowTable=false" @on-positive-click="call(
            insertTableCommand.key,{
              row: Number(tableModal.row),
@@ -261,11 +217,30 @@ const uploadUrlPic = async () => {
     <template #content>
       <div class="flex flex-row dark:text-white text-xl items-center">
         <Input class="mr-5" v-model="tableModal.row" default-model="search"
-               placeholder="链接文字（可选）" />
-        行
+               :placeholder="translatable(lang,'milkdown.input.table.row')" />
+        {{ translatable(lang, 'milkdown.modal.row') }}
         <Input class="m-5" v-model="tableModal.col" default-model="search"
-               placeholder="链接文字（可选）" />
-        列
+               :placeholder="translatable(lang,'milkdown.input.table.col')" />
+        {{ translatable(lang, 'milkdown.modal.col') }}
+      </div>
+    </template>
+  </Modal>
+  <Modal :show="isShowVideo" :title="translatable(lang,'milkdown.modal.insert.video.title')"
+         :positive-text="translatable(lang,'milkdown.modal.insert.video.positive')"
+         @default-close="() => isShowVideo=false"
+         @on-positive-click="() => {
+                  if(videoUrl===''){
+                    message.warning(translatable(lang,'message.warn.url.empty'))
+                    return
+                  }
+                  call(insertVideoCommand.key,videoUrl)
+                  isShowVideo = false
+                  videoUrl = ''
+                }">
+    <template #content>
+      <div class="flex-col size-full flex">
+        <Input class="my-5" v-model="videoUrl" default-model="search"
+               :placeholder="translatable(lang,'milkdown.input.video.url')" />
       </div>
     </template>
   </Modal>

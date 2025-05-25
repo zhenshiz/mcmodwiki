@@ -6,12 +6,15 @@ import { callCommand } from '@milkdown/utils'
 import { useInstance } from '@milkdown/vue'
 import { usePluginViewContext } from '@prosemirror-adapter/vue'
 import { useEditTopicStore } from '@/stores/modules/editTopic.js'
+import { translatable } from '@/assets/translatable/translatable.js'
+import { usePageStore } from '@/stores/index.js'
 
 const { view, prevState } = usePluginViewContext()
 
+const lang = computed(() => usePageStore().setting.language)
 const linkHref = ref('')
 const hide = ref(true)
-const [loading, get] = useInstance()
+const [get] = useInstance()
 const editTopicStore = useEditTopicStore()
 
 const linkUpdPopRef = ref()
@@ -75,8 +78,7 @@ const handleUpdateLink = () => {
 </script>
 
 <template>
-  <div v-if="loading"
-       class="wrapper w-[350px] inline-flex absolute bg-white border border-text-blue dark:bg-dark-blue dark:text-white"
+  <div class="wrapper w-[350px] inline-flex absolute bg-white border border-text-blue dark:bg-dark-blue dark:text-white z-[9999]"
        ref="linkUpdPopRef">
     <input
       class="w-full border-none p-[10px] bg-transparent focus:outline-none"
@@ -87,7 +89,7 @@ const handleUpdateLink = () => {
     <button
       class="cursor-pointer w-[65px] bg-transparent border-none text-[15px] pt-1 pb-1 flex-shrink-0 text-text-blue hover:text-white hover:bg-text-blue dark:hover:text-[#0c1720] dark:hover:bg-text-blue"
       @click="handleUpdateLink">
-      更新
+      {{ translatable(lang,'milkdown.link.update') }}
     </button>
   </div>
 </template>

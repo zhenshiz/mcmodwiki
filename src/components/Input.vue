@@ -36,7 +36,6 @@ const color = ref([])
 
 const defaultModelClass = {
   none: { class: '', borderColor: [] },
-  login: { class: 'border-b-2', borderColor: ['#BAE6FD', '#0EA5E9'] },
   search: { class: 'border-2 rounded p-2', borderColor: ['#00C0F5', '#F35FAB'] }
 }
 

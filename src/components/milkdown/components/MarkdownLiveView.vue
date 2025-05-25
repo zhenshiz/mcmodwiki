@@ -2,11 +2,14 @@
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import Textarea from '@/components/Textarea.vue'
 import gsap from 'gsap'
+import { usePageStore } from '@/stores/index.js'
+import { translatable } from '../../../assets/translatable/translatable.js'
 
 const content = ref('')
 const isPreview = ref(true)
 const nav = ref()
 const line = ref()
+const lang = computed(() => usePageStore().setting.language)
 
 const toggleNav = (value) => {
   if (value !== isPreview.value) {
@@ -25,8 +28,12 @@ const toggleNav = (value) => {
 <template>
   <div class="flex flex-col rounded border relative view">
     <div ref="nav" class="flex flex-row h-[40px] text-[16px] nav border-b">
-      <div @click="toggleNav(true)" class="flex-1 center button-theme-cursor-blue">预览</div>
-      <div @click="toggleNav(false)" class="flex-1 center button-theme-cursor-blue">代码</div>
+      <div @click="toggleNav(true)" class="flex-1 center button-theme-cursor-blue">
+        {{ translatable(lang, 'milkdown.mode.toggle.preview') }}
+      </div>
+      <div @click="toggleNav(false)" class="flex-1 center button-theme-cursor-blue">
+        {{ translatable(lang, 'milkdown.mode.toggle.code') }}
+      </div>
     </div>
     <div ref="line" class="line absolute border-b-2 w-1/2 top-[40px]" />
     <div class="min-h-[100px] w-full">

@@ -1,35 +1,10 @@
-# mcmod_wiki
+# How to Provide Your Translation
+Open the `src/assets/translatable` folder, where all the localization files are located under the lang folder. The file names should follow the naming conventions used within the Minecraft mod. Then, provide the corresponding translations for each key in the JSON files. Finally, open the `translatable.js` file, and add the corresponding enum in language.enum. Add your translated files to onlyLang (this step can also be handled by the author; you only need to provide the translation).
 
-This template should help get you started developing with Vue 3 in Vite.
+# How to Add a Wiki MarkDown File
+You can generate the markdown file using the website's built-in markdown editor. The website will automatically fill in the file name, and you can then add it to the `src/assets/mod/md/mod_name` folder. Finally, add the mod information in `mod.js`.
 
-## Recommended IDE Setup
+If you must use your own markdown file, make sure to check the following:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Does your markdown support the display format used by this project?
+Does your file name comply with the naming convention? The standard format is `${mc_version}_${mod_loader}_${mod_version}_${language}.md`.

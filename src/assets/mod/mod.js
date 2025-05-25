@@ -17,6 +17,12 @@ const availableHere = {
   GITEE: { name: 'Gitee', icon: 'simple-icons:gitee', lightColor: '#d90013', darkColor: '#d90013' }
 }
 
+export const modLoader = [
+  { label: 'NeoForge', value: 'NeoForge' },
+  { label: 'Fabric', value: 'Fabric' },
+  { label: 'Forge', value: 'Forge' }
+]
+
 export const modList = [
   {
     lang: 'mod.name.1',

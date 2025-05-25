@@ -30,6 +30,9 @@ import sql from 'refractor/lang/sql'
 import tsx from 'refractor/lang/tsx'
 import typescript from 'refractor/lang/typescript'
 import markdown from 'refractor/lang/markdown'
+import { diagram } from '@milkdown/plugin-diagram'
+import { video } from '@/components/milkdown/plugin/video.js'
+
 
 const props = defineProps({
   content: String,
@@ -75,8 +78,10 @@ const editor = useEditor((root) => {
     .use(automd)
     .use(gfm)
     .use(commonmark)
-    .use(math)
     .use(prism)
+    // .use(video)
+    .use(math)
+    .use(diagram)
 })
 
 
@@ -102,7 +107,7 @@ watch(() => props.content, (newValue) => {
     margin-right: auto;
     margin-top: 20px;
 
-    h1, h2 {
+    h1, h2, h3, h4, h5, h6 {
       line-height: 1.5; /* 设置行高，确保文本不会与下一行重叠 */
     }
 
@@ -123,13 +128,77 @@ watch(() => props.content, (newValue) => {
     }
 
     h2 {
-      font-size: 25px;
+      font-size: 28px;
       font-weight: 600;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 20px;
+        font-size: 23px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 21px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h4 {
+      font-size: 24px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 19px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h5 {
+      font-size: 22px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 17px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 1.5;
+        vertical-align: middle;
+      }
+    }
+
+    h6 {
+      font-size: 20px;
+      font-weight: 600;
+
+      &:before {
+        content: '#';
+        color: var(--blue-5);
+        font-size: 15px;
         font-weight: 600;
         font-style: italic;
         margin-right: 10px;
