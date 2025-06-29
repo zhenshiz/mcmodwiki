@@ -20,6 +20,9 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()]
     })
   ],
+  optimizeDeps: {
+    include: ['vue']
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
