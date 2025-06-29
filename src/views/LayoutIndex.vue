@@ -169,9 +169,9 @@ onBeforeUnmount(() => {
               </div>
             </template>
             <div class="size-full flex flex-col">
-              <Link v-for="item in modList" class="m-2 text-lg text-text-blue"
+              <Link v-for="(item,index) in modList" class="m-2 text-lg text-text-blue"
                     :href="`/wiki/${translatable(lang,item.lang)}`"
-                    hoverLineType="toFlanks">
+                    hoverLineType="toFlanks" :key="index">
                 {{ translatable(lang, item.lang) }}
               </Link>
             </div>
@@ -186,9 +186,9 @@ onBeforeUnmount(() => {
               </div>
             </template>
             <div class="size-full flex flex-col">
-              <Link v-for="item in moreUtilList" class="m-2 text-lg text-text-blue"
+              <Link v-for="(item,index) in moreUtilList" class="m-2 text-lg text-text-blue"
                     :href="item.link"
-                    hoverLineType="toFlanks">
+                    hoverLineType="toFlanks" :key="index">
                 {{ translatable(lang,item.lang) }}
               </Link>
             </div>
@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
                 <div
                   @click="()=>pageStore.setSetting({ language: item.value })"
                   class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue"
-                  v-for="item in languageList">
+                  v-for="(item,index) in languageList" :key="index">
                   {{ item.label }}
                 </div>
                 <div class="flex flex-row items-center p-2 dark:text-white theme-cursor-blue"
@@ -286,8 +286,8 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-show="modVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="item in modList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(lang,item.lang)}`">
+          <Link v-for="(item,index) in modList" class="m-2 text-text-blue"
+                :href="`/wiki/${translatable(lang,item.lang)}`" :key="index">
             {{ translatable(lang,item.lang) }}
           </Link>
         </div>
@@ -302,8 +302,8 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-show="moreVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="item in moreUtilList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(lang,item.lang)}`">
+          <Link v-for="(item,index) in moreUtilList" class="m-2 text-text-blue"
+                :href="`/wiki/${translatable(lang,item.lang)}`" :key="index">
             {{ translatable(lang,item.lang) }}
           </Link>
         </div>
@@ -315,7 +315,7 @@ onBeforeUnmount(() => {
           <div
             @click="pageStore.setSetting({ language: item.value })"
             class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue border-b border-b-text-blue"
-            v-for="item in languageList">
+            v-for="(item,index) in languageList" :key="index">
             {{ item.text }}
           </div>
           <div
@@ -378,7 +378,7 @@ onBeforeUnmount(() => {
         </Input>
         <div
           class="p-2 theme-cursor-blue flex flex-col dark:text-white mt-2 border border-text-blue"
-          v-for="item in searchList" @click="gotoModWiki(item)">
+          v-for="(item,index) in searchList" @click="gotoModWiki(item)" :key="index">
           <div class="flex flex-row size-full">
             #&nbsp;
             <div class="flex flex-row justify-between size-full">

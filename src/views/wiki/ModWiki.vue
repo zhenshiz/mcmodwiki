@@ -54,7 +54,7 @@ const toggleWikiMarkdown = async () => {
 
 const loadMarkdown = async (mod, mcVersion, modLoader, modVersion, language) => {
   const res = await fetch(
-    `/src/assets/mod/md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`,
+    `/public/md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`
   )
   const text = await res.text()
   if (text.startsWith('<!DOCTYPE html>')) {
@@ -137,7 +137,8 @@ watch(
         <div
           @click="openWeb(item.href)"
           class="theme-cursor-blue text-white flex flex-row items-center justify-between m-2 border-l-4 border-l-text-blue p-2"
-          v-for="item in pageInfo.availableHere"
+          v-for="(item,index) in pageInfo.availableHere"
+          :key="index"
         >
           <div class="flex flex-row items-center pl-3 gap-3">
             <Icon
@@ -157,7 +158,8 @@ watch(
         <div
           @click="router.push(item.router)"
           class="theme-cursor-blue text-white flex flex-row items-center m-2 border-l-4 border-l-text-blue p-2"
-          v-for="item in pageInfo.moreUtil"
+          v-for="(item,index) in pageInfo.moreUtil"
+          :key="index"
         >
           <div class="ml-3">{{ translatable(language, item.lang) }}</div>
         </div>
