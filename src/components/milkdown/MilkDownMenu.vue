@@ -131,11 +131,11 @@ const commandList = ref([
     lang: 'milkdown.menu.table.outline',
     click: () => isShowTable.value = true
   },
-  {
-    icon: 'icon-park-outline:video',
-    lang: 'milkdown.menu.video',
-    click: () => isShowVideo.value = true
-  }
+  // {
+  //   icon: 'icon-park-outline:video',
+  //   lang: 'milkdown.menu.video',
+  //   click: () => isShowVideo.value = true
+  // }
 ])
 </script>
 

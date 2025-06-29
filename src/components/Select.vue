@@ -5,8 +5,14 @@ import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
 
 const props = defineProps({
-  value: String,
-  options: Array,
+  value: {
+    type: String,
+    required: true
+  },
+  options: {
+    type: Array,
+    required: true
+  },
   valueName: {
     type: String,
     default: 'value'
@@ -37,6 +43,11 @@ const props = defineProps({
   defaultEmit: {
     type: Boolean,
     default: false
+  },
+  //是否不区分大小写
+  isNoCaseSensitive: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -46,10 +57,14 @@ const selected = computed(() => {
   let obj = {}
   obj[props.labelName] = ''
   obj[props.valueName] = ''
-  return props.options.find(option => option[props.valueName] === props.value) ?? obj
+  if (props.isNoCaseSensitive) {
+    return props.options.find((option) => option[props.valueName]?.toUpperCase() === props.value?.toUpperCase()) ?? obj
+  } else {
+    return props.options.find((option) => option[props.valueName] === props.value) ?? obj
+  }
 })
 
-const selectOption = item => {
+const selectOption = (item) => {
   if (props.defaultEmit) {
     emit('update:value', item[props.valueName])
   } else {
@@ -70,23 +85,40 @@ onMounted(() => {
 </script>
 
 <template>
-  <Popover :mode="mode" :trigger="trigger" :offset="offset"
-           :backgroundColor="isDark?'#003247':'#fff'">
+  <Popover
+    :mode="mode"
+    :trigger="trigger"
+    :offset="offset"
+    :backgroundColor="isDark ? '#003247' : '#fff'"
+  >
     <template #trigger>
-      <Tag ref="select" class="min-w-[120px] cursor-pointer whitespace-nowrap" backgroundColor="transparent"
-           :color="isDark?'#fff':'#000'"
-           :border-color="isDark?'#fff':'#999'"
-           round>
+      <Tag
+        ref="select"
+        class="min-w-[120px] cursor-pointer whitespace-nowrap"
+        backgroundColor="transparent"
+        :color="isDark ? '#fff' : '#000'"
+        :border-color="isDark ? '#fff' : '#999'"
+        round
+      >
         <div class="min-w-[80px]">{{ selected[labelName] }}</div>
         <template #footer>
-          <Icon class="dark:text-white ml-2 w-[20px] h-[20px]" icon="ri:arrow-down-s-line" />
+          <div class="w-full flex justify-end">
+            <Icon class="dark:text-white ml-2 w-[20px] h-[20px]"
+                  icon="ri:arrow-down-s-line" />
+          </div>
         </template>
       </Tag>
     </template>
-    <div ref="option" class="p-3 border shadow border-light-blue dark:border-dark-blue overflow-auto max-h-[200px]">
-      <div @click="selectOption(item)"
-           class="mb-1 last:mb-0 dark:text-white theme-cursor-blue p-1 whitespace-nowrap"
-           v-for="(item,index) in options" :key="index">
+    <div
+      ref="option"
+      class="p-3 border shadow border-light-blue dark:border-dark-blue overflow-auto max-h-[200px]"
+    >
+      <div
+        @click="selectOption(item)"
+        class="mb-1 last:mb-0 dark:text-white theme-cursor-blue p-1 whitespace-nowrap"
+        v-for="(item, index) in options"
+        :key="index"
+      >
         {{ item[labelName] }}
       </div>
     </div>

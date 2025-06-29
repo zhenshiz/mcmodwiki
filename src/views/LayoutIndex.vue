@@ -203,10 +203,7 @@ onBeforeUnmount(() => {
               </template>
               <div class="size-full flex flex-col dark:bg-dark-blue">
                 <div
-                  @click="()=>{
-                    pageStore.setSetting({ language: item.value })
-                    console.log(translatable(lang,'main.title.1'))
-                  }"
+                  @click="()=>pageStore.setSetting({ language: item.value })"
                   class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue"
                   v-for="item in languageList">
                   {{ item.label }}

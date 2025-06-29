@@ -45,11 +45,11 @@ const handleInputCodeMarkdown = (event) => {
 //发布话题
 const downloadMd = async () => {
   dialog.warning({
-    title: translatable(lang,'edit.download.md.dialog.title'),
-    content: translatable(lang,'edit.download.md.dialog.content'),
+    title: translatable(lang.value,'edit.download.md.dialog.title'),
+    content: translatable(lang.value,'edit.download.md.dialog.content'),
     onPositiveClick: async () => {
       if (!form.value.mcVersion || !form.value.modLoader || !form.value.modVersion || !form.value.language) {
-        message.warning(translatable(lang,'message.warn.download'))
+        message.warning(translatable(lang.value,'message.warn.download'))
         return
       }
       const blob = new Blob([form.value.content], { type: 'text/markdown' })

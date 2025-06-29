@@ -148,7 +148,7 @@ const editorInfo = useEditor((root) => {
     //新增链接
     .use(insertLinkPlugin)
     //视频
-    .use(video)
+    // .use(video)
     //数学
     .use(math)
     //图

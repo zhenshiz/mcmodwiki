@@ -4,31 +4,31 @@ import _ from 'lodash'
 const props = defineProps({
   placeholder: String,
   modelValue: String,
-  type:{
+  type: {
     type: String,
-    default: 'text'
+    default: 'text',
   },
   defaultModel: {
     type: String,
     default: 'none',
     validator(value, props) {
-      return ['none', 'login', 'search'].includes(value)
-    }
+      return ['none', 'search'].includes(value)
+    },
   },
   isDebounce: {
     type: Boolean,
-    default: false
+    default: false,
   },
   debounceTime: {
     type: Number,
-    default: 500
+    default: 500,
   },
   defaultColor: {
     type: Array,
     validator(value, props) {
       return value.length === 2
-    }
-  }
+    },
+  },
 })
 const emit = defineEmits(['update:modelValue'])
 const borderColor = ref()
@@ -36,17 +36,18 @@ const color = ref([])
 
 const defaultModelClass = {
   none: { class: '', borderColor: [] },
-  search: { class: 'border-2 rounded p-2', borderColor: ['#00C0F5', '#F35FAB'] }
+  search: { class: 'border-2 rounded p-2', borderColor: ['#00C0F5', '#F35FAB'] },
+  input: { class: 'border-b-2 pb-2 rounded-none', borderColor: ['#BAE6FD', '#0EA5E9'] },
 }
 
-
 const input = ref()
-const change = props.isDebounce ? _.debounce(() => {
-    emit('update:modelValue', input.value.value)
-  }, props.debounceTime) :
-  (event) => {
-    emit('update:modelValue', event.target.value)
-  }
+const change = props.isDebounce
+  ? _.debounce(() => {
+      emit('update:modelValue', input.value.value)
+    }, props.debounceTime)
+  : (event) => {
+      emit('update:modelValue', event.target.value)
+    }
 
 const focus = () => {
   borderColor.value = color.value[1]
@@ -55,7 +56,7 @@ const blur = () => {
   borderColor.value = color.value[0]
 }
 
-const getInput = ()=>{
+const getInput = () => {
   return input.value
 }
 
@@ -65,13 +66,16 @@ onMounted(() => {
 })
 
 defineExpose({
-  getInput
+  getInput,
 })
 </script>
 
 <template>
-  <div class="w-full relative rounded center flex-row" :class="defaultModelClass[defaultModel].class"
-       :style="{borderColor:borderColor}">
+  <div
+    class="w-full relative rounded center flex-row"
+    :class="defaultModelClass[defaultModel].class"
+    :style="{ borderColor: borderColor }"
+  >
     <slot name="header"></slot>
     <input
       ref="input"
@@ -82,7 +86,7 @@ defineExpose({
       @input="change($event)"
       @focus="focus"
       @blur="blur"
-    >
+    />
     <slot name="footer"></slot>
   </div>
 </template>

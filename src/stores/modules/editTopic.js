@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { modList } from '@/assets/mod/mod.js'
-import { language } from '@/assets/translatable/translatable.js'
 
 export const useEditTopicStore = defineStore(
   'edit-topic',

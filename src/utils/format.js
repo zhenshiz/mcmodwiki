@@ -6,22 +6,22 @@ export const parseQuery = url => {
 }
 
 //筛选对象属性
-export const pick =(obj,...props)=>{
-  return Object.fromEntries(Object.entries(obj).filter(([k])=>props.includes(k)))
+export const pick = (obj, ...props) => {
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => props.includes(k)))
 }
 
 //去掉字符串中的元素标记
 export const removeTag = (fragment) => {
-  return new DOMParser().parseFromString(fragment,'text/html').body.textContent || ''
+  return new DOMParser().parseFromString(fragment, 'text/html').body.textContent || ''
 }
 
 //生成一个uuid字符串
 export function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
+    const r = Math.random() * 16 | 0
+    const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
 }
 
 /**
