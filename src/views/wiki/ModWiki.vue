@@ -1,5 +1,12 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
+
+// 环境判断
+const isDevelopment = import.meta.env.DEV;
+const isProduction = import.meta.env.PROD;
+const isLocalhost = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1';
+console.log(`当前环境: ${isDevelopment ? '开发' : '生产'}, 本地运行: ${isLocalhost}`);
 import { modList } from '@/assets/mod/mod.js'
 import { translatable } from '@/assets/translatable/translatable.js'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
@@ -54,7 +61,7 @@ const toggleWikiMarkdown = async () => {
 
 const loadMarkdown = async (mod, mcVersion, modLoader, modVersion, language) => {
   const res = await fetch(
-    `/public/md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`
+    `../md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`
   )
   const text = await res.text()
   if (text.startsWith('<!DOCTYPE html>')) {

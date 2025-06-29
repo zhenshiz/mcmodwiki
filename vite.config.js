@@ -18,7 +18,7 @@ export default defineConfig({
     }),
     Components({
       resolvers: [NaiveUiResolver()]
-    })
+    }),
   ],
   optimizeDeps: {
     include: ['vue']
@@ -38,5 +38,5 @@ export default defineConfig({
       }
     }
   },
-  base: './'
+  base: '/'
 })
