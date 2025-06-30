@@ -153,15 +153,13 @@ const handleFileChange = (event) => {
     reader.onload = function (e) {
       const fileContent = e.target.result
       try {
-        const json = JSON.parse(fileContent)
-        dialoguesSetting.value = json
+        chatBoxEditorStore.dialoguesSetting = JSON.parse(fileContent)
       } catch (error) {
         console.error('文件内容不是有效的 JSON 格式！')
       }
     }
 
     reader.readAsText(file)
-    event.target.files = []
   }
 }
 
