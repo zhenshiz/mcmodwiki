@@ -24,18 +24,6 @@ const chatBoxEditorStore = useChatBoxEditorStore()
 const lang = computed(() => usePageStore().setting.language)
 const dialoguesSetting = computed(() => chatBoxEditorStore.dialoguesSetting)
 const isDark = computed(() => usePageStore().isDark)
-const EMPTY_DIALOGUES = {
-  dialogBox: {
-    name: '',
-    text: '',
-  },
-  portrait: [],
-  options: [],
-  sound: '',
-  volume: 1,
-  pitch: 1,
-  command: '',
-}
 const isShowSetting = ref(false)
 const isShowAddGroup = ref(false)
 const jsonInput = ref()
@@ -53,10 +41,17 @@ const addDialogue = (groupName) => {
     Object.assign(
       {
         id: generateUUID(),
-        top: 30,
-        left: 30,
+        dialogBox: {
+          name: '',
+          text: '',
+        },
+        portrait: [],
+        options: [],
+        sound: '',
+        volume: '',
+        pitch: '',
+        command: '',
       },
-      EMPTY_DIALOGUES,
     ),
   )
 }
@@ -174,8 +169,6 @@ const replacer = (key, value) => {
   if (
     key === 'visible' ||
     key === 'id' ||
-    key === 'top' ||
-    key === 'left' ||
     value === undefined ||
     value === null ||
     value === ''
