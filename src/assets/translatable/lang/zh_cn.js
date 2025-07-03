@@ -139,7 +139,7 @@ export const zh_cn = {
   'chat.box.component.global.portrait.set.component.scale': '缩放比例（可选，默认1）：',
   'chat.box.component.global.portrait.set.component.customAnimation': '自定义动画（可选）：',
   'chat.box.component.global.portrait.set.component.loop': '是否循环动画（可选，默认false）：',
-  'chat.box.component.global.portrait.set.item.customItemData': 'CustomModalItem组件值（可选）：'
+  'chat.box.component.global.portrait.set.item.customItemData': 'CustomModalItem组件值（可选）：',
 
   'chat.box.component.global.portrait.custom.animation': '自定义动画配置',
   'chat.box.component.global.portrait.custom.animation.node': '添加自定义动画节点',
