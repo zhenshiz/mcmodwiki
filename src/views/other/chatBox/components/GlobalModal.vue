@@ -641,6 +641,12 @@ const handleFileChange = (event) => {
               </div>
               <Input v-model="formData.value" default-model="search" />
             </div>
+            <div class="flex flex-row items-center">
+              <div class="whitespace-nowrap">
+                {{ translatable(lang, 'chat.box.component.global.portrait.set.item.customItemData') }}
+              </div>
+              <Input v-model="formData.customItemData" default-model="search" />
+            </div>
           </div>
           <div class="flex flex-row items-center">
             <div class="whitespace-nowrap">
