@@ -1,7 +1,7 @@
 <script setup>
 import GlobalDialog from '@/views/other/chatBox/components/GlobalModal.vue'
 import { Icon } from '@iconify/vue'
-import { generateUUID } from '@/utils/format.js'
+import { generateUUID, removeFirstAndLastLine } from '@/utils/format.js'
 import { translatable } from '@/assets/translatable/translatable.js'
 import { useChatBoxEditorStore, usePageStore } from '@/stores/index.js'
 import Modal from '@/components/Modal.vue'
@@ -11,7 +11,6 @@ import Switch from '@/components/Switch.vue'
 import Button from '@/components/Button.vue'
 import { computed, ref } from 'vue'
 import { copyToClipboard } from '@/utils/web'
-import { removeFirstAndLastLine } from '@/utils/format.js'
 import { isNumber } from 'lodash'
 import { MilkdownProvider } from '@milkdown/vue'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
@@ -159,6 +158,33 @@ const handleFileChange = (event) => {
   }
 }
 
+// 拖拽上传相关逻辑
+const isDragOver = ref(false)
+const onDragOver = () => {
+  isDragOver.value = true
+}
+const onDragLeave = () => {
+  isDragOver.value = false
+}
+const onDrop = (event) => {
+  isDragOver.value = false
+  event.preventDefault()
+  const file = event.dataTransfer.files[0]
+  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
+    const reader = new FileReader()
+    reader.onload = function(e) {
+      const fileContent = e.target.result
+      try {
+        chatBoxEditorStore.dialoguesSetting = JSON.parse(fileContent)
+      } catch (error) {
+        console.error('文件内容不是有效的 JSON 格式！')
+      }
+    }
+    reader.readAsText(file)
+    event.target.files = []
+  }
+}
+
 const isShowDialoguesJson = ref(false)
 const themeJson = computed(() => {
   return `\`\`\`json
@@ -196,10 +222,20 @@ const replacer = (key, value) => {
         <GlobalDialog />
       </div>
       <div class="flex-1 flex justify-end items-center gap-3">
-        <Button is-toggle-color :rounded-size="0" @click="jsonInput.click()" class="center">
-          <Icon width="30" icon="material-symbols:upload" />
-          {{ translatable(lang, 'chat.box.component.global.portrait.translatable.upload.json') }}
-        </Button>
+        <!-- 拖拽上传区域 -->
+        <div
+          class="drag-upload-area w-[180px] h-[50px] flex items-center justify-center border-2 border-dashed rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue mb-0"
+          :class="{ 'text-text-blue border-text-blue': isDragOver }"
+          @click="jsonInput.click()"
+          @dragover.prevent="onDragOver"
+          @dragleave.prevent="onDragLeave"
+          @drop.prevent="onDrop"
+        >
+          <Icon width="24" icon="material-symbols:upload" />
+          <span
+            class="ml-2 text-base">{{ translatable(lang, 'chat.box.component.global.portrait.translatable.upload.json')
+            }}</span>
+        </div>
         <input
           ref="jsonInput"
           hidden

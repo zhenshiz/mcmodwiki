@@ -80,22 +80,65 @@ const handleFileChange = (event) => {
     event.target.files = []
   }
 }
+
+const isDragOver = ref(false)
+
+const onDragOver = () => {
+  isDragOver.value = true
+}
+const onDragLeave = () => {
+  isDragOver.value = false
+}
+const onDrop = (event) => {
+  isDragOver.value = false
+  event.preventDefault()
+  const file = event.dataTransfer.files[0]
+  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
+    const reader = new FileReader()
+
+    // 文件读取完成后的回调
+    reader.onload = function(e) {
+      const fileContent = e.target.result
+      try {
+        const json = JSON.parse(fileContent)
+        chatBoxEditorStore.setThemeSetting(
+          {
+            filename: file.name.replaceAll('.json', ''),
+            theme: 'DIY',
+            dialogBox: json.dialogBox,
+            logButton: json.logButton,
+            option: json.option,
+            portrait: json.portrait
+          },
+          true
+        )
+      } catch (error) {
+        console.error('文件内容不是有效的 JSON 格式！')
+      }
+    }
+
+    reader.readAsText(file)
+    event.target.files = []
+  }
+}
 </script>
 
 <template>
   <div class="flex flex-row size-full dark:text-white">
     <div class="flex flex-col m-5 flex-1 border-r-2">
       <GlobalDialog />
-      <!--导入json文件-->
-      <Button
-        class="mt-5 mb-5 w-[300px] flex flex-row items-center justify-center"
-        isToggleColor
-        :rounded-size="0"
+      <!--拖拽上传区域-->
+      <div
+        class="drag-upload-area mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
+        :class="{ 'text-text-blue border-text-blue': isDragOver }"
         @click="jsonInput.click()"
+        @dragover.prevent="onDragOver"
+        @dragleave.prevent="onDragLeave"
+        @drop.prevent="onDrop"
       >
         <Icon width="30" icon="material-symbols:upload" />
-        {{ translatable(lang, 'more.chatbox.theme.upload') }}
-      </Button>
+        <span class="ml-2">{{ translatable(lang, 'more.chatbox.theme.upload') }}</span>
+      </div>
       <input
         ref="jsonInput"
         hidden
