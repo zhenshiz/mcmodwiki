@@ -129,7 +129,7 @@ const onDrop = (event) => {
       <GlobalDialog />
       <!--拖拽上传区域-->
       <div
-        class="drag-upload-area mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
+        class="mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed border-black rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
         :class="{ 'text-text-blue border-text-blue': isDragOver }"
         @click="jsonInput.click()"
         @dragover.prevent="onDragOver"

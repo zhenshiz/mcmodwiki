@@ -224,7 +224,7 @@ const replacer = (key, value) => {
       <div class="flex-1 flex justify-end items-center gap-3">
         <!-- 拖拽上传区域 -->
         <div
-          class="drag-upload-area w-[180px] h-[50px] flex items-center justify-center border-2 border-dashed rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue mb-0"
+          class="w-[180px] h-[50px] flex items-center justify-center border-2 border-dashed border-black rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue mb-0"
           :class="{ 'text-text-blue border-text-blue': isDragOver }"
           @click="jsonInput.click()"
           @dragover.prevent="onDragOver"
