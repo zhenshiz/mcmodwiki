@@ -21,6 +21,7 @@ const props = defineProps({
 const tag = ref('')
 const emit = defineEmits(['update:tags'])
 const addTag = () => {
+  if (props.tags === undefined) emit('update:tags', [])
   if (props.tags.includes(tag.value)) {
     message.warning(translatable(lang.value, 'message.warn.topic.tag.repetion'))
     return

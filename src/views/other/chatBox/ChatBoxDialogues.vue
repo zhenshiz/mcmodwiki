@@ -9,7 +9,7 @@ import Input from '@/components/Input.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 import Switch from '@/components/Switch.vue'
 import Button from '@/components/Button.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { copyToClipboard } from '@/utils/web'
 import { isNumber } from 'lodash'
 import { MilkdownProvider } from '@milkdown/vue'
@@ -18,18 +18,21 @@ import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import { allValuesEmptyString } from '@/utils/math'
 import Select from '@/components/Select.vue'
 import TagInput from '@/components/TagInput.vue'
+import { defaultDialogues } from '@/assets/more/chatBox/defaultInfo'
+import { useDialog } from '@/components/register/useDialog'
 
 const message = useMessage()
+const dialog = useDialog()
 const chatBoxEditorStore = useChatBoxEditorStore()
 const lang = computed(() => usePageStore().setting.language)
 const dialoguesSetting = computed(() => chatBoxEditorStore.dialoguesSetting)
 const isDark = computed(() => usePageStore().isDark)
 const isShowSetting = ref(false)
 const isShowAddGroup = ref(false)
-const jsonInput = ref()
 //记录当前打开的是谁的属性
 const dialogGroup = ref(null)
 const dialogIndex = ref(null)
+const isShowEdit = ref(false)
 const expandedGroups = ref({})
 
 const toggleGroup = (groupName) => {
@@ -38,22 +41,40 @@ const toggleGroup = (groupName) => {
 
 const addDialogue = (groupName) => {
   dialoguesSetting.value.dialogues[groupName].push(
-    Object.assign(
-      {
-        id: generateUUID(),
-        dialogBox: {
-          name: '',
-          text: '',
-        },
-        portrait: [],
-        options: [],
-        sound: '',
-        volume: '',
-        pitch: '',
-        command: '',
+    Object.assign({
+      id: generateUUID(),
+      dialogBox: {
+        name: '',
+        text: '',
       },
-    ),
+      portrait: [],
+      options: [],
+      sound: '',
+      volume: '',
+      pitch: '',
+      command: '',
+    }),
   )
+}
+
+const removeGroup = (groupName) => {
+  dialog.warning({
+    title: translatable(lang.value, 'dialog.warning'),
+    content: translatable(lang.value, 'dialog.warn.chatbox.dialogues.delete.groupName'),
+    onPositiveClick: () => {
+      if (groupName === dialogGroup.value) isShowEdit.value = false
+      const currentDialogues = JSON.parse(JSON.stringify(dialoguesSetting.value.dialogues)) || {}
+
+      const newDialogues = Object.fromEntries(
+        Object.entries(currentDialogues).filter(([key]) => key !== groupName),
+      )
+
+      chatBoxEditorStore.setDialoguesSetting({
+        ...dialoguesSetting.value,
+        dialogues: newDialogues,
+      })
+    },
+  })
 }
 
 const newGroupName = ref('')
@@ -75,7 +96,18 @@ const addGroup = () => {
 // 空替换，完全移除拖拽相关代码
 
 const closeDialogue = (groupName, index) => {
-  dialoguesSetting.value.dialogues[groupName].splice(index, 1)
+  dialog.warning({
+    title: translatable(lang.value, 'dialog.warning'),
+    content: translatable(lang.value, 'dialog.warn.chatbox.dialogues.delete.dialogues'),
+    onPositiveClick: () => {
+      if (index < dialogIndex.value) {
+        dialogIndex.value--
+      } else if (index === dialogIndex.value) {
+        isShowEdit.value = false
+      }
+      dialoguesSetting.value.dialogues[groupName].splice(index, 1)
+    },
+  })
 }
 
 const goto = (url) => {
@@ -85,11 +117,13 @@ const goto = (url) => {
 const openDialoguesSetting = (groupName, index) => {
   dialogGroup.value = groupName
   dialogIndex.value = index
+  isShowEdit.value = true
 
   // 初始化编辑界面的数据
   const dialogue = dialoguesSetting.value.dialogues[dialogGroup.value][dialogIndex.value]
   const dialogBox = dialogue.dialogBox
-  const options = dialogue.options
+  dialogue.portrait = dialogue.portrait || []
+  const options = dialogue.options || []
 
   dialogBox.name = dialogBox.name || ''
   dialogBox.text = dialogBox.text || ''
@@ -137,28 +171,35 @@ const removeOption = (index) => {
   dialoguesSetting.value.dialogues[dialogGroup.value][dialogIndex.value].options.splice(index, 1)
 }
 
-const handleFileChange = (event) => {
-  event.preventDefault()
+// 上传相关逻辑
+let fileHandle
 
-  const file = event.target.files[0]
-  if (file) {
+const loadFile = async () => {
+  ;[fileHandle] = await window.showOpenFilePicker()
+  const file = await fileHandle.getFile()
+  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
+    await set('dialoguesFile', fileHandle)
     const reader = new FileReader()
-
-    // 文件读取完成后的回调
     reader.onload = function (e) {
-      const fileContent = e.target.result
+      const fileContent = e.target.result || defaultDialogues
       try {
-        chatBoxEditorStore.dialoguesSetting = JSON.parse(fileContent)
+        chatBoxEditorStore.setDialoguesSetting(JSON.parse(fileContent))
       } catch (error) {
         console.error('文件内容不是有效的 JSON 格式！')
       }
     }
-
     reader.readAsText(file)
   }
 }
 
-// 拖拽上传相关逻辑
+const modifyFile = async (text) => {
+  if (fileHandle !== undefined && verifyPermission(fileHandle, true)) {
+    const writable = await fileHandle.createWritable()
+    await writable.write(text)
+    await writable.close()
+  }
+}
+
 const isDragOver = ref(false)
 const onDragOver = () => {
   isDragOver.value = true
@@ -166,23 +207,40 @@ const onDragOver = () => {
 const onDragLeave = () => {
   isDragOver.value = false
 }
-const onDrop = (event) => {
+
+const onDrop = async (event) => {
   isDragOver.value = false
   event.preventDefault()
-  const file = event.dataTransfer.files[0]
-  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
-    const reader = new FileReader()
-    reader.onload = function(e) {
-      const fileContent = e.target.result
-      try {
-        chatBoxEditorStore.dialoguesSetting = JSON.parse(fileContent)
-      } catch (error) {
-        console.error('文件内容不是有效的 JSON 格式！')
-      }
+  const handle = await [...event.dataTransfer.items]
+    .filter((item) => item.kind === 'file')[0]
+    .getAsFileSystemHandle()
+
+  if (handle.kind === 'file' && verifyPermission(handle, true)) {
+    fileHandle = handle
+    await set('dialoguesFile', handle)
+    let file = await fileHandle.getFile()
+    let text = await file.text()
+
+    try {
+      chatBoxEditorStore.setDialoguesSetting(JSON.parse(text || defaultDialogues))
+    } catch (error) {
+      console.error('文件内容不是有效的 JSON 格式！')
     }
-    reader.readAsText(file)
-    event.target.files = []
   }
+}
+
+async function verifyPermission(fileHandle, readWrite) {
+  const options = {}
+  if (readWrite) {
+    options.mode = 'readwrite'
+  }
+  if ((await fileHandle.queryPermission(options)) === 'granted') {
+    return true
+  }
+  if ((await fileHandle.requestPermission(options)) === 'granted') {
+    return true
+  }
+  return false
 }
 
 const isShowDialoguesJson = ref(false)
@@ -193,13 +251,7 @@ ${JSON.stringify(dialoguesSetting.value, replacer, 2)}
 })
 
 const replacer = (key, value) => {
-  if (
-    key === 'visible' ||
-    key === 'id' ||
-    value === undefined ||
-    value === null ||
-    value === ''
-  ) {
+  if (key === 'visible' || key === 'id' || value === undefined || value === null || value === '') {
     return undefined // 排除这些属性
   }
   //空数组
@@ -213,6 +265,18 @@ const replacer = (key, value) => {
   }
   return value // 其他的都保留
 }
+
+onMounted(async () => {
+  fileHandle = await get('dialoguesFile')
+})
+
+watch(
+  () => chatBoxEditorStore.dialoguesSetting,
+  (newValue) => {
+    modifyFile(JSON.stringify(newValue, replacer, 2))
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <template>
@@ -223,26 +287,18 @@ const replacer = (key, value) => {
       </div>
       <div class="flex-1 flex justify-end items-center gap-3">
         <!-- 拖拽上传区域 -->
-        <div
-          class="w-[180px] h-[50px] flex items-center justify-center border-2 border-dashed border-black rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue mb-0"
-          :class="{ 'text-text-blue border-text-blue': isDragOver }"
-          @click="jsonInput.click()"
+        <button
+          class="text-lg cursor-pointer select-none p-2 border border-[#208bff] text-[#208bff] hover:bg-[#208bff] hover:text-white"
+          :class="{ 'upload-drag': isDragOver }"
+          @click="loadFile"
           @dragover.prevent="onDragOver"
           @dragleave.prevent="onDragLeave"
           @drop.prevent="onDrop"
         >
-          <Icon width="24" icon="material-symbols:upload" />
-          <span
-            class="ml-2 text-base">{{ translatable(lang, 'chat.box.component.global.portrait.translatable.upload.json')
-            }}</span>
-        </div>
-        <input
-          ref="jsonInput"
-          hidden
-          type="file"
-          accept="application/JSON, .json"
-          @change="handleFileChange($event)"
-        />
+          <span class="ml-2 text-base">{{
+            translatable(lang, 'chat.box.component.global.portrait.translatable.upload.json')
+          }}</span>
+        </button>
         <Button is-toggle-color :rounded-size="0" @click="isShowDialoguesJson = true">
           {{
             translatable(lang, 'chat.box.component.global.portrait.translatable.generation.json')
@@ -284,6 +340,15 @@ const replacer = (key, value) => {
                   @click.stop="addDialogue(groupName)"
                 >
                   +
+                </Button>
+                <Button
+                  is-toggle-color
+                  :background="'#fff'"
+                  :color="'#f00'"
+                  class="w-[30px] h-[30px] center"
+                  @click.stop="removeGroup(groupName)"
+                >
+                  x
                 </Button>
               </div>
             </div>
@@ -332,7 +397,7 @@ const replacer = (key, value) => {
       <div
         class="border flex-1 overflow-auto p-4 dark:bg-gray-800 scrollbar scrollbar-track-transparent scrollbar-thumb-text-gray dark:scrollbar-thumb-text-blue"
       >
-        <div v-if="dialogGroup !== null && dialogIndex !== null" class="space-y-4">
+        <div v-if="isShowEdit && dialogGroup !== null && dialogIndex !== null" class="space-y-4">
           <div class="title">
             {{ translatable(lang, 'chat.box.dialogues.edit.title') }}
           </div>
@@ -664,5 +729,9 @@ const replacer = (key, value) => {
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.upload-drag {
+  background-color: #208bff;
+  color: white !important;
 }
 </style>

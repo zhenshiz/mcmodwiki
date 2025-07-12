@@ -15,13 +15,15 @@ import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import GlobalDialog from '@/views/other/chatBox/components/GlobalModal.vue'
 import { textAlign, themeList } from '@/assets/more/chatBox/option'
 import { isNumber } from '@/utils/math.js'
+import { defaultTheme } from '@/assets/more/chatBox/defaultInfo'
+import { get, set } from 'idb-keyval'
+import { onMounted } from 'vue'
 
 const lang = computed(() => usePageStore().setting.language)
 const chatBoxEditorStore = useChatBoxEditorStore()
 const message = useMessage()
 
 const themeComponent = ref()
-const jsonInput = ref()
 const isShowThemeJson = ref(false)
 const fileInfo = computed(() => chatBoxEditorStore.themeSetting)
 const themeJson = computed(() => {
@@ -31,13 +33,20 @@ ${JSON.stringify(chatBoxEditorStore.themeSetting, replacer, 2)}
 })
 
 const replacer = (key, value) => {
-  if (key === 'filename' || key === 'theme' || key === 'key' || key === 'visible' || value === undefined || value === null) {
-    return undefined  // 排除这些属性
+  if (
+    key === 'filename' ||
+    key === 'theme' ||
+    key === 'key' ||
+    key === 'visible' ||
+    value === undefined ||
+    value === null
+  ) {
+    return undefined // 排除这些属性
   }
   if (isNumber(value)) {
     return Number(value)
   }
-  return value  // 其他的都保留
+  return value // 其他的都保留
 }
 
 const open = (key, title, setting, renderOrder) => {
@@ -48,36 +57,25 @@ const setBasicSetting = (setting) => {
   chatBoxEditorStore.setThemeSetting(setting)
 }
 
-const handleFileChange = (event) => {
-  event.preventDefault()
+let fileHandle
 
-  const file = event.target.files[0]
-  if (file) {
+const loadFile = async () => {
+  ;[fileHandle] = await window.showOpenFilePicker()
+  const file = await fileHandle.getFile()
+  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
+    await set('themeFile', fileHandle)
     const reader = new FileReader()
-
-    // 文件读取完成后的回调
-    reader.onload = function(e) {
-      const fileContent = e.target.result
+    reader.onload = function (e) {
+      const fileContent = e.target.result || defaultTheme
       try {
-        const json = JSON.parse(fileContent)
-        chatBoxEditorStore.setThemeSetting(
-          {
-            filename: file.name.replaceAll('.json', ''),
-            theme: 'DIY',
-            dialogBox: json.dialogBox,
-            logButton: json.logButton,
-            option: json.option,
-            portrait: json.portrait
-          },
-          true
-        )
+        chatBoxEditorStore.setThemeSetting(JSON.parse(fileContent))
       } catch (error) {
         console.error('文件内容不是有效的 JSON 格式！')
       }
     }
-
     reader.readAsText(file)
-    event.target.files = []
+  } else {
+    fileHandle = undefined
   }
 }
 
@@ -89,38 +87,62 @@ const onDragOver = () => {
 const onDragLeave = () => {
   isDragOver.value = false
 }
-const onDrop = (event) => {
+const onDrop = async (event) => {
   isDragOver.value = false
   event.preventDefault()
-  const file = event.dataTransfer.files[0]
-  if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
-    const reader = new FileReader()
+  const handle = await [...event.dataTransfer.items]
+    .filter((item) => item.kind === 'file')[0]
+    .getAsFileSystemHandle()
 
-    // 文件读取完成后的回调
-    reader.onload = function(e) {
-      const fileContent = e.target.result
-      try {
-        const json = JSON.parse(fileContent)
-        chatBoxEditorStore.setThemeSetting(
-          {
-            filename: file.name.replaceAll('.json', ''),
-            theme: 'DIY',
-            dialogBox: json.dialogBox,
-            logButton: json.logButton,
-            option: json.option,
-            portrait: json.portrait
-          },
-          true
-        )
-      } catch (error) {
-        console.error('文件内容不是有效的 JSON 格式！')
-      }
+  if (handle.kind === 'file' && verifyPermission(handle, true)) {
+    fileHandle = handle
+    await set('themeFile', handle)
+    let file = await fileHandle.getFile()
+    let text = await file.text()
+
+    try {
+      chatBoxEditorStore.setThemeSetting(JSON.parse(text || defaultTheme))
+    } catch (error) {
+      console.error('文件内容不是有效的 JSON 格式！')
     }
-
-    reader.readAsText(file)
-    event.target.files = []
+  } else {
+    fileHandle = undefined
   }
 }
+
+async function verifyPermission(fileHandle, readWrite) {
+  const options = {}
+  if (readWrite) {
+    options.mode = 'readwrite'
+  }
+  if ((await fileHandle.queryPermission(options)) === 'granted') {
+    return true
+  }
+  if ((await fileHandle.requestPermission(options)) === 'granted') {
+    return true
+  }
+  return false
+}
+
+const modifyFile = async (text) => {
+  if (fileHandle !== undefined && verifyPermission(fileHandle, true)) {
+    const writable = await fileHandle.createWritable()
+    await writable.write(text)
+    await writable.close()
+  }
+}
+
+onMounted(async () => {
+  fileHandle = await get('themeFile')
+})
+
+watch(
+  () => chatBoxEditorStore.themeSetting,
+  (newValue) => {
+    modifyFile(JSON.stringify(newValue, replacer, 2))
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <template>
@@ -129,9 +151,9 @@ const onDrop = (event) => {
       <GlobalDialog />
       <!--拖拽上传区域-->
       <div
-        class="mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed border-black rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
+        class="mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed border-black dark:border-white rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
         :class="{ 'text-text-blue border-text-blue': isDragOver }"
-        @click="jsonInput.click()"
+        @click="loadFile"
         @dragover.prevent="onDragOver"
         @dragleave.prevent="onDragLeave"
         @drop.prevent="onDrop"
@@ -139,13 +161,6 @@ const onDrop = (event) => {
         <Icon width="30" icon="material-symbols:upload" />
         <span class="ml-2">{{ translatable(lang, 'more.chatbox.theme.upload') }}</span>
       </div>
-      <input
-        ref="jsonInput"
-        hidden
-        type="file"
-        accept="application/JSON, .json"
-        @change="handleFileChange($event)"
-      />
 
       <div class="font-bold text-2xl mb-5">{{ translatable(lang, 'chat.box.theme.1') }}</div>
 
@@ -164,21 +179,26 @@ const onDrop = (event) => {
           class="max-w-[150px]"
           v-model:value="fileInfo.theme"
           :options="themeList"
-          @update:value="(arg) => {
-            fileInfo.theme = arg.value
-            if(fileInfo.theme !== 'DIY'){
-              chatBoxEditorStore.themeSetting = Object.assign(chatBoxEditorStore.themeSetting,themeList.filter(theme=> theme.value === fileInfo.theme)[0].json)
-            }else{
-              chatBoxEditorStore.themeSetting = {
-                filename: '',
-                theme: 'DIY',
-                dialogBox: {},
-                logButton: {},
-                option: {},
-                portrait: {}
+          @update:value="
+            (arg) => {
+              fileInfo.theme = arg.value
+              if (fileInfo.theme !== 'DIY') {
+                chatBoxEditorStore.themeSetting = Object.assign(
+                  chatBoxEditorStore.themeSetting,
+                  themeList.filter((theme) => theme.value === fileInfo.theme)[0].json,
+                )
+              } else {
+                chatBoxEditorStore.themeSetting = {
+                  filename: '',
+                  theme: 'DIY',
+                  dialogBox: {},
+                  logButton: {},
+                  option: {},
+                  portrait: {},
+                }
               }
             }
-          }"
+          "
         />
       </div>
 
@@ -191,7 +211,7 @@ const onDrop = (event) => {
           class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
           isToggleColor
           :rounded-size="10"
-          @click="open('dialogBox', 'chat.box.theme.dialog.box.basic',0, fileInfo.dialogBox)"
+          @click="open('dialogBox', 'chat.box.theme.dialog.box.basic', 0, fileInfo.dialogBox)"
         >
           {{ translatable(lang, 'chat.box.theme.button.setting') }}
         </Button>
@@ -262,7 +282,7 @@ const onDrop = (event) => {
           class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
           isToggleColor
           :rounded-size="10"
-          @click="open('logButton', 'chat.box.theme.log.button.basic',30, fileInfo.logButton)"
+          @click="open('logButton', 'chat.box.theme.log.button.basic', 30, fileInfo.logButton)"
         >
           {{ translatable(lang, 'chat.box.theme.button.setting') }}
         </Button>
@@ -300,7 +320,7 @@ const onDrop = (event) => {
           class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
           isToggleColor
           :rounded-size="10"
-          @click="open('option', 'chat.box.theme.option.basic',10, fileInfo.option)"
+          @click="open('option', 'chat.box.theme.option.basic', 10, fileInfo.option)"
         >
           {{ translatable(lang, 'chat.box.theme.button.setting') }}
         </Button>

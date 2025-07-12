@@ -36,7 +36,7 @@ export const zh_cn = {
 
   'more.name.1': '对话JSON生成',
   'more.chatbox.mod.version': '当前生成器对应的模组版本：',
-  'more.chatbox.theme.upload': '导入Json对话框主题',
+  'more.chatbox.theme.upload': '拖拽或点击导入Json对话框主题',
   'more.chatbox.theme.download': '展示对话框主题Json',
 
   'chat.box.theme.component.x': 'X距离(可选，默认0)：',
@@ -93,7 +93,7 @@ export const zh_cn = {
   'chat.box.component.global.portrait.translatable.add.row': '新增行',
   'chat.box.component.global.portrait.translatable.add.col': '新增列',
   'chat.box.component.global.portrait.translatable.generation.json': '生成Json',
-  'chat.box.component.global.portrait.translatable.upload.json': '导入Json',
+  'chat.box.component.global.portrait.translatable.upload.json': '拖拽或者点击导入Json',
   'chat.box.component.global.portrait.translatable.delete.row': '删除行',
   'chat.box.component.global.portrait.translatable.delete.col': '删除列',
   'chat.box.component.global.portrait.translatable.handle': '操作',
@@ -263,4 +263,8 @@ export const zh_cn = {
   'message.warn.dialogues.group': '对话组名不能为空',
   'message.warn.topic.tag.repetion': '标签不能重复',
   'message.error.no.full': '浏览器不支持全屏 API',
+
+  'dialog.warning': '警告',
+  'dialog.warn.chatbox.dialogues.delete.groupName': '是否要删除分组',
+  'dialog.warn.chatbox.dialogues.delete.dialogues': '是否要删除该对话',
 }
