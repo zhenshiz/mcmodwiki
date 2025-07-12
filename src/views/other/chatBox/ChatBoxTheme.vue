@@ -68,7 +68,7 @@ const loadFile = async () => {
     reader.onload = function (e) {
       const fileContent = e.target.result || defaultTheme
       try {
-        chatBoxEditorStore.setThemeSetting(JSON.parse(fileContent))
+        chatBoxEditorStore.setThemeSetting(JSON.parse(fileContent), true)
       } catch (error) {
         console.error('文件内容不是有效的 JSON 格式！')
       }
@@ -101,7 +101,7 @@ const onDrop = async (event) => {
     let text = await file.text()
 
     try {
-      chatBoxEditorStore.setThemeSetting(JSON.parse(text || defaultTheme))
+      chatBoxEditorStore.setThemeSetting(JSON.parse(text || defaultTheme), true)
     } catch (error) {
       console.error('文件内容不是有效的 JSON 格式！')
     }
@@ -163,13 +163,6 @@ watch(
       </div>
 
       <div class="font-bold text-2xl mb-5">{{ translatable(lang, 'chat.box.theme.1') }}</div>
-
-      <!--创建文件-->
-      <div class="flex flex-row items-center">
-        <div class="whitespace-nowrap">{{ translatable(lang, 'chat.box.theme.2') }}</div>
-        <Input class="max-w-[300px] ml-2 mr-2" v-model="fileInfo.filename" defaultModel="search" />
-        <div>.json</div>
-      </div>
 
       <!--对话框主题-->
       <div class="mt-5 flex flex-row items-center">
