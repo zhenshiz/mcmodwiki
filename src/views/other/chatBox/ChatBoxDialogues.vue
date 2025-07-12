@@ -20,6 +20,7 @@ import Select from '@/components/Select.vue'
 import TagInput from '@/components/TagInput.vue'
 import { defaultDialogues } from '@/assets/more/chatBox/defaultInfo'
 import { useDialog } from '@/components/register/useDialog'
+import { get, set } from 'idb-keyval'
 
 const message = useMessage()
 const dialog = useDialog()
@@ -215,7 +216,7 @@ const onDrop = async (event) => {
     .filter((item) => item.kind === 'file')[0]
     .getAsFileSystemHandle()
 
-  if (handle.kind === 'file' && verifyPermission(handle, true)) {
+  if (handle.kind === 'file' && await verifyPermission(handle, true)) {
     fileHandle = handle
     await set('dialoguesFile', handle)
     let file = await fileHandle.getFile()

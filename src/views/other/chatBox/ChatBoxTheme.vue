@@ -94,7 +94,7 @@ const onDrop = async (event) => {
     .filter((item) => item.kind === 'file')[0]
     .getAsFileSystemHandle()
 
-  if (handle.kind === 'file' && verifyPermission(handle, true)) {
+  if (handle.kind === 'file' && await verifyPermission(handle, true)) {
     fileHandle = handle
     await set('themeFile', handle)
     let file = await fileHandle.getFile()
@@ -125,7 +125,7 @@ async function verifyPermission(fileHandle, readWrite) {
 }
 
 const modifyFile = async (text) => {
-  if (fileHandle !== undefined && verifyPermission(fileHandle, true)) {
+  if (fileHandle !== undefined && await verifyPermission(fileHandle, true)) {
     const writable = await fileHandle.createWritable()
     await writable.write(text)
     await writable.close()
@@ -152,7 +152,7 @@ watch(
       <!--拖拽上传区域-->
       <div
         class="mt-2 mb-5 w-[300px] h-[80px] flex items-center justify-center border-2 border-dashed border-black dark:border-white rounded cursor-pointer select-none hover:text-text-blue hover:border-text-blue"
-        :class="{ 'text-text-blue border-text-blue': isDragOver }"
+        :class="{ 'upload-drag': isDragOver }"
         @click="loadFile"
         @dragover.prevent="onDragOver"
         @dragleave.prevent="onDragLeave"
@@ -433,3 +433,11 @@ watch(
     </template>
   </Modal>
 </template>
+
+
+<style lang="scss" scoped>
+.upload-drag {
+  border-color: #00c0f5 !important;
+  color: #00c0f5 !important;
+}
+</style>
