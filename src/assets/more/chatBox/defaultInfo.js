@@ -1,5 +1,4 @@
 export const defaultTheme = `{
-  filename: '',
   theme: '',
   dialogBox: {},
   logButton: {},

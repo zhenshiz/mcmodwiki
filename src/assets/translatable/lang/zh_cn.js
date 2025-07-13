@@ -108,6 +108,7 @@ export const zh_cn = {
   'chat.box.component.global.portrait.get.texture.easing': '缓动函数：',
   'chat.box.component.global.portrait.get.player.head.value': '玩家信息：',
   'chat.box.component.global.portrait.get.item.value': '物品id：',
+  'chat.box.component.global.portrait.get.component.key': '立绘唯一标识：',
   'chat.box.component.global.portrait.get.component.width': '宽度：',
   'chat.box.component.global.portrait.get.component.height': '高度：',
   'chat.box.component.global.portrait.get.component.x': 'x距离：',

@@ -13,7 +13,6 @@ export const useChatBoxEditorStore = defineStore(
     ])
 
     const themeSetting = ref({
-      filename: '',
       theme: '',
       dialogBox: {},
       logButton: {},

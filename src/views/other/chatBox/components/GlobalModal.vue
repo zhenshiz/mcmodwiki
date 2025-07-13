@@ -75,13 +75,16 @@ const changePortraitInfo = ref({
 })
 
 const portraitKey = ref('')
+const isEditMode = ref(false) // 添加编辑模式标志
 
 const openChangePortrait = (key, setting = {}) => {
   isShowChangePortrait.value = true
   if (key === 'add') {
     portraitKey.value = ''
+    isEditMode.value = false // 新增模式
   } else if (key === 'update') {
     portraitKey.value = setting.key
+    isEditMode.value = true // 编辑模式
   }
   changePortraitInfo.value.title = translatable(
     lang.value,
@@ -124,18 +127,34 @@ const setPortrait = () => {
     return
   }
 
-  let cachePortrait = chatBoxEditorStore.themeSetting.portrait[portraitKey.value]
-  if (portraitKey.value) {
-    //update
-    del(portraitKey.value)
+  // 检查key是否重复
+  if (isEditMode.value) {
+    // 编辑模式：只有当key发生变化且新key已存在时才报错
+    if (portraitKey.value !== formData.value.key && formData.value.key in chatBoxEditorStore.themeSetting.portrait) {
+      message.warning(translatable(lang.value, 'message.warn.repetition.portrait.key'))
+      return
+    }
+  } else {
+    // 新增模式：key已存在就报错
+    if (formData.value.key in chatBoxEditorStore.themeSetting.portrait) {
+      message.warning(translatable(lang.value, 'message.warn.repetition.portrait.key'))
+      return
+    }
   }
-  if (formData.value.key in chatBoxEditorStore.themeSetting.portrait) {
-    //提示不能重名key 回滚
-    message.warning(translatable(lang.value, 'message.warn.repetition.portrait.key'))
-    chatBoxEditorStore.setPortraitSetting(cachePortrait, false)
-    return
+
+  if (isEditMode.value) {
+    // 编辑模式
+    if (portraitKey.value !== formData.value.key) {
+      // key发生变化，需要删除旧的key
+      del(portraitKey.value)
+    }
+    // 直接更新内容
+    chatBoxEditorStore.setPortraitSetting(formData.value, false)
+  } else {
+    // 新增模式
+    chatBoxEditorStore.setPortraitSetting(formData.value, false)
   }
-  chatBoxEditorStore.setPortraitSetting(formData.value, false)
+
   isShowChangePortrait.value = false
 }
 
@@ -300,6 +319,7 @@ onMounted(async () => {
 
 const replacer = (key, value) => {
   if (
+    key === 'filename' ||
     key === 'theme' ||
     key === 'key' ||
     key === 'visible' ||
@@ -385,6 +405,9 @@ watch(
               v-for="item in searchList"
               class="center flex-col border-2 rounded border-text-gray hover:border-text-blue m-5 pt-5 pb-5 w-[350px]"
             >
+              <div>{{ translatable(lang, 'chat.box.component.global.portrait.get.component.key')
+                }}{{ getDefaultIfInvalid(item.key, '') }}
+              </div>
               <div class="flex flex-col center" v-if="item.type?.toUpperCase() === 'TEXTURE'">
                 <div>{{ translatable(lang, 'chat.box.component.global.portrait.get.texture') }}
                 </div>

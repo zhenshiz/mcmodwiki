@@ -34,6 +34,7 @@ ${JSON.stringify(chatBoxEditorStore.themeSetting, replacer, 2)}
 
 const replacer = (key, value) => {
   if (
+    key === 'filename' ||
     key === 'theme' ||
     key === 'key' ||
     key === 'visible' ||
@@ -181,7 +182,6 @@ watch(
                 )
               } else {
                 chatBoxEditorStore.themeSetting = {
-                  filename: '',
                   theme: 'DIY',
                   dialogBox: {},
                   logButton: {},
