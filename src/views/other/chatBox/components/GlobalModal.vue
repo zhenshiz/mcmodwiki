@@ -13,7 +13,7 @@ import {
   easing,
   portraitType
 } from '@/assets/more/chatBox/option'
-import { getDefaultIfInvalid } from '@/utils/math'
+import { getDefaultIfInvalid, isNumber } from '@/utils/math'
 import { Icon } from '@iconify/vue'
 import { useDialog } from '@/components/register/useDialog.js'
 import { useMessage } from '@/components/register/useMessage.js'
@@ -26,6 +26,8 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { MilkdownProvider } from '@milkdown/vue'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import { get } from 'idb-keyval'
 
 const dialog = useDialog()
 const message = useMessage()
@@ -267,6 +269,59 @@ const handleFileChange = (event) => {
     event.target.files = []
   }
 }
+
+let fileHandle
+
+async function verifyPermission(fileHandle, readWrite) {
+  const options = {}
+  if (readWrite) {
+    options.mode = 'readwrite'
+  }
+  if ((await fileHandle.queryPermission(options)) === 'granted') {
+    return true
+  }
+  if ((await fileHandle.requestPermission(options)) === 'granted') {
+    return true
+  }
+  return false
+}
+
+const modifyFile = async (text) => {
+  if (fileHandle !== undefined && await verifyPermission(fileHandle, true)) {
+    const writable = await fileHandle.createWritable()
+    await writable.write(text)
+    await writable.close()
+  }
+}
+
+onMounted(async () => {
+  fileHandle = await get('themeFile')
+})
+
+const replacer = (key, value) => {
+  if (
+    key === 'theme' ||
+    key === 'key' ||
+    key === 'visible' ||
+    value === undefined ||
+    value === null
+  ) {
+    return undefined // 排除这些属性
+  }
+  if (isNumber(value)) {
+    return Number(value)
+  }
+  return value // 其他的都保留
+}
+
+//修改预设主题自动修改对应的主题文件，如果有的话
+watch(
+  () => chatBoxEditorStore.themeSetting,
+  (newValue) => {
+    modifyFile(JSON.stringify(newValue, replacer, 2))
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <template>
