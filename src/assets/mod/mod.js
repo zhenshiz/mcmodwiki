@@ -61,7 +61,7 @@ export const modList = [
     moreUtil: [],
     mcVersion: ['1.21-1.21.1'],
     modLoader: ['NeoForge'],
-    modVersion: ['1.0.6', '1.0.5', '1.0.4', '1.0.3', '1.0.2', '1.0.1'],
+    modVersion: ['1.0.7', '1.0.6', '1.0.5', '1.0.4', '1.0.3', '1.0.2', '1.0.1'],
   },
 ]
 
