@@ -1,6 +1,6 @@
 <script setup>
 import { useChatBoxEditorStore, usePageStore } from '@/stores/index.js'
-import { translatable, translatableArg } from '@/assets/translatable/translatable.js'
+import { translatable } from '@/assets/translatable/translatable.js'
 import ThemeComponent from '@/views/other/chatBox/components/ThemeComponent.vue'
 import Button from '@/components/Button.vue'
 import { Icon } from '@iconify/vue'
@@ -15,9 +15,14 @@ import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import GlobalDialog from '@/views/other/chatBox/components/GlobalModal.vue'
 import { textAlign, themeList } from '@/assets/more/chatBox/option'
 import { isNumber } from '@/utils/math.js'
-import { defaultTheme } from '@/assets/more/chatBox/defaultInfo'
+import { defaultTheme, functionalButtonSetting } from '@/assets/more/chatBox/defaultInfo'
 import { get, set } from 'idb-keyval'
-import { onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import FormItem from '@/components/FormItem.vue'
+import Form from '@/components/Form.vue'
+import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
+import InputNumber from '@/components/InputNumber.vue'
+import Switch from '@/components/Switch.vue'
 
 const lang = computed(() => usePageStore().setting.language)
 const chatBoxEditorStore = useChatBoxEditorStore()
@@ -37,11 +42,13 @@ const replacer = (key, value) => {
     key === 'filename' ||
     key === 'theme' ||
     key === 'key' ||
-    key === 'visible' ||
     value === undefined ||
     value === null
   ) {
     return undefined // 排除这些属性
+  }
+  if (typeof value === 'boolean') {
+    return value
   }
   if (isNumber(value)) {
     return Number(value)
@@ -49,8 +56,8 @@ const replacer = (key, value) => {
   return value // 其他的都保留
 }
 
-const open = (key, title, setting, renderOrder) => {
-  themeComponent.value.open(key, title, renderOrder, setting)
+const open = (key, title, setting, renderOrder, isSizeShow = true) => {
+  themeComponent.value.open(key, title, setting, renderOrder, isSizeShow)
 }
 
 const setBasicSetting = (setting) => {
@@ -118,10 +125,8 @@ async function verifyPermission(fileHandle, readWrite) {
   if ((await fileHandle.queryPermission(options)) === 'granted') {
     return true
   }
-  if ((await fileHandle.requestPermission(options)) === 'granted') {
-    return true
-  }
-  return false
+  return (await fileHandle.requestPermission(options)) === 'granted'
+
 }
 
 const modifyFile = async (text) => {
@@ -130,6 +135,14 @@ const modifyFile = async (text) => {
     await writable.write(text)
     await writable.close()
   }
+}
+
+// 更新功能按钮数组
+const updateFunctionalButton = (newButtons) => {
+  // 创建一个新的对象，以确保触发响应式更新
+  const newThemeSetting = JSON.parse(JSON.stringify(chatBoxEditorStore.themeSetting))
+  newThemeSetting.functionalButton = newButtons
+  chatBoxEditorStore.setThemeSetting(newThemeSetting, true)
 }
 
 onMounted(async () => {
@@ -165,218 +178,177 @@ watch(
       <div class="font-bold text-2xl mb-5">{{ translatable(lang, 'chat.box.theme.1') }}</div>
 
       <!--对话框主题-->
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">{{ translatable(lang, 'chat.box.theme.3') }}</div>
-        <Select
-          is-no-case-sensitive
-          class="max-w-[150px]"
-          v-model:value="fileInfo.theme"
-          :options="themeList"
-          @update:value="
+      <Form>
+        <FormItem :label="translatable(lang, 'chat.box.theme.2')">
+          <Select
+            is-no-case-sensitive
+            class="max-w-[150px]"
+            v-model:value="fileInfo.theme"
+            :options="themeList"
+            @update:value="
             (arg) => {
               fileInfo.theme = arg.value
+              // 保存当前的functionalButton
+              const currentButtons = [...(chatBoxEditorStore.themeSetting.functionalButton || [])]
+
               if (fileInfo.theme !== 'DIY') {
-                chatBoxEditorStore.themeSetting = Object.assign(
-                  chatBoxEditorStore.themeSetting,
-                  themeList.filter((theme) => theme.value === fileInfo.theme)[0].json,
-                )
+                // 合并主题设置，但保留当前的functionalButton
+                const themeJson = themeList.filter((theme) => theme.value === fileInfo.theme)[0].json
+                chatBoxEditorStore.themeSetting = {
+                  ...themeJson,
+                  functionalButton: currentButtons
+                }
               } else {
+                // 创建DIY主题，但保留当前的functionalButton
                 chatBoxEditorStore.themeSetting = {
                   theme: 'DIY',
-                  dialogBox: {},
-                  logButton: {},
-                  option: {},
                   portrait: {},
+                  option: {},
+                  dialogBox: {},
+                  functionalButton: currentButtons,
+                  keyPrompt: {}
                 }
               }
             }
           "
-        />
-      </div>
+          />
+        </FormItem>
+      </Form>
 
       <!--对话框配置-->
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.dialog.box.basic') }}：
-        </div>
-        <Button
-          class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
-          isToggleColor
-          :rounded-size="10"
-          @click="open('dialogBox', 'chat.box.theme.dialog.box.basic', 0, fileInfo.dialogBox)"
-        >
-          {{ translatable(lang, 'chat.box.theme.button.setting') }}
-        </Button>
-      </div>
+      <Form class="mt-3">
+        <FormItem :label="translatable(lang, 'chat.box.theme.dialog.box.basic')">
+          <Button
+            class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
+            isToggleColor
+            :rounded-size="10"
+            @click="open('dialogBox', 'chat.box.theme.dialog.box.basic',  fileInfo.dialogBox,0)"
+          >
+            {{ translatable(lang, 'chat.box.theme.button.setting') }}
+          </Button>
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.dialog.box.texture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="fileInfo.dialogBox.texture"
+            defaultModel="search"
+          />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.dialog.box.line_width')">
+          <InputNumber v-model="fileInfo.dialogBox.lineWidth" :min="0" class="mr-10" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.dialog.box.name.pos')">
+          <InputNumber v-model="fileInfo.dialogBox.nameX" class="mr-10" />
+          <InputNumber v-model="fileInfo.dialogBox.nameY" class="mr-10" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.dialog.box.text.pos')">
+          <InputNumber v-model="fileInfo.dialogBox.textX" class="mr-10" />
+          <InputNumber v-model="fileInfo.dialogBox.textY" class="mr-10" />
+        </FormItem>
+      </Form>
 
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.4') }}
+      <!--功能按钮配置-->
+      <div class="mr-4">
+        <div class="font-bold text-2xl mb-5 mt-5">
+          {{ translatable(lang, 'chat.box.theme.functional.button.basic') }}
         </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.texture"
-          defaultModel="search"
-        />
-      </div>
-
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.5') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.lineWidth"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.6') }}
-        </div>
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.nameX"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.nameY"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.7') }}
-        </div>
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.textX"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.dialogBox.textY"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-      </div>
-
-      <!--log按钮配置-->
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.log.button.basic') }}：
-        </div>
-        <Button
-          class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
-          isToggleColor
-          :rounded-size="10"
-          @click="open('logButton', 'chat.box.theme.log.button.basic', 30, fileInfo.logButton)"
-        >
-          {{ translatable(lang, 'chat.box.theme.button.setting') }}
-        </Button>
-      </div>
-
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.8') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.logButton.texture"
-          defaultModel="search"
-        />
-      </div>
-
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.9') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.logButton.hoverTexture"
-          defaultModel="search"
+        <ArrayObjectGenerator
+          :model-value="chatBoxEditorStore.themeSetting.functionalButton"
+          @update:model-value="updateFunctionalButton"
+          :field-descriptions="functionalButtonSetting(lang)"
+          displayTemplate="{type}"
+          :title="translatable(lang,'chat.box.theme.functional.button')"
         />
       </div>
     </div>
     <div class="flex-1">
       <!--选项配置-->
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.option.basic') }}：
-        </div>
-        <Button
-          class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
-          isToggleColor
-          :rounded-size="10"
-          @click="open('option', 'chat.box.theme.option.basic', 10, fileInfo.option)"
-        >
-          {{ translatable(lang, 'chat.box.theme.button.setting') }}
-        </Button>
-      </div>
-      <div class="flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.10') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.option.texture"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.11') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.option.selectTexture"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.12') }}
-        </div>
-        <Input
-          class="max-w-[500px] ml-2 mr-2"
-          v-model="fileInfo.option.lockTexture"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.13') }}
-        </div>
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.option.optionChatX"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-        <Input
-          class="max-w-[300px] ml-2 mr-2"
-          v-model="fileInfo.option.optionChatY"
-          :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-          defaultModel="search"
-        />
-      </div>
-      <div class="mt-5 flex flex-row items-center">
-        <div class="whitespace-nowrap">
-          {{ translatable(lang, 'chat.box.theme.14') }}
-        </div>
-        <Select
-          is-no-case-sensitive
-          class="max-w-[150px]"
-          v-model:value="fileInfo.option.textAlign"
-          :options="textAlign.values(lang)"
-          mode="top"
-          @update:value="(arg) => (fileInfo.option.textAlign = arg.value)"
-        />
-      </div>
+      <Form>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.basic')">
+          <Button
+            class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
+            isToggleColor
+            :rounded-size="10"
+            @click="open('option', 'chat.box.theme.option.basic',  fileInfo.option,10)"
+          >
+            {{ translatable(lang, 'chat.box.theme.button.setting') }}
+          </Button>
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.texture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="fileInfo.option.texture"
+            defaultModel="search"
+          />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.hover_texture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="fileInfo.option.selectTexture"
+            defaultModel="search"
+          />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.lock_texture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="fileInfo.option.lockTexture"
+            defaultModel="search"
+          />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.text.pos')">
+          <InputNumber v-model="fileInfo.dialogBox.optionChatX" class="mr-10" />
+          <InputNumber v-model="fileInfo.dialogBox.optionChatY" class="mr-10" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.option.text.align')">
+          <Select
+            is-no-case-sensitive
+            class="max-w-[150px]"
+            v-model:value="fileInfo.option.textAlign"
+            :options="textAlign.values(lang)"
+            mode="top"
+            @update:value="(arg) => (fileInfo.option.textAlign = arg.value)"
+          />
+        </FormItem>
+      </Form>
+
+      <!--按键提示配置-->
+      <Form>
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.basic')">
+          <Button
+            class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
+            isToggleColor
+            :rounded-size="10"
+            @click="open('keyPrompt', 'chat.box.theme.KeyPrompt.basic', fileInfo.keyPrompt,40)"
+          >
+            {{ translatable(lang, 'chat.box.theme.button.setting') }}
+          </Button>
+        </FormItem>
+        <FormItem :label="translatable(lang,'chat.box.theme.KeyPrompt.visible')">
+          <Switch v-model="chatBoxEditorStore.themeSetting.keyPrompt.visible" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureWidth')">
+          <InputNumber v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureWidth"
+                       :min="0" :step="0.1" class="mr-10" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureHeight')">
+          <InputNumber v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureHeight"
+                       :min="0" :step="0.1" class="mr-10" />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.rightClickTexture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="chatBoxEditorStore.themeSetting.keyPrompt.rightClickTexture"
+            defaultModel="search"
+          />
+        </FormItem>
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.scrollTexture')">
+          <Input
+            class="max-w-[500px] ml-2 mr-2"
+            v-model="chatBoxEditorStore.themeSetting.keyPrompt.scrollTexture"
+            defaultModel="search"
+          />
+        </FormItem>
+      </Form>
 
       <!--展示json-->
       <Button
@@ -392,6 +364,7 @@ watch(
 
   <ThemeComponent @onPositiveClick="setBasicSetting" ref="themeComponent" />
 
+  <!--json展示-->
   <Modal
     :show="isShowThemeJson"
     :title="translatable(lang, 'chat.box.theme.download.title')"

@@ -1,1 +1,1 @@
-export const chatBoxEditorVersion = '1.0.6'
+export const chatBoxEditorVersion = '1.0.7'

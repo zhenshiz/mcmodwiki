@@ -14,10 +14,11 @@ export const useChatBoxEditorStore = defineStore(
 
     const themeSetting = ref({
       theme: '',
-      dialogBox: {},
-      logButton: {},
-      option: {},
       portrait: {},
+      option: {},
+      dialogBox: {},
+      functionalButton: [],
+      keyPrompt: {}
     })
 
     const dialoguesSetting = ref({
@@ -28,6 +29,7 @@ export const useChatBoxEditorStore = defineStore(
       isPause: true,
       isHistoricalSkip: true,
       maxTriggerCount: -1,
+      theme: ''
     })
 
     const translatableKey = (lang) => {
@@ -77,6 +79,10 @@ export const useChatBoxEditorStore = defineStore(
           }
           case 'option': {
             themeSetting.value.option = Object.assign(themeSetting.value.option, setting)
+            break
+          }
+          case 'keyPrompt':{
+            themeSetting.value.keyPrompt = Object.assign(themeSetting.value.keyPrompt, setting)
             break
           }
         }

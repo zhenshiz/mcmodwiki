@@ -2,9 +2,11 @@
 import { usePageStore } from '@/stores/index.js'
 import { translatable, translatableArg } from '@/assets/translatable/translatable.js'
 import Modal from '@/components/Modal.vue'
-import Input from '@/components/Input.vue'
 import Select from '@/components/Select.vue'
 import { alignXList, alignYList } from '@/assets/more/chatBox/option'
+import Form from '@/components/Form.vue'
+import FormItem from '@/components/FormItem.vue'
+import InputNumber from '@/components/InputNumber.vue'
 
 const lang = computed(() => usePageStore().setting.language)
 
@@ -58,73 +60,52 @@ defineExpose({ open })
     @onNegativeClick="(arg) => (show = false)"
   >
     <template #content>
-      <div class="flex flex-col justify-center w-full dark:text-white">
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.x') }}
-            <Input
-              class="mr-2"
-              v-model="dialogSetting.setting.x"
-              defaultModel="search"
-              :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-            />
-          </div>
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.y') }}
-            <Input
-              v-model="dialogSetting.setting.y"
-              defaultModel="search"
-              :placeholder="translatableArg(lang, 'chat.box.theme.component.size', -100, 100)"
-            />
-          </div>
-          <div v-if="isSize" class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.width') }}
-            <Input
-              v-model="dialogSetting.setting.width"
-              defaultModel="search"
-              :placeholder="translatableArg(lang, 'chat.box.theme.component.size', 0, 100)"
-            />
-          </div>
-          <div v-if="isSize" class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.height') }}
-            <Input
-              v-model="dialogSetting.setting.height"
-              defaultModel="search"
-              :placeholder="translatableArg(lang, 'chat.box.theme.component.size', 0, 100)"
-            />
-          </div>
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.opacity') }}
-            <Input v-model="dialogSetting.setting.opacity" defaultModel="search" />
-          </div>
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatableArg(lang, 'chat.box.theme.component.renderOrder', defaultRenderOrder) }}
-            <Input v-model="dialogSetting.setting.renderOrder" defaultModel="search" />
-          </div>
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.align.x') }}
-            <Select
-              is-no-case-sensitive
-              class="max-w-[150px]"
-              v-model:value="dialogSetting.setting.alignX"
-              :options="alignXList.values(lang)"
-              mode="bottom"
-              @update:value="(arg) => (dialogSetting.setting.alignX = arg.value)"
-            />
-          </div>
-          <div class="flex flex-row items-center whitespace-nowrap">
-            {{ translatable(lang, 'chat.box.theme.component.align.y') }}
-            <Select
-              is-no-case-sensitive
-              class="max-w-[150px]"
-              v-model:value="dialogSetting.setting.alignY"
-              :options="alignYList.values(lang)"
-              mode="bottom"
-              @update:value="(arg) => (dialogSetting.setting.alignY = arg.value)"
-            />
-          </div>
-        </div>
-      </div>
+      <Form class="mt-3">
+        <FormItem class="mr-2" :label="translatableArg(lang, 'chat.box.theme.component.x',0)">
+          <InputNumber v-model="dialogSetting.setting.x" :step="0.1" />
+        </FormItem>
+        <FormItem class="mr-2" :label="translatableArg(lang, 'chat.box.theme.component.y',0)">
+          <InputNumber v-model="dialogSetting.setting.y" :step="0.1" />
+        </FormItem>
+        <FormItem v-if="isSize" class="mr-2"
+                  :label="translatableArg(lang, 'chat.box.theme.component.width',10)">
+          <InputNumber v-model="dialogSetting.setting.width" :step="0.1" :min="0" />
+        </FormItem>
+        <FormItem v-if="isSize" class="mr-2"
+                  :label="translatableArg(lang, 'chat.box.theme.component.height',10)">
+          <InputNumber v-model="dialogSetting.setting.height" :step="0.1" :min="0" />
+        </FormItem>
+        <FormItem class="mr-2"
+                  :label="translatableArg(lang, 'chat.box.theme.component.opacity',100)">
+          <InputNumber v-model="dialogSetting.setting.opacity" :step="1" :min="0" :max="100" />
+        </FormItem>
+        <FormItem class="mr-2"
+                  :label="translatableArg(lang, 'chat.box.theme.component.renderOrder',defaultRenderOrder)">
+          <InputNumber v-model="dialogSetting.setting.renderOrder" :step="1" />
+        </FormItem>
+        <FormItem
+          :label="translatableArg(lang, 'chat.box.theme.component.align.x',translatable(lang,alignXList.of('LEFT')))">
+          <Select
+            is-no-case-sensitive
+            class="max-w-[150px]"
+            v-model:value="dialogSetting.setting.alignX"
+            :options="alignXList.values(lang)"
+            mode="bottom"
+            @update:value="(arg) => (dialogSetting.setting.alignX = arg.value)"
+          />
+        </FormItem>
+        <FormItem
+          :label="translatableArg(lang, 'chat.box.theme.component.align.y',translatable(lang,alignYList.of('TOP')))">
+          <Select
+            is-no-case-sensitive
+            class="max-w-[150px]"
+            v-model:value="dialogSetting.setting.alignY"
+            :options="alignYList.values(lang)"
+            mode="bottom"
+            @update:value="(arg) => (dialogSetting.setting.alignY = arg.value)"
+          />
+        </FormItem>
+      </Form>
     </template>
   </Modal>
 </template>
