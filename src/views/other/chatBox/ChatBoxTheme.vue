@@ -161,6 +161,7 @@ watch(
       <Form>
         <FormItem :label="translatable(lang, 'chat.box.theme.2')">
           <Select
+            :offset="2"
             is-no-case-sensitive
             class="max-w-[150px]"
             v-model:value="fileInfo.theme"
