@@ -1,4 +1,3 @@
-// The following content is AI-translated and may not be 100% accurate
 export const en_us = {
   'chat.box.component.global.portrait.get.component.key': 'Portrait Unique ID:',
   'chat.box.dialogues.option': 'Option (optional)',
@@ -99,9 +98,9 @@ export const en_us = {
   'chat.box.theme.component.opacity': 'Opacity (optional, default 100)',
   'chat.box.theme.component.renderOrder': 'Render order weight (optional, default %s):',
   'chat.box.theme.component.size': 'Enter a value between %s-%s',
-  'chat.box.theme.dialog.box.basic': 'Dialog Box Basic Settings',
+  'chat.box.theme.dialog.box.basic': 'Dialog Box Basic Settings:',
   'chat.box.theme.log.button.basic': 'Chat History Button Settings',
-  'chat.box.theme.option.basic': 'Options Basic Settings',
+  'chat.box.theme.option.basic': 'Options Basic Settings:',
   'chat.box.theme.button.setting': 'Click to configure',
   'chat.box.theme.1': 'Dialog Theme Configuration',
   'chat.box.theme.2': 'Create File:',

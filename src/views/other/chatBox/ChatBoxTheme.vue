@@ -14,7 +14,6 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import GlobalDialog from '@/views/other/chatBox/components/GlobalModal.vue'
 import { textAlign, themeList } from '@/assets/more/chatBox/option'
-import { isNumber } from '@/utils/math.js'
 import { defaultTheme, functionalButtonSetting } from '@/assets/more/chatBox/defaultInfo'
 import { get, set } from 'idb-keyval'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -23,6 +22,7 @@ import Form from '@/components/Form.vue'
 import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
 import InputNumber from '@/components/InputNumber.vue'
 import Switch from '@/components/Switch.vue'
+import { cleanChatBoxTheme } from '@/assets/more/chatBox/class.js'
 
 const lang = computed(() => usePageStore().setting.language)
 const chatBoxEditorStore = useChatBoxEditorStore()
@@ -33,28 +33,9 @@ const isShowThemeJson = ref(false)
 const fileInfo = computed(() => chatBoxEditorStore.themeSetting)
 const themeJson = computed(() => {
   return `\`\`\`json
-${JSON.stringify(chatBoxEditorStore.themeSetting, replacer, 2)}
+${JSON.stringify(cleanChatBoxTheme(chatBoxEditorStore.themeSetting), null, 2)}
   \`\`\``
 })
-
-const replacer = (key, value) => {
-  if (
-    key === 'filename' ||
-    key === 'theme' ||
-    key === 'key' ||
-    value === undefined ||
-    value === null
-  ) {
-    return undefined // 排除这些属性
-  }
-  if (typeof value === 'boolean') {
-    return value
-  }
-  if (isNumber(value)) {
-    return Number(value)
-  }
-  return value // 其他的都保留
-}
 
 const open = (key, title, setting, renderOrder, isSizeShow = true) => {
   themeComponent.value.open(key, title, setting, renderOrder, isSizeShow)
@@ -101,7 +82,7 @@ const onDrop = async (event) => {
     .filter((item) => item.kind === 'file')[0]
     .getAsFileSystemHandle()
 
-  if (handle.kind === 'file' && await verifyPermission(handle, true)) {
+  if (handle.kind === 'file' && (await verifyPermission(handle, true))) {
     fileHandle = handle
     await set('themeFile', handle)
     let file = await fileHandle.getFile()
@@ -126,11 +107,10 @@ async function verifyPermission(fileHandle, readWrite) {
     return true
   }
   return (await fileHandle.requestPermission(options)) === 'granted'
-
 }
 
 const modifyFile = async (text) => {
-  if (fileHandle !== undefined && await verifyPermission(fileHandle, true)) {
+  if (fileHandle !== undefined && (await verifyPermission(fileHandle, true))) {
     const writable = await fileHandle.createWritable()
     await writable.write(text)
     await writable.close()
@@ -152,7 +132,7 @@ onMounted(async () => {
 watch(
   () => chatBoxEditorStore.themeSetting,
   (newValue) => {
-    modifyFile(JSON.stringify(newValue, replacer, 2))
+    modifyFile(JSON.stringify(cleanChatBoxTheme(newValue), null, 2))
   },
   { deep: true, immediate: true },
 )
@@ -186,31 +166,32 @@ watch(
             v-model:value="fileInfo.theme"
             :options="themeList"
             @update:value="
-            (arg) => {
-              fileInfo.theme = arg.value
-              // 保存当前的functionalButton
-              const currentButtons = [...(chatBoxEditorStore.themeSetting.functionalButton || [])]
+              (arg) => {
+                fileInfo.theme = arg.value
+                // 保存当前的functionalButton
+                const currentButtons = [...(chatBoxEditorStore.themeSetting.functionalButton || [])]
 
-              if (fileInfo.theme !== 'DIY') {
-                // 合并主题设置，但保留当前的functionalButton
-                const themeJson = themeList.filter((theme) => theme.value === fileInfo.theme)[0].json
-                chatBoxEditorStore.themeSetting = {
-                  ...themeJson,
-                  functionalButton: currentButtons
-                }
-              } else {
-                // 创建DIY主题，但保留当前的functionalButton
-                chatBoxEditorStore.themeSetting = {
-                  theme: 'DIY',
-                  portrait: {},
-                  option: {},
-                  dialogBox: {},
-                  functionalButton: currentButtons,
-                  keyPrompt: {}
+                if (fileInfo.theme !== 'DIY') {
+                  // 合并主题设置，但保留当前的functionalButton
+                  const themeJson = themeList.filter((theme) => theme.value === fileInfo.theme)[0]
+                    .json
+                  chatBoxEditorStore.themeSetting = {
+                    ...themeJson,
+                    functionalButton: currentButtons,
+                  }
+                } else {
+                  // 创建DIY主题，但保留当前的functionalButton
+                  chatBoxEditorStore.themeSetting = {
+                    theme: 'DIY',
+                    portrait: {},
+                    option: {},
+                    dialogBox: {},
+                    functionalButton: currentButtons,
+                    keyPrompt: {},
+                  }
                 }
               }
-            }
-          "
+            "
           />
         </FormItem>
       </Form>
@@ -222,7 +203,7 @@ watch(
             class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
             isToggleColor
             :rounded-size="10"
-            @click="open('dialogBox', 'chat.box.theme.dialog.box.basic',  fileInfo.dialogBox,0)"
+            @click="open('dialogBox', 'chat.box.theme.dialog.box.basic', fileInfo.dialogBox, 0)"
           >
             {{ translatable(lang, 'chat.box.theme.button.setting') }}
           </Button>
@@ -257,7 +238,7 @@ watch(
           @update:model-value="updateFunctionalButton"
           :field-descriptions="functionalButtonSetting(lang)"
           displayTemplate="{type}"
-          :title="translatable(lang,'chat.box.theme.functional.button')"
+          :title="translatable(lang, 'chat.box.theme.functional.button')"
         />
       </div>
     </div>
@@ -269,7 +250,7 @@ watch(
             class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
             isToggleColor
             :rounded-size="10"
-            @click="open('option', 'chat.box.theme.option.basic',  fileInfo.option,10)"
+            @click="open('option', 'chat.box.theme.option.basic', fileInfo.option, 10)"
           >
             {{ translatable(lang, 'chat.box.theme.button.setting') }}
           </Button>
@@ -318,21 +299,29 @@ watch(
             class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
             isToggleColor
             :rounded-size="10"
-            @click="open('keyPrompt', 'chat.box.theme.KeyPrompt.basic', fileInfo.keyPrompt,40)"
+            @click="open('keyPrompt', 'chat.box.theme.KeyPrompt.basic', fileInfo.keyPrompt, 40)"
           >
             {{ translatable(lang, 'chat.box.theme.button.setting') }}
           </Button>
         </FormItem>
-        <FormItem :label="translatable(lang,'chat.box.theme.KeyPrompt.visible')">
+        <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.visible')">
           <Switch v-model="chatBoxEditorStore.themeSetting.keyPrompt.visible" />
         </FormItem>
         <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureWidth')">
-          <InputNumber v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureWidth"
-                       :min="0" :step="0.1" class="mr-10" />
+          <InputNumber
+            v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureWidth"
+            :min="0"
+            :step="0.1"
+            class="mr-10"
+          />
         </FormItem>
         <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureHeight')">
-          <InputNumber v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureHeight"
-                       :min="0" :step="0.1" class="mr-10" />
+          <InputNumber
+            v-model="chatBoxEditorStore.themeSetting.keyPrompt.mouseTextureHeight"
+            :min="0"
+            :step="0.1"
+            class="mr-10"
+          />
         </FormItem>
         <FormItem :label="translatable(lang, 'chat.box.theme.KeyPrompt.rightClickTexture')">
           <Input
@@ -398,7 +387,6 @@ watch(
     </template>
   </Modal>
 </template>
-
 
 <style lang="scss" scoped>
 .upload-drag {

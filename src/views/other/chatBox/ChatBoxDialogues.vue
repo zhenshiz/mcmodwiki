@@ -9,13 +9,11 @@ import Input from '@/components/Input.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 import Switch from '@/components/Switch.vue'
 import Button from '@/components/Button.vue'
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { copyToClipboard } from '@/utils/web'
-import { isNumber } from 'lodash'
 import { MilkdownProvider } from '@milkdown/vue'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
-import { allValuesEmptyString } from '@/utils/math'
 import { defaultDialogues, optionSetting } from '@/assets/more/chatBox/defaultInfo'
 import PortraitEditor from '@/views/other/chatBox/components/PortraitEditor.vue'
 import { useDialog } from '@/components/register/useDialog'
@@ -24,6 +22,7 @@ import FormItem from '@/components/FormItem.vue'
 import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
 import AutoComplete from '@/components/AutoComplete.vue'
 import draggable from 'vuedraggable'
+import { cleanChatBoxDialogues } from '@/assets/more/chatBox/class.js'
 
 const message = useMessage()
 const dialog = useDialog()
@@ -192,33 +191,6 @@ const openDialoguesSetting = (groupName, index) => {
   dialogue.theme = dialogue.theme || ''
 }
 
-const addOption = () => {
-  dialoguesSetting.value.dialogues[dialogGroup.value][dialogIndex.value].options.push({
-    text: '',
-    isLock: false,
-    lock: {
-      objective: '',
-      value: '',
-    },
-    hidden: {
-      objective: '',
-      value: '',
-    },
-    isHidden: false,
-    next: '',
-    click: {
-      type: '',
-      value: '',
-    },
-    tooltip: '',
-    visible: true,
-  })
-}
-
-const removeOption = (index) => {
-  dialoguesSetting.value.dialogues[dialogGroup.value][dialogIndex.value].options.splice(index, 1)
-}
-
 // 上传相关逻辑
 let fileHandle
 
@@ -317,27 +289,9 @@ const preprocessDialogues = (dialogues) => {
 const themeJson = computed(() => {
   const processedData = preprocessDialogues(dialoguesSetting.value)
   return `\`\`\`json
-${JSON.stringify(processedData, simpleReplacer, 2)}
+${JSON.stringify(cleanChatBoxDialogues(processedData), null, 2)}
   \`\`\``
 })
-
-const simpleReplacer = (key, value) => {
-  // 排除visible字段和空值
-  if (key === 'visible' || value === undefined || value === null || value === '') {
-    return undefined // 排除这些属性
-  }
-
-  //空数组
-  if (Array.isArray(value) && value.length === 0) return undefined
-  //空对象
-  if (allValuesEmptyString(value)) {
-    return undefined
-  }
-  if (isNumber(value)) {
-    return Number(value)
-  }
-  return value // 其他的都保留
-}
 
 onMounted(async () => {
   fileHandle = await get('dialoguesFile')
@@ -346,7 +300,7 @@ onMounted(async () => {
 watch(
   () => chatBoxEditorStore.dialoguesSetting,
   (newValue) => {
-    modifyFile(JSON.stringify(newValue, simpleReplacer, 2))
+    modifyFile(JSON.stringify(cleanChatBoxDialogues(newValue), null, 2))
   },
   { deep: true, immediate: true },
 )
@@ -460,9 +414,7 @@ watch(
                           icon="mdi:drag-vertical"
                           class="text-lg mr-2 cursor-move dialog-handle"
                         />
-                        <span
-                          class="font-medium ellipsis max-w-20 cursor-pointer"
-                        >
+                        <span class="font-medium ellipsis max-w-20 cursor-pointer">
                           {{
                             dialog.dialogBox?.name === ''
                               ? `${translatable(lang, 'chat.box.dialogues')}${index + 1}`

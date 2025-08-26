@@ -9,7 +9,7 @@ import Select from './Select.vue'
 import Switch from './Switch.vue'
 import ColorPicker from './ColorPicker.vue'
 import AutoComplete from './AutoComplete.vue'
-import Color from '../assets/more/chatBox/class.js'
+import { Color } from '@/assets/more/chatBox/class.js'
 import { translatable } from '../assets/translatable/translatable.js'
 import { usePageStore } from '@/stores/index.js'
 

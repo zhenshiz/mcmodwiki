@@ -56,7 +56,7 @@ export const zh_cn = {
   'chat.box.theme.component.size': '请输入一个大于0的值',
 
   'chat.box.theme.dialog.box.basic': '对话框基础配置：',
-  'chat.box.theme.dialog.box.texture': '对话框贴图（必填）：',
+  'chat.box.theme.dialog.box.texture': '对话框贴图（建议填）：',
   'chat.box.theme.dialog.box.line_width': '对话框一行字的宽度（必填）：',
   'chat.box.theme.dialog.box.name.pos': '名称位置（可选，默认0）：',
   'chat.box.theme.dialog.box.text.pos': '文本位置（可选，默认0）：',
@@ -71,9 +71,9 @@ export const zh_cn = {
   'chat.box.theme.functional.button.hover_texture': '功能按钮鼠标悬浮时贴图（必填）：',
 
   'chat.box.theme.option.basic': '选项基础配置：',
-  'chat.box.theme.option.texture': '选项默认时材质（必填）：',
-  'chat.box.theme.option.hover_texture': '选项鼠标悬浮时材质（必填）：',
-  'chat.box.theme.option.lock_texture': '选项上锁时材质（必填）：',
+  'chat.box.theme.option.texture': '选项默认时材质（建议填）：',
+  'chat.box.theme.option.hover_texture': '选项鼠标悬浮时材质（建议填）：',
+  'chat.box.theme.option.lock_texture': '选项上锁时材质（建议填）：',
   'chat.box.theme.option.text.pos': '选项文本位置（可选，默认0）：',
   'chat.box.theme.option.text.align': '字体对齐（可选，默认左对齐）：',
 
@@ -228,7 +228,7 @@ export const zh_cn = {
   'chat.box.dialogues.portrait.reference': '引用',
   'chat.box.dialogues.portrait.custom': '自定义',
   'chat.box.dialogues.portrait.unknown': '未知立绘',
-  'chat.box.dialogues.portrait.id': '立绘ID：',
+  'chat.box.dialogues.portrait.id': '立绘ID（必填）：',
   'chat.box.dialogues.portrait.switch.to.object': '切换为自定义模式',
   'chat.box.dialogues.portrait.switch.to.string': '切换为引用模式',
 
