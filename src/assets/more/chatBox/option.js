@@ -145,12 +145,12 @@ export const themeList = [
   {
     label: 'RPG',
     value: 'RPG',
-    json: JSON.parse(`{"option":{"texture":"chatbox:textures/options/default_no_checked_option.png","selectTexture":"chatbox:textures/options/default_checked_option.png","lockTexture":"chatbox:textures/options/default_lock_checked_option.png","x":0,"y":30,"width":35,"height":8,"alignX":"right","alignY":"top","optionChatX":-12,"optionChatY":-2,"textAlign":"left"},"dialogBox":{"texture":"chatbox:textures/chatbox/default_dialog_box.png","alignX":"left","alignY":"bottom","lineWidth":70,"width":100,"height":40,"nameX":20,"nameY":10,"textX":20,"textY":15},"functionalButton":[{"type":"LOG"},{"type":"FASTFORWARD"},{"type":"AUTOPLAY"}]}`)
+    json: JSON.parse(`{"option":{"texture":"chatbox:textures/options/default_no_checked_option.png","selectTexture":"chatbox:textures/options/default_checked_option.png","lockTexture":"chatbox:textures/options/default_lock_checked_option.png","x":0,"y":30,"width":35,"height":8,"alignX":"right","alignY":"top","optionChatX":-12,"optionChatY":-2,"textAlign":"left"},"dialogBox":{"texture":"chatbox:textures/chatbox/default_dialog_box.png","alignX":"left","alignY":"bottom","lineWidth":70,"width":100,"height":40,"nameX":20,"nameY":10,"textX":20,"textY":15},"functionalButton":[{"type":"LOG"},{"type":"FASTFORWARD"},{"type":"AUTOPLAY"}],"keyPrompt": {}}`)
   },
   {
     label: 'GalGame',
     value: 'GalGame',
-    json: JSON.parse(`{"option":{"texture":"chatbox:textures/options/gal_no_checked_option.png","selectTexture":"chatbox:textures/options/gal_checked_option.png","lockTexture":"chatbox:textures/options/gal_no_checked_option.png","x":0,"y":20,"optionChatX":0,"optionChatY":-2,"width":50,"height":10,"alignX":"center","alignY":"top","textAlign":"center"},"dialogBox":{"texture":"chatbox:textures/chatbox/gal_dialog_box.png","alignX":"center","alignY":"bottom","x":0,"y":-5,"width":80,"height":40,"lineWidth":60,"nameX":10,"nameY":10,"textX":10,"textY":15},"functionalButton":[{"type":"LOG"},{"type":"FASTFORWARD"},{"type":"AUTOPLAY"}]}`)
+    json: JSON.parse(`{"option":{"texture":"chatbox:textures/options/gal_no_checked_option.png","selectTexture":"chatbox:textures/options/gal_checked_option.png","lockTexture":"chatbox:textures/options/gal_no_checked_option.png","x":0,"y":20,"optionChatX":0,"optionChatY":-2,"width":50,"height":10,"alignX":"center","alignY":"top","textAlign":"center"},"dialogBox":{"texture":"chatbox:textures/chatbox/gal_dialog_box.png","alignX":"center","alignY":"bottom","x":0,"y":-5,"width":80,"height":40,"lineWidth":60,"nameX":10,"nameY":10,"textX":10,"textY":15},"functionalButton":[{"type":"LOG"},{"type":"FASTFORWARD"},{"type":"AUTOPLAY"}],"keyPrompt": {}}`)
   },
   { label: 'DIY', value: 'DIY' }
 ]

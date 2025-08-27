@@ -169,16 +169,12 @@ watch(
             @update:value="
               (arg) => {
                 fileInfo.theme = arg.value
-                // 保存当前的functionalButton
-                const currentButtons = [...(chatBoxEditorStore.themeSetting.functionalButton || [])]
 
                 if (fileInfo.theme !== 'DIY') {
-                  // 合并主题设置，但保留当前的functionalButton
-                  const themeJson = themeList.filter((theme) => theme.value === fileInfo.theme)[0]
-                    .json
+                  const json = themeList.filter((theme) => theme.value === fileInfo.theme)[0].json
                   chatBoxEditorStore.themeSetting = {
-                    ...themeJson,
-                    functionalButton: currentButtons,
+                    theme: fileInfo.theme,
+                    ...json,
                   }
                 } else {
                   // 创建DIY主题，但保留当前的functionalButton
