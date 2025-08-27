@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
           <!--页面跳转-->
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
                 hoverLineType="toFlanks"
-                :href="`/main`">
+                :href="`/`">
             {{ translatable(lang, 'layout.link.1') }}
           </Link>
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks"
@@ -260,7 +260,7 @@ onBeforeUnmount(() => {
            class="w-[80%] bg-white dark:bg-dark-blue flex flex-col items-center justify-start h-full z-10">
         <div class="w-[80%] flex items-start">
           <Link class="m-2 mt-10 text-lg text-text-blue whitespace-nowrap"
-                :href="`/main`">
+                :href="`/`">
             {{ translatable(lang, 'layout.link.1') }}
           </Link>
         </div>
