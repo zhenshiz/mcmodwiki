@@ -21,6 +21,7 @@ import { get, set } from 'idb-keyval'
 import FormItem from '@/components/FormItem.vue'
 import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
 import AutoComplete from '@/components/AutoComplete.vue'
+import ThemeComponent from '@/views/other/chatBox/components/ThemeComponent.vue'
 import draggable from 'vuedraggable'
 import { cleanChatBoxDialogues } from '@/assets/more/chatBox/class.js'
 
@@ -40,6 +41,8 @@ const expandedGroups = ref({})
 
 // 将对象转换为数组以便拖拽
 const dialoguesArray = ref([])
+
+const themeComponent = ref()
 
 // 监听dialoguesSetting变化，更新dialoguesArray
 watch(
@@ -284,6 +287,17 @@ const preprocessDialogues = (dialogues) => {
   })
 
   return result
+}
+
+const open = (key, title, setting, renderOrder, isSizeShow = true) => {
+  themeComponent.value.open(key, title, setting, renderOrder, isSizeShow)
+}
+
+const setBasicSetting = (setting) => {
+  chatBoxEditorStore.setThemeSetting(setting, false, {
+    dialogGroup: dialogGroup.value,
+    dialogIndex: dialogIndex.value
+  })
 }
 
 const themeJson = computed(() => {
@@ -577,6 +591,19 @@ watch(
             >
               <Switch v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].video.loop" />
             </FormItem>
+            <FormItem
+              :label="translatable(lang, 'chat.box.dialogues.video.basic')"
+              layout="vertical"
+            >
+              <Button
+                class="mt-5 mb-5 w-[200px] flex flex-row items-center justify-center"
+                isToggleColor
+                :rounded-size="10"
+                @click="open('video', 'chat.box.dialogues.video.basic', dialoguesSetting.dialogues[dialogGroup][dialogIndex].video, 0)"
+              >
+                {{ translatable(lang, 'chat.box.theme.button.setting') }}
+              </Button>
+            </FormItem>
           </Form>
         </div>
       </div>
@@ -680,6 +707,8 @@ watch(
       </div>
     </template>
   </Modal>
+
+  <ThemeComponent @onPositiveClick="setBasicSetting" ref="themeComponent"></ThemeComponent>
 </template>
 
 <style lang="scss" scoped>

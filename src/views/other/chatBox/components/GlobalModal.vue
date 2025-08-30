@@ -925,6 +925,7 @@ watch(
             @click="
               customAnimation.push({
                 time: null,
+                texture:null,
                 x: null,
                 y: null,
                 scale: null,
@@ -967,6 +968,11 @@ watch(
               <FormItem
                 :label="translatable(lang, 'chat.box.component.global.portrait.custom.animation.time')">
                 <Input v-model="item.time" default-model="search" />
+              </FormItem>
+              <FormItem
+                v-if="formData.type?.toUpperCase() === 'TEXTURE'"
+                :label="translatable(lang, 'chat.box.component.global.portrait.custom.animation.texture')">
+                <Input v-model="item.texture" default-model="search" />
               </FormItem>
               <FormItem
                 :label="translatable(lang, 'chat.box.component.global.portrait.custom.animation.x')">

@@ -161,6 +161,7 @@ export const zh_cn = {
   'chat.box.component.global.portrait.custom.animation': '自定义动画配置',
   'chat.box.component.global.portrait.custom.animation.node': '添加自定义动画节点',
   'chat.box.component.global.portrait.custom.animation.time': '动画执行时长（单位帧，必填）：',
+  'chat.box.component.global.portrait.custom.animation.texture':'材质（可选）：',
   'chat.box.component.global.portrait.custom.animation.x': 'x距离（可选）：',
   'chat.box.component.global.portrait.custom.animation.y': 'y距离（可选）：',
   'chat.box.component.global.portrait.custom.animation.scale': '缩放大小（可选）：',
@@ -218,6 +219,7 @@ export const zh_cn = {
   'chat.box.dialogues.video.canControl': '是否允许调整视频的进度（可选，默认允许）',
   'chat.box.dialogues.video.canSkip': '是否允许玩家跳过这段视频（可选，默认允许）',
   'chat.box.dialogues.video.loop': '是否循环播放视频（可选，默认不循环）',
+  'chat.box.dialogues.video.basic': '视频基础配置',
   'chat.box.dialogues.empty': '未设置内容',
   'chat.box.dialogues': '对话',
 

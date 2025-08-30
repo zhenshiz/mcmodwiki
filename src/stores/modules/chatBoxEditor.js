@@ -64,7 +64,7 @@ export const useChatBoxEditorStore = defineStore(
       return options
     }
 
-    const setThemeSetting = (setting, isAllReplace = false) => {
+    const setThemeSetting = (setting, isAllReplace = false, object = {}) => {
       if (isAllReplace) {
         themeSetting.value = setting
       } else {
@@ -84,6 +84,9 @@ export const useChatBoxEditorStore = defineStore(
           case 'keyPrompt':{
             themeSetting.value.keyPrompt = Object.assign(themeSetting.value.keyPrompt, setting)
             break
+          }
+          case 'video': {
+            dialoguesSetting.value.dialogues[object.dialogGroup][object.dialogIndex].video = Object.assign(dialoguesSetting.value.dialogues[object.dialogGroup][object.dialogIndex].video, setting)
           }
         }
       }
