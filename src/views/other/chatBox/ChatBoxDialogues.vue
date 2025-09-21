@@ -523,6 +523,7 @@ watch(
               <ArrayObjectGenerator
                 v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].options"
                 :field-descriptions="optionSetting(lang)"
+                displayTemplate="{text}"
               />
             </FormItem>
             <FormItem :label="translatable(lang, 'chat.box.dialogues.sound')" layout="vertical">
