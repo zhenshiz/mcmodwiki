@@ -17,7 +17,7 @@ export const defaultTheme = `{
 
 export const defaultDialogues = `{
   $introduce: '',
-  dialogues: {},
+  dialogues: [],
   isTranslatable: false,
   isEsc: true,
   isPause: true,

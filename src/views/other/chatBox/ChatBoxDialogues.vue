@@ -260,10 +260,7 @@ async function verifyPermission(fileHandle, readWrite) {
   if ((await fileHandle.queryPermission(options)) === 'granted') {
     return true
   }
-  if ((await fileHandle.requestPermission(options)) === 'granted') {
-    return true
-  }
-  return false
+  return (await fileHandle.requestPermission(options)) === 'granted';
 }
 
 const isShowDialoguesJson = ref(false)
@@ -300,6 +297,27 @@ const setBasicSetting = (setting) => {
   })
 }
 
+const createVideoPropComputed = (propName, defaultValue) => {
+  return computed({
+    get() {
+      const dialogue = dialoguesSetting.value.dialogues[dialogGroup.value]?.[dialogIndex.value]
+      return dialogue?.video?.[propName] ?? defaultValue
+    },
+    set(value) {
+      const dialogue = dialoguesSetting.value.dialogues[dialogGroup.value][dialogIndex.value]
+      if (!dialogue.video) {
+        dialogue.video = {}
+      }
+      dialogue.video[propName] = value
+    }
+  })
+}
+
+const videoPath = createVideoPropComputed('path', '')
+const videoCanSkip = createVideoPropComputed('canSkip', true)
+const videoCanControl = createVideoPropComputed('canControl', true)
+const videoLoop = createVideoPropComputed('loop', false)
+
 const themeJson = computed(() => {
   const processedData = preprocessDialogues(dialoguesSetting.value)
   return `\`\`\`json
@@ -329,7 +347,9 @@ watch(
       <div class="flex-1 flex justify-end items-center gap-3">
         <!-- 拖拽上传区域 -->
         <Button
-          class="text-lg cursor-pointer select-none p-2 border border-[#208bff] text-[#208bff] hover:bg-[#208bff] hover:text-white"
+          is-toggle-color
+          :rounded-size="0"
+          class="text-lg cursor-pointer select-none p-2"
           :class="{ 'upload-drag': isDragOver }"
           @click="loadFile"
           @dragover.prevent="onDragOver"
@@ -534,19 +554,19 @@ watch(
             </FormItem>
             <FormItem :label="translatable(lang, 'chat.box.dialogues.volume')" layout="vertical">
               <Input
-                v-model.number="dialoguesSetting.dialogues[dialogGroup][dialogIndex].volume"
+                v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].volume"
                 default-model="input"
               />
             </FormItem>
             <FormItem :label="translatable(lang, 'chat.box.dialogues.pitch')" layout="vertical">
               <Input
-                v-model.number="dialoguesSetting.dialogues[dialogGroup][dialogIndex].pitch"
+                v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].pitch"
                 default-model="input"
               />
             </FormItem>
             <FormItem :label="translatable(lang, 'chat.box.dialogues.command')" layout="vertical">
               <Input
-                v-model.number="dialoguesSetting.dialogues[dialogGroup][dialogIndex].command"
+                v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].command"
                 default-model="input"
               />
             </FormItem>
@@ -555,7 +575,7 @@ watch(
               layout="vertical"
             >
               <Input
-                v-model.number="
+                v-model="
                   dialoguesSetting.dialogues[dialogGroup][dialogIndex].backgroundImage
                 "
                 default-model="input"
@@ -566,7 +586,7 @@ watch(
               layout="vertical"
             >
               <Input
-                v-model.number="dialoguesSetting.dialogues[dialogGroup][dialogIndex].video.path"
+                v-model="videoPath"
                 default-model="input"
               />
             </FormItem>
@@ -575,7 +595,7 @@ watch(
               layout="vertical"
             >
               <Switch
-                v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].video.canControl"
+                v-model="videoCanControl"
               />
             </FormItem>
             <FormItem
@@ -583,14 +603,14 @@ watch(
               layout="vertical"
             >
               <Switch
-                v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].video.canSkip"
+                v-model="videoCanSkip"
               />
             </FormItem>
             <FormItem
               :label="translatable(lang, 'chat.box.dialogues.video.loop')"
               layout="vertical"
             >
-              <Switch v-model="dialoguesSetting.dialogues[dialogGroup][dialogIndex].video.loop" />
+              <Switch v-model="videoLoop" />
             </FormItem>
             <FormItem
               :label="translatable(lang, 'chat.box.dialogues.video.basic')"
@@ -721,8 +741,8 @@ watch(
   text-overflow: ellipsis;
 }
 .upload-drag {
-  background-color: #208bff;
-  color: white !important;
+  border-color: #00c0f5 !important;
+  color: #00c0f5 !important;
 }
 .ghost-group {
   opacity: 0.5;

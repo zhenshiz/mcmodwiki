@@ -274,8 +274,8 @@ watch(
           />
         </FormItem>
         <FormItem :label="translatable(lang, 'chat.box.theme.option.text.pos')">
-          <InputNumber v-model="fileInfo.dialogBox.optionChatX" class="mr-10" />
-          <InputNumber v-model="fileInfo.dialogBox.optionChatY" class="mr-10" />
+          <InputNumber v-model="fileInfo.option.optionChatX" class="mr-10" />
+          <InputNumber v-model="fileInfo.option.optionChatY" class="mr-10" />
         </FormItem>
         <FormItem :label="translatable(lang, 'chat.box.theme.option.text.align')">
           <Select

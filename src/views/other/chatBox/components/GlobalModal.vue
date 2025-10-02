@@ -25,9 +25,10 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { MilkdownProvider } from '@milkdown/vue'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { get } from 'idb-keyval'
 import FormItem from '@/components/FormItem.vue'
+import { cleanChatBoxTheme } from '@/assets/more/chatBox/class.js'
 
 const dialog = useDialog()
 const message = useMessage()
@@ -342,28 +343,11 @@ onMounted(async () => {
   fileHandle = await get('themeFile')
 })
 
-const replacer = (key, value) => {
-  if (
-    key === 'filename' ||
-    key === 'theme' ||
-    key === 'key' ||
-    key === 'visible' ||
-    value === undefined ||
-    value === null
-  ) {
-    return undefined // 排除这些属性
-  }
-  if (isNumber(value)) {
-    return Number(value)
-  }
-  return value // 其他的都保留
-}
-
 //修改预设主题自动修改对应的主题文件，如果有的话
 watch(
   () => chatBoxEditorStore.themeSetting,
   (newValue) => {
-    modifyFile(JSON.stringify(newValue, replacer, 2))
+    modifyFile(JSON.stringify(cleanChatBoxTheme(newValue), null, 2))
   },
   { deep: true, immediate: true },
 )

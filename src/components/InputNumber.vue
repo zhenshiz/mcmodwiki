@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -118,11 +118,7 @@ watch(() => props.modelValue, (val) => {
 // 处理输入变化
 const handleInput = (event) => {
   userInput.value = event.target.value
-}
-
-// 处理值变化
-const handleChange = (value) => {
-  emit('change', value)
+  setCurrentValue(userInput.value)
 }
 
 // 处理失焦
