@@ -43,18 +43,21 @@ export const optionSetting = lang => {
     type: 'boolean'
   }
 
-  // 添加lock.objective字段
-  fieldDescriptions['options[].lock.objective'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.lock.objective'),
-    type: 'string',
-    condition: 'options[].isLock'
-  }
-
-  // 添加lock.value字段
-  fieldDescriptions['options[].lock.value'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.lock.value'),
-    type: 'string',
-    condition: 'options[].isLock'
+  // 添加lock对象字段
+  fieldDescriptions['options[].lock'] = {
+    label: translatable(lang, 'chat.box.dialogues.options.lock'),
+    type: 'object',
+    condition: 'options[].isLock',
+    properties: {
+      objective: {
+        label: translatable(lang, 'chat.box.dialogues.options.lock.objective'),
+        type: 'string'
+      },
+      value: {
+        label: translatable(lang, 'chat.box.dialogues.options.lock.value'),
+        type: 'string'
+      }
+    }
   }
 
   // 添加isHidden字段
@@ -64,18 +67,21 @@ export const optionSetting = lang => {
     type: 'boolean'
   }
 
-  // 添加hidden.objective字段
-  fieldDescriptions['options[].hidden.objective'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.hidden.objective'),
-    type: 'string',
-    condition: 'options[].isHidden'
-  }
-
-  // 添加hidden.value字段
-  fieldDescriptions['options[].hidden.value'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.hidden.value'),
-    type: 'string',
-    condition: 'options[].isHidden'
+  // 添加hidden对象字段
+  fieldDescriptions['options[].hidden'] = {
+    label: translatable(lang, 'chat.box.dialogues.options.hidden'),
+    type: 'object',
+    condition: 'options[].isHidden',
+    properties: {
+      objective: {
+        label: translatable(lang, 'chat.box.dialogues.options.hidden.objective'),
+        type: 'string'
+      },
+      value: {
+        label: translatable(lang, 'chat.box.dialogues.options.hidden.value'),
+        type: 'string'
+      }
+    }
   }
 
   // 添加next字段
@@ -84,16 +90,20 @@ export const optionSetting = lang => {
     type: 'string'
   }
 
-  // 添加click.type字段
-  fieldDescriptions['options[].click.type'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.click.type'),
-    type: 'string'
-  }
-
-  // 添加click.value字段
-  fieldDescriptions['options[].click.value'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.click.value'),
-    type: 'string'
+  // 添加click对象字段
+  fieldDescriptions['options[].click'] = {
+    label: translatable(lang, 'chat.box.dialogues.options.click'),
+    type: 'object',
+    properties: {
+      type: {
+        label: translatable(lang, 'chat.box.dialogues.options.click.type'),
+        type: 'string'
+      },
+      value: {
+        label: translatable(lang, 'chat.box.dialogues.options.click.value'),
+        type: 'string'
+      }
+    }
   }
 
   // 添加tooltip字段

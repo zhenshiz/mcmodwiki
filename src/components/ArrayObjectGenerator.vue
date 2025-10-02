@@ -134,6 +134,18 @@ const getDefaultValue = (field) => {
         : ''
     case 'color':
       return '#FFFFFF'
+    case 'object':
+      // 为对象类型创建默认值
+      const defaultObj = {}
+      if (fieldDesc.properties) {
+        Object.keys(fieldDesc.properties).forEach(propKey => {
+          const propDesc = fieldDesc.properties[propKey]
+          if (propDesc.type === 'string') {
+            defaultObj[propKey] = ''
+          }
+        })
+      }
+      return defaultObj
     default:
       return undefined
   }
@@ -357,6 +369,14 @@ const handleColorUpdate = (value, field) => {
   }
 }
 
+// 更新嵌套对象值
+const updateNestedValue = (field, propKey, value) => {
+  if (!currentEditingItem.value[field]) {
+    currentEditingItem.value[field] = {}
+  }
+  currentEditingItem.value[field][propKey] = value
+}
+
 // 获取显示名称
 const getDisplayName = (item, index) => {
   // 使用模板解析
@@ -449,8 +469,31 @@ const getDisplayName = (item, index) => {
             <!-- 使用字段描述中的字段列表 -->
             <template v-for="field in getAllFields()" :key="field">
               <FormItem :label="getFieldLabel(field)">
+                <!-- 对象类型字段 -->
+                <template v-if="getFieldDesc(field)?.type === 'object'">
+                  <div class="pl-4 border-l-2 border-gray-200 dark:border-gray-600">
+                    <template v-for="(propDesc, propKey) in getFieldDesc(field)?.properties" :key="`${field}.${propKey}`">
+                      <FormItem :label="propDesc.label" class="mb-3">
+                        <Input
+                          v-if="propDesc.type === 'string'"
+                          :model-value="currentEditingItem[field]?.[propKey] || ''"
+                          @update:model-value="updateNestedValue(field, propKey, $event)"
+                          default-model="search"
+                        />
+                        <AutoComplete
+                          v-else-if="propDesc.type === 'autocomplete'"
+                          :model-value="currentEditingItem[field]?.[propKey] || ''"
+                          :suggestions="propDesc.suggestions"
+                          @update:model-value="updateNestedValue(field, propKey, $event)"
+                          :clearable="true"
+                        />
+                      </FormItem>
+                    </template>
+                  </div>
+                </template>
+
                 <!-- 字符串类型 -->
-                <template v-if="getFieldType(field) === 'string'">
+                <template v-else-if="getFieldType(field) === 'string'">
                   <!-- 如果字段描述中指定了autocomplete类型 -->
                   <AutoComplete
                     v-if="getFieldDesc(field)?.type === 'autocomplete'"
