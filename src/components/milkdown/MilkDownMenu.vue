@@ -16,7 +16,7 @@ import {
   wrapInHeadingCommand,
   wrapInOrderedListCommand
 } from '@milkdown/preset-commonmark'
-import { toggleStrikethroughCommand } from '@milkdown/preset-gfm'
+import { insertTableCommand, toggleStrikethroughCommand } from '@milkdown/preset-gfm'
 import { useMessage } from '@/components/register/useMessage.js'
 import { insertLinkPlugin } from '@/components/milkdown/plugin/hyperlinkInsert.js'
 import Modal from '@/components/Modal.vue'
