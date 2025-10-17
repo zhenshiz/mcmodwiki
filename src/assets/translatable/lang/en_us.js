@@ -194,12 +194,6 @@ export const en_us = {
   'chat.box.component.global.portrait.custom.animation.opacity': 'Opacity (optional):',
   'chat.box.component.global.portrait.custom.animation.easing': 'Easing Function (optional, default EASE_IN_SINE):',
 
-  'chat.box.component.global.portrait.animation.none': 'No Animation',
-  'chat.box.component.global.portrait.animation.fade.in': 'Fade In',
-  'chat.box.component.global.portrait.animation.slide.in.from.bottom': 'Slide In From Bottom',
-  'chat.box.component.global.portrait.animation.bounce': 'Bounce',
-  'chat.box.component.global.portrait.animation.custom': 'Custom Animation',
-
   'chat.box.dialogues.custom.title': 'Dialog %s',
   'chat.box.dialogues.common.setting': 'Dialog Basic Settings',
   'chat.box.dialogues.add.group': 'Add Group',

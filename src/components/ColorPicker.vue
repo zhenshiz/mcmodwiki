@@ -28,7 +28,7 @@ const props = defineProps({
   // 是否使用Minecraft颜色格式 (r<<16) | (g<<8) | b | (a<<24)
   useMinecraftFormat: {
     type: Boolean,
-    default: false
+    default: true
   }
 })
 
@@ -123,7 +123,7 @@ const updateColor = () => {
   try {
     const hex = HSVtoHEX(hue.value, saturation.value / 100, value.value / 100, alpha.value / 100)
     colorValue.value = hex
-    
+
     if (props.useMinecraftFormat) {
       // 如果使用Minecraft格式，转换为整数
       const mcInt = hexToMinecraftInt(hex)
@@ -143,12 +143,12 @@ const hexToMinecraftInt = (hex) => {
   try {
     // 确保hex是字符串
     hex = String(hex)
-    
+
     // 移除#号
     hex = hex.replace('#', '')
-    
+
     let r, g, b, a = 255
-    
+
     // 处理不同长度的十六进制颜色
     if (hex.length === 3) {
       r = parseInt(hex[0] + hex[0], 16)
@@ -169,13 +169,13 @@ const hexToMinecraftInt = (hex) => {
       g = 0
       b = 0
     }
-    
+
     // 确保值有效
     r = isNaN(r) ? 0 : r
     g = isNaN(g) ? 0 : g
     b = isNaN(b) ? 0 : b
     a = isNaN(a) ? 255 : a
-    
+
     // 按照Minecraft格式计算整数值
     return (r << 16) | (g << 8) | b | (a << 24)
   } catch (error) {
@@ -188,17 +188,17 @@ const hexToMinecraftInt = (hex) => {
 const minecraftIntToHex = (mcInt) => {
   // 确保mcInt是数字
   mcInt = Number(mcInt) || 0
-  
+
   const r = (mcInt >> 16) & 0xFF
   const g = (mcInt >> 8) & 0xFF
   const b = mcInt & 0xFF
   const a = (mcInt >> 24) & 0xFF
-  
+
   // 如果alpha为255（完全不透明）或0（默认值），则返回6位十六进制
   if (a === 255 || a === 0) {
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
   }
-  
+
   // 否则返回8位十六进制（包含透明度）
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}${a.toString(16).padStart(2, '0')}`
 }
@@ -207,7 +207,7 @@ const minecraftIntToHex = (mcInt) => {
 const updateColorFromHex = (hex) => {
   // 确保hex是字符串
   hex = String(hex)
-  
+
   try {
     const { h, s, v, a } = HEXtoHSV(hex)
     hue.value = h
@@ -227,24 +227,24 @@ const updateColorFromHex = (hex) => {
 // 处理饱和度面板点击
 const handleSaturationMouseDown = (event) => {
   if (props.disabled) return
-  
+
   window.addEventListener('mousemove', handleSaturationMouseMove)
   window.addEventListener('mouseup', handleSaturationMouseUp)
-  
+
   handleSaturationMouseMove(event)
 }
 
 // 处理饱和度面板移动
 const handleSaturationMouseMove = (event) => {
   if (!saturationRef.value) return
-  
+
   const rect = saturationRef.value.getBoundingClientRect()
   let left = event.clientX - rect.left
   let top = event.clientY - rect.top
-  
+
   left = Math.max(0, Math.min(left, rect.width))
   top = Math.max(0, Math.min(top, rect.height))
-  
+
   saturation.value = Math.round((left / rect.width) * 100)
   value.value = Math.round(100 - (top / rect.height) * 100)
 }
@@ -258,22 +258,22 @@ const handleSaturationMouseUp = () => {
 // 处理色相滑块点击
 const handleHueMouseDown = (event) => {
   if (props.disabled) return
-  
+
   window.addEventListener('mousemove', handleHueMouseMove)
   window.addEventListener('mouseup', handleHueMouseUp)
-  
+
   handleHueMouseMove(event)
 }
 
 // 处理色相滑块移动
 const handleHueMouseMove = (event) => {
   if (!hueRef.value) return
-  
+
   const rect = hueRef.value.getBoundingClientRect()
   let left = event.clientX - rect.left
-  
+
   left = Math.max(0, Math.min(left, rect.width))
-  
+
   hue.value = Math.round((left / rect.width) * 360)
 }
 
@@ -286,22 +286,22 @@ const handleHueMouseUp = () => {
 // 处理透明度滑块点击
 const handleAlphaMouseDown = (event) => {
   if (props.disabled || !props.showAlpha) return
-  
+
   window.addEventListener('mousemove', handleAlphaMouseMove)
   window.addEventListener('mouseup', handleAlphaMouseUp)
-  
+
   handleAlphaMouseMove(event)
 }
 
 // 处理透明度滑块移动
 const handleAlphaMouseMove = (event) => {
   if (!alphaRef.value) return
-  
+
   const rect = alphaRef.value.getBoundingClientRect()
   let left = event.clientX - rect.left
-  
+
   left = Math.max(0, Math.min(left, rect.width))
-  
+
   alpha.value = Math.round((left / rect.width) * 100)
 }
 
@@ -336,11 +336,11 @@ const handleClickOutside = (event) => {
 function HSVtoHEX(h, s, v, a = 1) {
   const { r, g, b } = HSVtoRGB(h, s, v)
   const alpha = Math.round(a * 255).toString(16).padStart(2, '0')
-  const hex = '#' + 
-    Math.round(r).toString(16).padStart(2, '0') + 
-    Math.round(g).toString(16).padStart(2, '0') + 
+  const hex = '#' +
+    Math.round(r).toString(16).padStart(2, '0') +
+    Math.round(g).toString(16).padStart(2, '0') +
     Math.round(b).toString(16).padStart(2, '0')
-  
+
   return a < 1 ? hex + alpha : hex
 }
 
@@ -352,7 +352,7 @@ function HSVtoRGB(h, s, v) {
   const p = v * (1 - s)
   const q = v * (1 - f * s)
   const t = v * (1 - (1 - f) * s)
-  
+
   switch (i % 6) {
     case 0: r = v; g = t; b = p; break
     case 1: r = q; g = v; b = p; break
@@ -361,7 +361,7 @@ function HSVtoRGB(h, s, v) {
     case 4: r = t; g = p; b = v; break
     case 5: r = v; g = p; b = q; break
   }
-  
+
   return {
     r: r * 255,
     g: g * 255,
@@ -373,12 +373,12 @@ function HSVtoRGB(h, s, v) {
 function HEXtoHSV(hex) {
   // 确保hex是字符串
   hex = String(hex)
-  
+
   // 移除#号
   hex = hex.replace('#', '')
-  
+
   let r, g, b, a = 1
-  
+
   // 处理不同长度的十六进制颜色
   if (hex.length === 3) {
     r = parseInt(hex[0] + hex[0], 16) / 255
@@ -399,20 +399,20 @@ function HEXtoHSV(hex) {
     g = 0.5
     b = 1
   }
-  
+
   // 确保值有效
   r = isNaN(r) ? 0 : r
   g = isNaN(g) ? 0 : g
   b = isNaN(b) ? 0 : b
   a = isNaN(a) ? 1 : a
-  
+
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
   let h, s, v = max
-  
+
   const d = max - min
   s = max === 0 ? 0 : d / max
-  
+
   if (max === min) {
     h = 0 // 无色相
   } else {
@@ -423,7 +423,7 @@ function HEXtoHSV(hex) {
     }
     h *= 60
   }
-  
+
   return { h, s, v, a }
 }
 
@@ -454,7 +454,7 @@ onUnmounted(() => {
         :style="{ backgroundColor: currentColor }"
       ></div>
     </div>
-    
+
     <!-- 颜色选择面板 -->
     <div
       v-show="showPicker"
@@ -478,7 +478,7 @@ onUnmounted(() => {
           :style="saturationPointerStyle"
         ></div>
       </div>
-      
+
       <!-- 色相选择条 -->
       <div
         ref="hueRef"
@@ -491,7 +491,7 @@ onUnmounted(() => {
           :style="huePointerStyle"
         ></div>
       </div>
-      
+
       <!-- 透明度选择条 -->
       <div
         v-if="showAlpha"
@@ -509,7 +509,7 @@ onUnmounted(() => {
           :style="alphaPointerStyle"
         ></div>
       </div>
-      
+
       <!-- 当前颜色和输入框 -->
       <div class="flex items-center mb-4">
         <div
@@ -528,7 +528,7 @@ onUnmounted(() => {
           @input="updateColorFromHex(colorValue)"
         />
       </div>
-      
+
       <!-- 预定义颜色 -->
       <div v-if="predefine.length > 0" class="flex flex-wrap gap-2">
         <div
@@ -550,7 +550,7 @@ onUnmounted(() => {
                     linear-gradient(45deg, transparent 75%, #ddd 75%),
                     linear-gradient(-45deg, transparent 75%, #ddd 75%);
   background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0;
 }
 
 .dark .bg-checkerboard {

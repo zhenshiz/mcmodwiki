@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    type: [Number, String],
+    type: Number,
     default: 0
   },
   min: {
@@ -18,13 +18,10 @@ const props = defineProps({
     type: Number,
     default: 1
   },
+  // 是否只能输入为 step 的整数倍（会自动取整）。
   stepStrictly: {
     type: Boolean,
     default: false
-  },
-  precision: {
-    type: Number,
-    validator: (val) => val >= 0 && val === parseInt(val, 10)
   },
   size: {
     type: String,
@@ -35,14 +32,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // 是否显示两侧的「加减」按钮。
   controls: {
     type: Boolean,
     default: true
-  },
-  controlsPosition: {
-    type: String,
-    default: '',
-    validator: (val) => ['', 'right'].includes(val)
   },
   placeholder: {
     type: String,
@@ -76,11 +69,6 @@ const getBtnSizeClass = computed(() => {
   }
 })
 
-// 计算控制按钮位置样式
-const controlsAtRight = computed(() => {
-  return props.controlsPosition === 'right'
-})
-
 // 计算是否禁用减少按钮
 const minDisabled = computed(() => {
   return props.disabled || currentValue.value <= props.min
@@ -97,10 +85,6 @@ watch(() => props.modelValue, (val) => {
   if (newVal !== undefined) {
     if (isNaN(newVal)) {
       newVal = props.min || 0
-    }
-
-    if (props.precision !== undefined) {
-      newVal = toPrecision(newVal, props.precision)
     }
 
     if (newVal > props.max) {
@@ -171,14 +155,6 @@ const setCurrentValue = (value) => {
       newVal = props.min || 0
     }
 
-    if (props.stepStrictly) {
-      newVal = toPrecision(Math.round(newVal / props.step) * props.step, props.precision)
-    }
-
-    if (props.precision !== undefined) {
-      newVal = toPrecision(newVal, props.precision)
-    }
-
     if (newVal > props.max) {
       newVal = props.max
     }
@@ -188,7 +164,7 @@ const setCurrentValue = (value) => {
   }
 
   currentValue.value = newVal
-  emit('update:modelValue', newVal)
+  emit('update:modelValue', Number(newVal))
 }
 
 // 精确计算加法
@@ -229,13 +205,6 @@ const subtract = (num1, num2) => {
 
   const factor = Math.pow(10, Math.max(decimal1, decimal2))
   return (num1 * factor - num2 * factor) / factor
-}
-
-// 设置精度
-const toPrecision = (num, precision) => {
-  if (precision === undefined) return num
-
-  return parseFloat(Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision))
 }
 
 // 暴露方法

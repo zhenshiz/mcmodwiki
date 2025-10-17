@@ -1,35 +1,30 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Icon } from '@iconify/vue'
+import { getTexture } from '@/assets/textures/mcTextures.js'
 
 const props = defineProps({
   placeholder: String,
   modelValue: String,
   suggestions: {
-    type: Array,
+    type: [Array, Function], // 支持数组或函数
     default: () => []
   },
-  // 触发建议显示的最小字符数
   triggerOnFocus: {
     type: Boolean,
     default: true
   },
-  // 自定义建议项的渲染方式
   valueKey: {
     type: String,
     default: 'value'
   },
-  // 自定义标签显示的键名
   labelKey: {
     type: String,
     default: 'label'
   },
-  // 最大显示建议数量，-1表示显示全部
-  maxSuggestions: {
-    type: Number,
-    default: -1
+  iconKey: {
+    type: String,
+    default: 'icon'
   },
-  // 输入框尺寸
   size: {
     type: String,
     default: 'default',
@@ -37,19 +32,14 @@ const props = defineProps({
       return ['small', 'default', 'large'].includes(value)
     }
   },
-  // 是否禁用
   disabled: {
     type: Boolean,
     default: false
   },
-  // 输入框前缀图标
-  prefixIcon: String,
-  // 是否显示清除按钮
   clearable: {
     type: Boolean,
     default: false
   },
-  // 自定义建议过滤方法
   filterMethod: Function,
   defaultColor: {
     type: Array,
@@ -64,19 +54,18 @@ const emit = defineEmits(['update:modelValue', 'select', 'change', 'focus', 'blu
 
 const inputValue = ref(props.modelValue || '')
 const suggestions = ref([])
-const loading = ref(false)
 const showSuggestions = ref(false)
 const highlightedIndex = ref(-1)
 const inputRef = ref(null)
 const suggestionsRef = ref(null)
 const borderColor = ref(props.defaultColor[0])
 
-// 监听modelValue变化
+// --- 监听外部值变化 ---
 watch(() => props.modelValue, (val) => {
   inputValue.value = val
 })
 
-// 监听输入值变化
+// --- 输入变化时更新建议 ---
 watch(inputValue, (val) => {
   emit('update:modelValue', val)
 
@@ -96,50 +85,46 @@ const defaultFilterMethod = (value, item) => {
   return itemValue.toLowerCase().includes(value.toLowerCase())
 }
 
-// 防抖处理搜索建议
+// 获取建议源
+const getSuggestionsSource = () => {
+  return typeof props.suggestions === 'function' ? props.suggestions() : props.suggestions
+}
+
+// 模拟防抖（简单 setTimeout）
 const debouncedFetchSuggestions = (value) => {
-  loading.value = true
   setTimeout(() => {
-    if (value) {
-      // 先过滤符合条件的建议项
-      const filteredSuggestions = props.suggestions.filter(item => {
+    const source = getSuggestionsSource()
+    if (value && value.trim()) {
+      suggestions.value = source.filter(item => {
         if (props.filterMethod) {
           return props.filterMethod(value, item)
         }
         return defaultFilterMethod(value, item)
       })
-      
-      // 根据maxSuggestions限制显示数量
-      if (props.maxSuggestions > 0 && filteredSuggestions.length > props.maxSuggestions) {
-        suggestions.value = filteredSuggestions.slice(0, props.maxSuggestions)
-      } else {
-        suggestions.value = filteredSuggestions
-      }
     } else {
-      suggestions.value = []
+      suggestions.value = source
     }
     highlightedIndex.value = -1
-    loading.value = false
   }, 300)
 }
 
-// 处理输入变化
+// 输入事件
 const handleInput = (event) => {
   inputValue.value = event.target.value
   emit('change', inputValue.value)
 }
 
-// 处理建议项点击
+// 选择建议项
 const handleSelect = (item) => {
   inputValue.value = typeof item === 'object' ? item[props.valueKey] : item
   showSuggestions.value = false
   emit('select', item)
-  emit('update:modelValue', typeof item === 'object' ? item[props.valueKey] : item)
+  emit('update:modelValue', inputValue.value)
 }
 
-// 处理键盘导航
+// 键盘控制
 const handleKeyDown = (event) => {
-  if (!showSuggestions.value) return
+  if (!showSuggestions.value || suggestions.value.length === 0) return
 
   switch (event.key) {
     case 'ArrowDown':
@@ -149,9 +134,10 @@ const handleKeyDown = (event) => {
       break
     case 'ArrowUp':
       event.preventDefault()
-      highlightedIndex.value = highlightedIndex.value - 1 < 0
-        ? suggestions.value.length - 1
-        : highlightedIndex.value - 1
+      highlightedIndex.value =
+        highlightedIndex.value - 1 < 0
+          ? suggestions.value.length - 1
+          : highlightedIndex.value - 1
       scrollToItem()
       break
     case 'Enter':
@@ -165,17 +151,16 @@ const handleKeyDown = (event) => {
   }
 }
 
-// 滚动到选中项
+// 滚动到当前选项
 const scrollToItem = () => {
   if (!suggestionsRef.value) return
-
-  const suggestionItems = suggestionsRef.value.querySelectorAll('.suggestion-item')
-  if (suggestionItems.length > 0 && highlightedIndex.value >= 0) {
-    suggestionItems[highlightedIndex.value].scrollIntoView({ block: 'nearest' })
+  const items = suggestionsRef.value.querySelectorAll('.suggestion-item')
+  if (items.length > 0 && highlightedIndex.value >= 0) {
+    items[highlightedIndex.value].scrollIntoView({ block: 'nearest' })
   }
 }
 
-// 处理焦点
+// 聚焦 / 失焦
 const handleFocus = (event) => {
   borderColor.value = props.defaultColor[1]
   emit('focus', event)
@@ -184,25 +169,20 @@ const handleFocus = (event) => {
     debouncedFetchSuggestions(inputValue.value)
   }
 }
-
-// 处理失焦
 const handleBlur = (event) => {
   borderColor.value = props.defaultColor[0]
   emit('blur', event)
-  // 延迟隐藏建议列表，以便可以点击建议项
-  setTimeout(() => {
-    showSuggestions.value = false
-  }, 200)
+  setTimeout(() => (showSuggestions.value = false), 200)
 }
 
-// 清除输入
+// 清空输入
 const clearInput = () => {
   inputValue.value = ''
   showSuggestions.value = false
   suggestions.value = []
 }
 
-// 计算输入框尺寸类
+// 尺寸样式
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'small':
@@ -214,13 +194,8 @@ const sizeClass = computed(() => {
   }
 })
 
-// 获取输入框引用
-const getInput = () => {
-  return inputRef.value
-}
-
+// 暴露方法
 defineExpose({
-  getInput,
   focus: () => inputRef.value?.focus(),
   blur: () => inputRef.value?.blur()
 })
@@ -237,12 +212,6 @@ defineExpose({
       ]"
       :style="{ borderColor: borderColor }"
     >
-      <!-- 前缀图标 -->
-      <Icon v-if="prefixIcon" class="flex-shrink-0 mr-2 text-black dark:text-white"
-            :class="sizeClass.split(' ')[2]"
-            :icon="prefixIcon" />
-
-      <!-- 输入框 -->
       <input
         ref="inputRef"
         class="w-full bg-transparent focus:outline-none"
@@ -255,32 +224,20 @@ defineExpose({
         @keydown="handleKeyDown"
       />
 
-      <!-- 清除按钮 -->
-      <div
-        v-if="clearable && inputValue && !disabled"
-        class="flex-shrink-0 ml-2 cursor-pointer text-gray-400 hover:text-gray-600"
-        @click="clearInput"
-      >
-        <slot name="clear">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-               stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </slot>
-      </div>
-
-      <!-- 加载指示器 -->
-      <div v-if="loading" class="flex-shrink-0 ml-2">
-        <slot name="loading">
-          <svg class="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg"
-               fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                    stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        </slot>
+      <div class="flex-shrink-0 ml-2 min-h-4 w-5 flex items-center justify-center">
+        <div
+          v-if="clearable && inputValue && !disabled"
+          class="cursor-pointer text-gray-400 hover:text-gray-600"
+          @click="clearInput"
+        >
+          <slot name="clear">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </slot>
+        </div>
       </div>
     </div>
 
@@ -288,16 +245,25 @@ defineExpose({
     <div
       v-show="showSuggestions && suggestions.length > 0"
       ref="suggestionsRef"
-      class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-y-auto dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded shadow-lg
+             max-h-[10rem] overflow-y-auto dark:bg-gray-800 dark:border-gray-700"
     >
       <ul class="py-1">
         <li
           v-for="(item, index) in suggestions"
           :key="index"
-          class="suggestion-item px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+          class="suggestion-item px-4 py-2 cursor-pointer flex flex-row gap-5 items-center hover:bg-gray-100 dark:hover:bg-gray-700"
           :class="{ 'bg-blue-50 dark:bg-gray-600': index === highlightedIndex }"
           @click="handleSelect(item)"
         >
+          <!-- 左侧图标（若有） -->
+          <img
+            v-if="typeof item === 'object' && item.icon"
+            :src="getTexture(item.icon)"
+            class="w-5 h-5 flex-shrink-0 object-contain"
+            alt=""
+          />
+
           <slot name="item" :item="item" :index="index">
             {{ typeof item === 'object' ? item[labelKey] || item[valueKey] : item }}
           </slot>

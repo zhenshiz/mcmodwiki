@@ -179,11 +179,11 @@ watch(
         <div>{{ translatable(language, 'wiki.sidebar.3') }}</div>
         <div>
           <Select
-            v-model:value="form.mcVersion"
+            :modelValue="form.mcVersion"
             :options="mcVersionOption"
-            @update:value="
+            @update:modelValue="
               (newValue) => {
-                form.mcVersion = newValue.value
+                form.mcVersion = newValue
                 toggleWikiMarkdown()
               }
             "
@@ -197,11 +197,11 @@ watch(
         <div>{{ translatable(language, 'wiki.sidebar.4') }}</div>
         <div>
           <Select
-            v-model:value="form.modLoader"
+            :modelValue="form.modLoader"
             :options="modLoaderOption"
-            @update:value="
+            @update:modelValue="
               (newValue) => {
-                form.modLoader = newValue.value
+                form.modLoader = newValue
                 toggleWikiMarkdown()
               }
             "
@@ -215,11 +215,11 @@ watch(
         <div>{{ translatable(language, 'wiki.sidebar.5') }}</div>
         <div>
           <Select
-            v-model:value="form.modVersion"
+            :modelValue="form.modVersion"
             :options="modVersionOption"
-            @update:value="
+            @update:modelValue="
               (newValue) => {
-                form.modVersion = newValue.value
+                form.modVersion = newValue
                 toggleWikiMarkdown()
               }
             "

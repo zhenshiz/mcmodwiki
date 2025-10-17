@@ -1,4 +1,6 @@
 //解析url中的地址
+import { translatable } from '@/assets/translatable/translatable.js'
+
 export const parseQuery = url => {
   let q = {}
   url.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => (q[k] = v))
@@ -111,4 +113,20 @@ export const markdownToText = (markdown) => {
     .replace(/`(.*?)`/g, '$1')
     .replace(/\[(.*?)]\(.*?\)/g, '$1')
     .replace(/!\[.*$/g, '')
+}
+
+export const createEnum = (options) => {
+  return {
+    options,
+    values(lang) {
+      return this.options.map(item => ({
+        label: translatable(lang, item.label),
+        value: item.value
+      }))
+    },
+    of(value) {
+      const option = this.options.find(item => item.value === value)
+      return option ? option.label : this.options[0]?.label
+    }
+  }
 }

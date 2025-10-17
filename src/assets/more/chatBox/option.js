@@ -1,111 +1,39 @@
-import { translatable } from '@/assets/translatable/translatable'
+import { createEnum } from '@/utils/format.js'
 
-export const textAlign = {
-  options: [
-    { label: 'chat.box.theme.component.align.x.left', value: 'LEFT' },
-    { label: 'chat.box.theme.component.align.x.center', value: 'CENTER' },
-    { label: 'chat.box.theme.component.align.x.right', value: 'RIGHT' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const textAlign = createEnum([
+  { label: 'chat.box.theme.component.align.x.left', value: 'LEFT' },
+  { label: 'chat.box.theme.component.align.x.center', value: 'CENTER' },
+  { label: 'chat.box.theme.component.align.x.right', value: 'RIGHT' }
+])
 
-export const alignXList = {
-  options: [
-    { label: 'chat.box.theme.component.align.x.left', value: 'LEFT' },
-    { label: 'chat.box.theme.component.align.x.center', value: 'CENTER' },
-    { label: 'chat.box.theme.component.align.x.right', value: 'RIGHT' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const alignXList = createEnum([
+  { label: 'chat.box.theme.component.align.x.left', value: 'LEFT' },
+  { label: 'chat.box.theme.component.align.x.center', value: 'CENTER' },
+  { label: 'chat.box.theme.component.align.x.right', value: 'RIGHT' }
+])
 
-export const alignYList = {
-  options: [
-    { label: 'chat.box.theme.component.align.y.top', value: 'TOP' },
-    { label: 'chat.box.theme.component.align.y.center', value: 'CENTER' },
-    { label: 'chat.box.theme.component.align.y.bottom', value: 'BOTTOM' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const alignYList = createEnum([
+  { label: 'chat.box.theme.component.align.y.top', value: 'TOP' },
+  { label: 'chat.box.theme.component.align.y.center', value: 'CENTER' },
+  { label: 'chat.box.theme.component.align.y.bottom', value: 'BOTTOM' }
+])
 
-export const portraitType = {
-  options: [
-    { label: 'chat.box.theme.component.portrait.type.texture', value: 'TEXTURE' },
-    { label: 'chat.box.theme.component.portrait.type.player.head', value: 'PLAYER_HEAD' },
-    { label: 'chat.box.theme.component.portrait.type.item', value: 'ITEM' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const portraitType = createEnum([
+  { label: 'chat.box.theme.component.portrait.type.texture', value: 'TEXTURE' },
+  { label: 'chat.box.theme.component.portrait.type.player.head', value: 'PLAYER_HEAD' },
+  { label: 'chat.box.theme.component.portrait.type.item', value: 'ITEM' }
+])
 
-export const animation = {
-  options: [
-    { 'label': 'chat.box.component.global.portrait.animation.none', 'value': 'NONE' },
-    { 'label': 'chat.box.component.global.portrait.animation.fade.in', 'value': 'FADE_IN' },
-    {
-      'label': 'chat.box.component.global.portrait.animation.slide.in.from.bottom',
-      'value': 'SLIDE_IN_FROM_BOTTOM'
-    },
-    { 'label': 'chat.box.component.global.portrait.animation.bounce', 'value': 'BOUNCE' },
-    { 'label': 'chat.box.component.global.portrait.animation.custom', 'value': 'CUSTOM' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const functionalButtonType = createEnum([
+  { label: 'chat.box.theme.functional.button.type.log', value: 'LOG' },
+  { label: 'chat.box.theme.functional.button.type.fast_forward', value: 'FASTFORWARD' },
+  { label: 'chat.box.theme.functional.button.type.autoplay', value: 'AUTOPLAY' }
+])
 
-export const functionalButtonType = {
-  options: [
-    { label: 'chat.box.theme.functional.button.type.log', value: 'LOG' },
-    { label: 'chat.box.theme.functional.button.type.fast_forward', value: 'FASTFORWARD' },
-    { label: 'chat.box.theme.functional.button.type.autoplay', value: 'AUTOPLAY' }
-  ],
-  values: function (lang) {
-    return this.options.map((item) => {
-      return { label: translatable(lang, item.label), value: item.value }
-    })
-  },
-  of: function (value) {
-    const option = this.options.find(item => item.value === value);
-    return option ? option.label : this.options[0].label;
-  }
-}
+export const clickType = createEnum([
+  { label: 'chat.box.dialogues.options.click.type.command', value: 'COMMAND' },
+  { label: 'chat.box.dialogues.options.click.type.terraEntityShop', value: 'TERRA_ENTITY_SHOP' }
+])
 
 export const easing =
   [

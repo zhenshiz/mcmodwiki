@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
         <!--header右侧-->
         <div class="hidden z-10 sm:flex flex-row items-center">
           <Popover
-            class="mr-4"
+            :offset="-60"
             :background-color="isDark?'#002941':'#ffffff'"
             width="190"
           >
@@ -146,7 +146,7 @@ onBeforeUnmount(() => {
             </div>
           </Popover>
           <!--页面跳转-->
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
+          <Link class="ml-5 m-2 text-lg text-text-blue whitespace-nowrap"
                 hoverLineType="toFlanks"
                 :href="`/`">
             {{ translatable(lang, 'layout.link.1') }}
@@ -161,6 +161,7 @@ onBeforeUnmount(() => {
           </Link>
           <Popover
             v-if="modList.length"
+            :offset="-120"
             :background-color="isDark?'#002941':'#ffffff'"
           >
             <template #trigger>
@@ -178,6 +179,7 @@ onBeforeUnmount(() => {
           </Popover>
           <Popover
             v-if="moreUtilList.length"
+            :offset="-80"
             :background-color="isDark?'#002941':'#ffffff'"
           >
             <template #trigger>
@@ -196,7 +198,7 @@ onBeforeUnmount(() => {
           <!--切换主题 切换语言-->
           <div
             class="center h-[30px]  p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
-            <Popover :offset="-10">
+            <Popover :offset="-160">
               <template #trigger>
                 <Icon width="35" height="35" icon="flowbite:language-outline"
                       class="cursor-pointer dark:text-white" />

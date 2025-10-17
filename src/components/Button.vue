@@ -19,7 +19,7 @@ const props = defineProps({
   },
   roundedSize: {
     type: Number,
-    default: 9999
+    default: 5
   }
 })
 

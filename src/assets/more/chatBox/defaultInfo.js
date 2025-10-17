@@ -2,9 +2,26 @@ import { translatable, translatableArg } from '@/assets/translatable/translatabl
 import {
   alignXList,
   alignYList,
+  clickType,
   easing,
-  functionalButtonType
+  functionalButtonType,
+  portraitType,
+  textAlign
 } from '@/assets/more/chatBox/option.js'
+import {
+  AutoCompleteField,
+  BooleanField,
+  EnumField,
+  NumberField,
+  ObjectArrField,
+  ObjectDialogField,
+  ObjectField,
+  ObjectMapField,
+  StrArrFiled,
+  StringField
+} from '@/assets/const/objectClass.js'
+import { itemSuggestions } from '@/assets/textures/itemSuggestions.js'
+import { useChatBoxEditorStore } from '@/stores/index.js'
 
 export const defaultTheme = `{
   theme: '',
@@ -12,7 +29,8 @@ export const defaultTheme = `{
   option: {},
   dialogBox: {},
   functionalButton: [],
-  keyPrompt: {}
+  keyPrompt: {},
+  customAnimation: {}
 }`
 
 export const defaultDialogues = `{
@@ -21,249 +39,607 @@ export const defaultDialogues = `{
   isTranslatable: false,
   isEsc: true,
   isPause: true,
+  isScreen: true,
   isHistoricalSkip: true,
   maxTriggerCount: -1,
   theme: ''
 }`
 
-export const optionSetting = lang => {
-  // 创建字段描述对象
-  const fieldDescriptions = {}
-
-  // 添加text字段
-  fieldDescriptions['options[].text'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.text'),
-    type: 'string'
-  }
-
-  // 添加isLock字段
-  fieldDescriptions['options[].isLock'] = {
-    default: false,
-    label: translatable(lang, 'chat.box.dialogues.options.isLock'),
-    type: 'boolean'
-  }
-
-  // 添加lock对象字段
-  fieldDescriptions['options[].lock'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.lock'),
-    type: 'object',
-    condition: 'options[].isLock',
-    properties: {
-      objective: {
-        label: translatable(lang, 'chat.box.dialogues.options.lock.objective'),
-        type: 'string'
-      },
-      value: {
-        label: translatable(lang, 'chat.box.dialogues.options.lock.value'),
-        type: 'string'
-      }
+export const themeSetting = (lang) => {
+  /**
+   * 创建基础组件定义
+   * @param {Object} overrides 可选：用于覆盖默认 defaultProps 的值
+   */
+  function createComponent(overrides = {}) {
+    // 定义默认属性
+    const defaultProps = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10,
+      alignX: 'LEFT',
+      alignY: 'TOP',
+      opacity: 100,
+      renderOrder: undefined,
+      angle: 0,
+      ...overrides
     }
-  }
 
-  // 添加isHidden字段
-  fieldDescriptions['options[].isHidden'] = {
-    default: false,
-    label: translatable(lang, 'chat.box.dialogues.options.isHidden'),
-    type: 'boolean'
-  }
-
-  // 添加hidden对象字段
-  fieldDescriptions['options[].hidden'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.hidden'),
-    type: 'object',
-    condition: 'options[].isHidden',
-    properties: {
-      objective: {
-        label: translatable(lang, 'chat.box.dialogues.options.hidden.objective'),
-        type: 'string'
-      },
-      value: {
-        label: translatable(lang, 'chat.box.dialogues.options.hidden.value'),
-        type: 'string'
+    return new ObjectDialogField({
+      properties: {
+        x: new NumberField({
+          defaultValue: defaultProps.x,
+          label: translatableArg(lang, 'chat.box.theme.component.x', defaultProps.x)
+        }),
+        y: new NumberField({
+          defaultValue: defaultProps.y,
+          label: translatableArg(lang, 'chat.box.theme.component.y', defaultProps.y)
+        }),
+        width: new NumberField({
+          defaultValue: defaultProps.width,
+          label: translatableArg(lang, 'chat.box.theme.component.width', defaultProps.width),
+          min: 10
+        }),
+        height: new NumberField({
+          defaultValue: defaultProps.height,
+          label: translatableArg(lang, 'chat.box.theme.component.height', defaultProps.height),
+          min: 10
+        }),
+        alignX: new EnumField({
+          defaultValue: defaultProps.alignX,
+          label: translatableArg(lang, 'chat.box.theme.component.align.x', defaultProps.alignX),
+          options: alignXList.values(lang)
+        }),
+        alignY: new EnumField({
+          defaultValue: defaultProps.alignY,
+          label: translatableArg(lang, 'chat.box.theme.component.align.y', defaultProps.alignY),
+          options: alignYList.values(lang)
+        }),
+        opacity: new NumberField({
+          defaultValue: defaultProps.opacity,
+          label: translatableArg(lang, 'chat.box.theme.component.opacity', defaultProps.opacity),
+          min: 0,
+          max: 100
+        }),
+        renderOrder: new NumberField({
+          defaultValue: defaultProps.renderOrder,
+          label: translatableArg(lang, 'chat.box.theme.component.renderOrder', defaultProps.renderOrder)
+        }),
+        angle: new NumberField({
+          defaultValue: defaultProps.angle,
+          label: translatableArg(lang, 'chat.box.theme.component.angle', defaultProps.angle)
+        })
       }
-    }
+    })
   }
 
-  // 添加next字段
-  fieldDescriptions['options[].next'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.next'),
-    type: 'string'
-  }
+  // DialogBox
+  const dialogBoxComponent = createComponent({ renderOrder: 0 })
+  dialogBoxComponent.label = translatable(lang, 'chat.box.theme.dialog.box.basic')
 
-  // 添加click对象字段
-  fieldDescriptions['options[].click'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.click'),
-    type: 'object',
+  const dialogBox = new ObjectField({
     properties: {
-      type: {
+      texture: new StringField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.texture')
+      }),
+      lineWidth: new NumberField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.lineWidth')
+      }),
+      textAlign: new EnumField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.texture'),
+        defaultValue: 'LEFT',
+        options: textAlign.values(lang)
+      }),
+      nameX: new NumberField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.nameX'),
+        defaultValue: 0
+      }),
+      nameY: new NumberField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.nameY'),
+        defaultValue: 0
+      }),
+      textX: new NumberField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.textX'),
+        defaultValue: 0
+      }),
+      textY: new NumberField({
+        label: translatable(lang, 'chat.box.theme.dialog.box.textY'),
+        defaultValue: 0
+      })
+    }
+  })
+
+  // functionButtons
+  const functionButtonComponent = createComponent({
+    x: null,
+    width: 5,
+    height: 8,
+    alignX: 'RIGHT',
+    alignY: 'BOTTOM',
+    renderOrder: 30
+  })
+
+  const functionButtons = new ObjectField({
+    label: translatable(lang, 'chat.box.theme.functional.button.basic'),
+    layout: 'vertical',
+    properties: {
+      ...functionButtonComponent.properties,
+      type: new EnumField({
+        label: translatable(lang, 'chat.box.theme.functional.button.type'),
+        defaultValue: 'LOG',
+        options: functionalButtonType.values(lang)
+      }),
+      texture: new StringField({
+        label: translatable(lang, 'chat.box.theme.functional.button.texture')
+
+      }),
+      hoverTexture: new StringField({
+        label: translatable(lang, 'chat.box.theme.functional.button.hoverTexture')
+
+      })
+    }
+  })
+
+  // option
+  const optionComponent = createComponent({ renderOrder: 10 })
+  optionComponent.label = translatable(lang, 'chat.box.theme.option.basic')
+  const option = new ObjectField({
+    properties: {
+      texture: new StringField({
+        label: translatable(lang, 'chat.box.theme.option.texture')
+      }),
+      selectTexture: new StringField({
+        label: translatable(lang, 'chat.box.theme.option.hoverTexture')
+      }),
+      lockTexture: new StringField({
+        label: translatable(lang, 'chat.box.theme.option.lockTexture')
+
+      }),
+      optionChatX: new NumberField({
+        label: translatable(lang, 'chat.box.theme.option.optionChatX'),
+        defaultValue: 0
+      }),
+      optionChatY: new NumberField({
+        label: translatable(lang, 'chat.box.theme.option.optionChatY'),
+        defaultValue: 0
+      }),
+      textAlign: new EnumField({
+        label: translatable(lang, 'chat.box.theme.option.textAlign'),
+        defaultValue: 'LEFT',
+        options: textAlign.values(lang)
+      })
+    }
+  })
+
+  // keyPrompt
+  const keyPromptComponent = createComponent({ renderOrder: 40 })
+  keyPromptComponent.label = translatable(lang, 'chat.box.theme.KeyPrompt.basic')
+  const keyPrompt = new ObjectField({
+    properties: {
+      visible: new BooleanField({
+        label: translatable(lang, 'chat.box.theme.KeyPrompt.visible'),
+        defaultValue: true
+      }),
+      mouseTextureWidth: new NumberField({
+        label: translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureWidth'),
+        defaultValue: 16
+      }),
+      mouseTextureHeight: new NumberField({
+        label: translatable(lang, 'chat.box.theme.KeyPrompt.mouseTextureHeight'),
+        defaultValue: 16
+      }),
+      rightClickTexture: new StringField({
+        label: translatable(lang, 'chat.box.theme.KeyPrompt.rightClickTexture')
+      }),
+      scrollTexture: new StringField({
+        label: translatable(lang, 'chat.box.theme.KeyPrompt.scrollTexture')
+
+      })
+    }
+  })
+
+  // Portrait
+  const portraitComponent = createComponent({
+    renderOrder: 20
+  })
+  // customAnimation
+  const customAnimation = new ObjectField({
+    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation'),
+    layout: 'vertical',
+    properties: {
+      texture: new StringField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.texture')
+      }),
+      time: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.time'),
+        defaultValue: 0,
+        min: 0
+      }),
+      x: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.x')
+      }),
+      y: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.y')
+      }),
+      xOffset: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.xOffset')
+      }),
+      yOffset: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.yOffset')
+      }),
+      scale: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.scale'),
+        min: 0,
+        defaultValue: null
+      }),
+      opacity: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.opacity'),
+        defaultValue: null,
+        min: 0,
+        max: 100
+      }),
+      angle: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.angle')
+      }),
+      easing: new EnumField({
+        label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.easing'),
+        options: easing,
+        width: 200,
+        mode: 'top'
+      })
+    }
+  })
+  // Attachment
+  const attachment = new ObjectField({
+    label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment'),
+    layout: 'vertical',
+    tips: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment.tips'),
+    properties: {
+      value: new StringField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.texture.value')
+      }),
+      x: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment.x'),
+        defaultValue: 0
+      }),
+      y: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment.y'),
+        defaultValue: 0
+      }),
+      width: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment.width'),
+        defaultValue: 0,
+        min: 0
+      }),
+      height: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment.height'),
+        defaultValue: 0,
+        min: 0
+      })
+    }
+  })
+
+  const portrait = new ObjectField({
+    properties: {
+      type: new EnumField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.type'),
+        options: portraitType.values(lang)
+      }),
+      textureValue: new StringField({
+        key: 'value',
+        label: translatable(lang, 'chat.box.component.global.portrait.get.TEXTURE.value'),
+
+        visible: (field, value) => {
+          return value.type === 'TEXTURE'
+        }
+      }),
+      attachment: new ObjectArrField({
+        label: attachment.label,
+        layout: attachment.layout,
+        tips: attachment.tips,
+        properties: attachment.properties,
+        visible: (field, value) => {
+          return value.type === 'TEXTURE'
+        }
+      }),
+      playerHeadValue: new StringField({
+        key: 'value',
+        label: translatable(lang, 'chat.box.component.global.portrait.get.PLAYER_HEAD.value'),
+        visible: (field, value) => {
+          return value.type === 'PLAYER_HEAD'
+        }
+      }),
+      itemValue: new AutoCompleteField({
+        key: 'value',
+        label: translatable(lang, 'chat.box.component.global.portrait.get.ITEM.value'),
+        suggestions: itemSuggestions(lang),
+        filterMethod: (value, item) => {
+          return item.value.includes(value) || item.label.includes(value)
+        },
+        visible: (field, value) => {
+          return value.type === 'ITEM'
+        }
+      }),
+      customItemData: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.item.customItemData'),
+        visible: (field, value) => {
+          return value.type === 'ITEM'
+        }
+      }),
+      scale: new NumberField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.scale'),
+        defaultValue: 1,
+        min: 0,
+        step: 0.1
+      }),
+      animation: new AutoCompleteField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.attachment'),
+        suggestions: () => useChatBoxEditorStore().animationSuggestions,
+        visible: (field, value) => {
+          return value.customAnimation == null || value.customAnimation.length === 0
+        }
+      }),
+      customAnimation: new ObjectArrField({
+        label: customAnimation.label,
+        layout: customAnimation.layout,
+        properties: customAnimation.properties,
+        visible: (field, value) => {
+          return value.animation == null || value.animation === ''
+        }
+      }),
+      loop: new BooleanField({
+        label: translatable(lang, 'chat.box.component.global.portrait.set.component.loop'),
+        defaultValue: false
+      })
+    }
+  })
+
+  const customAnimationMap = new ObjectMapField({
+    properties: {
+      customAnimation: new ObjectArrField({
+        label: customAnimation.label,
+        layout: customAnimation.layout,
+        properties: customAnimation.properties
+      })
+    }
+  })
+
+  return {
+    createComponent,
+    dialogBoxComponent,
+    dialogBox,
+    functionButtons,
+    optionComponent,
+    option,
+    keyPromptComponent,
+    keyPrompt,
+    portrait,
+    customAnimation,
+    customAnimationMap
+  }
+}
+
+export const dialoguesSetting = (lang) => {
+  const dialogBasicConfiguration = new ObjectField({
+    properties: {
+      $introduce: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.introduce')
+      }),
+      isTranslatable: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.isTranslatable'),
+        defaultValue: false
+      }),
+      isEsc: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.isEsc'),
+        defaultValue: true
+      }),
+      isPause: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.isPause'),
+        defaultValue: true
+      }),
+      isHistoricalSkip: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.isHistoricalSkip'),
+        defaultValue: true
+      }),
+      maxTriggerCount: new NumberField({
+        label: translatable(lang, 'chat.box.dialogues.maxTriggerCount'),
+        defaultValue: -1,
+        min: -1
+      }),
+      isScreen: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.isScreen'),
+        defaultValue: true
+      }),
+      theme: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.theme'),
+        defaultValue: ''
+      })
+    }
+  })
+  //dialogBox
+  const dialogBox = new ObjectField({
+    properties: {
+      name: new AutoCompleteField({
+        label: translatable(lang, 'chat.box.dialogues.dialogBox.name'),
+        suggestions: () => useChatBoxEditorStore().getTranslatableOptions(lang),
+        filterMethod: (value, item) => {
+          return item.value.includes(value) || item.label.includes(value)
+        }
+      }),
+      text: new AutoCompleteField({
+        label: translatable(lang, 'chat.box.dialogues.dialogBox.text'),
+        suggestions: () => useChatBoxEditorStore().getTranslatableOptions(lang),
+        filterMethod: (value, item) => {
+          return item.value.includes(value) || item.label.includes(value)
+        }
+      })
+    }
+  })
+
+  //option
+  const condition = new ObjectField({
+    properties: {
+      objective: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.condition.objective')
+      }),
+      value: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.condition.value')
+      })
+    }
+  })
+  const click = new ObjectField({
+    properties: {
+      type: new AutoCompleteField({
         label: translatable(lang, 'chat.box.dialogues.options.click.type'),
-        type: 'string'
-      },
-      value: {
-        label: translatable(lang, 'chat.box.dialogues.options.click.value'),
-        type: 'string'
-      }
+        suggestions: clickType.values(lang)
+      }),
+      value: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.click.value')
+      })
     }
-  }
+  })
 
-  // 添加tooltip字段
-  fieldDescriptions['options[].tooltip'] = {
-    label: translatable(lang, 'chat.box.dialogues.options.tooltip'),
-    type: 'string'
-  }
+  const option = new ObjectArrField({
+    label: translatable(lang, 'chat.box.dialogues.option'),
+    layout: 'vertical',
+    displayTemplate: '{text}',
+    properties: {
+      text: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.text')
+      }),
+      isLock: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.options.isLock'),
+        defaultValue: false
+      }),
+      lock: new ObjectField({
+        properties: condition.properties,
+        visible: (field, value) => {
+          return value.isLock
+        }
+      }),
+      isHidden: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.options.isHidden'),
+        defaultValue: false
+      }),
+      hidden: new ObjectField({
+        properties: condition.properties,
+        visible: (field, value) => {
+          return value.isHidden
+        }
+      }),
+      next: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.next')
+      }),
+      click: click,
+      tooltip: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.tooltip')
+      })
+    }
+  })
 
-  return fieldDescriptions
+  //video
+  let videoComponent = themeSetting(lang).createComponent({
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+    renderOrder: -1
+  })
+  videoComponent.label = translatable(lang, 'chat.box.dialogues.video.basic')
+  const video = new ObjectField({
+    properties: {
+      path: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.video.path'),
+        tips: translatable(lang, 'chat.box.dialogues.video.tips')
+      }),
+      canControl: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.video.canControl'),
+        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
+        defaultValue: true
+      }),
+      canSkip: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.video.canSkip'),
+        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
+        defaultValue: true
+      }),
+      loop: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.video.loop'),
+        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
+        defaultValue: false
+      })
+    }
+  })
+
+  //portrait
+  const replacePortraitComponent = themeSetting(lang).createComponent({
+    x: null,
+    y: null,
+    width: null,
+    height: null,
+    alignX: null,
+    alignY: null,
+    opacity: null,
+    renderOrder: null,
+    angle: null,
+    scale: null,
+    loop: null
+  })
+  const replacePortrait = new ObjectField({
+    properties: {
+      id: new AutoCompleteField({
+        label: translatable(lang, 'chat.box.dialogues.portrait.id')
+      }),
+      ...replacePortraitComponent.properties
+    }
+  })
+
+  // dialogues
+  const dialogues = new ObjectField({
+    properties: {
+      dialogBox: dialogBox,
+      options: option,
+      sound: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.sound'),
+        defaultValue: ''
+      }),
+      volume: new NumberField({
+        label: translatable(lang, 'chat.box.dialogues.volume'),
+        defaultValue: 1,
+        min: 0,
+        step: 0.1
+      }),
+      pitch: new NumberField({
+        label: translatable(lang, 'chat.box.dialogues.pitch'),
+        defaultValue: 1,
+        min: 0,
+        step: 0.1
+      }),
+      command: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.command')
+      }),
+      backgroundImage: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.backgroundImage')
+      }),
+      clearOldPortrait: new BooleanField({
+        label: translatable(lang, 'chat.box.dialogues.clearOldPortrait'),
+        defaultValue: true
+      }),
+      removePortrait: new StrArrFiled({
+        label: translatable(lang, 'chat.box.dialogues.removePortrait'),
+        layout: 'vertical',
+        suggestions: () => Object.keys(useChatBoxEditorStore().themeSetting.portrait),
+        visible: (field, value) => {
+          return !value.clearOldPortrait
+        }
+      }),
+      video: video
+    }
+  })
+  return {
+    dialogBasicConfiguration,
+    dialogues,
+    videoComponent
+  }
 }
 
-export const customAnimationSetting = lang => {
-  // 创建字段描述对象
-  const fieldDescriptions = {}
 
-  // 添加texture字段
-  fieldDescriptions['customAnimation[].texture'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.texture'),
-    type: 'string'
-  }
-
-  // 添加time字段
-  fieldDescriptions['customAnimation[].time'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.time'),
-    type: 'integer',
-    required: true
-  }
-
-  // 添加x字段
-  fieldDescriptions['customAnimation[].x'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.x'),
-    type: 'float'
-  }
-
-  // 添加y字段
-  fieldDescriptions['customAnimation[].y'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.y'),
-    type: 'float'
-  }
-
-  // 添加scale字段
-  fieldDescriptions['customAnimation[].scale'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.scale'),
-    type: 'float',
-    default: 1.0
-  }
-
-  // 添加opacity字段
-  fieldDescriptions['customAnimation[].opacity'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.opacity'),
-    type: 'float',
-    min: 0,
-    max: 100,
-    default: 100
-  }
-
-  // 添加easing字段
-  fieldDescriptions['customAnimation[].easing'] = {
-    label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.easing'),
-    type: 'enum',
-    default: 'EASE_IN_SINE',
-    mode:'bottom',
-    enumOptions: easing
-  }
-
-  return fieldDescriptions
-}
-
-export const functionalButtonSetting = lang => {
-  // 创建字段描述对象
-  const fieldDescriptions = {}
-
-  // 添加type字段
-  fieldDescriptions['functionalButton[].type'] = {
-    label: translatable(lang, 'chat.box.theme.functional.button.type'),
-    type: 'enum',
-    enumOptions: functionalButtonType.values(lang)
-  }
-
-  // 添加texture字段
-  fieldDescriptions['functionalButton[].texture'] = {
-    label: translatable(lang, 'chat.box.theme.functional.button.texture'),
-    type: 'string'
-  }
-
-  // 添加hoverTexture字段
-  fieldDescriptions['functionalButton[].hoverTexture'] = {
-    label: translatable(lang, 'chat.box.theme.functional.button.hover_texture'),
-    type: 'string'
-  }
-
-  // 添加x字段
-  const xDefault = 0
-  fieldDescriptions['functionalButton[].x'] = {
-    default: xDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.x', xDefault),
-    type: 'float'
-  }
-
-  // 添加y字段
-  const yDefault = 0
-  fieldDescriptions['functionalButton[].y'] = {
-    default: yDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.y', yDefault),
-    type: 'float'
-  }
-
-  // 添加width字段
-  const widthDefault = 5
-  fieldDescriptions['functionalButton[].width'] = {
-    default: widthDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.width', widthDefault),
-    min: 0,
-    type: 'float'
-  }
-
-  // 添加height字段
-  const heightDefault = 8
-  fieldDescriptions['functionalButton[].height'] = {
-    default: heightDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.height', heightDefault),
-    min: 0,
-    type: 'float'
-  }
-
-  // 添加alignX字段
-  const alignXDefault = 'RIGHT'
-  fieldDescriptions['functionalButton[].alignX'] = {
-    default: alignXDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.align.x', translatable(lang, alignXList.of(alignXDefault))),
-    type: 'enum',
-    enumOptions: alignXList.values(lang)
-  }
-
-  // 添加alignY字段
-  const alignYDefault = 'BOTTOM'
-  fieldDescriptions['functionalButton[].alignY'] = {
-    default: alignYDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.align.y', translatable(lang, alignYList.of(alignYDefault))),
-    type: 'enum',
-    enumOptions: alignYList.values(lang)
-  }
-
-  // 添加opacity字段
-  const opacityDefault = 100
-  fieldDescriptions['functionalButton[].opacity'] = {
-    default: opacityDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.opacity', opacityDefault),
-    type: 'float',
-    min: 0,
-    max: 100
-  }
-
-  // 添加renderOrder字段
-  const renderOrderDefault = 30
-  fieldDescriptions['functionalButton[].renderOrder'] = {
-    default: renderOrderDefault,
-    label: translatableArg(lang, 'chat.box.theme.component.renderOrder', renderOrderDefault),
-    type: 'integer',
-  }
-
-  return fieldDescriptions
-}

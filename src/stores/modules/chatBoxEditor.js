@@ -1,154 +1,149 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-export const useChatBoxEditorStore = defineStore(
-  'chat-box-editor',
-  () => {
-    const translatableKeyColumns = ref(['zh_cn', 'en_us'])
-    const translatableKeyRows = ref([
-      {
-        key: '',
-        value: ['', ''],
-      },
-    ])
+export const useChatBoxEditorStore = defineStore('chat-box-editor', () => {
+  // 翻译列和行
+  const translatableKeyColumns = ref(['zh_cn', 'en_us'])
+  const translatableKeyRows = ref([
+    { key: '', value: ['', ''] }
+  ])
 
-    const themeSetting = ref({
-      theme: '',
-      portrait: {},
-      option: {},
-      dialogBox: {},
-      functionalButton: [],
-      keyPrompt: {}
+  const themeSetting = ref({
+    theme: '',
+    portrait: {},
+    option: {},
+    dialogBox: {},
+    functionalButton: [],
+    keyPrompt: {},
+    customAnimation: {}
+  })
+
+  const dialoguesSetting = ref({
+    $introduce: '',
+    dialogues: {},
+    isTranslatable: false,
+    isEsc: true,
+    isPause: true,
+    isHistoricalSkip: true,
+    maxTriggerCount: -1,
+    isScreen: true,
+    theme: ''
+  })
+
+  const animationSuggestions = computed(() => [
+    { label: 'FADE_IN', value: 'FADE_IN' },
+    { label: 'SLIDE_IN_FROM_BOTTOM', value: 'SLIDE_IN_FROM_BOTTOM' },
+    { label: 'BOUNCE', value: 'BOUNCE' },
+    ...Object.keys(themeSetting.value.customAnimation).map(k => ({ label: k, value: k }))
+  ])
+
+  // ========== 翻译键操作 ==========
+  const getTranslatableJSON = (lang) => {
+    const index = translatableKeyColumns.value.indexOf(lang)
+    const json = {}
+    translatableKeyRows.value.forEach(row => {
+      if (row.key) json[row.key] = row.value[index] || ''
     })
+    return json
+  }
 
-    const dialoguesSetting = ref({
-      $introduce: '',
-      dialogues: {},
-      isTranslatable: false,
-      isEsc: true,
-      isPause: true,
-      isHistoricalSkip: true,
-      maxTriggerCount: -1,
-      theme: ''
-    })
+  const loadFromJson = (json) => {
+    if (!json || typeof json !== 'object') return
 
-    const translatableKey = (lang) => {
-      let index = translatableKeyColumns.value.findIndex((item) => item === lang)
-      let json = {}
-      translatableKeyRows.value.forEach((item) => {
-        json[item.key] = item.value[index]
-      })
-      return json
-    }
+    // 判断是多语言结构还是单语言（单文件只包含键值对）
+    const isMultiLang = Object.values(json).every(v => typeof v === 'object' && v !== null)
+    const parsed = isMultiLang ? json : { zh_cn: json }
 
-    const translatable = (lang, key) => {
-      let index = translatableKeyColumns.value.findIndex((item) => item === lang)
-      let value
-      translatableKeyRows.value.forEach((item) => {
-        if (item.key === key) {
-          value = item.value[index]
-        }
-      })
-      return value
-    }
+    // 现有列 & 行
+    const existingCols = [...translatableKeyColumns.value]
+    const existingRows = [...translatableKeyRows.value]
 
-    const translatableOptions = (lang) => {
-      let index = translatableKeyColumns.value.findIndex((item) => item === lang)
-      let options = []
-      translatableKeyRows.value.forEach((item) => {
-        let json = {}
-        json.label = item.value[index]
-        json.value = item.key
-        options.push(json)
-      })
-      return options
-    }
-
-    const setThemeSetting = (setting, isAllReplace = false, object = {}) => {
-      if (isAllReplace) {
-        themeSetting.value = setting
-      } else {
-        switch (setting.key) {
-          case 'dialogBox': {
-            themeSetting.value.dialogBox = Object.assign(themeSetting.value.dialogBox, setting)
-            break
-          }
-          case 'logButton': {
-            themeSetting.value.logButton = Object.assign(themeSetting.value.logButton, setting)
-            break
-          }
-          case 'option': {
-            themeSetting.value.option = Object.assign(themeSetting.value.option, setting)
-            break
-          }
-          case 'keyPrompt':{
-            themeSetting.value.keyPrompt = Object.assign(themeSetting.value.keyPrompt, setting)
-            break
-          }
-          case 'video': {
-            dialoguesSetting.value.dialogues[object.dialogGroup][object.dialogIndex].video = Object.assign(dialoguesSetting.value.dialogues[object.dialogGroup][object.dialogIndex].video, setting)
-          }
-        }
+    // 合并所有语言列（保持原有列顺序，新增列追加到末尾）
+    for (const langCode of Object.keys(parsed)) {
+      if (!existingCols.includes(langCode)) {
+        existingCols.push(langCode)
       }
     }
 
-    const setPortraitSetting = (setting, isAllReplace = false) => {
-      if (isAllReplace) {
-        themeSetting.value.portrait = setting
-      } else {
-        themeSetting.value.portrait[setting.key] = setting
-      }
+    // 收集所有 key（已有 + 导入）
+    const allKeysSet = new Set()
+    existingRows.forEach(r => { if (r.key) allKeysSet.add(r.key) })
+    for (const langCode in parsed) {
+      const obj = parsed[langCode] || {}
+      Object.keys(obj).forEach(k => allKeysSet.add(k))
     }
+    const allKeys = Array.from(allKeysSet)
 
-    const setDialoguesSetting = (setting) => {
-      dialoguesSetting.value = setting
-    }
-
-    const setTranslatableKey = (index, lang, value) => {
-      translatableKeyRows.value[index][lang] = value
-    }
-
-    const addTranslatableKeyRow = () => {
-      translatableKeyRows.value.push({
-        key: '',
-        value: Array.from({ length: translatableKeyColumns.value.length }, () => ''),
+    // 为每个 key 构建一行，fill 对应列的值（缺失填 ''）
+    const newRows = allKeys.map(key => {
+      const values = existingCols.map(col => {
+        // 优先取 parsed 中的值（导入覆盖同语言的单个 key）
+        if (parsed[col] && Object.prototype.hasOwnProperty.call(parsed[col], key)) {
+          return parsed[col][key]
+        }
+        // 若导入中无该 lang 的值，再取已有行中的旧值（保持之前填写的数据）
+        const oldRow = existingRows.find(r => r.key === key)
+        if (oldRow) {
+          const oldColIndex = translatableKeyColumns.value.indexOf(col)
+          if (oldColIndex >= 0 && oldRow.value[oldColIndex] !== undefined) {
+            return oldRow.value[oldColIndex]
+          }
+        }
+        return ''
       })
-    }
+      return { key, value: values }
+    })
 
-    const addTranslatableKeyCol = (index) => {
-      translatableKeyColumns.value.push('')
-      translatableKeyRows.value.forEach((row) => {
-        row.value.push('')
-      })
-    }
+    translatableKeyColumns.value = existingCols
+    translatableKeyRows.value = newRows
+  }
 
-    const removeTranslatableKeyCol = (index) => {
-      translatableKeyColumns.value.splice(index, 1)
-      translatableKeyRows.value.forEach((row) => {
-        row.value.splice(index, 1)
-      })
-    }
+  const getTranslatableOptions = (lang) => {
+    const index = translatableKeyColumns.value.indexOf(lang)
+    return translatableKeyRows.value.map(row => ({
+      label: row.value[index],
+      value: row.key
+    }))
+  }
 
-    return {
-      translatableKeyColumns,
-      translatableKeyRows,
-      themeSetting,
-      dialoguesSetting,
-      setThemeSetting,
-      setPortraitSetting,
-      setDialoguesSetting,
-      setTranslatableKey,
-      addTranslatableKeyRow,
-      addTranslatableKeyCol,
-      removeTranslatableKeyCol,
-      translatableKey,
-      translatableOptions,
-      translatable
-    }
-  },
-  {
-    persist: {
-      pick: ['translatableKeyColumns', 'translatableKeyRows', 'themeSetting', 'dialoguesSetting'],
-    },
-  },
-)
+
+  const addRow = () => {
+    translatableKeyRows.value.push({
+      key: '',
+      value: Array(translatableKeyColumns.value.length).fill('')
+    })
+  }
+
+  const addColumn = (lang = '') => {
+    translatableKeyColumns.value.push(lang)
+    translatableKeyRows.value.forEach(row => row.value.push(''))
+  }
+
+  const removeColumn = (colIndex) => {
+    translatableKeyColumns.value.splice(colIndex, 1)
+    translatableKeyRows.value.forEach(row => row.value.splice(colIndex, 1))
+  }
+
+  const removeRow = (rowIndex) => {
+    translatableKeyRows.value.splice(rowIndex, 1)
+  }
+
+  return {
+    translatableKeyColumns,
+    translatableKeyRows,
+    themeSetting,
+    dialoguesSetting,
+    animationSuggestions,
+    getTranslatableJSON,
+    loadFromJson,
+    getTranslatableOptions,
+    addRow,
+    addColumn,
+    removeColumn,
+    removeRow
+  }
+}, {
+  persist: {
+    pick: ['translatableKeyColumns', 'translatableKeyRows', 'themeSetting', 'dialoguesSetting']
+  }
+})

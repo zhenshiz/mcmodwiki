@@ -3,9 +3,10 @@ import Tag from '@/components/Tag.vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
+import { computed, onMounted, ref } from 'vue'
 
 const props = defineProps({
-  value: {
+  modelValue: {
     type: String,
     required: true
   },
@@ -31,7 +32,7 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    default: 'top',
+    default: 'bottom',
     validator(value) {
       return ['top', 'bottom'].includes(value)
     }
@@ -40,36 +41,32 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  defaultEmit: {
-    type: Boolean,
-    default: false
-  },
-  //是否不区分大小写
   isNoCaseSensitive: {
     type: Boolean,
     default: false
   }
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:modelValue'])
 const isDark = computed(() => usePageStore().isDark)
+
 const selected = computed(() => {
   let obj = {}
   obj[props.labelName] = ''
   obj[props.valueName] = ''
   if (props.isNoCaseSensitive) {
-    return props.options.find((option) => option[props.valueName]?.toUpperCase() === props.value?.toUpperCase()) ?? obj
+    return props.options.find(
+      (option) => option[props.valueName]?.toUpperCase() === props.modelValue?.toUpperCase()
+    ) ?? obj
   } else {
-    return props.options.find((option) => option[props.valueName] === props.value) ?? obj
+    return props.options.find(
+      (option) => option[props.valueName] === props.modelValue
+    ) ?? obj
   }
 })
 
 const selectOption = (item) => {
-  if (props.defaultEmit) {
-    emit('update:value', item[props.valueName])
-  } else {
-    emit('update:value', item)
-  }
+  emit('update:modelValue', item[props.valueName])
 }
 
 const select = ref()
@@ -109,15 +106,16 @@ onMounted(() => {
         </template>
       </Tag>
     </template>
+
     <div
       ref="option"
       class="p-3 border shadow border-light-blue dark:border-dark-blue overflow-auto max-h-[200px]"
     >
       <div
-        @click="selectOption(item)"
-        class="mb-1 last:mb-0 dark:text-white theme-cursor-blue p-1 whitespace-nowrap"
         v-for="(item, index) in options"
         :key="index"
+        @click="selectOption(item)"
+        class="mb-1 last:mb-0 dark:text-white theme-cursor-blue p-1 whitespace-nowrap"
       >
         {{ item[labelName] }}
       </div>
