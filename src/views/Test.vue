@@ -1,7 +1,7 @@
 <script setup>
 import { itemSuggestions } from '@/assets/textures/itemSuggestions.js'
 import { computed } from 'vue'
-import { usePageStore } from '@/stores/index.js'
+import { useChatBoxEditorStore, usePageStore } from '@/stores/index.js'
 import {
   AutoCompleteField,
   BoolArrFiled,
@@ -11,14 +11,16 @@ import {
   NumberField,
   ObjectField,
   StrArrFiled,
-  StringField
+  StringField,
+  UnionArrField,
+  UnionTemplate
 } from '@/assets/const/objectClass.js'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import { MilkdownProvider } from '@milkdown/vue'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
-import { themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
-import ObjectMapComponent from '@/components/ObjectMapComponent.vue'
-import ArrayComponent from '@/components/ArrayComponent.vue'
+import { dialoguesSetting, themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
+import UnionArrGeneratorDialog from '@/components/UnionArrGeneratorDialog.vue'
+import { translatable } from '@/assets/translatable/translatable.js'
 
 const lang = computed(() => usePageStore().setting.language)
 
@@ -100,6 +102,24 @@ const formProperties = new ObjectField(
 const visible = ref(false)
 
 const theme = themeSetting(lang.value)
+
+const test = new UnionArrField({
+  itemTypes: {
+    portraitType: new UnionTemplate({
+      displayTemplate: `[${translatable(lang.value, 'chat.box.dialogues.portrait.reference')}] {value}`,
+      groupName: translatable(lang.value, 'chat.box.dialogues.portrait.reference'),
+      field: new AutoCompleteField({
+        label: translatable(lang.value, 'chat.box.dialogues.portrait.id'),
+        suggestions: () => Object.keys(useChatBoxEditorStore().themeSetting.portrait)
+      })
+    }),
+    replacePortrait: new UnionTemplate({
+      displayTemplate: `[${translatable(lang.value, 'chat.box.dialogues.portrait.custom')}] {id}`,
+      groupName: translatable(lang.value, 'chat.box.dialogues.portrait.custom'),
+      field: dialoguesSetting(lang.value).replacePortrait
+    })
+  }
+})
 </script>
 
 <template>
@@ -113,8 +133,10 @@ const theme = themeSetting(lang.value)
       <!--      <ObjectGeneratorDialog v-model="testModal"-->
       <!--                             :properties="formProperties" title="点击编辑" />-->
       <!--      <FileJsonHandler v-model="testModal"  key="test"/>-->
-      <ArrayComponent v-model="testModal">
-      </ArrayComponent>
+      <UnionArrGeneratorDialog :properties="test" v-model="testModal"
+                               :title="translatable(lang, 'chat.box.dialogues.portrait.title')">
+
+      </UnionArrGeneratorDialog>
     </div>
     <div class="flex-1">
       <MilkdownProvider>

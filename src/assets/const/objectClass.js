@@ -14,7 +14,7 @@ class BaseField {
     this.key = key               // 字段名
     this.label = label || ''     // 显示名称
     this.type = type             // 类型 string, number, boolean, color, enum, object, array...
-    this.defaultValue = defaultValue
+    this.defaultValue = defaultValue ?? undefined
     this.tips = tips || ''
     this.layout = layout || 'horizontal' // horizontal 或者 vertical
     this.required = required || false
@@ -100,9 +100,9 @@ export class ColorField extends BaseField {
   }
 }
 
-class ArrayField extends BaseField {
+export class ArrayField extends BaseField {
   constructor({ type, itemDefaultValue, title, ...rest }) {
-    super({ type, defaultValue: [], ...rest })
+    super({ type, defaultValue: rest.defaultValue ?? [], ...rest })
     this.itemDefaultValue = itemDefaultValue
     this.title = title || ''
   }
@@ -143,6 +143,38 @@ export class ObjectArrField extends ArrayField {
   }
 }
 
+export class UnionTemplate {
+  constructor({
+                displayTemplate,
+                field,
+                groupName
+              }) {
+    this.displayTemplate = displayTemplate || ''
+    this.type = field.type
+    this.isObjectField = field instanceof ObjectField
+    this.itemDefaultValue = field.getDefault()
+    if (field && !(field instanceof ObjectField)) {
+      this.field = new ObjectField({
+        properties: { value: field }
+      })
+    } else {
+      this.field = field
+    }
+    this.groupName = groupName
+  }
+}
+
+export class UnionArrField extends ArrayField {
+  constructor({
+                itemTypes,
+                title,
+                ...rest
+              }) {
+    super({ type: 'unionArr', title, ...rest })
+    this.itemTypes = itemTypes
+  }
+}
+
 export class ObjectField extends BaseField {
   constructor({ properties, ...rest }) {
     super({ type: 'object', defaultValue: {}, ...rest })
@@ -166,7 +198,7 @@ export class ObjectDialogField extends ObjectField {
 }
 
 export class ObjectMapField extends ObjectField {
-  constructor({ properties, ...rest }) {
+  constructor({ properties,valueType, ...rest }) {
     super({ type: 'objectMap', properties, ...rest })
   }
 }

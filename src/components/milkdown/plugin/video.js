@@ -60,7 +60,6 @@ export const videoNode = $node('video', () => ({
 export const insertVideoCommand = $command(
   'InsertVideo',
   (ctx) => (payload) => {
-    console.log(payload)
     if (!payload) {
       return false
     }

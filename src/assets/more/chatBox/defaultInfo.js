@@ -18,32 +18,37 @@ import {
   ObjectField,
   ObjectMapField,
   StrArrFiled,
-  StringField
+  StringField,
+  UnionArrField,
+  UnionTemplate
 } from '@/assets/const/objectClass.js'
 import { itemSuggestions } from '@/assets/textures/itemSuggestions.js'
 import { useChatBoxEditorStore } from '@/stores/index.js'
 
-export const defaultTheme = `{
-  theme: '',
-  portrait: {},
-  option: {},
-  dialogBox: {},
-  functionalButton: [],
-  keyPrompt: {},
-  customAnimation: {}
-}`
+export const defaultChatBoxTheme = () => {
+  let theme = themeSetting(null)
+  let defaultChatBoxTheme = theme.chatBoxTheme.getDefault()
+  defaultChatBoxTheme.portrait = { map: theme.portrait.getDefault() }
+  defaultChatBoxTheme.functionalButton = [theme.functionButtons.getDefault()]
+  defaultChatBoxTheme.customAnimation = { map: [theme.customAnimation.getDefault()] }
+  return defaultChatBoxTheme
+}
 
-export const defaultDialogues = `{
-  $introduce: '',
-  dialogues: [],
-  isTranslatable: false,
-  isEsc: true,
-  isPause: true,
-  isScreen: true,
-  isHistoricalSkip: true,
-  maxTriggerCount: -1,
-  theme: ''
-}`
+export const defaultChatBoxDialogues = () => {
+  let dialogues = dialoguesSetting(null)
+  let defaultChatBoxDialogues = dialogues.dialogBasicConfiguration.getDefault()
+  defaultChatBoxDialogues.$introduce = ''
+  let dialoguesDefault = dialogues.dialogues.getDefault()
+  dialoguesDefault.dialogBox = dialogues.dialogBox.getDefault()
+  dialoguesDefault.options = [dialogues.option.getItemDefault()]
+  dialoguesDefault.portrait = [undefined, dialogues.replacePortrait.getDefault()]
+  dialoguesDefault.removePortrait = [undefined]
+  dialoguesDefault.video = dialogues.video.getDefault()
+  defaultChatBoxDialogues.dialogues = {
+    map: [dialoguesDefault]
+  }
+  return defaultChatBoxDialogues
+}
 
 export const themeSetting = (lang) => {
   /**
@@ -163,20 +168,17 @@ export const themeSetting = (lang) => {
     label: translatable(lang, 'chat.box.theme.functional.button.basic'),
     layout: 'vertical',
     properties: {
-      ...functionButtonComponent.properties,
       type: new EnumField({
         label: translatable(lang, 'chat.box.theme.functional.button.type'),
-        defaultValue: 'LOG',
         options: functionalButtonType.values(lang)
       }),
       texture: new StringField({
         label: translatable(lang, 'chat.box.theme.functional.button.texture')
-
       }),
       hoverTexture: new StringField({
         label: translatable(lang, 'chat.box.theme.functional.button.hoverTexture')
-
-      })
+      }),
+      ...functionButtonComponent.properties
     }
   })
 
@@ -193,7 +195,6 @@ export const themeSetting = (lang) => {
       }),
       lockTexture: new StringField({
         label: translatable(lang, 'chat.box.theme.option.lockTexture')
-
       }),
       optionChatX: new NumberField({
         label: translatable(lang, 'chat.box.theme.option.optionChatX'),
@@ -270,11 +271,9 @@ export const themeSetting = (lang) => {
       scale: new NumberField({
         label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.scale'),
         min: 0,
-        defaultValue: null
       }),
       opacity: new NumberField({
         label: translatable(lang, 'chat.box.component.global.portrait.custom.animation.opacity'),
-        defaultValue: null,
         min: 0,
         max: 100
       }),
@@ -390,17 +389,35 @@ export const themeSetting = (lang) => {
       loop: new BooleanField({
         label: translatable(lang, 'chat.box.component.global.portrait.set.component.loop'),
         defaultValue: false
-      })
+      }),
+      ...portraitComponent.properties
     }
   })
 
+  //customAnimation
   const customAnimationMap = new ObjectMapField({
     properties: {
-      customAnimation: new ObjectArrField({
+      '': new ObjectArrField({
         label: customAnimation.label,
         layout: customAnimation.layout,
         properties: customAnimation.properties
       })
+    }
+  })
+
+  //all
+  const chatBoxTheme = new ObjectField({
+    properties: {
+      portrait: new ObjectMapField({
+        properties: portrait.properties
+      }),
+      option: option,
+      dialogBox: dialogBox,
+      functionalButton: new ObjectArrField({
+        properties: functionButtons.properties
+      }),
+      keyPrompt: keyPrompt,
+      customAnimation: customAnimationMap
     }
   })
 
@@ -415,7 +432,8 @@ export const themeSetting = (lang) => {
     keyPrompt,
     portrait,
     customAnimation,
-    customAnimationMap
+    customAnimationMap,
+    chatBoxTheme
   }
 }
 
@@ -546,6 +564,7 @@ export const dialoguesSetting = (lang) => {
     renderOrder: -1
   })
   videoComponent.label = translatable(lang, 'chat.box.dialogues.video.basic')
+  videoComponent.tips = translatable(lang, 'chat.box.dialogues.video.tips')
   const video = new ObjectField({
     properties: {
       path: new StringField({
@@ -587,7 +606,8 @@ export const dialoguesSetting = (lang) => {
   const replacePortrait = new ObjectField({
     properties: {
       id: new AutoCompleteField({
-        label: translatable(lang, 'chat.box.dialogues.portrait.id')
+        label: translatable(lang, 'chat.box.dialogues.portrait.id'),
+        suggestions: () => Object.keys(useChatBoxEditorStore().themeSetting.portrait)
       }),
       ...replacePortraitComponent.properties
     }
@@ -598,6 +618,25 @@ export const dialoguesSetting = (lang) => {
     properties: {
       dialogBox: dialogBox,
       options: option,
+      portrait: new UnionArrField({
+        label: translatable(lang, 'chat.box.dialogues.portrait'),
+        layout: 'vertical',
+        itemTypes: {
+          portraitType: new UnionTemplate({
+            displayTemplate: `[${translatable(lang, 'chat.box.dialogues.portrait.reference')}] {value}`,
+            groupName: translatable(lang, 'chat.box.dialogues.portrait.reference'),
+            field: new AutoCompleteField({
+              label: translatable(lang, 'chat.box.dialogues.portrait.id'),
+              suggestions: () => Object.keys(useChatBoxEditorStore().themeSetting.portrait)
+            })
+          }),
+          replacePortrait: new UnionTemplate({
+            displayTemplate: `[${translatable(lang, 'chat.box.dialogues.portrait.custom')}] {id}`,
+            groupName: translatable(lang, 'chat.box.dialogues.portrait.custom'),
+            field: replacePortrait
+          })
+        }
+      }),
       sound: new StringField({
         label: translatable(lang, 'chat.box.dialogues.sound'),
         defaultValue: ''
@@ -638,7 +677,11 @@ export const dialoguesSetting = (lang) => {
   return {
     dialogBasicConfiguration,
     dialogues,
-    videoComponent
+    videoComponent,
+    replacePortrait,
+    dialogBox,
+    option,
+    video
   }
 }
 

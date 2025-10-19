@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, onMounted, ref, watch } from 'vue'
+import { defineEmits, onMounted, ref, watch, computed } from 'vue'
 import { usePageStore } from '@/stores/index.js'
 import { translatable } from '../assets/translatable/translatable.js'
 import { Icon } from '@iconify/vue'
@@ -13,6 +13,10 @@ const props = defineProps({
   key: {
     type: String,
     required: true
+  },
+  processText: {
+    type: Function,
+    default: null
   }
 })
 
@@ -20,15 +24,15 @@ const emit = defineEmits(['update:modelValue'])
 const lang = computed(() => usePageStore().setting.language)
 let fileHandle
 
-// 打开文件选择器
+// === 文件选择 ===
 const loadFile = async () => {
   ;[fileHandle] = await window.showOpenFilePicker()
   const file = await fileHandle.getFile()
   if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
     await set(props.key, fileHandle)
     const reader = new FileReader()
-    reader.onload = function(e) {
-      const fileContent = e.target.result || defaultTheme
+    reader.onload = function (e) {
+      const fileContent = e.target.result
       try {
         emit('update:modelValue', JSON.parse(fileContent))
       } catch (error) {
@@ -41,8 +45,8 @@ const loadFile = async () => {
   }
 }
 
+// === 拖拽 ===
 const isDragOver = ref(false)
-
 const onDragOver = () => (isDragOver.value = true)
 const onDragLeave = () => (isDragOver.value = false)
 
@@ -69,7 +73,7 @@ const onDrop = async (event) => {
   }
 }
 
-// 权限检查
+// === 权限检查 ===
 async function verifyPermission(fileHandle, readWrite) {
   const options = {}
   if (readWrite) {
@@ -81,24 +85,37 @@ async function verifyPermission(fileHandle, readWrite) {
   return (await fileHandle.requestPermission(options)) === 'granted'
 }
 
-
-// 读取文件内容
-const modifyFile = async (text) => {
+// === 写入文件 ===
+const modifyFile = async (data) => {
   if (fileHandle !== undefined && (await verifyPermission(fileHandle, true))) {
     const writable = await fileHandle.createWritable()
+    let text
+    if (typeof props.processText === 'function') {
+      try {
+        text = props.processText(data)
+      } catch (err) {
+        console.error('processText 执行出错：', err)
+        text = JSON.stringify(data, null, 2)
+      }
+    } else {
+      text = JSON.stringify(data, null, 2)
+    }
+
     await writable.write(text)
     await writable.close()
   }
 }
 
+// === 初始化 ===
 onMounted(async () => {
   fileHandle = await get(props.key)
 })
 
+// === 监听 modelValue 自动保存 ===
 watch(
   () => props.modelValue,
   (newValue) => {
-    modifyFile(JSON.stringify(newValue), null, 2)
+    modifyFile(newValue)
   },
   { deep: true, immediate: true }
 )

@@ -6,35 +6,17 @@ import { translatable } from '@/assets/translatable/translatable.js'
 import { usePageStore } from '@/stores/index.js'
 import FormItem from '@/components/FormItem.vue'
 import Input from '@/components/Input.vue'
-import { ObjectField } from '@/assets/const/objectClass.js'
+import { ArrayField, ObjectField } from '@/assets/const/objectClass.js'
 import Modal from '@/components/Modal.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  properties: {
-    type: ObjectField,
-    required: true
-  },
-  displayTemplate: {
-    type: [String, Function],
-    default: ''
-  },
-  filter: {
-    type: Function,
-    default: null
-  },
-  dialogWidthPercent: {
-    type: Number,
-    default: 50
-  }
+  modelValue: { type: Object, required: true },
+  title: { type: String, default: '' },
+  properties: { type: ObjectField, required: true },
+  displayTemplate: { type: [String, Function], default: '' },
+  filter: { type: Function, default: null },
+  dialogWidthPercent: { type: Number, default: 50 }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -46,28 +28,80 @@ const editingKey = ref('')
 const editingValue = ref({})
 const editingOldKey = ref(null)
 
-// === Methods ===
+const isArrayMode = computed(() => {
+  const inner = props.properties?.properties?.['']
+  return inner && inner instanceof ArrayField
+})
+
 const openEdit = (key, value) => {
   editingKey.value = key ?? ''
-  editingValue.value = JSON.parse(JSON.stringify(value ?? {}))
   editingOldKey.value = key
+
+  // 深拷贝，防止直接改动原对象
+  let clonedValue = JSON.parse(JSON.stringify(value ?? (isArrayMode.value ? [] : {})))
+
+  if (isArrayMode.value) {
+    if (Array.isArray(clonedValue)) {
+      clonedValue = { '': clonedValue }
+    } else if (
+      typeof clonedValue === 'object' &&
+      clonedValue !== null &&
+      !Array.isArray(clonedValue) &&
+      !('' in clonedValue)
+    ) {
+      clonedValue = { '': [clonedValue] }
+    }
+  }
+
+  editingValue.value = clonedValue
   showDialog.value = true
 }
 
+
 const saveEdit = () => {
-  //唯一标识符不能为空
+  // 唯一标识符不能为空
   if (!editingKey.value || editingKey.value.trim() === '') {
     message.warning(translatable(lang.value, 'message.warn.no.key'))
     return
   }
+
+  // 复制外部 model（保持不可变习惯）
   const newData = { ...props.modelValue }
+
+  // 如果改了 key 名，删除旧的
   if (editingOldKey.value && editingOldKey.value !== editingKey.value) {
     delete newData[editingOldKey.value]
   }
-  newData[editingKey.value] = editingValue.value
+
+  if (isArrayMode.value) {
+    let toSave = editingValue.value
+
+    if (
+      toSave &&
+      typeof toSave === 'object' &&
+      !Array.isArray(toSave) &&
+      Object.prototype.hasOwnProperty.call(toSave, '')
+    ) {
+      if (Array.isArray(toSave[''])) {
+        toSave = toSave['']
+      } else {
+        toSave = toSave['']
+      }
+    }
+
+    if (!Array.isArray(toSave) && Array.isArray(editingValue.value)) {
+      toSave = editingValue.value
+    }
+
+    newData[editingKey.value] = JSON.parse(JSON.stringify(toSave))
+  } else {
+    newData[editingKey.value] = JSON.parse(JSON.stringify(editingValue.value))
+  }
+
   emit('update:modelValue', newData)
   showDialog.value = false
 }
+
 
 const removeKey = (key) => {
   const newData = { ...props.modelValue }
@@ -134,7 +168,7 @@ const filteredEntries = computed(() => {
         </div>
       </div>
 
-      <!-- 添加 -->
+      <!-- 添加按钮 -->
       <button
         class="w-full p-2 border border-dashed border-gray-300 dark:border-gray-700 rounded text-center hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center justify-center dark:text-white"
         @click="openEdit(null, null)"
@@ -143,12 +177,13 @@ const filteredEntries = computed(() => {
         {{ translatable(lang, 'component.add') }}{{ title }}
       </button>
 
+      <!-- 弹窗 -->
       <Modal
         :show="showDialog"
         :sm-width="dialogWidthPercent"
-        :title="editingOldKey ?
-          translatable(lang, 'component.update') + title :
-          translatable(lang, 'component.add') + title"
+        :title="editingOldKey
+          ? translatable(lang, 'component.update') + title
+          : translatable(lang, 'component.add') + title"
         @defaultClose="showDialog = false"
         @onNegativeClick="showDialog = false"
         @onPositiveClick="saveEdit"
@@ -159,7 +194,10 @@ const filteredEntries = computed(() => {
               <Input v-model="editingKey" defaultModel="search" />
             </FormItem>
 
-            <ObjectGenerator v-model="editingValue" :properties="properties" />
+            <ObjectGenerator
+              v-model="editingValue"
+              :properties="properties"
+            />
           </Form>
         </template>
       </Modal>

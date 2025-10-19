@@ -70,7 +70,7 @@ defineOptions({ inheritAttrs: false })
 
 <template>
   <div :class="$attrs.class">
-    <FormItem :label="properties.label">
+    <FormItem :label="properties.label" :tips="properties.tips">
       <slot name="trigger" :openDialog="openDialog">
         <Button @click="openDialog" is-toggle-color>
           {{ translatable(lang, buttonText) }}

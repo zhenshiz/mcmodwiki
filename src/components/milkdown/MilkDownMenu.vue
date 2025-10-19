@@ -144,7 +144,7 @@ const commandList = ref([
     class="dark:border dark:border-dark-blue dark:rounded sticky top-0 w-full flex justify-start h-full sm:h-[43px] z-10 bg-[#edfaff] dark:bg-[#051e2f]">
     <div class="flex flex-row flex-wrap">
       <ModeToggle :mode="mode" @update:mode="arg=>emit('update:mode', arg)" />
-      <Popover class="w-[40px] h-[40px] ml-5" trigger="hover">
+      <Popover mode="bottom" class="w-[40px] h-[40px] ml-5" trigger="hover">
         <template #trigger>
           <Icon class="icon dark:text-white" icon="icon-park-outline:title-level" />
         </template>
@@ -158,7 +158,7 @@ const commandList = ref([
           </div>
         </div>
       </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover"
+      <Popover class="w-[40px] h-[40px]" trigger="hover" mode="bottom"
                :is-popover-trigger="false" v-for="item in commandList"
       >
         <template #trigger>
@@ -167,7 +167,7 @@ const commandList = ref([
         </template>
         <div class="dark:bg-dark-blue text-text-blue p-1">{{ translatable(lang, item.lang) }}</div>
       </Popover>
-      <Popover class="w-[40px] h-[40px]" trigger="hover">
+      <Popover class="w-[40px] h-[40px]" trigger="hover" mode="bottom">
         <template #trigger>
           <Icon class="icon dark:text-white" icon="lucide:smile-plus" />
         </template>

@@ -40,7 +40,7 @@ const isVertical = computed(() => props.layout === 'vertical')
     <!-- Label + Tips -->
     <div
       class="flex items-center gap-1"
-      :class="isVertical ? 'mb-1' : 'mr-2 shrink-0'"
+      :class="isVertical ? 'mb-3' : 'mr-2 shrink-0'"
     >
       <label class="dark:text-white">{{ label }}</label>
 

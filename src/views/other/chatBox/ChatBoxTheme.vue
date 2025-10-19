@@ -8,18 +8,18 @@ import FormItem from '@/components/FormItem.vue'
 import Form from '@/components/Form.vue'
 import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
 import FileJsonHandler from '@/components/FileJsonHandler.vue'
-import { themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
+import { defaultChatBoxTheme, themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
 import ObjectGeneratorDialog from '@/components/ObjectGeneratorDialog.vue'
 import ObjectGenerator from '@/components/ObjectGenerator.vue'
 import ShowJsonCopy from '@/views/other/chatBox/components/ShowJsonCopy.vue'
 import GlobalModal from '@/views/other/chatBox/components/GlobalModal.vue'
+import { removeDefaultsByTemplate } from '@/utils/removeDefaults.js'
 
 const lang = computed(() => usePageStore().setting.language)
 const chatBoxEditorStore = useChatBoxEditorStore()
 
 const fileInfo = computed(() => chatBoxEditorStore.themeSetting)
 const themeConfig = themeSetting(lang.value)
-
 </script>
 
 <template>
@@ -29,6 +29,9 @@ const themeConfig = themeSetting(lang.value)
       <!--拖拽上传区域-->
       <FileJsonHandler class="mt-5 mb-5 w-[400px]"
                        v-model="chatBoxEditorStore.themeSetting"
+                       :process-text="value=>{
+                         return removeDefaultsByTemplate(value,defaultChatBoxTheme())
+                       }"
                        key="themeJson" />
 
       <div class="font-bold text-2xl mb-5">{{ translatable(lang, 'chat.box.theme.1') }}</div>
@@ -96,7 +99,8 @@ const themeConfig = themeSetting(lang.value)
                        v-model="fileInfo.keyPrompt" />
 
       <!--展示json-->
-      <ShowJsonCopy :value="chatBoxEditorStore.themeSetting" />
+      <ShowJsonCopy
+        :value="removeDefaultsByTemplate(chatBoxEditorStore.themeSetting,defaultChatBoxTheme())" />
     </div>
   </div>
 </template>

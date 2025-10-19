@@ -18,10 +18,10 @@ const router =useRouter()
       <div
         class="center flex-col gap-2 border-2 rounded border-dashed border-text-gray hover:border-text-blue m-5 pt-5 pb-5"
         v-for="item in modList">
-        <Image size="150" :src="item.icon" />
+        <Image :size="150" :src="item.icon" />
         <div class="title">{{ translatable(language, item.lang) }}</div>
         <div> {{ translatable(language, item.description) }}</div>
-        <Button @click="router.push(`/wiki/${translatable(language,item.lang)}`)" roundedSize="5"
+        <Button @click="router.push(`/wiki/${translatable(language,item.lang)}`)" :roundedSize="5"
                 isToggleColor class="text-sm mt-3">
           {{ translatable(language, 'main.button.1') }}
         </Button>

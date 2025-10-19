@@ -132,7 +132,6 @@ onBeforeUnmount(() => {
           <Popover
             :offset="-60"
             :background-color="isDark?'#002941':'#ffffff'"
-            width="190"
           >
             <template #trigger>
               <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid"
@@ -236,7 +235,6 @@ onBeforeUnmount(() => {
           <Popover
             class="mr-4"
             :background-color="isDark?'#002941':'#ffffff'"
-            width="190"
           >
             <template #trigger>
               <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid"

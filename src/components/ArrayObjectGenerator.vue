@@ -40,7 +40,7 @@ const showDialog = ref(false)
 
 // === 方法 ===
 const openEdit = (item, index) => {
-  editingItem.value = JSON.parse(JSON.stringify(item || props.properties.getItemDefault()))
+  editingItem.value = JSON.parse(JSON.stringify(item || props.properties.getDefault()))
   editingIndex.value = index
   showDialog.value = true
 }

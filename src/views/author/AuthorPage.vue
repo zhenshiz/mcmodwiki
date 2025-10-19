@@ -24,7 +24,7 @@ const authorList = ref([
       <div
         class="center flex-col gap-5 border-2 rounded border-dashed border-text-gray hover:border-text-blue m-5 pt-5 pb-5"
         v-for="item in authorList">
-        <Image size="150" :src="item.icon" />
+        <Image :size="150" :src="item.icon" />
         <div class="title">{{ translatable(lang, item.lang) }}</div>
         <div> {{ translatable(lang, item.job) }}</div>
         <div> {{ translatable(lang, item.description) }}</div>

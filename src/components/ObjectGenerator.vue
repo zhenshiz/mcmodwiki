@@ -13,6 +13,7 @@ import ObjectGeneratorDialog from '@/components/ObjectGeneratorDialog.vue'
 import ObjectMapComponent from '@/components/ObjectMapComponent.vue'
 import ArrayObjectGenerator from '@/components/ArrayObjectGenerator.vue'
 import { ObjectField } from '@/assets/const/objectClass.js'
+import UnionArrGeneratorDialog from '@/components/UnionArrGeneratorDialog.vue'
 
 const props = defineProps({
   modelValue: {
@@ -181,6 +182,13 @@ onMounted(() => {
           :displayTemplate="field.displayTemplate"
           v-model="modelValue[getRealKey(key)]"
         />
+
+        <!-- List<JsonElement> -->
+        <UnionArrGeneratorDialog
+          v-else-if="field.type === 'unionArr'"
+          :properties="field"
+          v-model="modelValue[getRealKey(key)]"
+          :title="field.title" />
       </FormItem>
     </template>
   </Form>

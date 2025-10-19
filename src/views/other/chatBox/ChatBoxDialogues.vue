@@ -11,8 +11,9 @@ import FileJsonHandler from '@/components/FileJsonHandler.vue'
 import ShowJsonCopy from '@/views/other/chatBox/components/ShowJsonCopy.vue'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import ObjectGeneratorDialog from '@/components/ObjectGeneratorDialog.vue'
-import { dialoguesSetting } from '@/assets/more/chatBox/defaultInfo.js'
+import { defaultChatBoxDialogues, dialoguesSetting } from '@/assets/more/chatBox/defaultInfo.js'
 import ObjectGenerator from '@/components/ObjectGenerator.vue'
+import { removeDefaultsByTemplate } from '@/utils/removeDefaults.js'
 
 const dialog = useDialog()
 const prompt = usePrompt()
@@ -113,6 +114,12 @@ const openDialoguesSetting = (groupName, index) => {
   dialogIndex.value = index
   isShowEdit.value = true
 }
+
+const duplicateDialogue = (groupName, index) => {
+  const list = chatBoxEditorStore.dialoguesSetting.dialogues[groupName]
+  const copied = JSON.parse(JSON.stringify(list[index]))
+  list.splice(index + 1, 0, copied)
+}
 </script>
 
 <template>
@@ -124,8 +131,12 @@ const openDialoguesSetting = (groupName, index) => {
       <div class="flex-1 flex justify-end items-center gap-3">
         <!-- 拖拽上传区域 -->
         <FileJsonHandler class="h-[50px]" key="dialoguesFile"
+                         :process-text="value=>{
+                         return removeDefaultsByTemplate(value,defaultChatBoxDialogues())
+                       }"
                          v-model="chatBoxEditorStore.dialoguesSetting" />
-        <ShowJsonCopy :value="chatBoxEditorStore.dialoguesSetting" />
+        <ShowJsonCopy
+          :value="removeDefaultsByTemplate(chatBoxEditorStore.dialoguesSetting,defaultChatBoxDialogues())" />
         <Button is-toggle-color :rounded-size="0" @click="addGroup">
           {{ translatable(lang, 'chat.box.dialogues.add.group') }}
         </Button>
@@ -235,11 +246,18 @@ const openDialoguesSetting = (groupName, index) => {
                                 : dialog.dialogBox?.text
                           }}
                         </span>
-                        <Icon
-                          icon="mdi:close"
-                          class="text-gray-500 hover:text-red-500"
-                          @click.stop="closeDialogue(group.groupName, index)"
-                        />
+                        <div class="flex items-center space-x-2">
+                          <Icon
+                            icon="mdi:content-copy"
+                            class="text-gray-500 hover:text-blue-500"
+                            @click.stop="duplicateDialogue(group.groupName, index)"
+                          />
+                          <Icon
+                            icon="mdi:close"
+                            class="text-gray-500 hover:text-red-500"
+                            @click.stop="closeDialogue(group.groupName, index)"
+                          />
+                        </div>
                       </div>
                     </div>
                   </template>
@@ -260,15 +278,11 @@ const openDialoguesSetting = (groupName, index) => {
           </div>
 
           <!-- 对话框基础配置 -->
-          <Form>
-            <ObjectGenerator :properties="dialogues.dialogues"
+          <ObjectGenerator :properties="dialogues.dialogues"
                              v-model="chatBoxEditorStore.dialoguesSetting.dialogues[dialogGroup][dialogIndex]" />
-            <div class="flex justify-start w-4/5">
-              <ObjectGeneratorDialog :properties="dialogues.videoComponent"
+          <ObjectGeneratorDialog :properties="dialogues.videoComponent"
                                      :title="translatable(lang, 'chat.box.dialogues.video.basic')"
                                      v-model="chatBoxEditorStore.dialoguesSetting.dialogues[dialogGroup][dialogIndex].video" />
-            </div>
-          </Form>
         </div>
       </div>
     </div>
