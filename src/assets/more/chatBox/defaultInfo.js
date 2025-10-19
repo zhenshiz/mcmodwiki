@@ -466,7 +466,6 @@ export const dialoguesSetting = (lang) => {
       }),
       isScreen: new BooleanField({
         label: translatable(lang, 'chat.box.dialogues.isScreen'),
-        defaultValue: true
       }),
       theme: new StringField({
         label: translatable(lang, 'chat.box.dialogues.theme'),
