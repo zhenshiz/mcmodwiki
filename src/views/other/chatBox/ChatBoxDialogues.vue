@@ -130,7 +130,7 @@ const duplicateDialogue = (groupName, index) => {
       </div>
       <div class="flex-1 flex justify-end items-center gap-3">
         <!-- 拖拽上传区域 -->
-        <FileJsonHandler class="h-[50px]" key="dialoguesFile"
+        <FileJsonHandler class="h-[50px]" storageKey="dialoguesFile"
                          :process-text="value=>{
                          return removeDefaultsByTemplate(value,defaultChatBoxDialogues())
                        }"

@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, onMounted, ref, watch, computed } from 'vue'
+import { computed, defineEmits, onMounted, ref, watch } from 'vue'
 import { usePageStore } from '@/stores/index.js'
 import { translatable } from '../assets/translatable/translatable.js'
 import { Icon } from '@iconify/vue'
@@ -10,7 +10,7 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  key: {
+  storageKey: {
     type: String,
     required: true
   },
@@ -29,7 +29,7 @@ const loadFile = async () => {
   ;[fileHandle] = await window.showOpenFilePicker()
   const file = await fileHandle.getFile()
   if (file && (file.type === 'application/json' || file.name.endsWith('.json'))) {
-    await set(props.key, fileHandle)
+    await set(props.storageKey, fileHandle)
     const reader = new FileReader()
     reader.onload = function (e) {
       const fileContent = e.target.result
@@ -59,7 +59,7 @@ const onDrop = async (event) => {
 
   if (handle.kind === 'file' && (await verifyPermission(handle, true))) {
     fileHandle = handle
-    await set(props.key, handle)
+    await set(props.storageKey, handle)
     let file = await fileHandle.getFile()
     let text = await file.text()
 
@@ -90,14 +90,19 @@ const modifyFile = async (data) => {
   if (fileHandle !== undefined && (await verifyPermission(fileHandle, true))) {
     const writable = await fileHandle.createWritable()
     let text
-    if (typeof props.processText === 'function') {
-      try {
+    try {
+      if (typeof props.processText === 'function') {
         text = props.processText(data)
-      } catch (err) {
-        console.error('processText 执行出错：', err)
+      }
+      if (typeof text !== 'string') {
         text = JSON.stringify(data, null, 2)
       }
-    } else {
+    } catch (err) {
+      console.error('processText 执行出错：', err)
+      text = JSON.stringify(data, null, 2)
+    }
+    if (typeof text !== 'string') {
+      console.warn('写入文件失败：processText 未返回字符串，将使用 JSON 格式')
       text = JSON.stringify(data, null, 2)
     }
 
@@ -106,9 +111,10 @@ const modifyFile = async (data) => {
   }
 }
 
+
 // === 初始化 ===
 onMounted(async () => {
-  fileHandle = await get(props.key)
+  fileHandle = await get(props.storageKey)
 })
 
 // === 监听 modelValue 自动保存 ===

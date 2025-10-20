@@ -32,7 +32,7 @@ const themeConfig = themeSetting(lang.value)
                        :process-text="value=>{
                          return removeDefaultsByTemplate(value,defaultChatBoxTheme())
                        }"
-                       key="themeJson" />
+                       storageKey="themeJson" />
 
       <div class="font-bold text-2xl mb-5">{{ translatable(lang, 'chat.box.theme.1') }}</div>
 

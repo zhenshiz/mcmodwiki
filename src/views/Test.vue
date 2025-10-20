@@ -21,6 +21,7 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { dialoguesSetting, themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
 import UnionArrGeneratorDialog from '@/components/UnionArrGeneratorDialog.vue'
 import { translatable } from '@/assets/translatable/translatable.js'
+import FileJsonHandler from '@/components/FileJsonHandler.vue'
 
 const lang = computed(() => usePageStore().setting.language)
 
@@ -133,10 +134,10 @@ const test = new UnionArrField({
       <!--      <ObjectGeneratorDialog v-model="testModal"-->
       <!--                             :properties="formProperties" title="点击编辑" />-->
       <!--      <FileJsonHandler v-model="testModal"  key="test"/>-->
-      <UnionArrGeneratorDialog :properties="test" v-model="testModal"
-                               :title="translatable(lang, 'chat.box.dialogues.portrait.title')">
-
-      </UnionArrGeneratorDialog>
+<!--      <UnionArrGeneratorDialog :properties="test" v-model="testModal"-->
+<!--                               :title="translatable(lang, 'chat.box.dialogues.portrait.title')">-->
+<!--      </UnionArrGeneratorDialog>-->
+      <FileJsonHandler storageKey="test" v-model="testModal" />
     </div>
     <div class="flex-1">
       <MilkdownProvider>
