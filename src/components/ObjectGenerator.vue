@@ -163,24 +163,31 @@ onMounted(() => {
         <!-- 嵌套对象 -->
         <ObjectGenerator
           v-else-if="field.type === 'object'"
-          v-model="modelValue[getRealKey(key)]"
+          :modelValue="modelValue[getRealKey(key)] || {}"
           :properties="field"
+          @update:modelValue="updateField(key, $event)"
         />
 
         <!-- 弹窗对象 -->
         <ObjectGeneratorDialog
           v-else-if="field.type === 'objectDialog'"
           v-model:visible="field.visible"
+          :title="field.title"
           :properties="field"
-          v-model="modelValue[getRealKey(key)]"
+          :show-label="false"
+          :modelValue="modelValue[getRealKey(key)] || {}"
+          @update:modelValue="updateField(key, $event)"
         />
 
         <!-- Map对象 -->
         <ObjectMapComponent
           v-else-if="field.type === 'objectMap'"
           :properties="field"
+          :show-label="false"
+          :keyField="field.keyField"
           :displayTemplate="field.displayTemplate"
-          v-model="modelValue[getRealKey(key)]"
+          :modelValue="modelValue[getRealKey(key)] || {}"
+          @update:modelValue="updateField(key, $event)"
         />
 
         <!-- List<JsonElement> -->

@@ -1,5 +1,6 @@
 import MapperPluginIcon from '@/assets/mod/icon/MapperPlugin.png'
 import ChatBox from '@/assets/mod/icon/cahtbox.png'
+import ViScriptShop from '@/assets/mod/icon/ViScriptShop.png'
 
 const availableHere = {
   CURSE_FORGE: {
@@ -59,10 +60,33 @@ export const modList = [
       },
     ],
     moreUtil: [],
-    mcVersion: ['1.21-1.21.1'],
+    mcVersion: ['1.21.1'],
     modLoader: ['NeoForge'],
-    modVersion: ['1.0.8', '1.0.7', '1.0.6', '1.0.5', '1.0.4', '1.0.3', '1.0.2', '1.0.1']
+    modVersion: ['1.0.9', '1.0.8', '1.0.7', '1.0.6', '1.0.5', '1.0.4', '1.0.3', '1.0.2', '1.0.1']
   },
+  {
+    lang: 'mod.name.3',
+    icon: ViScriptShop,
+    description: 'mod.description.3',
+    availableHere: [
+      {
+        icon: availableHere.MODRINTH,
+        href: 'https://modrinth.com/mod/viscriptshop',
+      },
+      {
+        icon: availableHere.GITHUB,
+        href: 'https://github.com/zhenshiz/ViScriptShop',
+      },
+      {
+        icon: availableHere.CURSE_FORGE,
+        href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptshop',
+      },
+    ],
+    moreUtil: [],
+    mcVersion: ['1.21.1'],
+    modLoader: ['NeoForge'],
+    modVersion: ['1.0.0']
+  }
 ]
 
 export const moreUtilList = [{ lang: 'more.name.1', link: '/chatbox/theme' }]

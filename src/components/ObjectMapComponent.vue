@@ -9,14 +9,17 @@ import Input from '@/components/Input.vue'
 import { ArrayField, ObjectField } from '@/assets/const/objectClass.js'
 import Modal from '@/components/Modal.vue'
 import { useMessage } from '@/components/register/useMessage.js'
+import draggable from 'vuedraggable'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
   title: { type: String, default: '' },
   properties: { type: ObjectField, required: true },
+  keyField: { type: String, default: null },
   displayTemplate: { type: [String, Function], default: '' },
   filter: { type: Function, default: null },
-  dialogWidthPercent: { type: Number, default: 50 }
+  dialogWidthPercent: { type: Number, default: 50 },
+  showLabel: { type: Boolean, default: true }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -59,8 +62,21 @@ const openEdit = (key, value) => {
 
 
 const saveEdit = () => {
+  // 如果设置了keyField，从editingValue中获取对应字段的值作为key
+  let finalKey = editingKey.value
+  if (props.keyField) {
+    // 根据isArrayMode处理不同的数据结构
+    if (isArrayMode.value) {
+      // 对于数组模式，我们可能需要特殊处理
+      // 这里简化处理，假设editingValue的结构符合预期
+      finalKey = editingValue.value?.['']?.[props.keyField] || editingValue.value?.[props.keyField]
+    } else {
+      finalKey = editingValue.value?.[props.keyField]
+    }
+  }
+
   // 唯一标识符不能为空
-  if (!editingKey.value || editingKey.value.trim() === '') {
+  if (!finalKey || finalKey.toString().trim() === '') {
     message.warning(translatable(lang.value, 'message.warn.no.key'))
     return
   }
@@ -69,7 +85,7 @@ const saveEdit = () => {
   const newData = { ...props.modelValue }
 
   // 如果改了 key 名，删除旧的
-  if (editingOldKey.value && editingOldKey.value !== editingKey.value) {
+  if (editingOldKey.value && editingOldKey.value !== finalKey) {
     delete newData[editingOldKey.value]
   }
 
@@ -93,9 +109,9 @@ const saveEdit = () => {
       toSave = editingValue.value
     }
 
-    newData[editingKey.value] = JSON.parse(JSON.stringify(toSave))
+    newData[finalKey] = JSON.parse(JSON.stringify(toSave))
   } else {
-    newData[editingKey.value] = JSON.parse(JSON.stringify(editingValue.value))
+    newData[finalKey] = JSON.parse(JSON.stringify(editingValue.value))
   }
 
   emit('update:modelValue', newData)
@@ -122,16 +138,25 @@ const renderLabel = (key, value) => {
 }
 
 const filteredEntries = computed(() => {
-  const entries = Object.entries(props.modelValue)
+  const entries = props.modelValue ? Object.entries(props.modelValue) : []
   if (typeof props.filter === 'function') {
     return entries.filter(([key, value]) => props.filter(key, value))
   }
   return entries
 })
+
+const handleDragUpdate = (event) => {
+  // 创建新对象以保持拖拽后的顺序
+  const newObj = {}
+  event.forEach(([key, value]) => {
+    newObj[key] = value
+  })
+  emit('update:modelValue', newObj)
+}
 </script>
 
 <template>
-  <FormItem :label="properties.label" :layout="properties.layout">
+  <FormItem :label="showLabel ? properties.label: ''" :tips="showLabel ? properties.tips: ''" :layout="properties.layout" >
     <div class="space-y-2">
       <!-- 空状态 -->
       <div
@@ -142,31 +167,41 @@ const filteredEntries = computed(() => {
       </div>
 
       <!-- 列表 -->
-      <div
-        v-for="([key, value], index) in filteredEntries"
-        :key="key"
-        class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+      <draggable
+        :modelValue="Array.from(filteredEntries)"
+        item-key="0"
+        class="space-y-2"
+        @update:modelValue="handleDragUpdate"
       >
-        <div class="flex flex-row items-center gap-5 dark:text-white">
-          <div class="text-sm text-gray-500 dark:text-gray-400">{{ key }}</div>
-          <div class="font-medium">{{ renderLabel(key, value) }}</div>
-        </div>
+        <template #item="{ element: [key, value], index }">
+          <div
+            class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            <div class="flex items-center">
+              <Icon icon="mdi:drag-vertical" class="mr-2 cursor-move text-gray-400 drag-handle" />
+              <div class="flex flex-row items-center gap-5 dark:text-white">
+                <div class="text-sm text-gray-500 dark:text-gray-400">{{ key }}</div>
+                <div class="font-medium">{{ renderLabel(key, value) }}</div>
+              </div>
+            </div>
 
-        <div class="flex items-center gap-2">
-          <button
-            class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
-            @click="openEdit(key, value)"
-          >
-            <Icon icon="mdi:pencil" />
-          </button>
-          <button
-            class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
-            @click="removeKey(key)"
-          >
-            <Icon icon="mdi:delete" />
-          </button>
-        </div>
-      </div>
+            <div class="flex items-center gap-2">
+              <button
+                class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
+                @click="openEdit(key, value)"
+              >
+                <Icon icon="mdi:pencil" />
+              </button>
+              <button
+                class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
+                @click="removeKey(key)"
+              >
+                <Icon icon="mdi:delete" />
+              </button>
+            </div>
+          </div>
+        </template>
+      </draggable>
 
       <!-- 添加按钮 -->
       <button
@@ -190,7 +225,7 @@ const filteredEntries = computed(() => {
       >
         <template #content>
           <Form>
-            <FormItem :label="`${title}${translatable(lang, 'component.key')}`">
+            <FormItem v-if="!keyField" :label="`${title}${translatable(lang, 'component.key')}`">
               <Input v-model="editingKey" defaultModel="search" />
             </FormItem>
 

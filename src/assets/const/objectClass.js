@@ -191,14 +191,17 @@ export class ObjectField extends BaseField {
 }
 
 export class ObjectDialogField extends ObjectField {
-  constructor({ properties, ...rest }) {
+  constructor({ title, properties, ...rest }) {
     super({ type: 'objectDialog', properties, ...rest })
+    this.title = title
     this.visible = false
   }
 }
 
 export class ObjectMapField extends ObjectField {
-  constructor({ properties,valueType, ...rest }) {
+  constructor({ properties, keyField, displayTemplate, ...rest }) {
     super({ type: 'objectMap', properties, ...rest })
+    this.displayTemplate = displayTemplate || ''
+    this.keyField = keyField
   }
 }

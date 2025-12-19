@@ -40,6 +40,8 @@ export const en_us = {
   'mod.description.1': 'Provides more interesting commands for map making',
   'mod.name.2': 'ChatBox',
   'mod.description.2': 'A dialogue box mod similar to Gal games',
+  'mod.name.3': 'ViScriptShop',
+  'mod.description.3': 'A modern store module',
 
   // More section translations
   'more.name.1': 'Dialogue JSON Generator',
@@ -274,6 +276,7 @@ export const en_us = {
   'component.modal.negative': 'Cancel',
   'component.add': 'Add',
   'component.update': 'Edit',
+  'component.cannot_change_type_when_editing': 'Cannot change type when editing',
   'component.delete': 'Delete',
   'component.empty': 'None',
   'component.image.alt': 'Failed to load',

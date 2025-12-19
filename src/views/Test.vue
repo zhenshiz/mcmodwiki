@@ -19,10 +19,12 @@ import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
 import { MilkdownProvider } from '@milkdown/vue'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { dialoguesSetting, themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
-import UnionArrGeneratorDialog from '@/components/UnionArrGeneratorDialog.vue'
 import { translatable } from '@/assets/translatable/translatable.js'
 import FileJsonHandler from '@/components/FileJsonHandler.vue'
+import { useMessage } from '@/components/register/useMessage.js'
+import ObjectGenerator from '@/components/ObjectGenerator.vue'
 
+useMessage().warning('测试长度长度长度长度长度长度长度长度')
 const lang = computed(() => usePageStore().setting.language)
 
 const testModal = ref([])
@@ -127,7 +129,7 @@ const test = new UnionArrField({
   <div class="flex flex-row">
     <div class="flex-1 flex w-full justify-center flex-col mb-10 items-center gap-10">
       <div class="text-center text-2xl dark:text-white">JSON生成器组件展示</div>
-      <!--      <ObjectGenerator v-model="testModal" :properties="theme.portrait" />-->
+      <ObjectGenerator v-model="testModal" :properties="formProperties" />
 <!--      <ObjectMapComponent :properties="theme.portrait" v-model="testModal" title="测试参数" />-->
       <!--            <ArrayObjectGenerator class="w-[500px]" v-model="testModal" :properties="formProperties"-->
       <!--                                  display-template="{input}" />-->

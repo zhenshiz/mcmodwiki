@@ -4,6 +4,7 @@ import { Icon } from '@iconify/vue'
 import Input from '@/components/Input.vue'
 import { usePageStore } from '@/stores/index.js'
 import { translatable } from '@/assets/translatable/translatable.js'
+import draggable from 'vuedraggable'
 
 const props = defineProps({
   modelValue: {
@@ -47,35 +48,46 @@ const openAdd = () => {
 <template>
   <div class="array-field w-full space-y-2">
     <!-- 列表 -->
-    <div v-if="modelValue.length" class="space-y-2">
-      <div
-        v-for="(item, index) in modelValue"
-        :key="index"
-        class="flex items-center justify-between p-2 border border-gray-200 rounded dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-      >
-        <div class="flex items-center w-full gap-2">
-          <span class="text-gray-400 shrink-0">#{{ index + 1 }}</span>
-
-          <slot name="item" :value="item" :index="index" :update="(v) => updateItem(index, v)">
-            <!-- 默认Input -->
-            <Input
-              defaultModel="search"
-              class="flex-1"
-              :modelValue="item"
-              @update:modelValue="updateItem(index, $event)"
+    <draggable
+      v-if="modelValue.length"
+      :modelValue="modelValue"
+      item-key="index"
+      class="space-y-2"
+      @update:modelValue="emit('update:modelValue', $event)"
+    >
+      <template #item="{ element: item, index }">
+        <div
+          class="flex items-center justify-between p-2 border border-gray-200 rounded dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          <div class="flex items-center w-full gap-2">
+            <!-- 拖拽手柄 -->
+            <Icon
+              icon="mdi:drag-vertical"
+              class="text-gray-500 cursor-move drag-handle"
             />
-          </slot>
+            <span class="text-gray-400 shrink-0">#{{ index + 1 }}</span>
 
-          <!-- 删除按钮 -->
-          <button
-            class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded shrink-0"
-            @click="removeItem(index)"
-          >
-            <Icon icon="mdi:delete" />
-          </button>
+            <slot name="item" :value="item" :index="index" :update="(v) => updateItem(index, v)">
+              <!-- 默认Input -->
+              <Input
+                defaultModel="search"
+                class="flex-1"
+                :modelValue="item"
+                @update:modelValue="updateItem(index, $event)"
+              />
+            </slot>
+
+            <!-- 删除按钮 -->
+            <button
+              class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded shrink-0"
+              @click="removeItem(index)"
+            >
+              <Icon icon="mdi:delete" />
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </draggable>
 
     <!-- 空状态 -->
     <div

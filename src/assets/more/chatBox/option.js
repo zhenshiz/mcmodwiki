@@ -30,9 +30,36 @@ export const functionalButtonType = createEnum([
   { label: 'chat.box.theme.functional.button.type.autoplay', value: 'AUTOPLAY' }
 ])
 
-export const clickType = createEnum([
-  { label: 'chat.box.dialogues.options.click.type.command', value: 'COMMAND' },
-  { label: 'chat.box.dialogues.options.click.type.terraEntityShop', value: 'TERRA_ENTITY_SHOP' }
+export const renderEventTrigger = (type = '') => {
+  let renderEvent = [
+    { label: 'chat.box.renderEvent.start', value: 'start' },
+    { label: 'chat.box.renderEvent.end', value: 'end' }
+  ]
+
+  if (type === 'portrait') {
+    renderEvent.push(
+      { label: 'chat.box.renderEvent.click', value: 'click' },
+      { label: 'chat.box.renderEvent.mouse_over', value: 'mouse_over' },
+      { label: 'chat.box.renderEvent.mouse_out', value: 'mouse_out' }
+    )
+  }
+
+  return createEnum(renderEvent)
+}
+
+export const eventType = createEnum([
+  { label: 'chat.box.event.type.command', value: 'command' },
+  { label: 'chat.box.event.type.jump', value: 'jump' },
+  { label: 'chat.box.event.type.goto_next', value: 'goto_next' },
+  { label: 'chat.box.event.type.play_sound', value: 'play_sound' },
+  { label: 'chat.box.event.type.play_voice', value: 'play_voice' },
+  { label: 'chat.box.event.type.stop_sound', value: 'stop_sound' },
+  { label: 'chat.box.event.type.hide', value: 'hide' },
+  { label: 'chat.box.event.type.show', value: 'show' },
+  { label: 'chat.box.event.type.replace', value: 'replace' },
+  { label: 'chat.box.event.type.set_autoplay', value: 'set_autoplay' },
+  { label: 'chat.box.event.type.scale', value: 'scale' },
+  { label: 'chat.box.event.type.terra_entity_shop', value: 'terra_entity_shop' },
 ])
 
 export const easing =

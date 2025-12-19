@@ -2,10 +2,11 @@ import { translatable, translatableArg } from '@/assets/translatable/translatabl
 import {
   alignXList,
   alignYList,
-  clickType,
   easing,
+  eventType,
   functionalButtonType,
   portraitType,
+  renderEventTrigger,
   textAlign
 } from '@/assets/more/chatBox/option.js'
 import {
@@ -438,14 +439,61 @@ export const themeSetting = (lang) => {
 }
 
 export const dialoguesSetting = (lang) => {
+  const renderEvent = (type) => {
+    return new ObjectField({
+      properties: {
+        trigger: new AutoCompleteField({
+          label: translatable(lang, 'chat.box.dialogues.renderEvent.trigger'),
+          suggestions: renderEventTrigger(type).values(lang)
+        }),
+        type: new AutoCompleteField({
+          label: translatable(lang, 'chat.box.dialogues.renderEvent.type'),
+          suggestions: eventType.values(lang)
+        }),
+        value1: new StringField({
+          key: 'value',
+          label: translatable(lang, 'chat.box.dialogues.renderEvent.value'),
+          visible: (field, value) => {
+            return !['hide', 'show', 'replace'].includes(value.type)
+          }
+        }),
+        value2: new AutoCompleteField({
+          key: 'value',
+          label: translatable(lang, 'chat.box.dialogues.renderEvent.value'),
+          suggestions: [
+            { label: '@s', value: '@s' },
+            { label: '@portraits', value: '@portraits' },
+            { label: '@options', value: '@options' },
+            { label: '@buttons', value: '@buttons' },
+            { label: '@dialog', value: '@dialog' },
+            { label: '@video', value: '@video' }
+          ],
+          visible: (field, value) => {
+            return ['hide', 'show', 'replace'].includes(value.type)
+          }
+        })
+      }
+    })
+  }
+
+  const listRenderEvent = (type) => {
+    return new ObjectArrField({
+      label: translatable(lang, 'chat.box.dialogues.renderEvents'),
+      title: translatable(lang, 'chat.box.dialogues.renderEvents.title'),
+      layout: 'vertical',
+      properties: renderEvent(type).properties
+    })
+  }
+
   const dialogBasicConfiguration = new ObjectField({
     properties: {
       $introduce: new StringField({
         label: translatable(lang, 'chat.box.dialogues.introduce')
       }),
-      isTranslatable: new BooleanField({
-        label: translatable(lang, 'chat.box.dialogues.isTranslatable'),
-        defaultValue: false
+      animationFPS: new NumberField({
+        label: translatable(lang, 'chat.box.dialogues.animationFPS'),
+        defaultValue: 60,
+        min: 1
       }),
       isEsc: new BooleanField({
         label: translatable(lang, 'chat.box.dialogues.isEsc'),
@@ -470,11 +518,17 @@ export const dialoguesSetting = (lang) => {
       theme: new StringField({
         label: translatable(lang, 'chat.box.dialogues.theme'),
         defaultValue: ''
+      }),
+      autoPlayTick: new NumberField({
+        label: translatable(lang, 'chat.box.dialogues.autoPlayTick'),
+        defaultValue: 20
       })
     }
   })
   //dialogBox
-  const dialogBox = new ObjectField({
+  const dialogBox = new ObjectDialogField({
+    label: translatable(lang, 'chat.box.dialogues.dialogBox'),
+    title: translatable(lang, 'chat.box.dialogues.dialogBox'),
     properties: {
       name: new AutoCompleteField({
         label: translatable(lang, 'chat.box.dialogues.dialogBox.name'),
@@ -489,26 +543,17 @@ export const dialoguesSetting = (lang) => {
         filterMethod: (value, item) => {
           return item.value.includes(value) || item.label.includes(value)
         }
-      })
+      }),
+      renderEvent: listRenderEvent()
     }
   })
 
   //option
-  const condition = new ObjectField({
-    properties: {
-      objective: new StringField({
-        label: translatable(lang, 'chat.box.dialogues.options.condition.objective')
-      }),
-      value: new StringField({
-        label: translatable(lang, 'chat.box.dialogues.options.condition.value')
-      })
-    }
-  })
   const click = new ObjectField({
     properties: {
       type: new AutoCompleteField({
         label: translatable(lang, 'chat.box.dialogues.options.click.type'),
-        suggestions: clickType.values(lang)
+        suggestions: eventType.values(lang)
       }),
       value: new StringField({
         label: translatable(lang, 'chat.box.dialogues.options.click.value')
@@ -528,21 +573,8 @@ export const dialoguesSetting = (lang) => {
         label: translatable(lang, 'chat.box.dialogues.options.isLock'),
         defaultValue: false
       }),
-      lock: new ObjectField({
-        properties: condition.properties,
-        visible: (field, value) => {
-          return value.isLock
-        }
-      }),
-      isHidden: new BooleanField({
-        label: translatable(lang, 'chat.box.dialogues.options.isHidden'),
-        defaultValue: false
-      }),
-      hidden: new ObjectField({
-        properties: condition.properties,
-        visible: (field, value) => {
-          return value.isHidden
-        }
+      unlockCommand: new StringField({
+        label: translatable(lang, 'chat.box.dialogues.options.unlockCommand')
       }),
       next: new StringField({
         label: translatable(lang, 'chat.box.dialogues.options.next')
@@ -564,27 +596,27 @@ export const dialoguesSetting = (lang) => {
   })
   videoComponent.label = translatable(lang, 'chat.box.dialogues.video.basic')
   videoComponent.tips = translatable(lang, 'chat.box.dialogues.video.tips')
-  const video = new ObjectField({
+  const video = new ObjectDialogField({
+    label: translatable(lang, 'chat.box.dialogues.video'),
+    title: translatable(lang, 'chat.box.dialogues.video'),
+    tips: translatable(lang, 'chat.box.dialogues.video.tips'),
     properties: {
       path: new StringField({
         label: translatable(lang, 'chat.box.dialogues.video.path'),
-        tips: translatable(lang, 'chat.box.dialogues.video.tips')
       }),
       canControl: new BooleanField({
         label: translatable(lang, 'chat.box.dialogues.video.canControl'),
-        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
         defaultValue: true
       }),
       canSkip: new BooleanField({
         label: translatable(lang, 'chat.box.dialogues.video.canSkip'),
-        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
         defaultValue: true
       }),
       loop: new BooleanField({
         label: translatable(lang, 'chat.box.dialogues.video.loop'),
-        tips: translatable(lang, 'chat.box.dialogues.video.tips'),
         defaultValue: false
-      })
+      }),
+      renderEvent: listRenderEvent()
     }
   })
 
@@ -608,6 +640,7 @@ export const dialoguesSetting = (lang) => {
         label: translatable(lang, 'chat.box.dialogues.portrait.id'),
         suggestions: () => Object.keys(useChatBoxEditorStore().themeSetting.portrait)
       }),
+      renderEvent: listRenderEvent('portrait'),
       ...replacePortraitComponent.properties
     }
   })
@@ -640,18 +673,6 @@ export const dialoguesSetting = (lang) => {
         label: translatable(lang, 'chat.box.dialogues.sound'),
         defaultValue: ''
       }),
-      volume: new NumberField({
-        label: translatable(lang, 'chat.box.dialogues.volume'),
-        defaultValue: 1,
-        min: 0,
-        step: 0.1
-      }),
-      pitch: new NumberField({
-        label: translatable(lang, 'chat.box.dialogues.pitch'),
-        defaultValue: 1,
-        min: 0,
-        step: 0.1
-      }),
       command: new StringField({
         label: translatable(lang, 'chat.box.dialogues.command')
       }),
@@ -670,6 +691,7 @@ export const dialoguesSetting = (lang) => {
           return !value.clearOldPortrait
         }
       }),
+      renderEvents: listRenderEvent(),
       video: video
     }
   })

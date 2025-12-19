@@ -61,7 +61,7 @@ const downloadMd = async () => {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      message.success(translatable(lang,'message.success.download'))
+      message.success(translatable(lang.value,'message.success.download'))
       editTopicStore.resetTopicInfo()
     }
   })
@@ -118,19 +118,19 @@ watch(
       </div>
 
       <div class="flex flex-row items-center justify-between mt-5 mb-5">
-        <div class="flex flex-row ml-3 items-center dark:text-white h-10 w-full sm:w-1/2">
+        <div class="flex flex-row ml-3 items-center dark:text-white h-10 w-full sm:w-1/2 gap-3">
           <Input :placeholder="translatable(lang,'edit.input.mc.version')"
                  v-model="form.mcVersion"
                  @update:modelValue="newValue => editTopicStore.setTopicInfo({mcVersion:newValue})"
                  default-model="search" />
-          <Select v-model:value="form.modLoader" :options="modLoader" mode="bottom"
-                  @update:value="newValue => editTopicStore.setTopicInfo({modLoader:newValue.value})" />
+          <Select v-model:modelValue="form.modLoader" :options="modLoader" mode="top"
+                  @update:modelValue="newValue => editTopicStore.setTopicInfo({modLoader:newValue.value})" />
           <Input :placeholder="translatable(lang,'edit.input.mod.version')"
                  v-model="form.modVersion"
                  @update:modelValue="newValue => editTopicStore.setTopicInfo({modVersion:newValue})"
                  default-model="search" />
-          <Select v-model:value="form.language" :options="language.values()" mode="bottom"
-                  @update:value="newValue => editTopicStore.setTopicInfo({language:newValue.value})" />
+          <Select v-model:modelValue="form.language" :options="language.values()" mode="top"
+                  @update:modelValue="newValue => editTopicStore.setTopicInfo({language:newValue.value})" />
         </div>
         <div class="flex items-center justify-end">
           <Button class="w-48 h-10 text-lg mr-2 center"

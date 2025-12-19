@@ -34,6 +34,10 @@ const props = defineProps({
   visible: {
     type: Boolean,
     default: false
+  },
+  showLabel: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -70,7 +74,7 @@ defineOptions({ inheritAttrs: false })
 
 <template>
   <div :class="$attrs.class">
-    <FormItem :label="properties.label" :tips="properties.tips">
+    <FormItem :label="showLabel ? properties.label: ''" :tips="showLabel ? properties.tips: ''">
       <slot name="trigger" :openDialog="openDialog">
         <Button @click="openDialog" is-toggle-color>
           {{ translatable(lang, buttonText) }}

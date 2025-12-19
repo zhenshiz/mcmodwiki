@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { Icon } from '@iconify/vue'
+import draggable from 'vuedraggable'
 import ObjectGenerator from '@/components/ObjectGenerator.vue'
 import Modal from '@/components/Modal.vue'
 import { translatable } from '@/assets/translatable/translatable.js'
@@ -126,6 +127,11 @@ const removeItem = (index) => {
   syncToParent()
 }
 
+const handleDragUpdate = () => {
+  // 拖拽完成后更新 modelValue
+  syncToParent()
+}
+
 // === 根据类型模板渲染标签 ===
 const renderLabel = (obj) => {
   const typeField = props.properties.itemTypes?.[obj.type]
@@ -163,30 +169,40 @@ watch(selectedType, (newType) => {
     </div>
 
     <!-- 列表 -->
-    <div
-      v-for="(item, index) in renderModelValue"
-      :key="index"
-      class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+    <draggable
+      v-model="renderModelValue"
+      item-key="id"
+      class="space-y-2"
+      @update:modelValue="handleDragUpdate"
     >
-      <div class="flex items-center gap-2">
-        <span class="text-gray-500 dark:text-gray-400">#{{ index + 1 }}</span>
-        <span class="font-medium dark:text-white">{{ renderLabel(item) }}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button
-          class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
-          @click="openEdit(item, index)"
+      <template #item="{ element: item, index }">
+        <div
+          class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
         >
-          <Icon icon="mdi:pencil" />
-        </button>
-        <button
-          class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
-          @click="removeItem(index)"
-        >
-          <Icon icon="mdi:delete" />
-        </button>
-      </div>
-    </div>
+          <div class="flex items-center">
+            <Icon icon="mdi:drag-vertical" class="mr-2 cursor-move text-gray-400 drag-handle" />
+            <div class="flex items-center gap-2">
+              <span class="text-gray-500 dark:text-gray-400">#{{ index + 1 }}</span>
+              <span class="font-medium dark:text-white">{{ renderLabel(item) }}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
+              @click="openEdit(item, index)"
+            >
+              <Icon icon="mdi:pencil" />
+            </button>
+            <button
+              class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
+              @click="removeItem(index)"
+            >
+              <Icon icon="mdi:delete" />
+            </button>
+          </div>
+        </div>
+      </template>
+    </draggable>
 
     <!-- 添加按钮 -->
     <button
@@ -215,14 +231,21 @@ watch(selectedType, (newType) => {
             <button
               v-for="(typeField, typeKey) in properties.itemTypes"
               :key="typeKey"
-              class="px-3 py-1 rounded-md text-sm"
+              class="px-3 py-1 rounded-md text-sm relative group"
               :class="{
                 'bg-blue-500 text-white': selectedType === typeKey,
-                'bg-gray-200 dark:bg-gray-700': selectedType !== typeKey
+                'bg-gray-200 dark:bg-gray-700': selectedType !== typeKey,
+                'cursor-not-allowed opacity-70': editingIndex >= 0 && selectedType !== typeKey
               }"
               @click="selectedType = typeKey"
+              :disabled="editingIndex >= 0 && selectedType !== typeKey"
+              :title="editingIndex >= 0 ? translatable(lang, 'component.cannot_change_type_when_editing') : ''"
             >
               {{ typeField.groupName || typeKey }}
+              <!-- 编辑模式下的提示 -->
+              <span v-if="editingIndex >= 0 && selectedType !== typeKey" class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                {{ translatable(lang, 'component.cannot_change_type_when_editing') }}
+              </span>
             </button>
           </div>
 

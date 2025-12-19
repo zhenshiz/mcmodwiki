@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import ObjectGenerator from '@/components/ObjectGenerator.vue'
 import Modal from '@/components/Modal.vue'
+import draggable from 'vuedraggable'
 import { translatable } from '@/assets/translatable/translatable.js'
 import { usePageStore } from '@/stores/index.js'
 import { ObjectArrField } from '@/assets/const/objectClass.js'
@@ -80,32 +81,39 @@ const renderLabel = (obj) => {
     </div>
 
     <!-- 列表 -->
-    <div
-      v-for="(item, index) in modelValue"
-      :key="index"
-      class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+    <draggable
+      :modelValue="modelValue"
+      item-key="id"
+      class="space-y-2"
+      @update:modelValue="emit('update:modelValue', $event)"
     >
-      <div class="flex items-center">
-        <span class="mr-2 text-gray-500 dark:text-gray-400">#{{ index + 1 }}</span>
-      </div>
-      <div>
-        <span class="font-medium dark:text-white">{{ renderLabel(item) }}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button
-          class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
-          @click="openEdit(item, index)"
-        >
-          <Icon icon="mdi:pencil" />
-        </button>
-        <button
-          class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
-          @click="removeItem(index)"
-        >
-          <Icon icon="mdi:delete" />
-        </button>
-      </div>
-    </div>
+      <template #item="{ element: item, index }">
+        <div
+          class="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center">
+            <Icon icon="mdi:drag-vertical" class="mr-2 cursor-move text-gray-400 drag-handle" />
+            <span class="mr-2 text-gray-500 dark:text-gray-400">#{{ index + 1 }}</span>
+          </div>
+          <div>
+            <span class="font-medium dark:text-white">{{ renderLabel(item) }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              class="text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900 p-1 rounded"
+              @click="openEdit(item, index)"
+            >
+              <Icon icon="mdi:pencil" />
+            </button>
+            <button
+              class="text-red-500 hover:bg-red-100 dark:hover:bg-red-900 p-1 rounded"
+              @click="removeItem(index)"
+            >
+              <Icon icon="mdi:delete" />
+            </button>
+          </div>
+        </div>
+      </template>
+    </draggable>
 
     <!-- 添加按钮 -->
     <button

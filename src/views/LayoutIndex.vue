@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
         <!--header右侧-->
         <div class="hidden z-10 sm:flex flex-row items-center">
           <Popover
-            :offset="-60"
+            mode="bottom"
             :background-color="isDark?'#002941':'#ffffff'"
           >
             <template #trigger>
@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
           </Link>
           <Popover
             v-if="modList.length"
-            :offset="-120"
+            mode="bottom"
             :background-color="isDark?'#002941':'#ffffff'"
           >
             <template #trigger>
@@ -178,7 +178,7 @@ onBeforeUnmount(() => {
           </Popover>
           <Popover
             v-if="moreUtilList.length"
-            :offset="-80"
+            mode="bottom"
             :background-color="isDark?'#002941':'#ffffff'"
           >
             <template #trigger>
@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
           <!--切换主题 切换语言-->
           <div
             class="center h-[30px]  p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
-            <Popover :offset="-160">
+            <Popover mode="bottom">
               <template #trigger>
                 <Icon width="35" height="35" icon="flowbite:language-outline"
                       class="cursor-pointer dark:text-white" />

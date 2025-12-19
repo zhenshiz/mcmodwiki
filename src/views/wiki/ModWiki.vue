@@ -1,12 +1,5 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-
-// 环境判断
-const isDevelopment = import.meta.env.DEV;
-const isProduction = import.meta.env.PROD;
-const isLocalhost = window.location.hostname === 'localhost' ||
-                    window.location.hostname === '127.0.0.1';
-console.log(`当前环境: ${isDevelopment ? '开发' : '生产'}, 本地运行: ${isLocalhost}`);
 import { modList } from '@/assets/mod/mod.js'
 import { translatable } from '@/assets/translatable/translatable.js'
 import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
@@ -17,6 +10,13 @@ import { usePageStore } from '@/stores/index.js'
 import Select from '@/components/Select.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 import { useTopicTOC } from '@/views/wiki/components/useTopicTOC.js'
+
+// 环境判断
+const isDevelopment = import.meta.env.DEV;
+const isProduction = import.meta.env.PROD;
+const isLocalhost = window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1';
+console.log(`当前环境: ${isDevelopment ? '开发' : '生产'}, 本地运行: ${isLocalhost}`);
 
 const message = useMessage()
 const pageStore = usePageStore()
@@ -60,6 +60,7 @@ const toggleWikiMarkdown = async () => {
 }
 
 const loadMarkdown = async (mod, mcVersion, modLoader, modVersion, language) => {
+  console.log(`${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}`)
   const res = await fetch(
     `../md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`
   )
