@@ -59,7 +59,10 @@ export const modList = [
         href: 'https://www.curseforge.com/minecraft/mc-mods/chatbox-for-mc',
       },
     ],
-    moreUtil: [],
+    moreUtil: [{
+      lang: 'more.name.1',
+      router: '/chatbox/theme'
+    }],
     mcVersion: ['1.21.1'],
     modLoader: ['NeoForge'],
     modVersion: ['1.0.9', '1.0.8', '1.0.7', '1.0.6', '1.0.5', '1.0.4', '1.0.3', '1.0.2', '1.0.1']
@@ -85,7 +88,7 @@ export const modList = [
     moreUtil: [],
     mcVersion: ['1.21.1'],
     modLoader: ['NeoForge'],
-    modVersion: ['1.0.0']
+    modVersion: ['1.0.1', '1.0.0']
   }
 ]
 

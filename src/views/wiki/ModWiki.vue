@@ -165,7 +165,7 @@ watch(
       <div v-if="pageInfo.moreUtil.length" class="flex flex-col">
         <div
           @click="router.push(item.router)"
-          class="theme-cursor-blue text-white flex flex-row items-center m-2 border-l-4 border-l-text-blue p-2"
+          class="theme-cursor-blue dark:text-white flex flex-row items-center m-2 border-l-4 border-l-text-blue p-2"
           v-for="(item,index) in pageInfo.moreUtil"
           :key="index"
         >

@@ -48,7 +48,6 @@ import sql from 'refractor/lang/sql'
 import tsx from 'refractor/lang/tsx'
 import typescript from 'refractor/lang/typescript'
 import markdown from 'refractor/lang/markdown'
-import { video } from '@/components/milkdown/plugin/video.js'
 
 const props = defineProps({
   valueMarkdown: String,
@@ -189,6 +188,7 @@ const editorInfo = useEditor((root) => {
     margin-top: 20px;
 
     h1, h2, h3, h4, h5, h6 {
+      margin-top: 15px;
       line-height: 1.5; /* 设置行高，确保文本不会与下一行重叠 */
     }
 
@@ -286,6 +286,12 @@ const editorInfo = useEditor((root) => {
         line-height: 1.5;
         vertical-align: middle;
       }
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
     }
 
     table {

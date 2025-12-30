@@ -101,13 +101,14 @@ watch(() => props.content, (newValue) => {
   margin-left: 10px;
 
   :deep(.milkdown) {
-    width: 95%;
+    width: 90%;
     min-height: 500px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
 
     h1, h2, h3, h4, h5, h6 {
+      margin-top: 15px;
       line-height: 1.5; /* 设置行高，确保文本不会与下一行重叠 */
     }
 
@@ -205,6 +206,12 @@ watch(() => props.content, (newValue) => {
         line-height: 1.5;
         vertical-align: middle;
       }
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
     }
 
     table {
