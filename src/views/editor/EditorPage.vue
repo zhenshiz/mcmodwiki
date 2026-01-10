@@ -9,7 +9,7 @@ import ModeToggle from '@/components/markdown/ModeToggle.vue'
 import Input from '@/components/Input.vue'
 import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import Modal from '@/components/Modal.vue'
-import Test from '../../../public/md/test.md?raw'
+import Test from '@/assets/test.md?raw'
 
 const visible = ref(false)
 const message = useMessage()

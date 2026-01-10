@@ -20,6 +20,7 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()]
     }),
   ],
+  assetsInclude: ['**/*.md'],
   optimizeDeps: {
     include: ['vue']
   },
