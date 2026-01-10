@@ -1,260 +1,265 @@
 <script setup>
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { modList } from '@/assets/mod/mod.js'
 import { translatable } from '@/assets/translatable/translatable.js'
-import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
-import { MilkdownProvider } from '@milkdown/vue'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
-import Select from '@/components/Select.vue'
-import { useMessage } from '@/components/register/useMessage.js'
-import { useTopicTOC } from '@/views/wiki/components/useTopicTOC.js'
+import MarkdownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
+import TreeItem from './component/TreeItem.vue'
 
-// 环境判断
-const isDevelopment = import.meta.env.DEV;
-const isProduction = import.meta.env.PROD;
-const isLocalhost = window.location.hostname === 'localhost' ||
-                    window.location.hostname === '127.0.0.1';
-console.log(`当前环境: ${isDevelopment ? '开发' : '生产'}, 本地运行: ${isLocalhost}`);
-
-const message = useMessage()
 const pageStore = usePageStore()
-const router = useRouter()
 const route = useRoute()
-const isDark = computed(() => pageStore.isDark)
 const language = computed(() => pageStore.setting.language)
+const isDark = computed(() => pageStore.isDark)
+const router = useRouter()
 
 const pageInfo = ref({
-  //模组名
   name: '',
-  //下载途径
-  availableHere: [],
-  //第三方工具
+  version: '',
   moreUtil: [],
-  //文档
+  availableHere: [],
   markdown: '',
+  treeData: []
 })
-const form = ref({
-  //mc版本
-  mcVersion: '',
-  //模组加载器,
-  modLoader: '',
-  //mod版本
-  modVersion: '',
-})
-const mcVersionOption = ref([])
-const modLoaderOption = ref([])
-const modVersionOption = ref([])
-const { headings, activeId, refreshTOC } = useTopicTOC()
+const currentFileName = ref('')
+const mdRenderer = ref(null)
 
-const toggleWikiMarkdown = async () => {
-  pageInfo.value.markdown = await loadMarkdown(
-    pageInfo.value.name.toLowerCase(),
-    form.value.mcVersion,
-    form.value.modLoader,
-    form.value.modVersion,
-    language.value,
-  )
-  await nextTick(() => refreshTOC())
+// 扫描 public/md 下所有的 md 文件
+const allMdModules = import.meta.glob('/public/md/**/*.md')
+
+const getFilesForMod = (modKey, lang) => {
+  const prefix = `/public/md/${modKey}/${lang}/`
+  return Object.keys(allMdModules)
+    .filter(path => path.startsWith(prefix))
+    .map(path => path.replace(prefix, ''))
 }
 
-const loadMarkdown = async (mod, mcVersion, modLoader, modVersion, language) => {
-  console.log(`${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}`)
-  const res = await fetch(
-    `../md/${mod}/${mcVersion}_${modLoader}_${modVersion}_${language}.md`
-  )
-  const text = await res.text()
-  if (text.startsWith('<!DOCTYPE html>')) {
-    message.warning(translatable(language, 'message.warn.no.wiki'))
-    return ''
-  } else {
+// --- 核心：解析文件名树 ---
+// 修改 ModWiki.vue 中的 buildFileTree
+const buildFileTree = (files) => {
+  const root = []
+  // 保持自然排序，确保 01 排在 02 前面
+  const sortedFiles = [...files].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+
+  sortedFiles.forEach(file => {
+    // 假设文件名格式为 "00.介绍.md" 或 "01-test.md"
+    const parts = file.replace('.md', '').split('.')
+    let currentLevel = root
+
+    parts.forEach((part, index) => {
+      const isLast = index === parts.length - 1
+
+      // 核心：移除显示上的前缀数字（支持 "01." 或 "01-" 格式）
+      const displayLabel = part.replace(/^(\d+[\.\-_])/, '')
+
+      let node = currentLevel.find(p => p.label === displayLabel)
+      if (!node) {
+        node = {
+          label: displayLabel,
+          children: [],
+          isLeaf: isLast,
+          fullPath: isLast ? file : null
+        }
+        currentLevel.push(node)
+      }
+      currentLevel = node.children
+    })
+  })
+  return root
+}
+
+const loadMarkdown = async (mod, lang, fileName) => {
+  try {
+    const res = await fetch(`/md/${mod}/${lang}/${fileName}`)
+    const text = await res.text()
+    if (text.startsWith('<!DOCTYPE html>')) throw new Error('Not Found')
     return text
+  } catch (err) {
+    console.error('加载 Markdown 失败:', err)
+    return ''
   }
 }
 
-const scrollToTOCElement = (id) => {
-  const element = document.getElementById(id)
-  element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+const selectFile = async (fileName) => {
+  currentFileName.value = fileName
+  const mod = modList.find(item => translatable(language.value, item.lang) === route.params.name)
+  if (!mod) return
 
-const openWeb = (url) => {
-  window.open(url)
-}
+  const modKey = (mod.name || route.params.name).toLowerCase()
+  pageInfo.value.markdown = await loadMarkdown(modKey, language.value, fileName)
 
-const load = async () => {
-  //根据翻译后的名字获取是哪个模组
-  let res = modList.find((item) => translatable(language.value, item.lang) === route.params.name)
-  mcVersionOption.value = res.mcVersion.map((item) => {
-    return { label: item, value: item }
-  })
-  modLoaderOption.value = res.modLoader.map((item) => {
-    return { label: item, value: item }
-  })
-  modVersionOption.value = res.modVersion.map((item) => {
-    return { label: item, value: item }
-  })
-  form.value = {
-    mcVersion: res.mcVersion[0],
-    modLoader: res.modLoader[0],
-    modVersion: res.modVersion[0],
+  // 渲染后刷新 TOC
+  await nextTick()
+  if (mdRenderer.value?.updateHeadings) {
+    mdRenderer.value.updateHeadings()
   }
-  let text = await loadMarkdown(
-    translatable(language.value, res.lang).toLowerCase(),
-    res.mcVersion[0],
-    res.modLoader[0],
-    res.modVersion[0],
-    language.value,
-  )
-  pageInfo.value = {
-    name: translatable(language.value, res.lang),
-    availableHere: res.availableHere,
-    moreUtil: res.moreUtil,
-    markdown: text,
-  }
-
-  await nextTick(() => refreshTOC())
 }
 
-onMounted(() => {
-  load()
+const loadModInfo = async () => {
+  // 重置状态
+  pageInfo.value.markdown = ''
+  pageInfo.value.name = ''
+
+  const mod = modList.find(item => translatable(language.value, item.lang) === route.params.name)
+  if (!mod) return
+
+  pageInfo.value.name = translatable(language.value, mod.lang)
+  pageInfo.value.version = mod.modVersion
+  pageInfo.value.availableHere = mod.availableHere || []
+  pageInfo.value.moreUtil = mod.moreUtil || []
+
+  const modKey = (mod.name || route.params.name).toLowerCase()
+  const files = getFilesForMod(modKey, language.value)
+  const finalFiles = files.length > 0 ? files : (mod.files || [])
+
+  pageInfo.value.treeData = buildFileTree(finalFiles)
+
+  if (finalFiles.length > 0) {
+    const queryFile = route.query.file
+    const hasQueryFile = queryFile && finalFiles.includes(queryFile)
+
+    let targetFile = finalFiles[0]
+    if (hasQueryFile) {
+      targetFile = queryFile
+    } else if (currentFileName.value && finalFiles.includes(currentFileName.value)) {
+      targetFile = currentFileName.value
+    }
+
+    await selectFile(targetFile)
+  }
+}
+
+const navigateToFile = (fileName) => {
+  router.push({
+    query: { ...route.query, file: fileName }
+  })
+}
+
+onMounted(() => loadModInfo())
+watch(() => route.query.file, (newFile) => {
+  if (newFile && newFile !== currentFileName.value) {
+    loadModInfo()
+  }
 })
-
-watch(language, (newValue, oldValue) => {
-  toggleWikiMarkdown()
-  nextTick(() => refreshTOC())
-})
-
-watch(
-  () => route.params.name,
-  (newName) => {
-    load()
-  },
-)
+watch([language, () => route.params.name], () => loadModInfo())
 </script>
 
 <template>
-  <div class="flex flex-row size-full">
-    <div
-      class="hidden w-1/5 scrollbar sm:flex flex-col m-5 sticky top-0 h-[calc(100vh-20px)] overflow-y-auto"
-    >
-      <div class="title border-line-between p-2">{{ pageInfo.name }}</div>
-      <!--获取途径-->
-      <div v-if="pageInfo.availableHere.length" class="flex flex-col">
-        <div class="dark:text-white m-2">{{ translatable(language, 'wiki.sidebar.1') }}</div>
-        <div
-          @click="openWeb(item.href)"
-          class="theme-cursor-blue text-white flex flex-row items-center justify-between m-2 border-l-4 border-l-text-blue p-2"
-          v-for="(item,index) in pageInfo.availableHere"
-          :key="index"
-        >
-          <div class="flex flex-row items-center pl-3 gap-3">
-            <Icon
-              width="25"
-              height="25"
-              :icon="item.icon.icon"
-              :color="isDark ? item.icon.darkColor : item.icon.lightColor"
-            />
-            <div class="text-black dark:text-white">{{ item.icon.name }}</div>
+  <div class="flex h-screen w-full bg-white dark:bg-dark-blue overflow-hidden">
+    <aside
+      class="w-72 border-r dark:border-slate-800 flex flex-col shrink-0 bg-gray-50/30 dark:bg-transparent">
+      <div class="p-6 h-full flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-xl font-bold dark:text-white truncate" :title="pageInfo.name">
+            {{ pageInfo.name }}</h1>
+          <span
+            class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-sm">
+            {{ pageInfo.version }}
+          </span>
+        </div>
+
+        <div v-if="pageInfo.availableHere.length" class="mb-6">
+          <div class="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-wider px-2">
+            {{ translatable(language, 'wiki.sidebar.1') }}
           </div>
-          <Icon width="25" height="25" icon="quill:link-out" class="text-text-blue" />
+          <div class="space-y-2">
+            <div
+              v-for="(item, index) in pageInfo.availableHere"
+              :key="index"
+              @click="window.open(item.href)"
+              class="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border border-transparent hover:border-blue-500/20 group"
+            >
+              <div class="flex items-center gap-3">
+                <Icon :icon="item.icon.icon" width="20" height="20"
+                      :color="isDark ? item.icon.darkColor : item.icon.lightColor" />
+                <span class="text-sm dark:text-gray-300 group-hover:text-blue-500">{{ item.icon.name
+                  }}</span>
+              </div>
+              <Icon icon="quill:link-out" width="16"
+                    class="text-gray-400 group-hover:text-blue-500" />
+            </div>
+          </div>
         </div>
-        <div class="border-line-between" />
-      </div>
-      <!--第三方工具-->
-      <div v-if="pageInfo.moreUtil.length" class="flex flex-col">
-        <div
-          @click="router.push(item.router)"
-          class="theme-cursor-blue dark:text-white flex flex-row items-center m-2 border-l-4 border-l-text-blue p-2"
-          v-for="(item,index) in pageInfo.moreUtil"
-          :key="index"
-        >
-          <div class="ml-3">{{ translatable(language, item.lang) }}</div>
+
+        <div v-if="pageInfo.moreUtil.length" class="mb-6">
+          <div class="space-y-2">
+            <div
+              v-for="(item, index) in pageInfo.moreUtil"
+              :key="index"
+              @click="router.push(item.router)"
+              class="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border-l-4 border-l-transparent hover:border-l-blue-500 bg-gray-100/50 dark:bg-slate-800/50"
+            >
+              <span class="text-sm dark:text-gray-300 ml-2">{{ translatable(language, item.lang)
+                }}</span>
+            </div>
+          </div>
         </div>
-        <div class="border-line-between" />
+
+        <div class="h-px bg-gray-200 dark:bg-slate-800 mb-6" />
+
+        <nav class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+          <div class="text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest px-2">
+            {{ translatable(language, 'wiki.sidebar.2') }}
+          </div>
+          <div class="tree-container">
+            <TreeItem
+              v-for="node in pageInfo.treeData"
+              :key="node.label"
+              :item="node"
+              :active-file="currentFileName"
+              @select="selectFile"
+            />
+          </div>
+        </nav>
       </div>
-      <!--mc版本选择-->
-      <div
-        class="flex flex-row items-center justify-between h-[80px] dark:text-white whitespace-nowrap m-2"
-      >
-        <div>{{ translatable(language, 'wiki.sidebar.3') }}</div>
-        <div>
-          <Select
-            :modelValue="form.mcVersion"
-            :options="mcVersionOption"
-            @update:modelValue="
-              (newValue) => {
-                form.mcVersion = newValue
-                toggleWikiMarkdown()
-              }
-            "
-          />
+    </aside>
+
+    <main
+          class="flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
+      <div class="mx-auto px-12 min-h-full">
+        <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer" :content="pageInfo.markdown" />
+      </div>
+    </main>
+
+    <aside class="w-64 hidden xl:block border-l dark:border-slate-800 p-8 shrink-0">
+      <div class="sticky top-10">
+        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
+          {{ translatable(language, 'wiki.sidebar.3') }}
         </div>
-      </div>
-      <!--mod加载器选择-->
-      <div
-        class="flex flex-row items-center justify-between h-[80px] dark:text-white whitespace-nowrap m-2"
-      >
-        <div>{{ translatable(language, 'wiki.sidebar.4') }}</div>
-        <div>
-          <Select
-            :modelValue="form.modLoader"
-            :options="modLoaderOption"
-            @update:modelValue="
-              (newValue) => {
-                form.modLoader = newValue
-                toggleWikiMarkdown()
-              }
-            "
-          />
-        </div>
-      </div>
-      <!--mod版本选择-->
-      <div
-        class="flex flex-row items-center justify-between h-[80px] dark:text-white whitespace-nowrap m-2"
-      >
-        <div>{{ translatable(language, 'wiki.sidebar.5') }}</div>
-        <div>
-          <Select
-            :modelValue="form.modVersion"
-            :options="modVersionOption"
-            @update:modelValue="
-              (newValue) => {
-                form.modVersion = newValue
-                toggleWikiMarkdown()
-              }
-            "
-          />
-        </div>
-      </div>
-      <div class="border-line-between" />
-      <!--文档导航-->
-      <div class="m-2 dark:text-white">{{ translatable(language, 'wiki.sidebar.2') }}</div>
-      <div v-if="headings.length" class="m-2 dark:text-white cursor-pointer">
-        <ul class="mb-4 space-y-2">
-          <li
-            v-for="item in headings"
-            :key="item.id"
-            :style="{ paddingLeft: `${item.level - 1}rem` }"
+        <ul class="space-y-1 relative border-l dark:border-slate-800">
+          <li v-for="h in mdRenderer?.headings" :key="h.id"
+              :style="{ paddingLeft: `${(h.level - 1) * 0.75}rem` }"
+              class="transition-all duration-300"
+              :class="{
+              'is-active': h.isActive && !h.isScrolledOver,
+              'is-scrolled-over': h.isScrolledOver
+            }"
           >
             <a
-              :href="`#${item.id}`"
-              @click.prevent="scrollToTOCElement(item.id)"
-              class="block py-1 text-sm hover:text-text-blue"
-              :class="{ 'text-text-blue': activeId === item.id }"
+              href="javascript:;"
+              @click="mdRenderer.scrollToHeading(h.id)"
+              class="block py-1.5 text-xs border-l-2 -ml-[2px] pl-4 transition-colors"
+              :class="(h.isActive && !h.isScrolledOver)
+              ? 'text-blue-500 border-blue-500 font-bold'
+              : 'text-gray-500 border-transparent hover:text-gray-700 dark:hover:text-gray-300'"
             >
-              {{ item.text }}
+              {{ h.textContent }}
             </a>
           </li>
         </ul>
       </div>
-    </div>
-    <div class="w-4/5 m-5">
-      <MilkdownProvider>
-        <ProsemirrorAdapterProvider>
-          <MilkDownReadOnly :content="pageInfo.markdown" />
-        </ProsemirrorAdapterProvider>
-      </MilkdownProvider>
-    </div>
+    </aside>
   </div>
 </template>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.2);
+  border-radius: 10px;
+}
+</style>

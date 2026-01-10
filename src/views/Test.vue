@@ -15,9 +15,6 @@ import {
   UnionArrField,
   UnionTemplate
 } from '@/assets/const/objectClass.js'
-import MilkDownReadOnly from '@/components/milkdown/MilkDownReadOnly.vue'
-import { MilkdownProvider } from '@milkdown/vue'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { dialoguesSetting, themeSetting } from '@/assets/more/chatBox/defaultInfo.js'
 import { translatable } from '@/assets/translatable/translatable.js'
 import FileJsonHandler from '@/components/FileJsonHandler.vue'
@@ -126,10 +123,10 @@ const test = new UnionArrField({
 </script>
 
 <template>
-  <div class="flex flex-row">
-    <div class="flex-1 flex w-full justify-center flex-col mb-10 items-center gap-10">
-      <div class="text-center text-2xl dark:text-white">JSON生成器组件展示</div>
-      <ObjectGenerator v-model="testModal" :properties="formProperties" />
+<!--  <div class="flex flex-row">-->
+<!--    <div class="flex-1 flex w-full justify-center flex-col mb-10 items-center gap-10">-->
+<!--      <div class="text-center text-2xl dark:text-white">JSON生成器组件展示</div>-->
+<!--      <ObjectGenerator v-model="testModal" :properties="formProperties" />-->
 <!--      <ObjectMapComponent :properties="theme.portrait" v-model="testModal" title="测试参数" />-->
       <!--            <ArrayObjectGenerator class="w-[500px]" v-model="testModal" :properties="formProperties"-->
       <!--                                  display-template="{input}" />-->
@@ -139,14 +136,7 @@ const test = new UnionArrField({
 <!--      <UnionArrGeneratorDialog :properties="test" v-model="testModal"-->
 <!--                               :title="translatable(lang, 'chat.box.dialogues.portrait.title')">-->
 <!--      </UnionArrGeneratorDialog>-->
-      <FileJsonHandler storageKey="test" v-model="testModal" />
-    </div>
-    <div class="flex-1">
-      <MilkdownProvider>
-        <ProsemirrorAdapterProvider>
-          <MilkDownReadOnly :content="themeJson" />
-        </ProsemirrorAdapterProvider>
-      </MilkdownProvider>
-    </div>
-  </div>
+<!--      <FileJsonHandler storageKey="test" v-model="testModal" />-->
+<!--    </div>-->
+<!--  </div>-->
 </template>

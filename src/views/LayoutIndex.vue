@@ -51,7 +51,7 @@ const closeSmSetting = () => {
 }
 
 const gotoModWiki = item => {
-  router.push(`/wiki/${translatable(lang, item.lang)}`)
+  router.push(`/wiki/${item.lang}`)
 }
 
 const openWeb = (url) => {
@@ -120,8 +120,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="w-full">
     <!--头部导航栏-->
-    <div
-      class="relative top-0 h-16 w-full flex justify-center shadow z-20 dark:bg-dark-blue">
+    <div class="relative top-0 h-16 w-full flex justify-center shadow z-20 dark:bg-dark-blue">
       <div class="flex flex-row justify-between w-[90%] size-full">
         <!--header左侧-->
         <div class="z-10 flex flex-row items-center">
@@ -129,15 +128,10 @@ onBeforeUnmount(() => {
         </div>
         <!--header右侧-->
         <div class="hidden z-10 sm:flex flex-row items-center">
-          <Popover
-            mode="bottom"
-            :background-color="isDark?'#002941':'#ffffff'"
-          >
+          <Popover mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
             <template #trigger>
-              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid"
-                    width="30"
-                    height="30"
-                    @click="()=>searchVisible=true" />
+              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
+                height="30" @click="() => searchVisible = true" />
             </template>
             <div class="text-[#3487d5] text-center text-sm p-1">
               {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
@@ -145,52 +139,38 @@ onBeforeUnmount(() => {
             </div>
           </Popover>
           <!--页面跳转-->
-          <Link class="ml-5 m-2 text-lg text-text-blue whitespace-nowrap"
-                hoverLineType="toFlanks"
-                :href="`/`">
-            {{ translatable(lang, 'layout.link.1') }}
+          <Link class="ml-5 m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/`">
+          {{ translatable(lang, 'layout.link.1') }}
           </Link>
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks"
-                :href="`/author`">
-            {{ translatable(lang, 'layout.link.2') }}
+          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/author`">
+          {{ translatable(lang, 'layout.link.2') }}
           </Link>
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks"
-                :href="`/editor`">
-            {{ translatable(lang, 'layout.link.3') }}
+          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/editor`">
+          {{ translatable(lang, 'layout.link.3') }}
           </Link>
-          <Popover
-            v-if="modList.length"
-            mode="bottom"
-            :background-color="isDark?'#002941':'#ffffff'"
-          >
+          <Popover v-if="modList.length" mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
             <template #trigger>
               <div class="cursor-pointer m-2 text-lg text-text-blue whitespace-nowrap">
                 {{ translatable(lang, 'layout.link.4') }}
               </div>
             </template>
             <div class="size-full flex flex-col">
-              <Link v-for="(item,index) in modList" class="m-2 text-lg text-text-blue"
-                    :href="`/wiki/${translatable(lang,item.lang)}`"
-                    hoverLineType="toFlanks" :key="index">
-                {{ translatable(lang, item.lang) }}
+              <Link v-for="(item, index) in modList" class="m-2 text-lg text-text-blue"
+                :href="`/wiki/${translatable(lang, item.lang)}`" hoverLineType="toFlanks" :key="index">
+              {{ translatable(lang, item.lang) }}
               </Link>
             </div>
           </Popover>
-          <Popover
-            v-if="moreUtilList.length"
-            mode="bottom"
-            :background-color="isDark?'#002941':'#ffffff'"
-          >
+          <Popover v-if="moreUtilList.length" mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
             <template #trigger>
               <div class="cursor-pointer text-lg text-text-blue m-2 whitespace-nowrap">
                 {{ translatable(lang, 'layout.link.5') }}
               </div>
             </template>
             <div class="size-full flex flex-col">
-              <Link v-for="(item,index) in moreUtilList" class="m-2 text-lg text-text-blue"
-                    :href="item.link"
-                    hoverLineType="toFlanks" :key="index">
-                {{ translatable(lang,item.lang) }}
+              <Link v-for="(item, index) in moreUtilList" class="m-2 text-lg text-text-blue" :href="item.link"
+                hoverLineType="toFlanks" :key="index">
+              {{ translatable(lang, item.lang) }}
               </Link>
             </div>
           </Popover>
@@ -199,85 +179,71 @@ onBeforeUnmount(() => {
             class="center h-[30px]  p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
             <Popover mode="bottom">
               <template #trigger>
-                <Icon width="35" height="35" icon="flowbite:language-outline"
-                      class="cursor-pointer dark:text-white" />
+                <Icon width="35" height="35" icon="flowbite:language-outline" class="cursor-pointer dark:text-white" />
               </template>
               <div class="size-full flex flex-col dark:bg-dark-blue">
-                <div
-                  @click="()=>pageStore.setSetting({ language: item.value })"
+                <div @click="() => pageStore.setSetting({ language: item.value })"
                   class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue"
-                  v-for="(item,index) in languageList" :key="index">
+                  v-for="(item, index) in languageList" :key="index">
                   {{ item.label }}
                 </div>
                 <div class="flex flex-row items-center p-2 dark:text-white theme-cursor-blue"
-                     @click="openWeb(webHref.translatable)">
+                  @click="openWeb(webHref.translatable)">
                   <div>
                     {{ translatable(lang, 'layout.translatable.1') }}<br>
                     {{ translatable(lang, 'layout.translatable.2') }}
                   </div>
-                  <Icon class="ml-2 cursor-pointer" width="25"
-                        height="25" icon="quill:link-out" />
+                  <Icon class="ml-2 cursor-pointer" width="25" height="25" icon="quill:link-out" />
                 </div>
               </div>
             </Popover>
-            <Icon width="35" height="35" :color="isDark?'#66cffc':'#ff454f'"
-                  :icon="`line-md:${isDark?'moon':'sunny'}-loop`" class="cursor-pointer"
-                  @click="toggleTheme" />
+            <Icon width="35" height="35" :color="isDark ? '#66cffc' : '#ff454f'"
+              :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`" class="cursor-pointer" @click="toggleTheme" />
           </div>
           <div class="size-full flex items-center ml-2 mr-5">
-            <Icon @click="openWeb(webHref.github)" :color="isDark?'#fff':'#000'" width="35"
-                  height="35" icon="mdi:github" class="cursor-pointer" />
+            <Icon @click="openWeb(webHref.github)" :color="isDark ? '#fff' : '#000'" width="35" height="35"
+              icon="mdi:github" class="cursor-pointer" />
           </div>
         </div>
 
         <!--移动端适配按钮-->
         <div class="center sm:hidden z-10 mr-5 dark:text-white">
-          <Popover
-            class="mr-4"
-            :background-color="isDark?'#002941':'#ffffff'"
-          >
+          <Popover class="mr-4" :background-color="isDark ? '#002941' : '#ffffff'">
             <template #trigger>
-              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid"
-                    width="30"
-                    height="30"
-                    @click="()=>searchVisible=true" />
+              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
+                height="30" @click="() => searchVisible = true" />
             </template>
             <div class="text-[#3487d5] text-center text-sm p-1">
               {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
               }}
             </div>
           </Popover>
-          <Icon @click="()=>smSettingVisible=true" width="35" height="35" icon="ph:list-bold" />
+          <Icon @click="() => smSettingVisible = true" width="35" height="35" icon="ph:list-bold" />
         </div>
       </div>
     </div>
 
     <!--移动端设置面板-->
-    <div class="sm:hidden absolute top-0 left-0 size-full min-h-lvh flex flex-row z-50"
-         v-if="smSettingVisible">
+    <div class="sm:hidden absolute top-0 left-0 size-full min-h-lvh flex flex-row z-50" v-if="smSettingVisible">
       <!--设置面板-->
       <div ref="smSetting"
-           class="w-[80%] bg-white dark:bg-dark-blue flex flex-col items-center justify-start h-full z-10">
+        class="w-[80%] bg-white dark:bg-dark-blue flex flex-col items-center justify-start h-full z-10">
         <div class="w-[80%] flex items-start">
-          <Link class="m-2 mt-10 text-lg text-text-blue whitespace-nowrap"
-                :href="`/`">
-            {{ translatable(lang, 'layout.link.1') }}
+          <Link class="m-2 mt-10 text-lg text-text-blue whitespace-nowrap" :href="`/`">
+          {{ translatable(lang, 'layout.link.1') }}
           </Link>
         </div>
         <div class="w-[80%] flex items-start">
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
-                :href="`/author`">
-            {{ translatable(lang, 'layout.link.2') }}
+          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" :href="`/author`">
+          {{ translatable(lang, 'layout.link.2') }}
           </Link>
         </div>
         <div class="w-[80%] flex items-start">
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap"
-                :href="`/editor`">
-            {{ translatable(lang, 'layout.link.3') }}
+          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" :href="`/editor`">
+          {{ translatable(lang, 'layout.link.3') }}
           </Link>
         </div>
-        <div class="w-[80%] flex items-start justify-between text-text-blue"
-             @click="()=>modVisible = !modVisible">
+        <div class="w-[80%] flex items-start justify-between text-text-blue" @click="() => modVisible = !modVisible">
           <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
             {{ translatable(lang, 'layout.link.5') }}
           </div>
@@ -286,14 +252,13 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-show="modVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="(item,index) in modList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(lang,item.lang)}`" :key="index">
-            {{ translatable(lang,item.lang) }}
+          <Link v-for="(item, index) in modList" class="m-2 text-text-blue"
+            :href="`/wiki/${translatable(lang, item.lang)}`" :key="index">
+          {{ translatable(lang, item.lang) }}
           </Link>
         </div>
 
-        <div class="w-[80%] flex items-start justify-between text-text-blue"
-             @click="()=>moreVisible = !moreVisible">
+        <div class="w-[80%] flex items-start justify-between text-text-blue" @click="() => moreVisible = !moreVisible">
           <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
             {{ translatable(lang, 'layout.link.4') }}
           </div>
@@ -302,39 +267,34 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-show="moreVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="(item,index) in moreUtilList" class="m-2 text-text-blue"
-                :href="`/wiki/${translatable(lang,item.lang)}`" :key="index">
-            {{ translatable(lang,item.lang) }}
+          <Link v-for="(item, index) in moreUtilList" class="m-2 text-text-blue"
+            :href="`/wiki/${translatable(lang, item.lang)}`" :key="index">
+          {{ translatable(lang, item.lang) }}
           </Link>
         </div>
 
-        <Icon width="35" height="35" icon="flowbite:language-outline"
-              class="dark:text-white" @click="()=>languageVisible=!languageVisible" />
-        <div v-show="languageVisible"
-             class="w-[95%] flex flex-col border border-text-blue dark:bg-dark-blue">
-          <div
-            @click="pageStore.setSetting({ language: item.value })"
+        <Icon width="35" height="35" icon="flowbite:language-outline" class="dark:text-white"
+          @click="() => languageVisible = !languageVisible" />
+        <div v-show="languageVisible" class="w-[95%] flex flex-col border border-text-blue dark:bg-dark-blue">
+          <div @click="pageStore.setSetting({ language: item.value })"
             class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue border-b border-b-text-blue"
-            v-for="(item,index) in languageList" :key="index">
+            v-for="(item, index) in languageList" :key="index">
             {{ item.text }}
           </div>
-          <div
-            class="flex flex-row items-center justify-around p-2 dark:text-white theme-cursor-blue"
+          <div class="flex flex-row items-center justify-around p-2 dark:text-white theme-cursor-blue"
             @click="openWeb(webHref.translatable)">
             <div>
               {{ translatable(lang, 'layout.translatable.1') }}<br>
               {{ translatable(lang, 'layout.translatable.2') }}
             </div>
-            <Icon class="ml-2 cursor-pointer" width="25"
-                  height="25" icon="quill:link-out" />
+            <Icon class="ml-2 cursor-pointer" width="25" height="25" icon="quill:link-out" />
           </div>
         </div>
 
-        <Icon width="35" height="35" :color="isDark?'#66cffc':'#ff454f'"
-              :icon="`line-md:${isDark?'moon':'sunny'}-loop`" class="cursor-pointer mt-3 mb-3"
-              @click="toggleTheme" />
-        <Icon @click="openWeb(webHref.github)" :color="isDark?'#fff':'#000'" width="35"
-              height="35" icon="mdi:github" class="cursor-pointer" />
+        <Icon width="35" height="35" :color="isDark ? '#66cffc' : '#ff454f'" :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`"
+          class="cursor-pointer mt-3 mb-3" @click="toggleTheme" />
+        <Icon @click="openWeb(webHref.github)" :color="isDark ? '#fff' : '#000'" width="35" height="35" icon="mdi:github"
+          class="cursor-pointer" />
       </div>
       <!--遮蔽-->
       <div @click="closeSmSetting" class="mask" />
@@ -346,45 +306,39 @@ onBeforeUnmount(() => {
 
     <!--进度条-->
     <div v-show="scrollVisible"
-         class="fixed bottom-5 right-5 h-12 w-[220px] rounded-full bg-white dark:bg-dark-blue center flex-row shadow">
-      <div class="w-[100px] h-2 rounded-full"
-           :style="{backgroundColor:isDark?'#3f3f45':'#999'}">
+      class="fixed bottom-5 right-5 h-12 w-[220px] rounded-full bg-white dark:bg-dark-blue center flex-row shadow">
+      <div class="w-[100px] h-2 rounded-full" :style="{ backgroundColor: isDark ? '#3f3f45' : '#999' }">
         <div class="h-full rounded-full"
-             :style="{width:scrollProgress+'px',backgroundColor:isDark?'#0094f2':'#0079ea'}" />
+          :style="{ width: scrollProgress + 'px', backgroundColor: isDark ? '#0094f2' : '#0079ea' }" />
       </div>
       <div class="ml-2 mr-2 text-text-blue w-[40px] text-right">{{ Math.floor(scrollProgress) }}%</div>
-      <Icon :style="{backgroundColor:isDark?'#042235':'#cce4fa'}"
-            :color="isDark?'#368cc5':'#3483ce'"
-            width="35" height="35"
-            :icon="isUp?'lucide:move-up':'lucide:move-down'"
-            class="rounded-full p-2 cursor-pointer"
-            @click="scrollTo" />
+      <Icon :style="{ backgroundColor: isDark ? '#042235' : '#cce4fa' }" :color="isDark ? '#368cc5' : '#3483ce'" width="35"
+        height="35" :icon="isUp ? 'lucide:move-up' : 'lucide:move-down'" class="rounded-full p-2 cursor-pointer"
+        @click="scrollTo" />
     </div>
   </div>
 
   <!--搜索框-->
-  <Modal :show="searchVisible" @default-close="() => searchVisible=false" :isShowClose="false"
-         :negativeVisible="false" :positiveVisible="false">
+  <Modal :show="searchVisible" @default-close="() => searchVisible = false" :isShowClose="false" :negativeVisible="false"
+    :positiveVisible="false">
     <template #content>
       <div class="flex flex-col size-full">
-        <Input v-model="search" @update:modelValue="change"
-               :placeholder="translatable(lang,'layout.search.2')"
-               default-model="search" is-debounce>
-          <template #header>
-            <div class="w-[25px] h-[25px] center dark:text-white">
-              <Icon icon="material-symbols:search-rounded" width="30" height="30" />
-            </div>
-          </template>
+        <Input v-model="search" @update:modelValue="change" :placeholder="translatable(lang, 'layout.search.2')"
+          default-model="search" is-debounce>
+        <template #header>
+          <div class="w-[25px] h-[25px] center dark:text-white">
+            <Icon icon="material-symbols:search-rounded" width="30" height="30" />
+          </div>
+        </template>
         </Input>
-        <div
-          class="p-2 theme-cursor-blue flex flex-col dark:text-white mt-2 border border-text-blue"
-          v-for="(item,index) in searchList" @click="gotoModWiki(item)" :key="index">
+        <div class="p-2 theme-cursor-blue flex flex-col dark:text-white mt-2 border border-text-blue"
+          v-for="(item, index) in searchList" @click="gotoModWiki(item)" :key="index">
           <div class="flex flex-row size-full">
             #&nbsp;
             <div class="flex flex-row justify-between size-full">
-              <div>{{ translatable(lang,item.lang) }}</div>
+              <div>{{ translatable(lang, item.lang) }}</div>
               <div class="ellipsis w-[300px] text-end">
-                {{ translatable(lang,item.description) }}
+                {{ translatable(lang, item.description) }}
               </div>
             </div>
           </div>

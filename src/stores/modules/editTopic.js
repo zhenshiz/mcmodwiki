@@ -6,63 +6,40 @@ export const useEditTopicStore = defineStore(
   () => {
 
     let content = ref('')
-    let mcVersion = ref('')
-    let modLoader = ref('')
-    let modVersion = ref('')
-    let language = ref('')
+    let filename = ref('')
 
     //preview | code
     let mode = ref('preview')
-    let textCount = ref(0)
-    let autosaveCount = ref(0)
 
     let editorContext = ref(null)
 
     const setTopicInfo = (topic) => {
       if (topic?.content !== undefined) content.value = topic.content
-      if (topic?.mcVersion !== undefined) mcVersion.value = topic.mcVersion
-      if (topic?.modLoader !== undefined) modLoader.value = topic.modLoader
-      if (topic?.modVersion !== undefined) modVersion.value = topic.modVersion
-      if (topic?.language !== undefined) language.value = topic.language
+      if (topic?.filename !== undefined) filename.value = topic.filename
       if (topic?.mode !== undefined) mode.value = topic.mode
-      if (topic?.textCount !== undefined) textCount.value = topic.textCount
-      if (topic?.autosaveCount !== undefined) autosaveCount.value = topic.autosaveCount
       if (topic?.editorContext !== undefined) editorContext.value = topic.editorContext
     }
 
     const getTopicInfo = () => {
       return {
         content: content.value,
-        mcVersion: mcVersion.value,
-        modLoader: modLoader.value,
-        modVersion: modVersion.value,
-        language: language.value,
+        filename: filename.value,
         mode: mode.value,
-        textCount: textCount.value,
-        autosaveCount: autosaveCount.value,
         editorContext: editorContext.value
       }
     }
 
     const resetTopicInfo = () => {
       content.value = ''
-      mcVersion.value = ''
-      modVersion.value = ''
+      filename.value = ''
       mode.value = 'preview'
-      textCount.value = 0
-      autosaveCount.value = 0
       editorContext.value = null
     }
 
     return {
       content,
-      mcVersion,
-      modLoader,
-      modVersion,
-      language,
+      filename,
       mode,
-      textCount,
-      autosaveCount,
       editorContext,
       setTopicInfo,
       getTopicInfo,
@@ -71,7 +48,7 @@ export const useEditTopicStore = defineStore(
   },
   {
     persist: {
-      pick: ['content', 'mcVersion', 'modLoader', 'modVersion', 'language', 'mode', 'textCount', 'autosaveCount', 'editorContext']
+      pick: ['content', 'filename', 'mode', 'editorContext']
     }
   }
 )

@@ -2,6 +2,7 @@
 import { translatable } from '@/assets/translatable/translatable.js'
 import Image from '@/components/Image.vue'
 import zhenshiz from '@/assets/author/zhenshiz.jpg'
+import Amotassic from '@/assets/author/Amotassic.jpg'
 import { usePageStore } from '@/stores/index.js'
 
 const lang = computed(() => usePageStore().setting.language)
@@ -11,6 +12,12 @@ const authorList = ref([
     icon: zhenshiz,
     job: 'author.job.1',
     description: 'author.description.1'
+  },
+  {
+    lang: 'Amotassic',
+    icon: Amotassic,
+    job: 'author.job.2',
+    description: 'author.description.2'
   }
 ])
 </script>
