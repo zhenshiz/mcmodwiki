@@ -57,7 +57,9 @@ const editor = useEditor({
   content: props.valueMarkdown,
   extensions: [
     StarterKit.configure({
-      codeBlock: false
+      codeBlock: false,
+      link: false,
+      table: false
     }),
     EnhancedCodeBlock,
     CodeBlockLowlight.configure({
@@ -81,10 +83,7 @@ const editor = useEditor({
       nested: true
     }),
     Mathematics,
-    Youtube.configure({
-      controls: false,
-      nocookie: true
-    }),
+    Youtube,
     BiliBili,
     Mermaid,
     HiddenText,
@@ -186,7 +185,6 @@ defineExpose({
 </script>
 
 <template>
-
   <div ref="editorContainer" class="bg-white dark:bg-dark-blue">
     <MarkDownMenu
       v-if="isShowMenu"
