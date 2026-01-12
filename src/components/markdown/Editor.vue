@@ -337,8 +337,11 @@ defineExpose({
   }
 
   ul, ol {
-    padding: 0 1rem;
-    margin: 0.5rem 1rem 0.5rem 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  ul ul, ul ol, ol ul, ol ol {
+    margin: 0.2rem 0 0.2rem 1.5rem;
   }
 
   ul {
@@ -355,10 +358,6 @@ defineExpose({
 
   ol {
     list-style: decimal;
-  }
-
-  ul ul, ul ol, ol ul, ol ol {
-    margin: 0.2rem 0;
   }
 
   ul[data-type='taskList'] {
