@@ -126,8 +126,21 @@ const editor = useEditor({
     },
     handleKeyDown: (view, event) => {
       if (event.key === 'Tab') {
-        event.preventDefault()
+        const { state } = view
+        const { selection } = state
 
+        let isInList = false
+        for (let i = selection.$from.depth; i > 0; i--) {
+          if (selection.$from.node(i).type.name === 'listItem') {
+            isInList = true
+            break
+          }
+        }
+        if (isInList) {
+          return false
+        }
+
+        event.preventDefault()
         view.dispatch(view.state.tr.insertText('    '))
         return true
       }
@@ -323,12 +336,29 @@ defineExpose({
     }
   }
 
+  ul, ol {
+    padding: 0 1rem;
+    margin: 0.5rem 1rem 0.5rem 1.5rem;
+  }
+
   ul {
     list-style: disc;
+
+    ul {
+      list-style-type: circle;
+
+      ul {
+        list-style-type: square;
+      }
+    }
   }
 
   ol {
     list-style: decimal;
+  }
+
+  ul ul, ul ol, ol ul, ol ol {
+    margin: 0.2rem 0;
   }
 
   ul[data-type='taskList'] {
