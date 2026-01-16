@@ -130,10 +130,8 @@ const loadModInfo = async () => {
   }
 }
 
-const navigateToFile = (fileName) => {
-  router.push({
-    query: { ...route.query, file: fileName }
-  })
+const openWeb = href =>{
+  window.open(href)
 }
 
 onMounted(() => loadModInfo())
@@ -167,7 +165,7 @@ watch([language, () => route.params.name], () => loadModInfo())
             <div
               v-for="(item, index) in pageInfo.availableHere"
               :key="index"
-              @click="window.open(item.href)"
+              @click="openWeb(item.href)"
               class="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border border-transparent hover:border-blue-500/20 group"
             >
               <div class="flex items-center gap-3">
