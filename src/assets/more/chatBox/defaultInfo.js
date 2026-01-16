@@ -84,12 +84,12 @@ export const themeSetting = (lang) => {
         width: new NumberField({
           defaultValue: defaultProps.width,
           label: translatableArg(lang, 'chat.box.theme.component.width', defaultProps.width),
-          min: 10
+          min: 0
         }),
         height: new NumberField({
           defaultValue: defaultProps.height,
           label: translatableArg(lang, 'chat.box.theme.component.height', defaultProps.height),
-          min: 10
+          min: 0
         }),
         alignX: new EnumField({
           defaultValue: defaultProps.alignX,
