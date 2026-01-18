@@ -36,22 +36,19 @@ const getFilesForMod = (modKey, lang) => {
 }
 
 // --- 核心：解析文件名树 ---
-// 修改 ModWiki.vue 中的 buildFileTree
 const buildFileTree = (files) => {
   const root = []
   // 保持自然排序，确保 01 排在 02 前面
   const sortedFiles = [...files].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
 
   sortedFiles.forEach(file => {
-    // 假设文件名格式为 "00.介绍.md" 或 "01-test.md"
     const parts = file.replace('.md', '').split('.')
     let currentLevel = root
 
     parts.forEach((part, index) => {
       const isLast = index === parts.length - 1
 
-      // 核心：移除显示上的前缀数字（支持 "01." 或 "01-" 格式）
-      const displayLabel = part.replace(/^(\d+[\.\-_])/, '')
+      const displayLabel = part.replace(/^(\d+[.\-_])/, '')
 
       let node = currentLevel.find(p => p.label === displayLabel)
       if (!node) {
@@ -116,7 +113,8 @@ const loadModInfo = async () => {
   pageInfo.value.treeData = buildFileTree(finalFiles)
 
   if (finalFiles.length > 0) {
-    const queryFile = route.query.file
+    const rawQuery = route.query.file
+    const queryFile = rawQuery ? rawQuery.replace(/^["']|["']$/g, '') : null
     const hasQueryFile = queryFile && finalFiles.includes(queryFile)
 
     let targetFile = finalFiles[0]

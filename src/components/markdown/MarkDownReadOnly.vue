@@ -2,7 +2,6 @@
 import { defineExpose, onBeforeUnmount, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
 import { TableKit } from '@tiptap/extension-table'
 import Superscript from '@tiptap/extension-superscript'
@@ -31,6 +30,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 import TextAlign from '@tiptap/extension-text-align'
 import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table-of-contents'
 import { TextSelection } from '@tiptap/pm/state'
+import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 
 const props = defineProps({
   content: { type: String, default: '' }
@@ -48,7 +48,7 @@ const editor = useEditor({
   editorProps: {
     attributes: {
       spellcheck: 'false'
-    }
+    },
   },
   extensions: [
     StarterKit.configure({
@@ -57,7 +57,7 @@ const editor = useEditor({
     }),
     EnhancedCodeBlock,
     CodeBlockLowlight.configure({ lowlight }),
-    Link.configure({ openOnClick: true, autolink: true }),
+    BetterLink,
     Image.configure({ allowBase64: true }),
     TableKit,
     Superscript,
@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
   :deep(.tiptap) {
     outline: none;
     width: 90%;
-    margin: 0 auto;
+    margin: 50px auto;
     min-height: 500px;
 
     &:focus {
@@ -152,7 +152,12 @@ onBeforeUnmount(() => {
       scroll-margin-top: 40px;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin-top: 15px;
       line-height: 1.5;
     }
@@ -253,8 +258,28 @@ onBeforeUnmount(() => {
       }
     }
 
+    ul,
+    ol {
+      margin: 0.5rem 0;
+    }
+
+    ul ul,
+    ul ol,
+    ol ul,
+    ol ol {
+      margin: 0.2rem 0 0.2rem 1.5rem;
+    }
+
     ul {
       list-style: disc;
+
+      ul {
+        list-style-type: circle;
+
+        ul {
+          list-style-type: square;
+        }
+      }
     }
 
     ol {
@@ -271,7 +296,7 @@ onBeforeUnmount(() => {
         display: flex;
         margin: 8px 0;
 
-        > label {
+        >label {
           flex: 0 0 auto;
           margin-right: 12px;
           user-select: none;
@@ -311,7 +336,7 @@ onBeforeUnmount(() => {
           }
         }
 
-        > div {
+        >div {
           flex: 1 1 auto;
           color: var(--font-color-2);
           line-height: 1.6;
@@ -322,7 +347,7 @@ onBeforeUnmount(() => {
         }
 
         &[data-checked="true"] {
-          > div {
+          >div {
             text-decoration: line-through;
             color: var(--font-color-0);
             opacity: 0.6;
@@ -356,10 +381,10 @@ onBeforeUnmount(() => {
 
       code {
         font-family: SF Mono,
-        Menlo,
-        Consolas,
-        Liberation Mono,
-        monospace;
+          Menlo,
+          Consolas,
+          Liberation Mono,
+          monospace;
         margin: 0 4px;
         background-color: var(--trans-blue-1);
         padding: 2px 4px;
@@ -374,17 +399,17 @@ onBeforeUnmount(() => {
       background-color: var(--trans-white-5);
       position: relative;
       box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05),
-      0 1px 4px hsla(0, 0%, 0%, 0.05),
-      0 2px 8px hsla(0, 0%, 0%, 0.05);
+        0 1px 4px hsla(0, 0%, 0%, 0.05),
+        0 2px 8px hsla(0, 0%, 0%, 0.05);
       overflow-x: auto;
 
       code {
         font-size: 15px;
         font-family: SF Mono,
-        Menlo,
-        Consolas,
-        Liberation Mono,
-        monospace;
+          Menlo,
+          Consolas,
+          Liberation Mono,
+          monospace;
         float: left;
         min-width: 100%;
 
@@ -472,7 +497,7 @@ onBeforeUnmount(() => {
 
     }
 
-    & > div:nth-child(1) {
+    &>div:nth-child(1) {
       transition: all 0.2s;
       margin: 0 auto;
       min-height: v-bind(editorHeight);

@@ -28,7 +28,7 @@ const portraitFilter = (key, value) => {
 }
 
 const portraitDisplayTemplate = (key, value) => {
-  return `${translatable(lang.value, 'chat.box.component.global.portrait.get.type')}：${value.type}  ${translatable(lang.value, `chat.box.component.global.portrait.get.${value.type}.value`)}：${value.value}`
+  return `${translatable(lang.value, 'chat.box.component.global.portrait.type')}：${value.type}  ${translatable(lang.value, `chat.box.component.global.portrait.texture.${value.type}`)}：${value.value}`
 }
 
 const customAnimationSearch = ref({

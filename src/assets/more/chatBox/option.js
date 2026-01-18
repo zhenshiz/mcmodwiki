@@ -24,6 +24,11 @@ export const portraitType = createEnum([
   { label: 'chat.box.theme.component.portrait.type.item', value: 'ITEM' }
 ])
 
+export const attachmentType = createEnum([
+  { label: 'chat.box.component.global.portrait.attachment.type.texture', value: 'TEXTURE' },
+  { label: 'chat.box.component.global.portrait.attachment.type.text', value: 'TEXT' }
+])
+
 export const functionalButtonType = createEnum([
   { label: 'chat.box.theme.functional.button.type.log', value: 'LOG' },
   { label: 'chat.box.theme.functional.button.type.fast_forward', value: 'FASTFORWARD' },
@@ -59,6 +64,8 @@ export const eventType = createEnum([
   { label: 'chat.box.event.type.replace', value: 'replace' },
   { label: 'chat.box.event.type.set_autoplay', value: 'set_autoplay' },
   { label: 'chat.box.event.type.scale', value: 'scale' },
+  { label: 'chat.box.event.type.play_animation', value: 'play_animation' },
+  { label: 'chat.box.event.type.restart_animation', value: 'restart_animation' },
   { label: 'chat.box.event.type.terra_entity_shop', value: 'terra_entity_shop' },
 ])
 

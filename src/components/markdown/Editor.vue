@@ -2,7 +2,6 @@
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 //插件
 import StarterKit from '@tiptap/starter-kit'
-import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
 import { TableKit } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
@@ -38,6 +37,7 @@ import LinkUpdatePopup from '@/components/markdown/components/LinkUpdatePopup.vu
 import { html as beautifyHtml } from 'js-beautify'
 import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table-of-contents'
 import { TextSelection } from '@tiptap/pm/state'
+import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 
 // 存储提取的标题
 const headings = ref([])
@@ -65,10 +65,7 @@ const editor = useEditor({
     CodeBlockLowlight.configure({
       lowlight
     }),
-    Link.configure({
-      openOnClick: false,
-      autolink: true
-    }),
+    BetterLink,
     Image.configure({
       allowBase64: true
     }),

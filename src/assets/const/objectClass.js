@@ -9,7 +9,6 @@ class BaseField {
    * @param {'horizontal' | 'vertical'} layout
    * @param {Boolean} required
    * @param {function(BaseField,any): boolean} visible 2个参数一个是当前的结构，一个参数是当前字段的值
-   * @param {function(BaseField,any): boolean}
    */
   constructor({ key, label, type, defaultValue, tips, layout, required, visible,shouldSerialize }) {
     this.key = key               // 字段名
@@ -20,9 +19,6 @@ class BaseField {
     this.layout = layout || 'horizontal' // horizontal 或者 vertical
     this.required = required || false
     this.visible = visible || null
-    this.shouldSerialize = shouldSerialize || ((field, value) => {
-      return value !== field.defaultValue
-    })
   }
 
   getDefault() {
@@ -33,10 +29,6 @@ class BaseField {
 
   isVisible(field, value) {
     return typeof this.visible === 'function' ? this.visible(field, value) : true
-  }
-
-  getSerializedValue(value) {
-    return value
   }
 }
 
@@ -187,37 +179,6 @@ export class ObjectField extends BaseField {
   constructor({ properties, ...rest }) {
     super({ type: 'object', defaultValue: {}, ...rest })
     this.properties = properties // { key: FieldDefinition }
-  }
-
-  getSerializedData(currentValue) {
-    if (!currentValue || typeof currentValue !== 'object') return {}
-    
-    const result = {}
-    for (const [key, field] of Object.entries(this.properties)) {
-      const realKey = field.key || key
-      const value = currentValue[realKey]
-
-      if (field.visible && !field.isVisible(field, currentValue)) {
-        continue
-      }
-
-      if (field.shouldSerialize(field, value)) {
-        if (field instanceof ObjectField) {
-          result[realKey] = field.getSerializedData(value)
-        } else {
-          result[realKey] = value
-        }
-      }
-    }
-    return result
-  }
-
-  getDefault() {
-    const obj = {}
-    for (const [key, field] of Object.entries(this.properties)) {
-      obj[key] = field.getDefault()
-    }
-    return obj
   }
 }
 

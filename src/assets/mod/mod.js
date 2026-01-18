@@ -47,7 +47,7 @@ export const modList = [
       lang: 'more.name.1',
       router: '/chatbox/theme'
     }],
-    modVersion: '1.0.9'
+    modVersion: '1.1'
   },
   {
     lang: 'mod.name.2',
