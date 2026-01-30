@@ -1,24 +1,25 @@
 <script setup>
-import Button from '@/components/Button.vue'
+import { ref, computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
-import { translatable } from '@/assets/translatable/translatable.js'
+import Modal from '@/components/Modal.vue'
+import Button from '@/components/Button.vue'
 
 const props = defineProps({
   title: String,
   content: String,
   positiveText: {
     type: String,
-    default: translatable(usePageStore().setting.language,'component.dialog.positive')
+    default: t('确定')
   },
   negativeText: {
     type: String,
-    default: translatable(usePageStore().setting.language,'component.dialog.negative')
+    default: t('取消')
   },
   type: {
     type: String,
     default: 'info',
-    validator(value, props) {
+    validator(value) {
       return ['info', 'warn', 'success', 'error'].includes(value)
     }
   },
@@ -30,111 +31,78 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  onPositiveClick: {
-    type: Function,
-    default: () => {
-    }
-  },
-  onNegativeClick: {
-    type: Function,
-    default: () => {
-    }
-  },
-  onMaskClick: {
-    type: Function,
-    default: () => {
-    }
-  },
-  onEscClick: {
-    type: Function,
-    default: () => {
-    }
-  }
+  // 回调函数
+  onPositiveClick: Function,
+  onNegativeClick: Function,
+  onMaskClick: Function,
+  onEscClick: Function
 })
 
-const isDark = computed(() => usePageStore().setting.themeIndex === 1)
-const emit = defineEmits(['onPositiveClick', 'onNegativeClick', 'onMaskClick', 'onEscClick'])
+const pageStore = usePageStore()
+const isDark = computed(() => pageStore.isDark)
+
+// 控制 Modal 显示
 const show = ref(true)
 
-const emitEvent = (event) => {
-  if (event === 'onPositiveClick') {
-    show.value = false
-    props.onPositiveClick()
-  } else if (event === 'onNegativeClick') {
-    show.value = false
-    props.onNegativeClick()
-  } else if (event === 'onMaskClick') {
-    if (props.maskClosable) show.value = false
-    props.onMaskClick()
-  } else if (event === 'onEsc') {
-    if (props.escClosable) show.value = false
-    props.onEscClick()
+// --- 样式与图标逻辑 ---
+const iconConfig = computed(() => {
+  const map = {
+    info: { icon: 'lucide:info', color: isDark.value ? '#80ccff' : '#0969da' },
+    warn: { icon: 'lucide:triangle-alert', color: '#d4a72c' },
+    success: { icon: 'lucide:check', color: '#2da44e' },
+    error: { icon: 'lucide:x', color: '#fa4549' }
   }
-}
-
-const escEvent = event => {
-  if (event.key === 'Escape') {
-    emitEvent('onEsc')
-  }
-}
-
-document.addEventListener('keydown', escEvent)
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', escEvent)
+  return map[props.type] || map.info
 })
 
+// --- 事件处理 ---
+const handleClose = () => {
+  show.value = false
+}
+
+const handlePositive = () => {
+  handleClose()
+  props.onPositiveClick?.()
+}
+
+const handleNegative = () => {
+  handleClose()
+  props.onNegativeClick?.()
+}
+
+const handleMaskClick = () => {
+  props.onMaskClick?.()
+}
+
+const handleEscClick = () => {
+  props.onEscClick?.()
+}
 </script>
 
 <template>
-  <teleport to="body">
-    <div v-if="show" class="fixed top-0 left-0 size-full center z-[998]">
-      <div
-        class="relative w-[95%] bg-white center flex-col rounded dark:bg-dark-blue sm:w-[30%] z-[1000]">
-        <div class="flex flex-row justify-between mt-5 w-[90%] text-[20px]">
-          <div class="flex flex-row">
-            <Icon
-              class="mr-[17px] font-[30px] icon"
-              width="30"
-              height="30"
-              :color="`${
-              {
-                warn: '#d4a72c',
-                success: '#2da44e',
-                error: '#fa4549',
-                info: `${isDark?'#80ccff':'#0969da'}`
-              }[type]
-            }`"
-              :icon="`lucide:${
-            {
-              warn: 'triangle-alert',
-              success: 'check',
-              error: 'x',
-              info: 'info'
-            }[type]
-            }`"
-            />
-            <div class="flex items-center font-bold dark:text-white">{{ title }}</div>
-          </div>
-          <div @click="show=false" class="flex items-center w-5 h-5 select-none dark:text-white cursor-pointer">x</div>
-        </div>
-        <div class="min-h-[50px] w-[90%] flex justify-start items-start my-3 dark:text-white">
-          {{ content }}
-        </div>
-        <div class="flex w-full justify-end items-center mb-5">
-          <Button @click="emitEvent('onNegativeClick')" is-toggle-color
-                        :color="'#fa454a'"
-                        :background="isDark?'#032742':'#fff'"
-                        class="w-[100px]">
-            {{ negativeText }}
-          </Button>
-          <Button @click="emitEvent('onPositiveClick')" is-toggle-color
-                        :background="isDark?'#032742':'#fff'"
-                        class="w-[100px] ml-5 mr-5">
-            {{ positiveText }}
-          </Button>
-        </div>
+  <Modal v-model:show="show" :width="'400px'" :mask-closable="maskClosable" :close-on-esc="escClosable"
+    @close="handleMaskClick" @after-leave="$emit('close')">
+    <template #header>
+      <div class="flex items-center gap-3">
+        <Icon :icon="iconConfig.icon" :color="iconConfig.color" width="26" height="26" />
+        <span class="font-bold text-lg dark:text-white">{{ title }}</span>
       </div>
-      <div class="mask z-[999]" @click="emitEvent('onMaskClick')" />
-    </div>
-  </teleport>
+    </template>
+
+    <slot>
+      <div class="py-2 text-base text-gray-600 dark:text-gray-300">
+        {{ content }}
+      </div>
+    </slot>
+
+    <template #footer>
+      <Button @click="handleNegative" :color="'#fa454a'" :background="isDark ? '#032742' : '#fff'" class="w-[80px]">
+        {{ negativeText }}
+      </Button>
+
+      <Button @click="handlePositive" :background="isDark ? '#032742' : '#fff'" class="w-[80px]">
+        {{ positiveText }}
+      </Button>
+    </template>
+  </Modal>
 </template>

@@ -1,53 +1,38 @@
 <script setup>
-import { language, translatable, translatableArg } from '@/assets/translatable/translatable.js'
-import Popover from '@/components/Popover.vue'
+import Dropdown from '@/components/Dropdown.vue'
 import { usePageStore } from '@/stores/index.js'
 import { Icon } from '@iconify/vue'
-import { webHref } from '@/assets/const/web.js'
-import gsap from 'gsap'
 import { useRouter } from 'vue-router'
-import { getOperatingSystem } from '../utils/web.js'
 import Modal from '@/components/Modal.vue'
-import { modList, moreUtilList } from '@/assets/mod/mod.js'
+import { modList, moreUtilList } from '@/assets/info/mod.js'
+import { i18nScope } from '@/languages'
+import { useVoerkaI18n } from '@voerkai18n/vue'
+import { webUtil } from '@/utils/webUtil.js'
+import { useEventListener } from '@vueuse/core'
+import { languageList, webHref } from '@/assets/info/web.js'
+import { ref, computed, onMounted } from 'vue'
+
+const { languages } = useVoerkaI18n(i18nScope)
 
 const router = useRouter()
 const pageStore = usePageStore()
 const isDark = computed(() => pageStore.isDark)
-const lang = computed(() => pageStore.setting.language)
-const smSettingVisible = ref(false)
 const searchVisible = ref(false)
-//移动端
-const modVisible = ref(false)
-const moreVisible = ref(false)
-const languageVisible = ref(false)
-
-const languageList = ref(language.values())
 
 const search = ref('')
 const searchList = ref([])
 const change = () => {
-  searchList.value = modList.filter(item => translatable(lang, item.lang).toLowerCase().includes(search.value.toLowerCase()))
+  searchList.value = modList.filter(item => item.lang.toLowerCase().includes(search.value.toLowerCase()))
 }
 
 const toggleTheme = () => {
   if (isDark.value) {
-    //光明状态
     document.body.classList.remove('dark')
-    pageStore.setSetting({ dark: false })
+    pageStore.isDark = false
   } else {
-    //黑暗状态
     document.body.classList.add('dark')
-    pageStore.setSetting({ dark: true })
+    pageStore.isDark = true
   }
-}
-
-const smSetting = ref()
-const closeSmSetting = () => {
-  gsap.to(smSetting.value, {
-    duration: 0.5, x: -window.innerWidth * 0.8, onComplete: () => {
-      smSettingVisible.value = false
-    }
-  })
 }
 
 const gotoModWiki = item => {
@@ -58,7 +43,7 @@ const openWeb = (url) => {
   window.open(url)
 }
 
-//进度条
+// 进度条逻辑保持不变
 const scrollProgress = ref(0)
 const scrollVisible = ref(false)
 const isUp = ref(false)
@@ -71,10 +56,8 @@ const handleScroll = event => {
   isUp.value = scrollProgress.value <= lastScrollTop.value
   lastScrollTop.value = scrollProgress.value <= 0 ? 0 : scrollProgress.value
 
-  // 显示进度条
   scrollVisible.value = true
 
-  // 如果用户滚动，重置 3 秒隐藏计时器
   if (scrollTimeout.value) {
     clearTimeout(scrollTimeout.value)
   }
@@ -91,222 +74,122 @@ const scrollTo = () => {
   }
 }
 
-//监听玩家按键打开搜索页面
 const keydownToSearch = event => {
-  // 获取当前操作系统
-  const os = getOperatingSystem()
-
-  // Linux、Windows 使用 Ctrl+K，macOS 使用 Cmd+K
+  const os = webUtil.getOperatingSystem()
   if ((os === 'Mac' && event.metaKey && event.key === 'k') ||
     (os !== 'Mac' && event.ctrlKey && event.key === 'k')) {
-    event.preventDefault()  // 防止默认行为
+    event.preventDefault()
     searchVisible.value = true
   }
 }
 
-window.addEventListener('keydown', keydownToSearch)
-window.addEventListener('scroll', handleScroll)
+useEventListener('keydown', keydownToSearch)
+useEventListener('scroll', handleScroll)
 
 onMounted(() => {
   if (isDark.value) document.body.classList.add('dark')
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', keydownToSearch)
-  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
 <template>
   <div class="w-full">
-    <!--头部导航栏-->
     <div class="relative top-0 h-16 w-full flex justify-center shadow z-20 dark:bg-dark-blue">
       <div class="flex flex-row justify-between w-[90%] size-full">
-        <!--header左侧-->
         <div class="z-10 flex flex-row items-center">
           <div class="ml-5 text-xl font-bold dark:text-white">MCModWiki</div>
         </div>
-        <!--header右侧-->
+        
         <div class="hidden z-10 sm:flex flex-row items-center">
-          <Popover mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
+          
+          <Dropdown>
             <template #trigger>
               <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
                 height="30" @click="() => searchVisible = true" />
             </template>
-            <div class="text-[#3487d5] text-center text-sm p-1">
-              {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
-              }}
+            <div class="text-[#3487d5] text-center text-sm p-3">
+              {{ t('按下 {} + k 以搜索', webUtil.getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl') }}
             </div>
-          </Popover>
-          <!--页面跳转-->
+          </Dropdown>
+
           <Link class="ml-5 m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/`">
-          {{ translatable(lang, 'layout.link.1') }}
+            {{ t('首页') }}
           </Link>
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/author`">
-          {{ translatable(lang, 'layout.link.2') }}
+            {{ t('关于我们') }}
           </Link>
           <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/editor`">
-          {{ translatable(lang, 'layout.link.3') }}
+            {{ t('编辑') }}
           </Link>
-          <Popover v-if="modList.length" mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
+
+          <Dropdown v-if="modList.length">
             <template #trigger>
               <div class="cursor-pointer m-2 text-lg text-text-blue whitespace-nowrap">
-                {{ translatable(lang, 'layout.link.4') }}
+                {{ t('模组') }}
               </div>
             </template>
-            <div class="size-full flex flex-col">
+            <div class="flex flex-col py-2">
               <Link v-for="(item, index) in modList" class="m-2 text-lg text-text-blue"
-                :href="`/wiki/${translatable(lang, item.lang)}`" hoverLineType="toFlanks" :key="index">
-              {{ translatable(lang, item.lang) }}
+                    :href="`/wiki/${item.lang}`" hoverLineType="toFlanks" :key="index">
+                {{ item.lang }}
               </Link>
             </div>
-          </Popover>
-          <Popover v-if="moreUtilList.length" mode="bottom" :background-color="isDark ? '#002941' : '#ffffff'">
+          </Dropdown>
+
+          <Dropdown v-if="moreUtilList.length">
             <template #trigger>
               <div class="cursor-pointer text-lg text-text-blue m-2 whitespace-nowrap">
-                {{ translatable(lang, 'layout.link.5') }}
+                {{ t('更多') }}
               </div>
             </template>
-            <div class="size-full flex flex-col">
-              <Link v-for="(item, index) in moreUtilList" class="m-2 text-lg text-text-blue" :href="item.link"
+            <div class="flex flex-col py-2">
+              <Link v-for="(item, index) in moreUtilList" class="m-2 text-lg text-text-blue" :href="item.router"
                 hoverLineType="toFlanks" :key="index">
-              {{ translatable(lang, item.lang) }}
+                {{ t(item.lang) }}
               </Link>
             </div>
-          </Popover>
-          <!--切换主题 切换语言-->
-          <div
-            class="center h-[30px]  p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
-            <Popover mode="bottom">
+          </Dropdown>
+
+          <div class="center h-[30px] p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
+            
+            <Dropdown>
               <template #trigger>
                 <Icon width="35" height="35" icon="flowbite:language-outline" class="cursor-pointer dark:text-white" />
               </template>
-              <div class="size-full flex flex-col dark:bg-dark-blue">
-                <div @click="() => pageStore.setSetting({ language: item.value })"
-                  class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue"
-                  v-for="(item, index) in languageList" :key="index">
-                  {{ item.label }}
+              <div class="flex flex-col dark:bg-dark-blue">
+                <div @click="() => i18nScope.change(lang.name)"
+                  class="flex flex-row items-center justify-center px-4 py-2 cursor-pointer dark:text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                  v-for="(lang, index) in languages" :key="index">
+                  {{ languageList[lang.name] }}
                 </div>
-                <div class="flex flex-row items-center p-2 dark:text-white theme-cursor-blue"
+                <div class="flex flex-row items-center justify-center px-4 py-2 border-t dark:border-gray-600 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   @click="openWeb(webHref.translatable)">
-                  <div>
-                    {{ translatable(lang, 'layout.translatable.1') }}<br>
-                    {{ translatable(lang, 'layout.translatable.2') }}
-                  </div>
-                  <Icon class="ml-2 cursor-pointer" width="25" height="25" icon="quill:link-out" />
+                  <Translate id="notice" class="text-xs text-center">
+                    找不到您的语言？<br>
+                    点击这里协助翻译
+                  </Translate>
+                  <Icon class="ml-2" width="20" height="20" icon="quill:link-out" />
                 </div>
               </div>
-            </Popover>
+            </Dropdown>
+
             <Icon width="35" height="35" :color="isDark ? '#66cffc' : '#ff454f'"
-              :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`" class="cursor-pointer" @click="toggleTheme" />
+              :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`" class="cursor-pointer ml-3" @click="toggleTheme" />
           </div>
+
           <div class="size-full flex items-center ml-2 mr-5">
             <Icon @click="openWeb(webHref.github)" :color="isDark ? '#fff' : '#000'" width="35" height="35"
               icon="mdi:github" class="cursor-pointer" />
           </div>
         </div>
-
-        <!--移动端适配按钮-->
-        <div class="center sm:hidden z-10 mr-5 dark:text-white">
-          <Popover class="mr-4" :background-color="isDark ? '#002941' : '#ffffff'">
-            <template #trigger>
-              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
-                height="30" @click="() => searchVisible = true" />
-            </template>
-            <div class="text-[#3487d5] text-center text-sm p-1">
-              {{ translatableArg(lang, 'layout.search.1', getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl')
-              }}
-            </div>
-          </Popover>
-          <Icon @click="() => smSettingVisible = true" width="35" height="35" icon="ph:list-bold" />
-        </div>
       </div>
     </div>
 
-    <!--移动端设置面板-->
-    <div class="sm:hidden absolute top-0 left-0 size-full min-h-lvh flex flex-row z-50" v-if="smSettingVisible">
-      <!--设置面板-->
-      <div ref="smSetting"
-        class="w-[80%] bg-white dark:bg-dark-blue flex flex-col items-center justify-start h-full z-10">
-        <div class="w-[80%] flex items-start">
-          <Link class="m-2 mt-10 text-lg text-text-blue whitespace-nowrap" :href="`/`">
-          {{ translatable(lang, 'layout.link.1') }}
-          </Link>
-        </div>
-        <div class="w-[80%] flex items-start">
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" :href="`/author`">
-          {{ translatable(lang, 'layout.link.2') }}
-          </Link>
-        </div>
-        <div class="w-[80%] flex items-start">
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" :href="`/editor`">
-          {{ translatable(lang, 'layout.link.3') }}
-          </Link>
-        </div>
-        <div class="w-[80%] flex items-start justify-between text-text-blue" @click="() => modVisible = !modVisible">
-          <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
-            {{ translatable(lang, 'layout.link.5') }}
-          </div>
-          <div class="m-2">
-            +
-          </div>
-        </div>
-        <div v-show="modVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="(item, index) in modList" class="m-2 text-text-blue"
-            :href="`/wiki/${translatable(lang, item.lang)}`" :key="index">
-          {{ translatable(lang, item.lang) }}
-          </Link>
-        </div>
-
-        <div class="w-[80%] flex items-start justify-between text-text-blue" @click="() => moreVisible = !moreVisible">
-          <div class="cursor-pointer m-2 text-lg whitespace-nowrap">
-            {{ translatable(lang, 'layout.link.4') }}
-          </div>
-          <div class="m-2">
-            +
-          </div>
-        </div>
-        <div v-show="moreVisible" class="w-[95%] flex flex-col border border-text-blue">
-          <Link v-for="(item, index) in moreUtilList" class="m-2 text-text-blue"
-            :href="`/wiki/${translatable(lang, item.lang)}`" :key="index">
-          {{ translatable(lang, item.lang) }}
-          </Link>
-        </div>
-
-        <Icon width="35" height="35" icon="flowbite:language-outline" class="dark:text-white"
-          @click="() => languageVisible = !languageVisible" />
-        <div v-show="languageVisible" class="w-[95%] flex flex-col border border-text-blue dark:bg-dark-blue">
-          <div @click="pageStore.setSetting({ language: item.value })"
-            class="flex flex-row items-center justify-center px-1 h-[30px] dark:text-text-blue theme-cursor-blue border-b border-b-text-blue"
-            v-for="(item, index) in languageList" :key="index">
-            {{ item.text }}
-          </div>
-          <div class="flex flex-row items-center justify-around p-2 dark:text-white theme-cursor-blue"
-            @click="openWeb(webHref.translatable)">
-            <div>
-              {{ translatable(lang, 'layout.translatable.1') }}<br>
-              {{ translatable(lang, 'layout.translatable.2') }}
-            </div>
-            <Icon class="ml-2 cursor-pointer" width="25" height="25" icon="quill:link-out" />
-          </div>
-        </div>
-
-        <Icon width="35" height="35" :color="isDark ? '#66cffc' : '#ff454f'" :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`"
-          class="cursor-pointer mt-3 mb-3" @click="toggleTheme" />
-        <Icon @click="openWeb(webHref.github)" :color="isDark ? '#fff' : '#000'" width="35" height="35" icon="mdi:github"
-          class="cursor-pointer" />
-      </div>
-      <!--遮蔽-->
-      <div @click="closeSmSetting" class="mask" />
-    </div>
-    <!--路由页面-->
     <div class="dark:bg-black-blue min-h-[calc(100vh-64px)]">
       <router-view></router-view>
     </div>
 
-    <!--进度条-->
     <div v-show="scrollVisible"
-      class="fixed bottom-5 right-5 h-12 w-[220px] rounded-full bg-white dark:bg-dark-blue center flex-row shadow">
+      class="fixed bottom-5 right-5 h-12 w-[220px] rounded-full bg-white dark:bg-dark-blue center flex-row shadow z-50">
       <div class="w-[100px] h-2 rounded-full" :style="{ backgroundColor: isDark ? '#3f3f45' : '#999' }">
         <div class="h-full rounded-full"
           :style="{ width: scrollProgress + 'px', backgroundColor: isDark ? '#0094f2' : '#0079ea' }" />
@@ -318,12 +201,10 @@ onBeforeUnmount(() => {
     </div>
   </div>
 
-  <!--搜索框-->
-  <Modal :show="searchVisible" @default-close="() => searchVisible = false" :isShowClose="false" :negativeVisible="false"
-    :positiveVisible="false">
-    <template #content>
+  <Modal v-model:show="searchVisible">
+    <template #default>
       <div class="flex flex-col size-full">
-        <Input v-model="search" @update:modelValue="change" :placeholder="translatable(lang, 'layout.search.2')"
+        <Input v-model="search" @change="change" :placeholder="t('输入内容以自动搜索')"
           default-model="search" is-debounce>
         <template #header>
           <div class="w-[25px] h-[25px] center dark:text-white">
@@ -336,9 +217,9 @@ onBeforeUnmount(() => {
           <div class="flex flex-row size-full">
             #&nbsp;
             <div class="flex flex-row justify-between size-full">
-              <div>{{ translatable(lang, item.lang) }}</div>
+              <div>{{ item.lang }}</div>
               <div class="ellipsis w-[300px] text-end">
-                {{ translatable(lang, item.description) }}
+                {{ t(item.description) }}
               </div>
             </div>
           </div>
@@ -347,13 +228,3 @@ onBeforeUnmount(() => {
     </template>
   </Modal>
 </template>
-
-<style lang="scss" scoped>
-.ellipsis {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>

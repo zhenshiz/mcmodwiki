@@ -1,0 +1,94 @@
+export const attributeSuggestions = [{
+  label: '护甲值',
+  value: 'minecraft:generic.armor'
+}, {
+  label: '盔甲韧性',
+  value: 'minecraft:generic.armor_toughness'
+}, {
+  label: '攻击伤害',
+  value: 'minecraft:generic.attack_damage'
+}, {
+  label: '击退',
+  value: 'minecraft:generic.attack_knockback'
+}, {
+  label: '攻击速度',
+  value: 'minecraft:generic.attack_speed'
+}, {
+  label: '方块破坏速度',
+  value: 'minecraft:player.block_break_speed'
+}, {
+  label: '方块交互距离',
+  value: 'minecraft:player.block_interaction_range'
+}, {
+  label: '着火时间',
+  value: 'minecraft:generic.burning_time'
+}, {
+  label: '爆炸击退抗性',
+  value: 'minecraft:generic.explosion_knockback_resistance'
+}, {
+  label: '实体交互距离',
+  value: 'minecraft:player.entity_interaction_range'
+}, {
+  label: '摔落伤害倍数',
+  value: 'minecraft:generic.fall_damage_multiplier'
+}, {
+  label: '飞行速度',
+  value: 'minecraft:generic.flying_speed'
+}, {
+  label: '生物跟随距离',
+  value: 'minecraft:generic.follow_range'
+}, {
+  label: '重力',
+  value: 'minecraft:generic.gravity'
+}, {
+  label: '跳跃力度',
+  value: 'minecraft:generic.jump_strength'
+}, {
+  label: '击退抗性',
+  value: 'minecraft:generic.knockback_resistance'
+}, {
+  label: '幸运值',
+  value: 'minecraft:generic.luck'
+}, {
+  label: '最大伤害吸收值',
+  value: 'minecraft:generic.max_absorption'
+}, {
+  label: '最大生命值',
+  value: 'minecraft:generic.max_health'
+}, {
+  label: '挖掘效率',
+  value: 'minecraft:player.mining_efficiency'
+}, {
+  label: '移动效率',
+  value: 'minecraft:generic.movement_efficiency'
+}, {
+  label: '速度',
+  value: 'minecraft:generic.movement_speed'
+}, {
+  label: '额外氧气',
+  value: 'minecraft:generic.oxygen_bonus'
+}, {
+  label: '安全摔落高度',
+  value: 'minecraft:generic.safe_fall_distance'
+}, {
+  label: '尺寸',
+  value: 'minecraft:generic.scale'
+}, {
+  label: '潜行速度',
+  value: 'minecraft:player.sneaking_speed'
+}, {
+  label: '僵尸增援',
+  value: 'minecraft:zombie.spawn_reinforcements'
+}, {
+  label: '最大行走高度',
+  value: 'minecraft:generic.step_height'
+}, {
+  label: '水下挖掘速度',
+  value: 'minecraft:player.submerged_mining_speed'
+}, {
+  label: '横扫伤害比率',
+  value: 'minecraft:player.sweeping_damage_ratio'
+}, {
+  label: '水中移动效率',
+  value: 'minecraft:generic.water_movement_efficiency'
+}]

@@ -53,7 +53,8 @@ const editor = useEditor({
   extensions: [
     StarterKit.configure({
       codeBlock: false,
-      link: false
+      link: false,
+      table: false
     }),
     EnhancedCodeBlock,
     CodeBlockLowlight.configure({ lowlight }),

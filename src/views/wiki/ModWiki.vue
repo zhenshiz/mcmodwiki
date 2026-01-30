@@ -1,18 +1,22 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { modList } from '@/assets/mod/mod.js'
-import { translatable } from '@/assets/translatable/translatable.js'
+import { modList } from '@/assets/info/mod.js'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
 import MarkdownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import TreeItem from './component/TreeItem.vue'
+import { i18nScope } from '@/languages'
+import { useVoerkaI18n } from '@voerkai18n/vue'
+import { useMessage } from '@/components/register/useMessage.js'
 
 const pageStore = usePageStore()
 const route = useRoute()
-const language = computed(() => pageStore.setting.language)
+const { t } = useVoerkaI18n(i18nScope)
+const language = computed(() => i18nScope.activeLanguage)
 const isDark = computed(() => pageStore.isDark)
 const router = useRouter()
+const message = useMessage()
 
 const pageInfo = ref({
   name: '',
@@ -69,18 +73,24 @@ const buildFileTree = (files) => {
 const loadMarkdown = async (mod, lang, fileName) => {
   try {
     const res = await fetch(`/md/${mod}/${lang}/${fileName}`)
+    // 检查响应状态
+    if (!res.ok) throw new Error('Network response was not ok')
+
     const text = await res.text()
-    if (text.startsWith('<!DOCTYPE html>')) throw new Error('Not Found')
+    // 检查是否返回了 SPA 的 404 HTML 页面
+    if (text.trim().startsWith('<!DOCTYPE html>') || text.trim().startsWith('<html')) {
+      throw new Error('Not Found')
+    }
     return text
   } catch (err) {
-    console.error('加载 Markdown 失败:', err)
+    message.warning(t('当前语言没有文档哦，请使用其它语言'))
     return ''
   }
 }
 
 const selectFile = async (fileName) => {
   currentFileName.value = fileName
-  const mod = modList.find(item => translatable(language.value, item.lang) === route.params.name)
+  const mod = modList.find(item => item.lang === route.params.name)
   if (!mod) return
 
   const modKey = (mod.name || route.params.name).toLowerCase()
@@ -98,16 +108,22 @@ const loadModInfo = async () => {
   pageInfo.value.markdown = ''
   pageInfo.value.name = ''
 
-  const mod = modList.find(item => translatable(language.value, item.lang) === route.params.name)
+  const mod = modList.find(item => item.lang === route.params.name)
   if (!mod) return
 
-  pageInfo.value.name = translatable(language.value, mod.lang)
+  pageInfo.value.name = mod.lang
   pageInfo.value.version = mod.modVersion
   pageInfo.value.availableHere = mod.availableHere || []
   pageInfo.value.moreUtil = mod.moreUtil || []
 
   const modKey = (mod.name || route.params.name).toLowerCase()
   const files = getFilesForMod(modKey, language.value)
+
+  // ⚠️ 核心修改：如果当前语言和默认配置都没有文件，说明该模组确实没文档
+  if (files.length === 0 && (!mod.files || mod.files.length === 0)) {
+    message.warning(t('当前语言没有文档哦，请使用其它语言'))
+  }
+
   const finalFiles = files.length > 0 ? files : (mod.files || [])
 
   pageInfo.value.treeData = buildFileTree(finalFiles)
@@ -128,7 +144,7 @@ const loadModInfo = async () => {
   }
 }
 
-const openWeb = href =>{
+const openWeb = href => {
   window.open(href)
 }
 
@@ -151,21 +167,18 @@ watch([language, () => route.params.name], () => loadModInfo())
             {{ pageInfo.name }}</h1>
           <span
             class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-sm">
-            {{ pageInfo.version }}
-          </span>
+                        {{ pageInfo.version }}
+                    </span>
         </div>
 
         <div v-if="pageInfo.availableHere.length" class="mb-6">
           <div class="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-wider px-2">
-            {{ translatable(language, 'wiki.sidebar.1') }}
+            {{ t('获取途径') }}
           </div>
           <div class="space-y-2">
-            <div
-              v-for="(item, index) in pageInfo.availableHere"
-              :key="index"
-              @click="openWeb(item.href)"
-              class="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border border-transparent hover:border-blue-500/20 group"
-            >
+            <div v-for="(item, index) in pageInfo.availableHere" :key="index"
+                 @click="openWeb(item.href)"
+                 class="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border border-transparent hover:border-blue-500/20 group">
               <div class="flex items-center gap-3">
                 <Icon :icon="item.icon.icon" width="20" height="20"
                       :color="isDark ? item.icon.darkColor : item.icon.lightColor" />
@@ -180,14 +193,11 @@ watch([language, () => route.params.name], () => loadModInfo())
 
         <div v-if="pageInfo.moreUtil.length" class="mb-6">
           <div class="space-y-2">
-            <div
-              v-for="(item, index) in pageInfo.moreUtil"
-              :key="index"
-              @click="router.push(item.router)"
-              class="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border-l-4 border-l-transparent hover:border-l-blue-500 bg-gray-100/50 dark:bg-slate-800/50"
-            >
-              <span class="text-sm dark:text-gray-300 ml-2">{{ translatable(language, item.lang)
-                }}</span>
+            <div v-for="(item, index) in pageInfo.moreUtil" :key="index"
+                 @click="router.push(item.router)"
+                 class="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border-l-4 border-l-transparent hover:border-l-blue-500 bg-gray-100/50 dark:bg-slate-800/50">
+                            <span class="text-sm dark:text-gray-300 ml-2">{{ item.lang
+                              }}</span>
             </div>
           </div>
         </div>
@@ -196,50 +206,41 @@ watch([language, () => route.params.name], () => loadModInfo())
 
         <nav class="flex-1 overflow-y-auto custom-scrollbar pr-2">
           <div class="text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest px-2">
-            {{ translatable(language, 'wiki.sidebar.2') }}
+            {{ t('文档') }}
           </div>
           <div class="tree-container">
-            <TreeItem
-              v-for="node in pageInfo.treeData"
-              :key="node.label"
-              :item="node"
-              :active-file="currentFileName"
-              @select="selectFile"
-            />
+            <TreeItem v-for="node in pageInfo.treeData" :key="node.label" :item="node"
+                      :active-file="currentFileName" @select="selectFile" />
           </div>
         </nav>
       </div>
     </aside>
 
     <main
-          class="flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
+      class="flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
       <div class="mx-auto px-12 min-h-full">
-        <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer" :content="pageInfo.markdown" />
+        <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer"
+                          :content="pageInfo.markdown" />
       </div>
     </main>
 
     <aside class="w-64 hidden xl:block border-l dark:border-slate-800 p-8 shrink-0">
       <div class="sticky top-10">
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
-          {{ translatable(language, 'wiki.sidebar.3') }}
+          {{ t('目录') }}
         </div>
         <ul class="space-y-1 relative border-l dark:border-slate-800">
           <li v-for="h in mdRenderer?.headings" :key="h.id"
               :style="{ paddingLeft: `${(h.level - 1) * 0.75}rem` }"
               class="transition-all duration-300"
               :class="{
-              'is-active': h.isActive && !h.isScrolledOver,
-              'is-scrolled-over': h.isScrolledOver
-            }"
-          >
-            <a
-              href="javascript:;"
-              @click="mdRenderer.scrollToHeading(h.id)"
-              class="block py-1.5 text-xs border-l-2 -ml-[2px] pl-4 transition-colors"
-              :class="(h.isActive && !h.isScrolledOver)
-              ? 'text-blue-500 border-blue-500 font-bold'
-              : 'text-gray-500 border-transparent hover:text-gray-700 dark:hover:text-gray-300'"
-            >
+                            'is-active': h.isActive && !h.isScrolledOver,
+                            'is-scrolled-over': h.isScrolledOver
+                        }">
+            <a href="javascript:;" @click="mdRenderer.scrollToHeading(h.id)"
+               class="block py-1.5 text-xs border-l-2 -ml-[2px] pl-4 transition-colors" :class="(h.isActive && !h.isScrolledOver)
+                                ? 'text-blue-500 border-blue-500 font-bold'
+                                : 'text-gray-500 border-transparent hover:text-gray-700 dark:hover:text-gray-300'">
               {{ h.textContent }}
             </a>
           </li>

@@ -8,11 +8,11 @@ const routes = [
       { path: '/author', component: () => import('@/views/author/AuthorPage.vue') },
       { path: '/editor', component: () => import('@/views/editor/EditorPage.vue') },
       { path: '/wiki/:name', component: () => import('@/views/wiki/ModWiki.vue') },
-
-      //神秘小工具
-      { path: '/chatbox/theme', component: () => import('@/views/other/chatBox/ChatBoxTheme.vue') },
-      { path: '/chatbox/dialogues', component: () => import('@/views/other/chatBox/ChatBoxDialogues.vue') },
     ]
+  },
+  {
+    path: '/chatbox/visual',
+    component: () => import('@/views/more/chatbox/ChatBoxVisual.vue')
   },
   {
     path: '/:pathMatch(.*)*',

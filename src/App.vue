@@ -3,7 +3,8 @@
 </template>
 <script setup></script>
 <style lang="scss">
-@use '@/assets/css/theme.css';
-@use "@/assets/css/editor/content/light";
-@use "@/assets/css/editor/content/dark";
+@use "assets/css/theme.css";
+@use "assets/css/main.css";
+@use "assets/css/dark";
+@use "assets/css/light";
 </style>

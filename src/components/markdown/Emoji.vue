@@ -1,5 +1,5 @@
 <script setup>
-import { emojiArray } from '@/assets/emoji/emoji.js'
+import { emojiArray } from '@/components/markdown/emoji/emoji.js'
 import { Icon } from '@iconify/vue'
 
 const props = defineProps({

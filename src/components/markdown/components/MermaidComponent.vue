@@ -3,6 +3,7 @@ import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { ref, onMounted, computed, watch } from 'vue'
 import mermaid from 'mermaid'
 import { usePageStore } from '@/stores/index.js'
+import { Translate } from '@/languages'
 
 const props = defineProps(nodeViewProps)
 const localCode = ref(props.node.attrs.code)
@@ -101,12 +102,11 @@ onMounted(renderChart)
           >
             <path d="m9 18 6-6-6-6" />
           </svg>
-          <span
+          <translate
             class="text-[10px] uppercase tracking-wider font-bold transition-colors"
             :class="isDark ? 'text-slate-400 group-hover:text-blue-400' : 'text-blue-400 group-hover:text-blue-600'"
-          >
-            Mermaid 源码
-          </span>
+            message="Mermaid 源码"
+          />
         </div>
 
         <button
@@ -116,7 +116,7 @@ onMounted(renderChart)
             ? 'border-slate-600 text-slate-500 hover:border-red-500/50 hover:text-red-400 bg-slate-900'
             : 'border-blue-200 text-blue-400 hover:border-red-300 hover:text-red-500 bg-white'"
         >
-          永久关闭
+          {{ t('永久关闭') }}
         </button>
       </div>
 

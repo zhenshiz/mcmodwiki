@@ -1,0 +1,127 @@
+export const enchantmentSuggestions = [{
+  label: '水下速掘',
+  value: 'minecraft:aqua_affinity'
+}, {
+  label: '节肢杀手',
+  value: 'minecraft:bane_of_arthropods'
+}, {
+  label: '绑定诅咒',
+  value: 'minecraft:binding_curse'
+}, {
+  label: '爆炸保护',
+  value: 'minecraft:blast_protection'
+}, {
+  label: '破甲',
+  value: 'minecraft:breach'
+}, {
+  label: '引雷',
+  value: 'minecraft:channeling'
+}, {
+  label: '致密',
+  value: 'minecraft:density'
+}, {
+  label: '深海探索者',
+  value: 'minecraft:depth_strider'
+}, {
+  label: '效率',
+  value: 'minecraft:efficiency'
+}, {
+  label: '摔落缓冲',
+  value: 'minecraft:feather_falling'
+}, {
+  label: '火焰附加',
+  value: 'minecraft:fire_aspect'
+}, {
+  label: '火焰保护',
+  value: 'minecraft:fire_protection'
+}, {
+  label: '火矢',
+  value: 'minecraft:flame'
+}, {
+  label: '时运',
+  value: 'minecraft:fortune'
+}, {
+  label: '冰霜行者',
+  value: 'minecraft:frost_walker'
+}, {
+  label: '穿刺',
+  value: 'minecraft:impaling'
+}, {
+  label: '无限',
+  value: 'minecraft:infinity'
+}, {
+  label: '击退',
+  value: 'minecraft:knockback'
+}, {
+  label: '抢夺',
+  value: 'minecraft:looting'
+}, {
+  label: '忠诚',
+  value: 'minecraft:loyalty'
+}, {
+  label: '海之眷顾',
+  value: 'minecraft:luck_of_the_sea'
+}, {
+  label: '饵钓',
+  value: 'minecraft:lure'
+}, {
+  label: '经验修补',
+  value: 'minecraft:mending'
+}, {
+  label: '多重射击',
+  value: 'minecraft:multishot'
+}, {
+  label: '穿透',
+  value: 'minecraft:piercing'
+}, {
+  label: '力量',
+  value: 'minecraft:power'
+}, {
+  label: '弹射物保护',
+  value: 'minecraft:projectile_protection'
+}, {
+  label: '保护',
+  value: 'minecraft:protection'
+}, {
+  label: '冲击',
+  value: 'minecraft:punch'
+}, {
+  label: '快速装填',
+  value: 'minecraft:quick_charge'
+}, {
+  label: '水下呼吸',
+  value: 'minecraft:respiration'
+}, {
+  label: '激流',
+  value: 'minecraft:riptide'
+}, {
+  label: '锋利',
+  value: 'minecraft:sharpness'
+}, {
+  label: '精准采集',
+  value: 'minecraft:silk_touch'
+}, {
+  label: '锋利',
+  value: 'minecraft:smite'
+}, {
+  label: '灵魂疾行',
+  value: 'minecraft:soul_speed'
+}, {
+  label: '横扫之刃',
+  value: 'minecraft:sweeping_edge'
+}, {
+  label: '迅捷潜行',
+  value: 'minecraft:swift_sneak'
+}, {
+  label: '荆棘',
+  value: 'minecraft:thorns'
+}, {
+  label: '耐久',
+  value: 'minecraft:unbreaking'
+}, {
+  label: '消失诅咒',
+  value: 'minecraft:vanishing_curse'
+}, {
+  label: '风爆',
+  value: 'minecraft:wind_burst'
+}]

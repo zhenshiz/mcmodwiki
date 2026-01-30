@@ -7,7 +7,7 @@
         placeholder="https://..."
         @keydown.enter="updateLink"
       />
-      <button @click="updateLink">{{ translatable(lang, 'component.modal.positive') }}</button>
+      <button @click="updateLink">{{ t('确定') }}</button>
       <button @click="unlink" class="hover:text-red-500">
         <Icon icon="lucide:link-2-off" />
       </button>
@@ -29,14 +29,10 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { Icon } from '@iconify/vue'
-import { translatable } from '@/assets/translatable/translatable.js'
-import { usePageStore } from '@/stores/index.js'
 
 const props = defineProps({
   editor: { type: Object, required: true }
 })
-
-const lang = computed(() => usePageStore().setting.language)
 
 const linkHref = ref('')
 
@@ -48,7 +44,6 @@ watch(() => props.editor.isActive('link'), (active) => {
 }, { immediate: true })
 
 const updateLink = () => {
-  const { href } = props.editor.getAttributes('link')
   if (linkHref.value) {
     // 使用 extendMarkRange 确保修改的是整个链接
     props.editor.chain().focus().extendMarkRange('link').setLink({ href: linkHref.value }).run()

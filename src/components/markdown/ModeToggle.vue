@@ -1,8 +1,6 @@
 <script setup>
-import { useEditTopicStore, usePageStore } from '@/stores/index.js'
-import { translatable } from '@/assets/translatable/translatable.js'
+import { useEditTopicStore } from '@/stores/index.js'
 
-const lang = computed(() => usePageStore().setting.language)
 const props = defineProps({
   mode: String
 })
@@ -23,13 +21,13 @@ const updateMode = (value) => {
   <div class="flex flex-row pl-2 pr-2 h-[43px] text-[16px] pt-[10px] dark:text-white">
     <div class="flex flex-col cursor-pointer" @click="updateMode('preview')">
       <div :class="{'text-text-blue':mode === 'preview'}">
-        {{ translatable(lang, 'markdown.mode.toggle.preview') }}
+        {{ t('预览') }}
       </div>
       <div v-show="mode === 'preview'" class="border-b-2 border-text-blue mt-[1px]" />
     </div>
     <div class="flex flex-col cursor-pointer ml-5" @click="updateMode('code')">
       <div :class="{'text-text-blue':mode === 'code'}">
-        {{ translatable(lang, 'markdown.mode.toggle.code') }}
+        {{ t('代码') }}
       </div>
       <div v-show="mode === 'code'" class="border-b-2 border-text-blue mt-[1px]" />
     </div>

@@ -1,0 +1,196 @@
+export const effect = [{
+  label: '迅捷',
+  value: 'speed',
+  icon: 'effect/speed.png',
+  isBeneficial: true
+}, {
+  label: '缓慢',
+  value: 'slowness',
+  icon: 'effect/slowness.png',
+  isBeneficial: false
+}, {
+  label: '急迫',
+  value: 'haste',
+  icon: 'effect/haste.png',
+  isBeneficial: true
+}, {
+  label: '挖掘疲劳',
+  value: 'mining_fatigue',
+  icon: 'effect/mining_fatigue.png',
+  isBeneficial: false
+}, {
+  label: '力量',
+  value: 'strength',
+  icon: 'effect/strength.png',
+  isBeneficial: true
+}, {
+  label: '瞬间治疗',
+  value: 'instant_health',
+  icon: 'effect/instant_health.png',
+  isBeneficial: true
+}, {
+  label: '瞬间伤害',
+  value: 'instant_damage',
+  icon: 'effect/instant_damage.png',
+  isBeneficial: false
+}, {
+  label: '跳跃提升',
+  value: 'jump_boost',
+  icon: 'effect/jump_boost.png',
+  isBeneficial: true
+}, {
+  label: '反胃',
+  value: 'nausea',
+  icon: 'effect/nausea.png',
+  isBeneficial: false
+}, {
+  label: '生命恢复',
+  value: 'regeneration',
+  icon: 'effect/regeneration.png',
+  isBeneficial: true
+}, {
+  label: '抗性提升',
+  value: 'resistance',
+  icon: 'effect/resistance.png',
+  isBeneficial: true
+}, {
+  label: '抗火',
+  value: 'fire_resistance',
+  icon: 'effect/fire_resistance.png',
+  isBeneficial: true
+}, {
+  label: '水下呼吸',
+  value: 'water_breathing',
+  icon: 'effect/water_breathing.png',
+  isBeneficial: true
+}, {
+  label: '隐身',
+  value: 'invisibility',
+  icon: 'effect/invisibility.png',
+  isBeneficial: true
+}, {
+  label: '失明',
+  value: 'blindness',
+  icon: 'effect/blindness.png',
+  isBeneficial: false
+}, {
+  label: '夜视',
+  value: 'night_vision',
+  icon: 'effect/night_vision.png',
+  isBeneficial: true
+}, {
+  label: '饥饿',
+  value: 'hunger',
+  icon: 'effect/hunger.png',
+  isBeneficial: false
+}, {
+  label: '虚弱',
+  value: 'weakness',
+  icon: 'effect/weakness.png',
+  isBeneficial: false
+}, {
+  label: '中毒',
+  value: 'poison',
+  icon: 'effect/poison.png',
+  isBeneficial: false
+}, {
+  label: '凋零',
+  value: 'wither',
+  icon: 'effect/wither.png',
+  isBeneficial: false
+}, {
+  label: '生命提升',
+  value: 'health_boost',
+  icon: 'effect/health_boost.png',
+  isBeneficial: true
+}, {
+  label: '伤害吸收',
+  value: 'absorption',
+  icon: 'effect/absorption.png',
+  isBeneficial: true
+}, {
+  label: '饱和',
+  value: 'saturation',
+  icon: 'effect/saturation.png',
+  isBeneficial: true
+}, {
+  label: '发光',
+  value: 'glowing',
+  icon: 'effect/glowing.png',
+  isBeneficial: false
+}, {
+  label: '飘浮',
+  value: 'levitation',
+  icon: 'effect/levitation.png',
+  isBeneficial: false
+}, {
+  label: '幸运',
+  value: 'luck',
+  icon: 'effect/luck.png',
+  isBeneficial: true
+}, {
+  label: '霉运',
+  value: 'unluck',
+  icon: 'effect/unluck.png',
+  isBeneficial: false
+}, {
+  label: '缓降',
+  value: 'slow_falling',
+  icon: 'effect/slow_falling.png',
+  isBeneficial: true
+}, {
+  label: '潮涌能量',
+  value: 'conduit_power',
+  icon: 'effect/conduit_power.png',
+  isBeneficial: true
+}, {
+  label: '海豚的恩惠',
+  value: 'dolphins_grace',
+  icon: 'effect/dolphins_grace.png',
+  isBeneficial: true
+}, {
+  label: '不祥之兆',
+  value: 'bad_omen',
+  icon: 'effect/bad_omen.png',
+  isBeneficial: false
+}, {
+  label: '村庄英雄',
+  value: 'hero_of_the_village',
+  icon: 'effect/hero_of_the_village.png',
+  isBeneficial: true
+}, {
+  label: '黑暗',
+  value: 'darkness',
+  icon: 'effect/darkness.png',
+  isBeneficial: false
+}, {
+  label: '试炼之兆',
+  value: 'trial_omen',
+  icon: 'effect/trial_omen.png',
+  isBeneficial: false
+}, {
+  label: '袭击之兆',
+  value: 'raid_omen',
+  icon: 'effect/raid_omen.png',
+  isBeneficial: false
+}, {
+  label: '蓄风',
+  value: 'wind_charged',
+  icon: 'effect/wind_charged.png',
+  isBeneficial: false
+}, {
+  label: '盘丝',
+  value: 'weaving',
+  icon: 'effect/weaving.png',
+  isBeneficial: false
+}, {
+  label: '渗浆',
+  value: 'oozing',
+  icon: 'effect/oozing.png',
+  isBeneficial: false
+}, {
+  label: '寄生',
+  value: 'infested',
+  icon: 'effect/infested.png',
+  isBeneficial: false
+}]

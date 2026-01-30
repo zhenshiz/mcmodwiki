@@ -9,35 +9,35 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   plugins: [
     legacy({
-      targets: ['defaults', 'not IE 11']
+      targets: ['defaults', 'not IE 11'],
     }),
     vue(),
     AutoImport({
       imports: ['vue', 'vue-router'],
-      dirs: ['./src/stores', './src/components']
+      dirs: ['./src/stores', './src/components', './src/components/form', './src/languages'],
     }),
     Components({
-      resolvers: [NaiveUiResolver()]
+      resolvers: [NaiveUiResolver()],
     }),
   ],
   assetsInclude: ['**/*.md'],
   optimizeDeps: {
-    include: ['vue']
+    include: ['vue'],
   },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   build: {
-    target: ['es2015', 'chrome63']
+    target: ['es2015', 'chrome63'],
   },
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler'
-      }
-    }
+        api: 'modern-compiler',
+      },
+    },
   },
-  base: '/'
+  base: '/',
 })

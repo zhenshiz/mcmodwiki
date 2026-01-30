@@ -1,11 +1,8 @@
 <script setup>
 import defaultImage from '@/assets/defaultImage.png'
 import { Icon } from '@iconify/vue'
-import { downloadImg } from '@/utils/image.js'
-import { translatable } from '@/assets/translatable/translatable.js'
-import { usePageStore } from '@/stores/index.js'
+import { imageUtil } from '@/utils/imageUtil.js'
 
-const language = computed(() => usePageStore().setting.language)
 const props = defineProps({
   src: {
     type: String,
@@ -79,7 +76,7 @@ const iconList = ref([
   },
   {
     icon: 'material-symbols:download', onClick: () => {
-      downloadImg(previewImg.value.src)
+      imageUtil.downloadImg(previewImg.value.src)
     }
   },
   {
@@ -108,14 +105,14 @@ const handleImageError = (event) => {
        @click="ImgPreview"
        :src="src"
        crossorigin="anonymous"
-       :alt="translatable(language,'component.image.alt')">
+       :alt="t('加载失败')">
   <teleport to="body">
     <div v-if="show && !previewDisabled" class="fixed top-0 left-0 size-full center z-[997]">
       <div class="mask z-[998]" @click="()=>show=false" />
       <img ref="previewImg" class="z-[999] transform duration-500 select-none"
            @error="handleImageError($event)"
            :src="src"
-           :alt="translatable(language,'component.image.alt')">
+           :alt="t('加载失败')">
       <div
         v-if="showToolbar"
         class="z-[1000] absolute bottom-10 left-1/2 -translate-x-1/2 bg-[#747474] gap-3 h-[50px] w-[300px] center rounded-full text-white bg-opacity-70">

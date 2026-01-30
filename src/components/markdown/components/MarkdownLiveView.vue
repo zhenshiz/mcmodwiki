@@ -29,10 +29,10 @@ const toggleNav = (value) => {
   <div class="flex flex-col rounded border relative view">
     <div ref="nav" class="flex flex-row h-[40px] text-[16px] nav border-b">
       <div @click="toggleNav(true)" class="flex-1 center button-theme-cursor-blue">
-        {{ translatable(lang, 'milkdown.mode.toggle.preview') }}
+        {{ t('预览') }}
       </div>
       <div @click="toggleNav(false)" class="flex-1 center button-theme-cursor-blue">
-        {{ translatable(lang, 'milkdown.mode.toggle.code') }}
+        {{ t('代码') }}
       </div>
     </div>
     <div ref="line" class="line absolute border-b-2 w-1/2 top-[40px]" />

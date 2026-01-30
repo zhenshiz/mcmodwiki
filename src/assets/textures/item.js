@@ -1,0 +1,6661 @@
+export const item = [{
+  label: '红树根',
+  value: 'minecraft:mangrove_roots',
+  icon: 'item/mangrove_roots.png',
+  isBlock: true
+}, {
+  label: '重生锚',
+  value: 'minecraft:respawn_anchor',
+  icon: 'item/respawn_anchor.png',
+  isBlock: true
+}, {
+  label: '绯红菌核',
+  value: 'minecraft:crimson_hyphae',
+  icon: 'item/crimson_hyphae.png',
+  isBlock: true
+}, {
+  label: '悦灵刷怪蛋',
+  value: 'minecraft:allay_spawn_egg',
+  icon: 'item/allay_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '猫刷怪蛋',
+  value: 'minecraft:cat_spawn_egg',
+  icon: 'item/cat_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '杜鹃花丛',
+  value: 'minecraft:azalea',
+  icon: 'item/azalea.png',
+  isBlock: true
+}, {
+  label: '附魔之瓶',
+  value: 'minecraft:experience_bottle',
+  icon: 'item/experience_bottle.png',
+  isBlock: false
+}, {
+  label: '金粒',
+  value: 'minecraft:gold_nugget',
+  icon: 'item/gold_nugget.png',
+  isBlock: false
+}, {
+  label: '丛林木',
+  value: 'minecraft:jungle_wood',
+  icon: 'item/jungle_wood.png',
+  isBlock: true
+}, {
+  label: '雕纹下界砖块',
+  value: 'minecraft:chiseled_nether_bricks',
+  icon: 'item/chiseled_nether_bricks.png',
+  isBlock: true
+}, {
+  label: '避雷针',
+  value: 'minecraft:lightning_rod',
+  icon: 'item/lightning_rod.png',
+  isBlock: true
+}, {
+  label: '基岩',
+  value: 'minecraft:bedrock',
+  icon: 'item/bedrock.png',
+  isBlock: true
+}, {
+  label: '鹿角珊瑚块',
+  value: 'minecraft:horn_coral_block',
+  icon: 'item/horn_coral_block.png',
+  isBlock: true
+}, {
+  label: '垂泪藤',
+  value: 'minecraft:weeping_vines',
+  icon: 'item/weeping_vines.png',
+  isBlock: true
+}, {
+  label: '红石矿石',
+  value: 'minecraft:redstone_ore',
+  icon: 'item/redstone_ore.png',
+  isBlock: true
+}, {
+  label: '青蛙刷怪蛋',
+  value: 'minecraft:frog_spawn_egg',
+  icon: 'item/frog_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '樱花木台阶',
+  value: 'minecraft:cherry_slab',
+  icon: 'item/cherry_slab.png',
+  isBlock: true
+}, {
+  label: '鞘翅',
+  value: 'minecraft:elytra',
+  icon: 'item/elytra.png',
+  isBlock: false
+}, {
+  label: '淡灰色带釉陶瓦',
+  value: 'minecraft:light_gray_glazed_terracotta',
+  icon: 'item/light_gray_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '雕纹石英块',
+  value: 'minecraft:chiseled_quartz_block',
+  icon: 'item/chiseled_quartz_block.png',
+  isBlock: true
+}, {
+  label: '品红色陶瓦',
+  value: 'minecraft:magenta_terracotta',
+  icon: 'item/magenta_terracotta.png',
+  isBlock: true
+}, {
+  label: '铁锭',
+  value: 'minecraft:iron_ingot',
+  icon: 'item/iron_ingot.png',
+  isBlock: false
+}, {
+  label: '竹栅栏门',
+  value: 'minecraft:bamboo_fence_gate',
+  icon: 'item/bamboo_fence_gate.png',
+  isBlock: true
+}, {
+  label: '红树木船',
+  value: 'minecraft:mangrove_boat',
+  icon: 'item/mangrove_boat.png',
+  isBlock: false
+}, {
+  label: '深层红石矿石',
+  value: 'minecraft:deepslate_redstone_ore',
+  icon: 'item/deepslate_redstone_ore.png',
+  isBlock: true
+}, {
+  label: '绿宝石矿石',
+  value: 'minecraft:emerald_ore',
+  icon: 'item/emerald_ore.png',
+  isBlock: true
+}, {
+  label: '樱花木告示牌',
+  value: 'minecraft:cherry_sign',
+  icon: 'item/cherry_sign.png',
+  isBlock: true
+}, {
+  label: '紫色羊毛',
+  value: 'minecraft:purple_wool',
+  icon: 'item/purple_wool.png',
+  isBlock: true
+}, {
+  label: '骡刷怪蛋',
+  value: 'minecraft:mule_spawn_egg',
+  icon: 'item/mule_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '钻石护腿',
+  value: 'minecraft:diamond_leggings',
+  icon: 'item/diamond_leggings.png',
+  isBlock: false
+}, {
+  label: '甘蔗',
+  value: 'minecraft:sugar_cane',
+  icon: 'item/sugar_cane.png',
+  isBlock: true
+}, {
+  label: '黄绿色床',
+  value: 'minecraft:lime_bed',
+  icon: 'item/lime_bed.png',
+  isBlock: true
+}, {
+  label: '红色潜影盒',
+  value: 'minecraft:red_shulker_box',
+  icon: 'item/red_shulker_box.png',
+  isBlock: true
+}, {
+  label: '平滑红砂岩楼梯',
+  value: 'minecraft:smooth_red_sandstone_stairs',
+  icon: 'item/smooth_red_sandstone_stairs.png',
+  isBlock: true
+}, {
+  label: '矢车菊',
+  value: 'minecraft:cornflower',
+  icon: 'item/cornflower.png',
+  isBlock: true
+}, {
+  label: '骨粉',
+  value: 'minecraft:bone_meal',
+  icon: 'item/bone_meal.png',
+  isBlock: false
+}, {
+  label: '淡蓝色染料',
+  value: 'minecraft:light_blue_dye',
+  icon: 'item/light_blue_dye.png',
+  isBlock: false
+}, {
+  label: '凝灰岩墙',
+  value: 'minecraft:tuff_wall',
+  icon: 'item/tuff_wall.png',
+  isBlock: true
+}, {
+  label: '深层绿宝石矿石',
+  value: 'minecraft:deepslate_emerald_ore',
+  icon: 'item/deepslate_emerald_ore.png',
+  isBlock: true
+}, {
+  label: '海晶灯',
+  value: 'minecraft:sea_lantern',
+  icon: 'item/sea_lantern.png',
+  isBlock: true
+}, {
+  label: '苦力怕的头',
+  value: 'minecraft:creeper_head',
+  icon: 'item/creeper_head.png',
+  isBlock: true
+}, {
+  label: '钻石锹',
+  value: 'minecraft:diamond_shovel',
+  icon: 'item/diamond_shovel.png',
+  isBlock: false
+}, {
+  label: '失活的气泡珊瑚扇',
+  value: 'minecraft:dead_bubble_coral_fan',
+  icon: 'item/dead_bubble_coral_fan.png',
+  isBlock: true
+}, {
+  label: '绯红木栅栏',
+  value: 'minecraft:crimson_fence',
+  icon: 'item/crimson_fence.png',
+  isBlock: true
+}, {
+  label: '平滑红砂岩台阶',
+  value: 'minecraft:smooth_red_sandstone_slab',
+  icon: 'item/smooth_red_sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '磨制花岗岩台阶',
+  value: 'minecraft:polished_granite_slab',
+  icon: 'item/polished_granite_slab.png',
+  isBlock: true
+}, {
+  label: '云杉木按钮',
+  value: 'minecraft:spruce_button',
+  icon: 'item/spruce_button.png',
+  isBlock: true
+}, {
+  label: '绿色陶瓦',
+  value: 'minecraft:green_terracotta',
+  icon: 'item/green_terracotta.png',
+  isBlock: true
+}, {
+  label: '黄色蜡烛',
+  value: 'minecraft:yellow_candle',
+  icon: 'item/yellow_candle.png',
+  isBlock: true
+}, {
+  label: '兰花',
+  value: 'minecraft:blue_orchid',
+  icon: 'item/blue_orchid.png',
+  isBlock: true
+}, {
+  label: '悬挂式深色橡木告示牌',
+  value: 'minecraft:dark_oak_hanging_sign',
+  icon: 'item/dark_oak_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '小型紫晶芽',
+  value: 'minecraft:small_amethyst_bud',
+  icon: 'item/small_amethyst_bud.png',
+  isBlock: true
+}, {
+  label: '石砖墙',
+  value: 'minecraft:stone_brick_wall',
+  icon: 'item/stone_brick_wall.png',
+  isBlock: true
+}, {
+  label: '磨制花岗岩楼梯',
+  value: 'minecraft:polished_granite_stairs',
+  icon: 'item/polished_granite_stairs.png',
+  isBlock: true
+}, {
+  label: '樱花木压力板',
+  value: 'minecraft:cherry_pressure_plate',
+  icon: 'item/cherry_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '小型垂滴叶',
+  value: 'minecraft:small_dripleaf',
+  icon: 'item/small_dripleaf.png',
+  isBlock: true
+}, {
+  label: '紫颂植株',
+  value: 'minecraft:chorus_plant',
+  icon: 'item/chorus_plant.png',
+  isBlock: true
+}, {
+  label: '平滑石头台阶',
+  value: 'minecraft:smooth_stone_slab',
+  icon: 'item/smooth_stone_slab.png',
+  isBlock: true
+}, {
+  label: '凝灰岩砖墙',
+  value: 'minecraft:tuff_brick_wall',
+  icon: 'item/tuff_brick_wall.png',
+  isBlock: true
+}, {
+  label: '下界合金剑',
+  value: 'minecraft:netherite_sword',
+  icon: 'item/netherite_sword.png',
+  isBlock: false
+}, {
+  label: '生鸡肉',
+  value: 'minecraft:chicken',
+  icon: 'item/chicken.png',
+  isBlock: false
+}, {
+  label: '岩浆膏',
+  value: 'minecraft:magma_cream',
+  icon: 'item/magma_cream.png',
+  isBlock: false
+}, {
+  label: '白色染色玻璃板',
+  value: 'minecraft:white_stained_glass_pane',
+  icon: 'item/white_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '金合欢木活板门',
+  value: 'minecraft:acacia_trapdoor',
+  icon: 'item/acacia_trapdoor.png',
+  isBlock: true
+}, {
+  label: '樱花木楼梯',
+  value: 'minecraft:cherry_stairs',
+  icon: 'item/cherry_stairs.png',
+  isBlock: true
+}, {
+  label: '悲恸纹样陶片',
+  value: 'minecraft:mourner_pottery_sherd',
+  icon: 'item/mourner_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '石头按钮',
+  value: 'minecraft:stone_button',
+  icon: 'item/stone_button.png',
+  isBlock: true
+}, {
+  label: '悬挂式金合欢木告示牌',
+  value: 'minecraft:acacia_hanging_sign',
+  icon: 'item/acacia_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '信标',
+  value: 'minecraft:beacon',
+  icon: 'item/beacon.png',
+  isBlock: true
+}, {
+  label: '甜菜种子',
+  value: 'minecraft:beetroot_seeds',
+  icon: 'item/beetroot_seeds.png',
+  isBlock: true
+}, {
+  label: '切制红砂岩',
+  value: 'minecraft:cut_red_sandstone',
+  icon: 'item/cut_red_sandstone.png',
+  isBlock: true
+}, {
+  label: '下界合金块',
+  value: 'minecraft:netherite_block',
+  icon: 'item/netherite_block.png',
+  isBlock: true
+}, {
+  label: '金合欢木楼梯',
+  value: 'minecraft:acacia_stairs',
+  icon: 'item/acacia_stairs.png',
+  isBlock: true
+}, {
+  label: '青翠蛙明灯',
+  value: 'minecraft:verdant_froglight',
+  icon: 'item/verdant_froglight.png',
+  isBlock: true
+}, {
+  label: '平滑石英块',
+  value: 'minecraft:smooth_quartz',
+  icon: 'item/smooth_quartz.png',
+  isBlock: true
+}, {
+  label: '粉红色陶瓦',
+  value: 'minecraft:pink_terracotta',
+  icon: 'item/pink_terracotta.png',
+  isBlock: true
+}, {
+  label: '雕纹砂岩',
+  value: 'minecraft:chiseled_sandstone',
+  icon: 'item/chiseled_sandstone.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:wild_armor_trim_smithing_template',
+  icon: 'item/wild_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '红色蘑菇',
+  value: 'minecraft:red_mushroom',
+  icon: 'item/red_mushroom.png',
+  isBlock: true
+}, {
+  label: '深层青金石矿石',
+  value: 'minecraft:deepslate_lapis_ore',
+  icon: 'item/deepslate_lapis_ore.png',
+  isBlock: true
+}, {
+  label: '橡木栅栏门',
+  value: 'minecraft:oak_fence_gate',
+  icon: 'item/oak_fence_gate.png',
+  isBlock: true
+}, {
+  label: '末地石砖',
+  value: 'minecraft:end_stone_bricks',
+  icon: 'item/end_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '嗅探兽刷怪蛋',
+  value: 'minecraft:sniffer_spawn_egg',
+  icon: 'item/sniffer_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:tide_armor_trim_smithing_template',
+  icon: 'item/tide_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '磨制黑石砖墙',
+  value: 'minecraft:polished_blackstone_brick_wall',
+  icon: 'item/polished_blackstone_brick_wall.png',
+  isBlock: true
+}, {
+  label: '涂蜡的斑驳铜格栅',
+  value: 'minecraft:waxed_exposed_copper_grate',
+  icon: 'item/waxed_exposed_copper_grate.png',
+  isBlock: true
+}, {
+  label: '紫色混凝土粉末',
+  value: 'minecraft:purple_concrete_powder',
+  icon: 'item/purple_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '圆石',
+  value: 'minecraft:cobblestone',
+  icon: 'item/cobblestone.png',
+  isBlock: true
+}, {
+  label: '黄绿色染料',
+  value: 'minecraft:lime_dye',
+  icon: 'item/lime_dye.png',
+  isBlock: false
+}, {
+  label: '樱花木',
+  value: 'minecraft:cherry_wood',
+  icon: 'item/cherry_wood.png',
+  isBlock: true
+}, {
+  label: '灰色带釉陶瓦',
+  value: 'minecraft:gray_glazed_terracotta',
+  icon: 'item/gray_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '干海带块',
+  value: 'minecraft:dried_kelp_block',
+  icon: 'item/dried_kelp_block.png',
+  isBlock: true
+}, {
+  label: '红树木楼梯',
+  value: 'minecraft:mangrove_stairs',
+  icon: 'item/mangrove_stairs.png',
+  isBlock: true
+}, {
+  label: '气泡珊瑚扇',
+  value: 'minecraft:bubble_coral_fan',
+  icon: 'item/bubble_coral_fan.png',
+  isBlock: true
+}, {
+  label: '生兔肉',
+  value: 'minecraft:rabbit',
+  icon: 'item/rabbit.png',
+  isBlock: false
+}, {
+  label: '动力铁轨',
+  value: 'minecraft:powered_rail',
+  icon: 'item/powered_rail.png',
+  isBlock: true
+}, {
+  label: '试炼钥匙',
+  value: 'minecraft:trial_key',
+  icon: 'item/trial_key.png',
+  isBlock: false
+}, {
+  label: '粉红色染色玻璃',
+  value: 'minecraft:pink_stained_glass',
+  icon: 'item/pink_stained_glass.png',
+  isBlock: true
+}, {
+  label: '唱片残片',
+  value: 'minecraft:disc_fragment_5',
+  icon: 'item/disc_fragment_5.png',
+  isBlock: false
+}, {
+  label: '灵魂火把',
+  value: 'minecraft:soul_torch',
+  icon: 'item/soul_torch.png',
+  isBlock: true
+}, {
+  label: '品红色潜影盒',
+  value: 'minecraft:magenta_shulker_box',
+  icon: 'item/magenta_shulker_box.png',
+  isBlock: true
+}, {
+  label: '下界砖',
+  value: 'minecraft:nether_brick',
+  icon: 'item/nether_brick.png',
+  isBlock: false
+}, {
+  label: '金合欢木门',
+  value: 'minecraft:acacia_door',
+  icon: 'item/acacia_door.png',
+  isBlock: true
+}, {
+  label: '牛排',
+  value: 'minecraft:cooked_beef',
+  icon: 'item/cooked_beef.png',
+  isBlock: false
+}, {
+  label: '红砂岩墙',
+  value: 'minecraft:red_sandstone_wall',
+  icon: 'item/red_sandstone_wall.png',
+  isBlock: true
+}, {
+  label: '末影之眼',
+  value: 'minecraft:ender_eye',
+  icon: 'item/ender_eye.png',
+  isBlock: false
+}, {
+  label: '黄色地毯',
+  value: 'minecraft:yellow_carpet',
+  icon: 'item/yellow_carpet.png',
+  isBlock: true
+}, {
+  label: '刷怪笼',
+  value: 'minecraft:spawner',
+  icon: 'item/spawner.png',
+  isBlock: true
+}, {
+  label: '云杉树叶',
+  value: 'minecraft:spruce_leaves',
+  icon: 'item/spruce_leaves.png',
+  isBlock: true
+}, {
+  label: '谜之炖菜',
+  value: 'minecraft:suspicious_stew',
+  icon: 'item/suspicious_stew.png',
+  isBlock: false
+}, {
+  label: '下界合金锹',
+  value: 'minecraft:netherite_shovel',
+  icon: 'item/netherite_shovel.png',
+  isBlock: false
+}, {
+  label: '丛林木栅栏',
+  value: 'minecraft:jungle_fence',
+  icon: 'item/jungle_fence.png',
+  isBlock: true
+}, {
+  label: '菌光体',
+  value: 'minecraft:shroomlight',
+  icon: 'item/shroomlight.png',
+  isBlock: true
+}, {
+  label: '泥砖',
+  value: 'minecraft:mud_bricks',
+  icon: 'item/mud_bricks.png',
+  isBlock: true
+}, {
+  label: '金苹果',
+  value: 'minecraft:golden_apple',
+  icon: 'item/golden_apple.png',
+  isBlock: false
+}, {
+  label: '流浪者刷怪蛋',
+  value: 'minecraft:stray_spawn_egg',
+  icon: 'item/stray_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '云杉木门',
+  value: 'minecraft:spruce_door',
+  icon: 'item/spruce_door.png',
+  isBlock: true
+}, {
+  label: '丛林木楼梯',
+  value: 'minecraft:jungle_stairs',
+  icon: 'item/jungle_stairs.png',
+  isBlock: true
+}, {
+  label: '守卫者刷怪蛋',
+  value: 'minecraft:guardian_spawn_egg',
+  icon: 'item/guardian_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '橙色潜影盒',
+  value: 'minecraft:orange_shulker_box',
+  icon: 'item/orange_shulker_box.png',
+  isBlock: true
+}, {
+  label: '矿车',
+  value: 'minecraft:minecart',
+  icon: 'item/minecart.png',
+  isBlock: false
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_creator',
+  icon: 'item/music_disc_creator.png',
+  isBlock: false
+}, {
+  label: '损坏的铁砧',
+  value: 'minecraft:damaged_anvil',
+  icon: 'item/damaged_anvil.png',
+  isBlock: true
+}, {
+  label: '竹栅栏',
+  value: 'minecraft:bamboo_fence',
+  icon: 'item/bamboo_fence.png',
+  isBlock: true
+}, {
+  label: '漏斗',
+  value: 'minecraft:hopper',
+  icon: 'item/hopper.png',
+  isBlock: true
+}, {
+  label: '熊猫刷怪蛋',
+  value: 'minecraft:panda_spawn_egg',
+  icon: 'item/panda_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '脚手架',
+  value: 'minecraft:scaffolding',
+  icon: 'item/scaffolding.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_strad',
+  icon: 'item/music_disc_strad.png',
+  isBlock: false
+}, {
+  label: '泥砖墙',
+  value: 'minecraft:mud_brick_wall',
+  icon: 'item/mud_brick_wall.png',
+  isBlock: true
+}, {
+  label: '绵羊刷怪蛋',
+  value: 'minecraft:sheep_spawn_egg',
+  icon: 'item/sheep_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '涂蜡的锈蚀铜活板门',
+  value: 'minecraft:waxed_weathered_copper_trapdoor',
+  icon: 'item/waxed_weathered_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '皮革外套',
+  value: 'minecraft:leather_chestplate',
+  icon: 'item/leather_chestplate.png',
+  isBlock: false
+}, {
+  label: '失活的火珊瑚块',
+  value: 'minecraft:dead_fire_coral_block',
+  icon: 'item/dead_fire_coral_block.png',
+  isBlock: true
+}, {
+  label: '蜂蜜瓶',
+  value: 'minecraft:honey_bottle',
+  icon: 'item/honey_bottle.png',
+  isBlock: false
+}, {
+  label: '金胸甲',
+  value: 'minecraft:golden_chestplate',
+  icon: 'item/golden_chestplate.png',
+  isBlock: false
+}, {
+  label: '蜘蛛网',
+  value: 'minecraft:cobweb',
+  icon: 'item/cobweb.png',
+  isBlock: true
+}, {
+  label: '沉重核心',
+  value: 'minecraft:heavy_core',
+  icon: 'item/heavy_core.png',
+  isBlock: true
+}, {
+  label: '恶魂之泪',
+  value: 'minecraft:ghast_tear',
+  icon: 'item/ghast_tear.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:shaper_armor_trim_smithing_template',
+  icon: 'item/shaper_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '斑驳的铜格栅',
+  value: 'minecraft:exposed_copper_grate',
+  icon: 'item/exposed_copper_grate.png',
+  isBlock: true
+}, {
+  label: '淡灰色蜡烛',
+  value: 'minecraft:light_gray_candle',
+  icon: 'item/light_gray_candle.png',
+  isBlock: true
+}, {
+  label: '金胡萝卜',
+  value: 'minecraft:golden_carrot',
+  icon: 'item/golden_carrot.png',
+  isBlock: false
+}, {
+  label: '橡树树苗',
+  value: 'minecraft:oak_sapling',
+  icon: 'item/oak_sapling.png',
+  isBlock: true
+}, {
+  label: '烟熏炉',
+  value: 'minecraft:smoker',
+  icon: 'item/smoker.png',
+  isBlock: true
+}, {
+  label: '涂蜡的雕纹铜块',
+  value: 'minecraft:waxed_chiseled_copper',
+  icon: 'item/waxed_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '斑驳的切制铜楼梯',
+  value: 'minecraft:exposed_cut_copper_stairs',
+  icon: 'item/exposed_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '砂岩墙',
+  value: 'minecraft:sandstone_wall',
+  icon: 'item/sandstone_wall.png',
+  isBlock: true
+}, {
+  label: '曲奇',
+  value: 'minecraft:cookie',
+  icon: 'item/cookie.png',
+  isBlock: false
+}, {
+  label: '不可合成的喷溅型药水',
+  value: 'minecraft:splash_potion',
+  icon: 'item/splash_potion.png',
+  isBlock: false
+}, {
+  label: '淡蓝色混凝土粉末',
+  value: 'minecraft:light_blue_concrete_powder',
+  icon: 'item/light_blue_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '海晶石楼梯',
+  value: 'minecraft:prismarine_stairs',
+  icon: 'item/prismarine_stairs.png',
+  isBlock: true
+}, {
+  label: '金合欢木栅栏',
+  value: 'minecraft:acacia_fence',
+  icon: 'item/acacia_fence.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀铜块',
+  value: 'minecraft:waxed_weathered_copper',
+  icon: 'item/waxed_weathered_copper.png',
+  isBlock: true
+}, {
+  label: '黄色旗帜',
+  value: 'minecraft:yellow_banner',
+  icon: 'item/yellow_banner.png',
+  isBlock: true
+}, {
+  label: '铁镐',
+  value: 'minecraft:iron_pickaxe',
+  icon: 'item/iron_pickaxe.png',
+  isBlock: false
+}, {
+  label: '金靴子',
+  value: 'minecraft:golden_boots',
+  icon: 'item/golden_boots.png',
+  isBlock: false
+}, {
+  label: '涂蜡的斑驳铜灯',
+  value: 'minecraft:waxed_exposed_copper_bulb',
+  icon: 'item/waxed_exposed_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '安山岩台阶',
+  value: 'minecraft:andesite_slab',
+  icon: 'item/andesite_slab.png',
+  isBlock: true
+}, {
+  label: '美西螈刷怪蛋',
+  value: 'minecraft:axolotl_spawn_egg',
+  icon: 'item/axolotl_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '铜矿石',
+  value: 'minecraft:copper_ore',
+  icon: 'item/copper_ore.png',
+  isBlock: true
+}, {
+  label: '涂蜡的氧化切制铜楼梯',
+  value: 'minecraft:waxed_oxidized_cut_copper_stairs',
+  icon: 'item/waxed_oxidized_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '虫蚀圆石',
+  value: 'minecraft:infested_cobblestone',
+  icon: 'item/infested_cobblestone.png',
+  isBlock: true
+}, {
+  label: '嗅探纹样陶片',
+  value: 'minecraft:snort_pottery_sherd',
+  icon: 'item/snort_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '烈焰人刷怪蛋',
+  value: 'minecraft:blaze_spawn_egg',
+  icon: 'item/blaze_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '河豚',
+  value: 'minecraft:pufferfish',
+  icon: 'item/pufferfish.png',
+  isBlock: false
+}, {
+  label: '气泡珊瑚',
+  value: 'minecraft:bubble_coral',
+  icon: 'item/bubble_coral.png',
+  isBlock: true
+}, {
+  label: '石斧',
+  value: 'minecraft:stone_axe',
+  icon: 'item/stone_axe.png',
+  isBlock: false
+}, {
+  label: '黄绿色带釉陶瓦',
+  value: 'minecraft:lime_glazed_terracotta',
+  icon: 'item/lime_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:dune_armor_trim_smithing_template',
+  icon: 'item/dune_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '裂纹深板岩砖',
+  value: 'minecraft:cracked_deepslate_bricks',
+  icon: 'item/cracked_deepslate_bricks.png',
+  isBlock: true
+}, {
+  label: '绯红木按钮',
+  value: 'minecraft:crimson_button',
+  icon: 'item/crimson_button.png',
+  isBlock: true
+}, {
+  label: '石锹',
+  value: 'minecraft:stone_shovel',
+  icon: 'item/stone_shovel.png',
+  isBlock: false
+}, {
+  label: '白桦木按钮',
+  value: 'minecraft:birch_button',
+  icon: 'item/birch_button.png',
+  isBlock: true
+}, {
+  label: '干海带',
+  value: 'minecraft:dried_kelp',
+  icon: 'item/dried_kelp.png',
+  isBlock: false
+}, {
+  label: '苔石',
+  value: 'minecraft:mossy_cobblestone',
+  icon: 'item/mossy_cobblestone.png',
+  isBlock: true
+}, {
+  label: '橙色染色玻璃板',
+  value: 'minecraft:orange_stained_glass_pane',
+  icon: 'item/orange_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '铁胸甲',
+  value: 'minecraft:iron_chestplate',
+  icon: 'item/iron_chestplate.png',
+  isBlock: false
+}, {
+  label: '熟鸡肉',
+  value: 'minecraft:cooked_chicken',
+  icon: 'item/cooked_chicken.png',
+  isBlock: false
+}, {
+  label: '涂蜡的氧化雕纹铜块',
+  value: 'minecraft:waxed_oxidized_chiseled_copper',
+  icon: 'item/waxed_oxidized_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '生猪排',
+  value: 'minecraft:porkchop',
+  icon: 'item/porkchop.png',
+  isBlock: false
+}, {
+  label: '红树木台阶',
+  value: 'minecraft:mangrove_slab',
+  icon: 'item/mangrove_slab.png',
+  isBlock: true
+}, {
+  label: '竹块',
+  value: 'minecraft:bamboo_block',
+  icon: 'item/bamboo_block.png',
+  isBlock: true
+}, {
+  label: '黑色混凝土粉末',
+  value: 'minecraft:black_concrete_powder',
+  icon: 'item/black_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '大型紫晶芽',
+  value: 'minecraft:large_amethyst_bud',
+  icon: 'item/large_amethyst_bud.png',
+  isBlock: true
+}, {
+  label: '火珊瑚块',
+  value: 'minecraft:fire_coral_block',
+  icon: 'item/fire_coral_block.png',
+  isBlock: true
+}, {
+  label: '火把',
+  value: 'minecraft:torch',
+  icon: 'item/torch.png',
+  isBlock: true
+}, {
+  label: '哭泣的黑曜石',
+  value: 'minecraft:crying_obsidian',
+  icon: 'item/crying_obsidian.png',
+  isBlock: true
+}, {
+  label: '红树木告示牌',
+  value: 'minecraft:mangrove_sign',
+  icon: 'item/mangrove_sign.png',
+  isBlock: true
+}, {
+  label: '画',
+  value: 'minecraft:painting',
+  icon: 'item/painting.png',
+  isBlock: false
+}, {
+  label: '涂蜡的氧化铜块',
+  value: 'minecraft:waxed_oxidized_copper',
+  icon: 'item/waxed_oxidized_copper.png',
+  isBlock: true
+}, {
+  label: '砂岩楼梯',
+  value: 'minecraft:sandstone_stairs',
+  icon: 'item/sandstone_stairs.png',
+  isBlock: true
+}, {
+  label: '海豚刷怪蛋',
+  value: 'minecraft:dolphin_spawn_egg',
+  icon: 'item/dolphin_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '凋灵刷怪蛋',
+  value: 'minecraft:wither_spawn_egg',
+  icon: 'item/wither_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '驴刷怪蛋',
+  value: 'minecraft:donkey_spawn_egg',
+  icon: 'item/donkey_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '黑石楼梯',
+  value: 'minecraft:blackstone_stairs',
+  icon: 'item/blackstone_stairs.png',
+  isBlock: true
+}, {
+  label: '烈焰纹样陶片',
+  value: 'minecraft:burn_pottery_sherd',
+  icon: 'item/burn_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '淡灰色地毯',
+  value: 'minecraft:light_gray_carpet',
+  icon: 'item/light_gray_carpet.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_mellohi',
+  icon: 'item/music_disc_mellohi.png',
+  isBlock: false
+}, {
+  label: '羊驼刷怪蛋',
+  value: 'minecraft:llama_spawn_egg',
+  icon: 'item/llama_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '去皮白桦木',
+  value: 'minecraft:stripped_birch_wood',
+  icon: 'item/stripped_birch_wood.png',
+  isBlock: true
+}, {
+  label: '黑曜石',
+  value: 'minecraft:obsidian',
+  icon: 'item/obsidian.png',
+  isBlock: true
+}, {
+  label: '蓝花美耳草',
+  value: 'minecraft:azure_bluet',
+  icon: 'item/azure_bluet.png',
+  isBlock: true
+}, {
+  label: '鳕鱼桶',
+  value: 'minecraft:cod_bucket',
+  icon: 'item/cod_bucket.png',
+  isBlock: false
+}, {
+  label: '黏土球',
+  value: 'minecraft:clay_ball',
+  icon: 'item/clay_ball.png',
+  isBlock: false
+}, {
+  label: '幽匿感测体',
+  value: 'minecraft:sculk_sensor',
+  icon: 'item/sculk_sensor.png',
+  isBlock: true
+}, {
+  label: '开裂的铁砧',
+  value: 'minecraft:chipped_anvil',
+  icon: 'item/chipped_anvil.png',
+  isBlock: true
+}, {
+  label: '粗铁',
+  value: 'minecraft:raw_iron',
+  icon: 'item/raw_iron.png',
+  isBlock: false
+}, {
+  label: '凋灵骷髅刷怪蛋',
+  value: 'minecraft:wither_skeleton_spawn_egg',
+  icon: 'item/wither_skeleton_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '龙蛋',
+  value: 'minecraft:dragon_egg',
+  icon: 'item/dragon_egg.png',
+  isBlock: true
+}, {
+  label: '紫色混凝土',
+  value: 'minecraft:purple_concrete',
+  icon: 'item/purple_concrete.png',
+  isBlock: true
+}, {
+  label: '黄色陶瓦',
+  value: 'minecraft:yellow_terracotta',
+  icon: 'item/yellow_terracotta.png',
+  isBlock: true
+}, {
+  label: '黄绿色羊毛',
+  value: 'minecraft:lime_wool',
+  icon: 'item/lime_wool.png',
+  isBlock: true
+}, {
+  label: '磁石',
+  value: 'minecraft:lodestone',
+  icon: 'item/lodestone.png',
+  isBlock: true
+}, {
+  label: '品红色染色玻璃板',
+  value: 'minecraft:magenta_stained_glass_pane',
+  icon: 'item/magenta_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '鱿鱼刷怪蛋',
+  value: 'minecraft:squid_spawn_egg',
+  icon: 'item/squid_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '黑色床',
+  value: 'minecraft:black_bed',
+  icon: 'item/black_bed.png',
+  isBlock: true
+}, {
+  label: '暗海晶石',
+  value: 'minecraft:dark_prismarine',
+  icon: 'item/dark_prismarine.png',
+  isBlock: true
+}, {
+  label: '淡蓝色潜影盒',
+  value: 'minecraft:light_blue_shulker_box',
+  icon: 'item/light_blue_shulker_box.png',
+  isBlock: true
+}, {
+  label: '木斧',
+  value: 'minecraft:wooden_axe',
+  icon: 'item/wooden_axe.png',
+  isBlock: false
+}, {
+  label: '蓝色染色玻璃板',
+  value: 'minecraft:blue_stained_glass_pane',
+  icon: 'item/blue_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '黑石',
+  value: 'minecraft:blackstone',
+  icon: 'item/blackstone.png',
+  isBlock: true
+}, {
+  label: '裂纹深板岩瓦',
+  value: 'minecraft:cracked_deepslate_tiles',
+  icon: 'item/cracked_deepslate_tiles.png',
+  isBlock: true
+}, {
+  label: '铁门',
+  value: 'minecraft:iron_door',
+  icon: 'item/iron_door.png',
+  isBlock: true
+}, {
+  label: '去皮樱花原木',
+  value: 'minecraft:stripped_cherry_log',
+  icon: 'item/stripped_cherry_log.png',
+  isBlock: true
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:creeper_banner_pattern',
+  icon: 'item/creeper_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '涂蜡的氧化铜灯',
+  value: 'minecraft:waxed_oxidized_copper_bulb',
+  icon: 'item/waxed_oxidized_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '猪灵刷怪蛋',
+  value: 'minecraft:piglin_spawn_egg',
+  icon: 'item/piglin_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '灰色染色玻璃板',
+  value: 'minecraft:gray_stained_glass_pane',
+  icon: 'item/gray_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '海龟壳',
+  value: 'minecraft:turtle_helmet',
+  icon: 'item/turtle_helmet.png',
+  isBlock: false
+}, {
+  label: '钻石镐',
+  value: 'minecraft:diamond_pickaxe',
+  icon: 'item/diamond_pickaxe.png',
+  isBlock: false
+}, {
+  label: '海龟蛋',
+  value: 'minecraft:turtle_egg',
+  icon: 'item/turtle_egg.png',
+  isBlock: true
+}, {
+  label: '烟花火箭',
+  value: 'minecraft:firework_rocket',
+  icon: 'item/firework_rocket.png',
+  isBlock: false
+}, {
+  label: '高草丛',
+  value: 'minecraft:tall_grass',
+  icon: 'item/tall_grass.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_blocks',
+  icon: 'item/music_disc_blocks.png',
+  isBlock: false
+}, {
+  label: '铁粒',
+  value: 'minecraft:iron_nugget',
+  icon: 'item/iron_nugget.png',
+  isBlock: false
+}, {
+  label: '西瓜片',
+  value: 'minecraft:melon_slice',
+  icon: 'item/melon_slice.png',
+  isBlock: false
+}, {
+  label: '菌丝体',
+  value: 'minecraft:mycelium',
+  icon: 'item/mycelium.png',
+  isBlock: true
+}, {
+  label: '蓝色陶瓦',
+  value: 'minecraft:blue_terracotta',
+  icon: 'item/blue_terracotta.png',
+  isBlock: true
+}, {
+  label: '烟火之星',
+  value: 'minecraft:firework_star',
+  icon: 'item/firework_star.png',
+  isBlock: false
+}, {
+  label: '石英台阶',
+  value: 'minecraft:quartz_slab',
+  icon: 'item/quartz_slab.png',
+  isBlock: true
+}, {
+  label: '红树木栅栏',
+  value: 'minecraft:mangrove_fence',
+  icon: 'item/mangrove_fence.png',
+  isBlock: true
+}, {
+  label: '深层铜矿石',
+  value: 'minecraft:deepslate_copper_ore',
+  icon: 'item/deepslate_copper_ore.png',
+  isBlock: true
+}, {
+  label: '斑驳的切制铜块',
+  value: 'minecraft:exposed_cut_copper',
+  icon: 'item/exposed_cut_copper.png',
+  isBlock: true
+}, {
+  label: '遮光玻璃',
+  value: 'minecraft:tinted_glass',
+  icon: 'item/tinted_glass.png',
+  isBlock: true
+}, {
+  label: '白桦树叶',
+  value: 'minecraft:birch_leaves',
+  icon: 'item/birch_leaves.png',
+  isBlock: true
+}, {
+  label: '铜格栅',
+  value: 'minecraft:copper_grate',
+  icon: 'item/copper_grate.png',
+  isBlock: true
+}, {
+  label: '红砖',
+  value: 'minecraft:brick',
+  icon: 'item/brick.png',
+  isBlock: false
+}, {
+  label: '虫蚀雕纹石砖',
+  value: 'minecraft:infested_chiseled_stone_bricks',
+  icon: 'item/infested_chiseled_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '樱花木栅栏门',
+  value: 'minecraft:cherry_fence_gate',
+  icon: 'item/cherry_fence_gate.png',
+  isBlock: true
+}, {
+  label: '绿色混凝土',
+  value: 'minecraft:green_concrete',
+  icon: 'item/green_concrete.png',
+  isBlock: true
+}, {
+  label: '淡灰色旗帜',
+  value: 'minecraft:light_gray_banner',
+  icon: 'item/light_gray_banner.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_relic',
+  icon: 'item/music_disc_relic.png',
+  isBlock: false
+}, {
+  label: '白色混凝土',
+  value: 'minecraft:white_concrete',
+  icon: 'item/white_concrete.png',
+  isBlock: true
+}, {
+  label: '末影人刷怪蛋',
+  value: 'minecraft:enderman_spawn_egg',
+  icon: 'item/enderman_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '盔甲架',
+  value: 'minecraft:armor_stand',
+  icon: 'item/armor_stand.png',
+  isBlock: false
+}, {
+  label: '红树木',
+  value: 'minecraft:mangrove_wood',
+  icon: 'item/mangrove_wood.png',
+  isBlock: true
+}, {
+  label: '白桦木栅栏门',
+  value: 'minecraft:birch_fence_gate',
+  icon: 'item/birch_fence_gate.png',
+  isBlock: true
+}, {
+  label: '青金石块',
+  value: 'minecraft:lapis_block',
+  icon: 'item/lapis_block.png',
+  isBlock: true
+}, {
+  label: '洞穴蜘蛛刷怪蛋',
+  value: 'minecraft:cave_spider_spawn_egg',
+  icon: 'item/cave_spider_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '涂蜡的斑驳雕纹铜块',
+  value: 'minecraft:waxed_exposed_chiseled_copper',
+  icon: 'item/waxed_exposed_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '僵尸的头',
+  value: 'minecraft:zombie_head',
+  icon: 'item/zombie_head.png',
+  isBlock: true
+}, {
+  label: '钟',
+  value: 'minecraft:bell',
+  icon: 'item/bell.png',
+  isBlock: true
+}, {
+  label: '红色下界砖块',
+  value: 'minecraft:red_nether_bricks',
+  icon: 'item/red_nether_bricks.png',
+  isBlock: true
+}, {
+  label: '南瓜',
+  value: 'minecraft:pumpkin',
+  icon: 'item/pumpkin.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:silence_armor_trim_smithing_template',
+  icon: 'item/silence_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '云杉木楼梯',
+  value: 'minecraft:spruce_stairs',
+  icon: 'item/spruce_stairs.png',
+  isBlock: true
+}, {
+  label: '烤马铃薯',
+  value: 'minecraft:baked_potato',
+  icon: 'item/baked_potato.png',
+  isBlock: false
+}, {
+  label: '涂蜡的切制铜楼梯',
+  value: 'minecraft:waxed_cut_copper_stairs',
+  icon: 'item/waxed_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '深色橡木压力板',
+  value: 'minecraft:dark_oak_pressure_plate',
+  icon: 'item/dark_oak_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '麦捆纹样陶片',
+  value: 'minecraft:sheaf_pottery_sherd',
+  icon: 'item/sheaf_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '橡木运输船',
+  value: 'minecraft:oak_chest_boat',
+  icon: 'item/oak_chest_boat.png',
+  isBlock: false
+}, {
+  label: '诡异木板',
+  value: 'minecraft:warped_planks',
+  icon: 'item/warped_planks.png',
+  isBlock: true
+}, {
+  label: '兔子刷怪蛋',
+  value: 'minecraft:rabbit_spawn_egg',
+  icon: 'item/rabbit_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '箭',
+  value: 'minecraft:arrow',
+  icon: 'item/arrow.png',
+  isBlock: false
+}, {
+  label: '竹压力板',
+  value: 'minecraft:bamboo_pressure_plate',
+  icon: 'item/bamboo_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '犰狳鳞甲',
+  value: 'minecraft:armadillo_scute',
+  icon: 'item/armadillo_scute.png',
+  isBlock: false
+}, {
+  label: '绿色潜影盒',
+  value: 'minecraft:green_shulker_box',
+  icon: 'item/green_shulker_box.png',
+  isBlock: true
+}, {
+  label: '悬挂式红树木告示牌',
+  value: 'minecraft:mangrove_hanging_sign',
+  icon: 'item/mangrove_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '涂蜡的切制铜台阶',
+  value: 'minecraft:waxed_cut_copper_slab',
+  icon: 'item/waxed_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '竹按钮',
+  value: 'minecraft:bamboo_button',
+  icon: 'item/bamboo_button.png',
+  isBlock: true
+}, {
+  label: '命令方块矿车',
+  value: 'minecraft:command_block_minecart',
+  icon: 'item/command_block_minecart.png',
+  isBlock: false
+}, {
+  label: '金斧',
+  value: 'minecraft:golden_axe',
+  icon: 'item/golden_axe.png',
+  isBlock: false
+}, {
+  label: '紫水晶母岩',
+  value: 'minecraft:budding_amethyst',
+  icon: 'item/budding_amethyst.png',
+  isBlock: true
+}, {
+  label: '黑色染料',
+  value: 'minecraft:black_dye',
+  icon: 'item/black_dye.png',
+  isBlock: false
+}, {
+  label: '去皮红树原木',
+  value: 'minecraft:stripped_mangrove_log',
+  icon: 'item/stripped_mangrove_log.png',
+  isBlock: true
+}, {
+  label: '热带鱼',
+  value: 'minecraft:tropical_fish',
+  icon: 'item/tropical_fish.png',
+  isBlock: false
+}, {
+  label: '蝌蚪桶',
+  value: 'minecraft:tadpole_bucket',
+  icon: 'item/tadpole_bucket.png',
+  isBlock: false
+}, {
+  label: '深色橡木栅栏',
+  value: 'minecraft:dark_oak_fence',
+  icon: 'item/dark_oak_fence.png',
+  isBlock: true
+}, {
+  label: '雪傀儡刷怪蛋',
+  value: 'minecraft:snow_golem_spawn_egg',
+  icon: 'item/snow_golem_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '灰色陶瓦',
+  value: 'minecraft:gray_terracotta',
+  icon: 'item/gray_terracotta.png',
+  isBlock: true
+}, {
+  label: '紫色陶瓦',
+  value: 'minecraft:purple_terracotta',
+  icon: 'item/purple_terracotta.png',
+  isBlock: true
+}, {
+  label: '黄色混凝土粉末',
+  value: 'minecraft:yellow_concrete_powder',
+  icon: 'item/yellow_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '雕纹铜块',
+  value: 'minecraft:chiseled_copper',
+  icon: 'item/chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_otherside',
+  icon: 'item/music_disc_otherside.png',
+  isBlock: false
+}, {
+  label: '石头楼梯',
+  value: 'minecraft:stone_stairs',
+  icon: 'item/stone_stairs.png',
+  isBlock: true
+}, {
+  label: '末影箱',
+  value: 'minecraft:ender_chest',
+  icon: 'item/ender_chest.png',
+  isBlock: true
+}, {
+  label: '诡异木门',
+  value: 'minecraft:warped_door',
+  icon: 'item/warped_door.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_5',
+  icon: 'item/music_disc_5.png',
+  isBlock: false
+}, {
+  label: '钻石胸甲',
+  value: 'minecraft:diamond_chestplate',
+  icon: 'item/diamond_chestplate.png',
+  isBlock: false
+}, {
+  label: '竹马赛克台阶',
+  value: 'minecraft:bamboo_mosaic_slab',
+  icon: 'item/bamboo_mosaic_slab.png',
+  isBlock: true
+}, {
+  label: '山羊刷怪蛋',
+  value: 'minecraft:goat_spawn_egg',
+  icon: 'item/goat_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '苔石砖楼梯',
+  value: 'minecraft:mossy_stone_brick_stairs',
+  icon: 'item/mossy_stone_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '溺尸刷怪蛋',
+  value: 'minecraft:drowned_spawn_egg',
+  icon: 'item/drowned_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '下界合金镐',
+  value: 'minecraft:netherite_pickaxe',
+  icon: 'item/netherite_pickaxe.png',
+  isBlock: false
+}, {
+  label: '危机纹样陶片',
+  value: 'minecraft:danger_pottery_sherd',
+  icon: 'item/danger_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '青色混凝土粉末',
+  value: 'minecraft:cyan_concrete_powder',
+  icon: 'item/cyan_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '木镐',
+  value: 'minecraft:wooden_pickaxe',
+  icon: 'item/wooden_pickaxe.png',
+  isBlock: false
+}, {
+  label: '磨制安山岩楼梯',
+  value: 'minecraft:polished_andesite_stairs',
+  icon: 'item/polished_andesite_stairs.png',
+  isBlock: true
+}, {
+  label: '橡木活板门',
+  value: 'minecraft:oak_trapdoor',
+  icon: 'item/oak_trapdoor.png',
+  isBlock: true
+}, {
+  label: '湿海绵',
+  value: 'minecraft:wet_sponge',
+  icon: 'item/wet_sponge.png',
+  isBlock: true
+}, {
+  label: '唱片机',
+  value: 'minecraft:jukebox',
+  icon: 'item/jukebox.png',
+  isBlock: true
+}, {
+  label: '磨制安山岩',
+  value: 'minecraft:polished_andesite',
+  icon: 'item/polished_andesite.png',
+  isBlock: true
+}, {
+  label: '浮冰',
+  value: 'minecraft:packed_ice',
+  icon: 'item/packed_ice.png',
+  isBlock: true
+}, {
+  label: '锁链胸甲',
+  value: 'minecraft:chainmail_chestplate',
+  icon: 'item/chainmail_chestplate.png',
+  isBlock: false
+}, {
+  label: '藤蔓',
+  value: 'minecraft:vine',
+  icon: 'item/vine.png',
+  isBlock: true
+}, {
+  label: '漏斗矿车',
+  value: 'minecraft:hopper_minecart',
+  icon: 'item/hopper_minecart.png',
+  isBlock: false
+}, {
+  label: '黄绿色混凝土粉末',
+  value: 'minecraft:lime_concrete_powder',
+  icon: 'item/lime_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '堆肥桶',
+  value: 'minecraft:composter',
+  icon: 'item/composter.png',
+  isBlock: true
+}, {
+  label: '海晶石砖',
+  value: 'minecraft:prismarine_bricks',
+  icon: 'item/prismarine_bricks.png',
+  isBlock: true
+}, {
+  label: '滴水石块',
+  value: 'minecraft:dripstone_block',
+  icon: 'item/dripstone_block.png',
+  isBlock: true
+}, {
+  label: '猪灵蛮兵刷怪蛋',
+  value: 'minecraft:piglin_brute_spawn_egg',
+  icon: 'item/piglin_brute_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '酿造台',
+  value: 'minecraft:brewing_stand',
+  icon: 'item/brewing_stand.png',
+  isBlock: true
+}, {
+  label: '深板岩瓦楼梯',
+  value: 'minecraft:deepslate_tile_stairs',
+  icon: 'item/deepslate_tile_stairs.png',
+  isBlock: true
+}, {
+  label: '黑色潜影盒',
+  value: 'minecraft:black_shulker_box',
+  icon: 'item/black_shulker_box.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:spire_armor_trim_smithing_template',
+  icon: 'item/spire_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '安山岩墙',
+  value: 'minecraft:andesite_wall',
+  icon: 'item/andesite_wall.png',
+  isBlock: true
+}, {
+  label: '白桦木压力板',
+  value: 'minecraft:birch_pressure_plate',
+  icon: 'item/birch_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '铜门',
+  value: 'minecraft:copper_door',
+  icon: 'item/copper_door.png',
+  isBlock: true
+}, {
+  label: '雪块',
+  value: 'minecraft:snow_block',
+  icon: 'item/snow_block.png',
+  isBlock: true
+}, {
+  label: '熔炉',
+  value: 'minecraft:furnace',
+  icon: 'item/furnace.png',
+  isBlock: true
+}, {
+  label: '墨囊',
+  value: 'minecraft:ink_sac',
+  icon: 'item/ink_sac.png',
+  isBlock: false
+}, {
+  label: '远古守卫者刷怪蛋',
+  value: 'minecraft:elder_guardian_spawn_egg',
+  icon: 'item/elder_guardian_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '物品展示框',
+  value: 'minecraft:item_frame',
+  icon: 'item/item_frame.png',
+  isBlock: false
+}, {
+  label: '岩浆怪刷怪蛋',
+  value: 'minecraft:magma_cube_spawn_egg',
+  icon: 'item/magma_cube_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '深板岩瓦台阶',
+  value: 'minecraft:deepslate_tile_slab',
+  icon: 'item/deepslate_tile_slab.png',
+  isBlock: true
+}, {
+  label: '投掷器',
+  value: 'minecraft:dropper',
+  icon: 'item/dropper.png',
+  isBlock: true
+}, {
+  label: '苦力怕刷怪蛋',
+  value: 'minecraft:creeper_spawn_egg',
+  icon: 'item/creeper_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '金锭',
+  value: 'minecraft:gold_ingot',
+  icon: 'item/gold_ingot.png',
+  isBlock: false
+}, {
+  label: '棕色床',
+  value: 'minecraft:brown_bed',
+  icon: 'item/brown_bed.png',
+  isBlock: true
+}, {
+  label: '熟兔肉',
+  value: 'minecraft:cooked_rabbit',
+  icon: 'item/cooked_rabbit.png',
+  isBlock: false
+}, {
+  label: '氧化的铜格栅',
+  value: 'minecraft:oxidized_copper_grate',
+  icon: 'item/oxidized_copper_grate.png',
+  isBlock: true
+}, {
+  label: '品红色蜡烛',
+  value: 'minecraft:magenta_candle',
+  icon: 'item/magenta_candle.png',
+  isBlock: true
+}, {
+  label: '白桦原木',
+  value: 'minecraft:birch_log',
+  icon: 'item/birch_log.png',
+  isBlock: true
+}, {
+  label: '史莱姆刷怪蛋',
+  value: 'minecraft:slime_spawn_egg',
+  icon: 'item/slime_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '恼鬼刷怪蛋',
+  value: 'minecraft:vex_spawn_egg',
+  icon: 'item/vex_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '盾牌',
+  value: 'minecraft:shield',
+  icon: 'item/shield.png',
+  isBlock: false
+}, {
+  label: '沼骸刷怪蛋',
+  value: 'minecraft:bogged_spawn_egg',
+  icon: 'item/bogged_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '橡木木板',
+  value: 'minecraft:oak_planks',
+  icon: 'item/oak_planks.png',
+  isBlock: true
+}, {
+  label: '指南针',
+  value: 'minecraft:compass',
+  icon: 'item/compass.png',
+  isBlock: false
+}, {
+  label: '品红色羊毛',
+  value: 'minecraft:magenta_wool',
+  icon: 'item/magenta_wool.png',
+  isBlock: true
+}, {
+  label: '橙色混凝土',
+  value: 'minecraft:orange_concrete',
+  icon: 'item/orange_concrete.png',
+  isBlock: true
+}, {
+  label: '深板岩圆石台阶',
+  value: 'minecraft:cobbled_deepslate_slab',
+  icon: 'item/cobbled_deepslate_slab.png',
+  isBlock: true
+}, {
+  label: '下界合金护腿',
+  value: 'minecraft:netherite_leggings',
+  icon: 'item/netherite_leggings.png',
+  isBlock: false
+}, {
+  label: '品红色混凝土粉末',
+  value: 'minecraft:magenta_concrete_powder',
+  icon: 'item/magenta_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '磨制黑石压力板',
+  value: 'minecraft:polished_blackstone_pressure_plate',
+  icon: 'item/polished_blackstone_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '蜂箱',
+  value: 'minecraft:beehive',
+  icon: 'item/beehive.png',
+  isBlock: true
+}, {
+  label: '圆石楼梯',
+  value: 'minecraft:cobblestone_stairs',
+  icon: 'item/cobblestone_stairs.png',
+  isBlock: true
+}, {
+  label: '云杉木活板门',
+  value: 'minecraft:spruce_trapdoor',
+  icon: 'item/spruce_trapdoor.png',
+  isBlock: true
+}, {
+  label: '生牛肉',
+  value: 'minecraft:beef',
+  icon: 'item/beef.png',
+  isBlock: false
+}, {
+  label: '虫蚀裂纹石砖',
+  value: 'minecraft:infested_cracked_stone_bricks',
+  icon: 'item/infested_cracked_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '品红色染色玻璃',
+  value: 'minecraft:magenta_stained_glass',
+  icon: 'item/magenta_stained_glass.png',
+  isBlock: true
+}, {
+  label: '苔石台阶',
+  value: 'minecraft:mossy_cobblestone_slab',
+  icon: 'item/mossy_cobblestone_slab.png',
+  isBlock: true
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:flower_banner_pattern',
+  icon: 'item/flower_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '深色橡木栅栏门',
+  value: 'minecraft:dark_oak_fence_gate',
+  icon: 'item/dark_oak_fence_gate.png',
+  isBlock: true
+}, {
+  label: '红石灯',
+  value: 'minecraft:redstone_lamp',
+  icon: 'item/redstone_lamp.png',
+  isBlock: true
+}, {
+  label: '玄武岩',
+  value: 'minecraft:basalt',
+  icon: 'item/basalt.png',
+  isBlock: true
+}, {
+  label: '樱花树苗',
+  value: 'minecraft:cherry_sapling',
+  icon: 'item/cherry_sapling.png',
+  isBlock: true
+}, {
+  label: '标靶',
+  value: 'minecraft:target',
+  icon: 'item/target.png',
+  isBlock: true
+}, {
+  label: '紫颂花',
+  value: 'minecraft:chorus_flower',
+  icon: 'item/chorus_flower.png',
+  isBlock: true
+}, {
+  label: '钻石',
+  value: 'minecraft:diamond',
+  icon: 'item/diamond.png',
+  isBlock: false
+}, {
+  label: '橙色羊毛',
+  value: 'minecraft:orange_wool',
+  icon: 'item/orange_wool.png',
+  isBlock: true
+}, {
+  label: '去皮丛林原木',
+  value: 'minecraft:stripped_jungle_log',
+  icon: 'item/stripped_jungle_log.png',
+  isBlock: true
+}, {
+  label: '淡灰色潜影盒',
+  value: 'minecraft:light_gray_shulker_box',
+  icon: 'item/light_gray_shulker_box.png',
+  isBlock: true
+}, {
+  label: '盛开的杜鹃花丛',
+  value: 'minecraft:flowering_azalea',
+  icon: 'item/flowering_azalea.png',
+  isBlock: true
+}, {
+  label: '下界苗',
+  value: 'minecraft:nether_sprouts',
+  icon: 'item/nether_sprouts.png',
+  isBlock: true
+}, {
+  label: '蜜蜂刷怪蛋',
+  value: 'minecraft:bee_spawn_egg',
+  icon: 'item/bee_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '尸壳刷怪蛋',
+  value: 'minecraft:husk_spawn_egg',
+  icon: 'item/husk_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '皮革',
+  value: 'minecraft:leather',
+  icon: 'item/leather.png',
+  isBlock: false
+}, {
+  label: '涂蜡的斑驳切制铜台阶',
+  value: 'minecraft:waxed_exposed_cut_copper_slab',
+  icon: 'item/waxed_exposed_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '绯红木楼梯',
+  value: 'minecraft:crimson_stairs',
+  icon: 'item/crimson_stairs.png',
+  isBlock: true
+}, {
+  label: '白桦木楼梯',
+  value: 'minecraft:birch_stairs',
+  icon: 'item/birch_stairs.png',
+  isBlock: true
+}, {
+  label: '金马铠',
+  value: 'minecraft:golden_horse_armor',
+  icon: 'item/golden_horse_armor.png',
+  isBlock: false
+}, {
+  label: '胡萝卜钓竿',
+  value: 'minecraft:carrot_on_a_stick',
+  icon: 'item/carrot_on_a_stick.png',
+  isBlock: false
+}, {
+  label: '诡异菌钓竿',
+  value: 'minecraft:warped_fungus_on_a_stick',
+  icon: 'item/warped_fungus_on_a_stick.png',
+  isBlock: false
+}, {
+  label: '丛林木门',
+  value: 'minecraft:jungle_door',
+  icon: 'item/jungle_door.png',
+  isBlock: true
+}, {
+  label: '铁锄',
+  value: 'minecraft:iron_hoe',
+  icon: 'item/iron_hoe.png',
+  isBlock: false
+}, {
+  label: '竹活板门',
+  value: 'minecraft:bamboo_trapdoor',
+  icon: 'item/bamboo_trapdoor.png',
+  isBlock: true
+}, {
+  label: '泥巴',
+  value: 'minecraft:mud',
+  icon: 'item/mud.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:ward_armor_trim_smithing_template',
+  icon: 'item/ward_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '磨制深板岩楼梯',
+  value: 'minecraft:polished_deepslate_stairs',
+  icon: 'item/polished_deepslate_stairs.png',
+  isBlock: true
+}, {
+  label: '金镐',
+  value: 'minecraft:golden_pickaxe',
+  icon: 'item/golden_pickaxe.png',
+  isBlock: false
+}, {
+  label: '深色橡木活板门',
+  value: 'minecraft:dark_oak_trapdoor',
+  icon: 'item/dark_oak_trapdoor.png',
+  isBlock: true
+}, {
+  label: '阳光探测器',
+  value: 'minecraft:daylight_detector',
+  icon: 'item/daylight_detector.png',
+  isBlock: true
+}, {
+  label: '棕色染料',
+  value: 'minecraft:brown_dye',
+  icon: 'item/brown_dye.png',
+  isBlock: false
+}, {
+  label: '绿色混凝土粉末',
+  value: 'minecraft:green_concrete_powder',
+  icon: 'item/green_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '命名牌',
+  value: 'minecraft:name_tag',
+  icon: 'item/name_tag.png',
+  isBlock: false
+}, {
+  label: '烈焰粉',
+  value: 'minecraft:blaze_powder',
+  icon: 'item/blaze_powder.png',
+  isBlock: false
+}, {
+  label: '望远镜',
+  value: 'minecraft:spyglass',
+  icon: 'item/spyglass.png',
+  isBlock: false
+}, {
+  label: '平滑石英台阶',
+  value: 'minecraft:smooth_quartz_slab',
+  icon: 'item/smooth_quartz_slab.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_mall',
+  icon: 'item/music_disc_mall.png',
+  isBlock: false
+}, {
+  label: '生羊肉',
+  value: 'minecraft:mutton',
+  icon: 'item/mutton.png',
+  isBlock: false
+}, {
+  label: '苹果',
+  value: 'minecraft:apple',
+  icon: 'item/apple.png',
+  isBlock: false
+}, {
+  label: '灰色混凝土',
+  value: 'minecraft:gray_concrete',
+  icon: 'item/gray_concrete.png',
+  isBlock: true
+}, {
+  label: '高炉',
+  value: 'minecraft:blast_furnace',
+  icon: 'item/blast_furnace.png',
+  isBlock: true
+}, {
+  label: '黏液块',
+  value: 'minecraft:slime_block',
+  icon: 'item/slime_block.png',
+  isBlock: true
+}, {
+  label: '品红色地毯',
+  value: 'minecraft:magenta_carpet',
+  icon: 'item/magenta_carpet.png',
+  isBlock: true
+}, {
+  label: '砂轮',
+  value: 'minecraft:grindstone',
+  icon: 'item/grindstone.png',
+  isBlock: true
+}, {
+  label: '失活的管珊瑚',
+  value: 'minecraft:dead_tube_coral',
+  icon: 'item/dead_tube_coral.png',
+  isBlock: true
+}, {
+  label: '切制铜台阶',
+  value: 'minecraft:cut_copper_slab',
+  icon: 'item/cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '绯红菌',
+  value: 'minecraft:crimson_fungus',
+  icon: 'item/crimson_fungus.png',
+  isBlock: true
+}, {
+  label: '灵魂沙',
+  value: 'minecraft:soul_sand',
+  icon: 'item/soul_sand.png',
+  isBlock: true
+}, {
+  label: '下界合金靴子',
+  value: 'minecraft:netherite_boots',
+  icon: 'item/netherite_boots.png',
+  isBlock: false
+}, {
+  label: '磨制黑石按钮',
+  value: 'minecraft:polished_blackstone_button',
+  icon: 'item/polished_blackstone_button.png',
+  isBlock: true
+}, {
+  label: '蜜脾块',
+  value: 'minecraft:honeycomb_block',
+  icon: 'item/honeycomb_block.png',
+  isBlock: true
+}, {
+  label: '猪刷怪蛋',
+  value: 'minecraft:pig_spawn_egg',
+  icon: 'item/pig_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '金合欢木栅栏门',
+  value: 'minecraft:acacia_fence_gate',
+  icon: 'item/acacia_fence_gate.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_creator_music_box',
+  icon: 'item/music_disc_creator_music_box.png',
+  isBlock: false
+}, {
+  label: '磨制黑石',
+  value: 'minecraft:polished_blackstone',
+  icon: 'item/polished_blackstone.png',
+  isBlock: true
+}, {
+  label: '深板岩砖',
+  value: 'minecraft:deepslate_bricks',
+  icon: 'item/deepslate_bricks.png',
+  isBlock: true
+}, {
+  label: '淡蓝色染色玻璃板',
+  value: 'minecraft:light_blue_stained_glass_pane',
+  icon: 'item/light_blue_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '杜鹃树叶',
+  value: 'minecraft:azalea_leaves',
+  icon: 'item/azalea_leaves.png',
+  isBlock: true
+}, {
+  label: '卫道士刷怪蛋',
+  value: 'minecraft:vindicator_spawn_egg',
+  icon: 'item/vindicator_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '虞美人',
+  value: 'minecraft:poppy',
+  icon: 'item/poppy.png',
+  isBlock: true
+}, {
+  label: '弓',
+  value: 'minecraft:bow',
+  icon: 'item/bow.png',
+  isBlock: false
+}, {
+  label: '灵魂土',
+  value: 'minecraft:soul_soil',
+  icon: 'item/soul_soil.png',
+  isBlock: true
+}, {
+  label: '泥土',
+  value: 'minecraft:dirt',
+  icon: 'item/dirt.png',
+  isBlock: true
+}, {
+  label: '失活的脑纹珊瑚扇',
+  value: 'minecraft:dead_brain_coral_fan',
+  icon: 'item/dead_brain_coral_fan.png',
+  isBlock: true
+}, {
+  label: '剪刀',
+  value: 'minecraft:shears',
+  icon: 'item/shears.png',
+  isBlock: false
+}, {
+  label: '锁链',
+  value: 'minecraft:chain',
+  icon: 'item/chain.png',
+  isBlock: true
+}, {
+  label: '疣猪兽刷怪蛋',
+  value: 'minecraft:hoglin_spawn_egg',
+  icon: 'item/hoglin_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '中型紫晶芽',
+  value: 'minecraft:medium_amethyst_bud',
+  icon: 'item/medium_amethyst_bud.png',
+  isBlock: true
+}, {
+  label: '淡灰色染色玻璃板',
+  value: 'minecraft:light_gray_stained_glass_pane',
+  icon: 'item/light_gray_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '白桦木运输船',
+  value: 'minecraft:birch_chest_boat',
+  icon: 'item/birch_chest_boat.png',
+  isBlock: false
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:globe_banner_pattern',
+  icon: 'item/globe_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '红沙',
+  value: 'minecraft:red_sand',
+  icon: 'item/red_sand.png',
+  isBlock: true
+}, {
+  label: '青色蜡烛',
+  value: 'minecraft:cyan_candle',
+  icon: 'item/cyan_candle.png',
+  isBlock: true
+}, {
+  label: '红色下界砖台阶',
+  value: 'minecraft:red_nether_brick_slab',
+  icon: 'item/red_nether_brick_slab.png',
+  isBlock: true
+}, {
+  label: '淡蓝色混凝土',
+  value: 'minecraft:light_blue_concrete',
+  icon: 'item/light_blue_concrete.png',
+  isBlock: true
+}, {
+  label: '粉红色蜡烛',
+  value: 'minecraft:pink_candle',
+  icon: 'item/pink_candle.png',
+  isBlock: true
+}, {
+  label: '蝌蚪刷怪蛋',
+  value: 'minecraft:tadpole_spawn_egg',
+  icon: 'item/tadpole_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '光源方块',
+  value: 'minecraft:light',
+  icon: 'item/light.png',
+  isBlock: true
+}, {
+  label: '滨菊',
+  value: 'minecraft:oxeye_daisy',
+  icon: 'item/oxeye_daisy.png',
+  isBlock: true
+}, {
+  label: '棕色蘑菇方块',
+  value: 'minecraft:brown_mushroom_block',
+  icon: 'item/brown_mushroom_block.png',
+  isBlock: true
+}, {
+  label: '瓶子草',
+  value: 'minecraft:pitcher_plant',
+  icon: 'item/pitcher_plant.png',
+  isBlock: true
+}, {
+  label: '铁头盔',
+  value: 'minecraft:iron_helmet',
+  icon: 'item/iron_helmet.png',
+  isBlock: false
+}, {
+  label: '鸡蛋',
+  value: 'minecraft:egg',
+  icon: 'item/egg.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:sentry_armor_trim_smithing_template',
+  icon: 'item/sentry_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '线',
+  value: 'minecraft:string',
+  icon: 'item/string.png',
+  isBlock: true
+}, {
+  label: '蓝色床',
+  value: 'minecraft:blue_bed',
+  icon: 'item/blue_bed.png',
+  isBlock: true
+}, {
+  label: '鞍',
+  value: 'minecraft:saddle',
+  icon: 'item/saddle.png',
+  isBlock: false
+}, {
+  label: '去皮深色橡木原木',
+  value: 'minecraft:stripped_dark_oak_log',
+  icon: 'item/stripped_dark_oak_log.png',
+  isBlock: true
+}, {
+  label: '蝙蝠刷怪蛋',
+  value: 'minecraft:bat_spawn_egg',
+  icon: 'item/bat_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '发酵蛛眼',
+  value: 'minecraft:fermented_spider_eye',
+  icon: 'item/fermented_spider_eye.png',
+  isBlock: false
+}, {
+  label: '淡蓝色蜡烛',
+  value: 'minecraft:light_blue_candle',
+  icon: 'item/light_blue_candle.png',
+  isBlock: true
+}, {
+  label: '石英楼梯',
+  value: 'minecraft:quartz_stairs',
+  icon: 'item/quartz_stairs.png',
+  isBlock: true
+}, {
+  label: '骷髅头颅',
+  value: 'minecraft:skeleton_skull',
+  icon: 'item/skeleton_skull.png',
+  isBlock: true
+}, {
+  label: '品红色旗帜',
+  value: 'minecraft:magenta_banner',
+  icon: 'item/magenta_banner.png',
+  isBlock: true
+}, {
+  label: '金头盔',
+  value: 'minecraft:golden_helmet',
+  icon: 'item/golden_helmet.png',
+  isBlock: false
+}, {
+  label: '涂蜡的铜活板门',
+  value: 'minecraft:waxed_copper_trapdoor',
+  icon: 'item/waxed_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '石砖',
+  value: 'minecraft:stone_bricks',
+  icon: 'item/stone_bricks.png',
+  isBlock: true
+}, {
+  label: '涂蜡的铜格栅',
+  value: 'minecraft:waxed_copper_grate',
+  icon: 'item/waxed_copper_grate.png',
+  isBlock: true
+}, {
+  label: '平滑红砂岩',
+  value: 'minecraft:smooth_red_sandstone',
+  icon: 'item/smooth_red_sandstone.png',
+  isBlock: true
+}, {
+  label: '钻石剑',
+  value: 'minecraft:diamond_sword',
+  icon: 'item/diamond_sword.png',
+  isBlock: false
+}, {
+  label: '凝灰岩',
+  value: 'minecraft:tuff',
+  icon: 'item/tuff.png',
+  isBlock: true
+}, {
+  label: '黄色羊毛',
+  value: 'minecraft:yellow_wool',
+  icon: 'item/yellow_wool.png',
+  isBlock: true
+}, {
+  label: '黄绿色陶瓦',
+  value: 'minecraft:lime_terracotta',
+  icon: 'item/lime_terracotta.png',
+  isBlock: true
+}, {
+  label: '合成器',
+  value: 'minecraft:crafter',
+  icon: 'item/crafter.png',
+  isBlock: true
+}, {
+  label: '下界岩',
+  value: 'minecraft:netherrack',
+  icon: 'item/netherrack.png',
+  isBlock: true
+}, {
+  label: '蘑菇煲',
+  value: 'minecraft:mushroom_stew',
+  icon: 'item/mushroom_stew.png',
+  isBlock: false
+}, {
+  label: '暗海晶石台阶',
+  value: 'minecraft:dark_prismarine_slab',
+  icon: 'item/dark_prismarine_slab.png',
+  isBlock: true
+}, {
+  label: '樱花木活板门',
+  value: 'minecraft:cherry_trapdoor',
+  icon: 'item/cherry_trapdoor.png',
+  isBlock: true
+}, {
+  label: '樱花木门',
+  value: 'minecraft:cherry_door',
+  icon: 'item/cherry_door.png',
+  isBlock: true
+}, {
+  label: '钻石块',
+  value: 'minecraft:diamond_block',
+  icon: 'item/diamond_block.png',
+  isBlock: true
+}, {
+  label: '蘑菇柄',
+  value: 'minecraft:mushroom_stem',
+  icon: 'item/mushroom_stem.png',
+  isBlock: true
+}, {
+  label: '深色橡木船',
+  value: 'minecraft:dark_oak_boat',
+  icon: 'item/dark_oak_boat.png',
+  isBlock: false
+}, {
+  label: '绯红木台阶',
+  value: 'minecraft:crimson_slab',
+  icon: 'item/crimson_slab.png',
+  isBlock: true
+}, {
+  label: '淡蓝色羊毛',
+  value: 'minecraft:light_blue_wool',
+  icon: 'item/light_blue_wool.png',
+  isBlock: true
+}, {
+  label: '耕地',
+  value: 'minecraft:farmland',
+  icon: 'item/farmland.png',
+  isBlock: true
+}, {
+  label: '深色橡木按钮',
+  value: 'minecraft:dark_oak_button',
+  icon: 'item/dark_oak_button.png',
+  isBlock: true
+}, {
+  label: '弓箭纹样陶片',
+  value: 'minecraft:archer_pottery_sherd',
+  icon: 'item/archer_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '光灵箭',
+  value: 'minecraft:spectral_arrow',
+  icon: 'item/spectral_arrow.png',
+  isBlock: false
+}, {
+  label: '骷髅马刷怪蛋',
+  value: 'minecraft:skeleton_horse_spawn_egg',
+  icon: 'item/skeleton_horse_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '红砂岩',
+  value: 'minecraft:red_sandstone',
+  icon: 'item/red_sandstone.png',
+  isBlock: true
+}, {
+  label: '沾泥的红树根',
+  value: 'minecraft:muddy_mangrove_roots',
+  icon: 'item/muddy_mangrove_roots.png',
+  isBlock: true
+}, {
+  label: '丛林木压力板',
+  value: 'minecraft:jungle_pressure_plate',
+  icon: 'item/jungle_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '绯红木告示牌',
+  value: 'minecraft:crimson_sign',
+  icon: 'item/crimson_sign.png',
+  isBlock: true
+}, {
+  label: '幽匿尖啸体',
+  value: 'minecraft:sculk_shrieker',
+  icon: 'item/sculk_shrieker.png',
+  isBlock: true
+}, {
+  label: '失活的管珊瑚块',
+  value: 'minecraft:dead_tube_coral_block',
+  icon: 'item/dead_tube_coral_block.png',
+  isBlock: true
+}, {
+  label: '深板岩',
+  value: 'minecraft:deepslate',
+  icon: 'item/deepslate.png',
+  isBlock: true
+}, {
+  label: '竹楼梯',
+  value: 'minecraft:bamboo_stairs',
+  icon: 'item/bamboo_stairs.png',
+  isBlock: true
+}, {
+  label: '诡异菌索',
+  value: 'minecraft:warped_roots',
+  icon: 'item/warped_roots.png',
+  isBlock: true
+}, {
+  label: '涂蜡的氧化铜活板门',
+  value: 'minecraft:waxed_oxidized_copper_trapdoor',
+  icon: 'item/waxed_oxidized_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀铜格栅',
+  value: 'minecraft:waxed_weathered_copper_grate',
+  icon: 'item/waxed_weathered_copper_grate.png',
+  isBlock: true
+}, {
+  label: '绯红木栅栏门',
+  value: 'minecraft:crimson_fence_gate',
+  icon: 'item/crimson_fence_gate.png',
+  isBlock: true
+}, {
+  label: '橙色郁金香',
+  value: 'minecraft:orange_tulip',
+  icon: 'item/orange_tulip.png',
+  isBlock: true
+}, {
+  label: '管珊瑚扇',
+  value: 'minecraft:tube_coral_fan',
+  icon: 'item/tube_coral_fan.png',
+  isBlock: true
+}, {
+  label: '下界合金胸甲',
+  value: 'minecraft:netherite_chestplate',
+  icon: 'item/netherite_chestplate.png',
+  isBlock: false
+}, {
+  label: '锈蚀的铜门',
+  value: 'minecraft:weathered_copper_door',
+  icon: 'item/weathered_copper_door.png',
+  isBlock: true
+}, {
+  label: '枯萎的灌木',
+  value: 'minecraft:dead_bush',
+  icon: 'item/dead_bush.png',
+  isBlock: true
+}, {
+  label: '钻石斧',
+  value: 'minecraft:diamond_axe',
+  icon: 'item/diamond_axe.png',
+  isBlock: false
+}, {
+  label: '不祥之瓶',
+  value: 'minecraft:ominous_bottle',
+  icon: 'item/ominous_bottle.png',
+  isBlock: false
+}, {
+  label: '青色地毯',
+  value: 'minecraft:cyan_carpet',
+  icon: 'item/cyan_carpet.png',
+  isBlock: true
+}, {
+  label: '涂蜡的斑驳切制铜楼梯',
+  value: 'minecraft:waxed_exposed_cut_copper_stairs',
+  icon: 'item/waxed_exposed_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '绯红菌岩',
+  value: 'minecraft:crimson_nylium',
+  icon: 'item/crimson_nylium.png',
+  isBlock: true
+}, {
+  label: '粉红色地毯',
+  value: 'minecraft:pink_carpet',
+  icon: 'item/pink_carpet.png',
+  isBlock: true
+}, {
+  label: '雕刻南瓜',
+  value: 'minecraft:carved_pumpkin',
+  icon: 'item/carved_pumpkin.png',
+  isBlock: true
+}, {
+  label: '脑纹珊瑚扇',
+  value: 'minecraft:brain_coral_fan',
+  icon: 'item/brain_coral_fan.png',
+  isBlock: true
+}, {
+  label: '深板岩瓦墙',
+  value: 'minecraft:deepslate_tile_wall',
+  icon: 'item/deepslate_tile_wall.png',
+  isBlock: true
+}, {
+  label: '蓝色染料',
+  value: 'minecraft:blue_dye',
+  icon: 'item/blue_dye.png',
+  isBlock: false
+}, {
+  label: '云杉木压力板',
+  value: 'minecraft:spruce_pressure_plate',
+  icon: 'item/spruce_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '悬挂式橡木告示牌',
+  value: 'minecraft:oak_hanging_sign',
+  icon: 'item/oak_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '绿色蜡烛',
+  value: 'minecraft:green_candle',
+  icon: 'item/green_candle.png',
+  isBlock: true
+}, {
+  label: '滴水石锥',
+  value: 'minecraft:pointed_dripstone',
+  icon: 'item/pointed_dripstone.png',
+  isBlock: true
+}, {
+  label: '末地石砖台阶',
+  value: 'minecraft:end_stone_brick_slab',
+  icon: 'item/end_stone_brick_slab.png',
+  isBlock: true
+}, {
+  label: '陷阱箱',
+  value: 'minecraft:trapped_chest',
+  icon: 'item/trapped_chest.png',
+  isBlock: true
+}, {
+  label: '鲑鱼桶',
+  value: 'minecraft:salmon_bucket',
+  icon: 'item/salmon_bucket.png',
+  isBlock: false
+}, {
+  label: '灯笼',
+  value: 'minecraft:lantern',
+  icon: 'item/lantern.png',
+  isBlock: true
+}, {
+  label: '紫水晶簇',
+  value: 'minecraft:amethyst_cluster',
+  icon: 'item/amethyst_cluster.png',
+  isBlock: true
+}, {
+  label: '雕纹磨制黑石',
+  value: 'minecraft:chiseled_polished_blackstone',
+  icon: 'item/chiseled_polished_blackstone.png',
+  isBlock: true
+}, {
+  label: '红树胎生苗',
+  value: 'minecraft:mangrove_propagule',
+  icon: 'item/mangrove_propagule.png',
+  isBlock: true
+}, {
+  label: '佳酿纹样陶片',
+  value: 'minecraft:brewer_pottery_sherd',
+  icon: 'item/brewer_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '悬挂式竹告示牌',
+  value: 'minecraft:bamboo_hanging_sign',
+  icon: 'item/bamboo_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '红砖块',
+  value: 'minecraft:bricks',
+  icon: 'item/bricks.png',
+  isBlock: true
+}, {
+  label: '下界合金斧',
+  value: 'minecraft:netherite_axe',
+  icon: 'item/netherite_axe.png',
+  isBlock: false
+}, {
+  label: '南瓜灯',
+  value: 'minecraft:jack_o_lantern',
+  icon: 'item/jack_o_lantern.png',
+  isBlock: true
+}, {
+  label: '淡蓝色地毯',
+  value: 'minecraft:light_blue_carpet',
+  icon: 'item/light_blue_carpet.png',
+  isBlock: true
+}, {
+  label: '斑驳的切制铜台阶',
+  value: 'minecraft:exposed_cut_copper_slab',
+  icon: 'item/exposed_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '深板岩圆石墙',
+  value: 'minecraft:cobbled_deepslate_wall',
+  icon: 'item/cobbled_deepslate_wall.png',
+  isBlock: true
+}, {
+  label: '腐肉',
+  value: 'minecraft:rotten_flesh',
+  icon: 'item/rotten_flesh.png',
+  isBlock: false
+}, {
+  label: '切制红砂岩台阶',
+  value: 'minecraft:cut_red_sandstone_slab',
+  icon: 'item/cut_red_sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '红色蜡烛',
+  value: 'minecraft:red_candle',
+  icon: 'item/red_candle.png',
+  isBlock: true
+}, {
+  label: '磨制凝灰岩台阶',
+  value: 'minecraft:polished_tuff_slab',
+  icon: 'item/polished_tuff_slab.png',
+  isBlock: true
+}, {
+  label: '裂纹下界砖块',
+  value: 'minecraft:cracked_nether_bricks',
+  icon: 'item/cracked_nether_bricks.png',
+  isBlock: true
+}, {
+  label: '骷髅刷怪蛋',
+  value: 'minecraft:skeleton_spawn_egg',
+  icon: 'item/skeleton_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '钻石矿石',
+  value: 'minecraft:diamond_ore',
+  icon: 'item/diamond_ore.png',
+  isBlock: true
+}, {
+  label: '雕纹红砂岩',
+  value: 'minecraft:chiseled_red_sandstone',
+  icon: 'item/chiseled_red_sandstone.png',
+  isBlock: true
+}, {
+  label: '铜块',
+  value: 'minecraft:copper_block',
+  icon: 'item/copper_block.png',
+  isBlock: true
+}, {
+  label: '苔藓块',
+  value: 'minecraft:moss_block',
+  icon: 'item/moss_block.png',
+  isBlock: true
+}, {
+  label: '淡灰色羊毛',
+  value: 'minecraft:light_gray_wool',
+  icon: 'item/light_gray_wool.png',
+  isBlock: true
+}, {
+  label: '铁桶',
+  value: 'minecraft:bucket',
+  icon: 'item/bucket.png',
+  isBlock: false
+}, {
+  label: '潜影壳',
+  value: 'minecraft:shulker_shell',
+  icon: 'item/shulker_shell.png',
+  isBlock: false
+}, {
+  label: '讲台',
+  value: 'minecraft:lectern',
+  icon: 'item/lectern.png',
+  isBlock: true
+}, {
+  label: '回响碎片',
+  value: 'minecraft:echo_shard',
+  icon: 'item/echo_shard.png',
+  isBlock: false
+}, {
+  label: '木桶',
+  value: 'minecraft:barrel',
+  icon: 'item/barrel.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_pigstep',
+  icon: 'item/music_disc_pigstep.png',
+  isBlock: false
+}, {
+  label: '苔石墙',
+  value: 'minecraft:mossy_cobblestone_wall',
+  icon: 'item/mossy_cobblestone_wall.png',
+  isBlock: true
+}, {
+  label: '盛开的杜鹃树叶',
+  value: 'minecraft:flowering_azalea_leaves',
+  icon: 'item/flowering_azalea_leaves.png',
+  isBlock: true
+}, {
+  label: '磨制深板岩',
+  value: 'minecraft:polished_deepslate',
+  icon: 'item/polished_deepslate.png',
+  isBlock: true
+}, {
+  label: '不祥试炼钥匙',
+  value: 'minecraft:ominous_trial_key',
+  icon: 'item/ominous_trial_key.png',
+  isBlock: false
+}, {
+  label: '陶瓦',
+  value: 'minecraft:terracotta',
+  icon: 'item/terracotta.png',
+  isBlock: true
+}, {
+  label: '深层钻石矿石',
+  value: 'minecraft:deepslate_diamond_ore',
+  icon: 'item/deepslate_diamond_ore.png',
+  isBlock: true
+}, {
+  label: '管珊瑚块',
+  value: 'minecraft:tube_coral_block',
+  icon: 'item/tube_coral_block.png',
+  isBlock: true
+}, {
+  label: '紫色染色玻璃',
+  value: 'minecraft:purple_stained_glass',
+  icon: 'item/purple_stained_glass.png',
+  isBlock: true
+}, {
+  label: '丛林木按钮',
+  value: 'minecraft:jungle_button',
+  icon: 'item/jungle_button.png',
+  isBlock: true
+}, {
+  label: '樱花木板',
+  value: 'minecraft:cherry_planks',
+  icon: 'item/cherry_planks.png',
+  isBlock: true
+}, {
+  label: '青色旗帜',
+  value: 'minecraft:cyan_banner',
+  icon: 'item/cyan_banner.png',
+  isBlock: true
+}, {
+  label: '蕨',
+  value: 'minecraft:fern',
+  icon: 'item/fern.png',
+  isBlock: true
+}, {
+  label: '鳕鱼刷怪蛋',
+  value: 'minecraft:cod_spawn_egg',
+  icon: 'item/cod_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '荧光物品展示框',
+  value: 'minecraft:glow_item_frame',
+  icon: 'item/glow_item_frame.png',
+  isBlock: false
+}, {
+  label: '深色橡树树叶',
+  value: 'minecraft:dark_oak_leaves',
+  icon: 'item/dark_oak_leaves.png',
+  isBlock: true
+}, {
+  label: '白桦木船',
+  value: 'minecraft:birch_boat',
+  icon: 'item/birch_boat.png',
+  isBlock: false
+}, {
+  label: '粉红色旗帜',
+  value: 'minecraft:pink_banner',
+  icon: 'item/pink_banner.png',
+  isBlock: true
+}, {
+  label: '悬挂式绯红木告示牌',
+  value: 'minecraft:crimson_hanging_sign',
+  icon: 'item/crimson_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '珠光蛙明灯',
+  value: 'minecraft:pearlescent_froglight',
+  icon: 'item/pearlescent_froglight.png',
+  isBlock: true
+}, {
+  label: '金合欢木板',
+  value: 'minecraft:acacia_planks',
+  icon: 'item/acacia_planks.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀切制铜台阶',
+  value: 'minecraft:waxed_weathered_cut_copper_slab',
+  icon: 'item/waxed_weathered_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '大型垂滴叶',
+  value: 'minecraft:big_dripleaf',
+  icon: 'item/big_dripleaf.png',
+  isBlock: true
+}, {
+  label: '制箭台',
+  value: 'minecraft:fletching_table',
+  icon: 'item/fletching_table.png',
+  isBlock: true
+}, {
+  label: '羽毛',
+  value: 'minecraft:feather',
+  icon: 'item/feather.png',
+  isBlock: false
+}, {
+  label: '蠹虫刷怪蛋',
+  value: 'minecraft:silverfish_spawn_egg',
+  icon: 'item/silverfish_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '绯红菌柄',
+  value: 'minecraft:crimson_stem',
+  icon: 'item/crimson_stem.png',
+  isBlock: true
+}, {
+  label: '白色染色玻璃',
+  value: 'minecraft:white_stained_glass',
+  icon: 'item/white_stained_glass.png',
+  isBlock: true
+}, {
+  label: '轻质测重压力板',
+  value: 'minecraft:light_weighted_pressure_plate',
+  icon: 'item/light_weighted_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '橡木船',
+  value: 'minecraft:oak_boat',
+  icon: 'item/oak_boat.png',
+  isBlock: false
+}, {
+  label: '旋风纹样陶片',
+  value: 'minecraft:guster_pottery_sherd',
+  icon: 'item/guster_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '淡蓝色旗帜',
+  value: 'minecraft:light_blue_banner',
+  icon: 'item/light_blue_banner.png',
+  isBlock: true
+}, {
+  label: '诡异疣块',
+  value: 'minecraft:warped_wart_block',
+  icon: 'item/warped_wart_block.png',
+  isBlock: true
+}, {
+  label: '探测铁轨',
+  value: 'minecraft:detector_rail',
+  icon: 'item/detector_rail.png',
+  isBlock: true
+}, {
+  label: '去皮云杉原木',
+  value: 'minecraft:stripped_spruce_log',
+  icon: 'item/stripped_spruce_log.png',
+  isBlock: true
+}, {
+  label: '涂蜡的斑驳铜活板门',
+  value: 'minecraft:waxed_exposed_copper_trapdoor',
+  icon: 'item/waxed_exposed_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '红树木板',
+  value: 'minecraft:mangrove_planks',
+  icon: 'item/mangrove_planks.png',
+  isBlock: true
+}, {
+  label: '红树木活板门',
+  value: 'minecraft:mangrove_trapdoor',
+  icon: 'item/mangrove_trapdoor.png',
+  isBlock: true
+}, {
+  label: '工作台',
+  value: 'minecraft:crafting_table',
+  icon: 'item/crafting_table.png',
+  isBlock: true
+}, {
+  label: '橙色带釉陶瓦',
+  value: 'minecraft:orange_glazed_terracotta',
+  icon: 'item/orange_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '绿色地毯',
+  value: 'minecraft:green_carpet',
+  icon: 'item/green_carpet.png',
+  isBlock: true
+}, {
+  label: '绿色羊毛',
+  value: 'minecraft:green_wool',
+  icon: 'item/green_wool.png',
+  isBlock: true
+}, {
+  label: '失活的火珊瑚',
+  value: 'minecraft:dead_fire_coral',
+  icon: 'item/dead_fire_coral.png',
+  isBlock: true
+}, {
+  label: '幽匿块',
+  value: 'minecraft:sculk',
+  icon: 'item/sculk.png',
+  isBlock: true
+}, {
+  label: '丛林树苗',
+  value: 'minecraft:jungle_sapling',
+  icon: 'item/jungle_sapling.png',
+  isBlock: true
+}, {
+  label: '花岗岩台阶',
+  value: 'minecraft:granite_slab',
+  icon: 'item/granite_slab.png',
+  isBlock: true
+}, {
+  label: '铁剑',
+  value: 'minecraft:iron_sword',
+  icon: 'item/iron_sword.png',
+  isBlock: false
+}, {
+  label: '虫蚀石头',
+  value: 'minecraft:infested_stone',
+  icon: 'item/infested_stone.png',
+  isBlock: true
+}, {
+  label: '皮革马铠',
+  value: 'minecraft:leather_horse_armor',
+  icon: 'item/leather_horse_armor.png',
+  isBlock: false
+}, {
+  label: '牡丹',
+  value: 'minecraft:peony',
+  icon: 'item/peony.png',
+  isBlock: true
+}, {
+  label: '去皮金合欢木',
+  value: 'minecraft:stripped_acacia_wood',
+  icon: 'item/stripped_acacia_wood.png',
+  isBlock: true
+}, {
+  label: '红色混凝土',
+  value: 'minecraft:red_concrete',
+  icon: 'item/red_concrete.png',
+  isBlock: true
+}, {
+  label: '龙首',
+  value: 'minecraft:dragon_head',
+  icon: 'item/dragon_head.png',
+  isBlock: true
+}, {
+  label: '青色混凝土',
+  value: 'minecraft:cyan_concrete',
+  icon: 'item/cyan_concrete.png',
+  isBlock: true
+}, {
+  label: '氧化的切制铜块',
+  value: 'minecraft:oxidized_cut_copper',
+  icon: 'item/oxidized_cut_copper.png',
+  isBlock: true
+}, {
+  label: '钻石马铠',
+  value: 'minecraft:diamond_horse_armor',
+  icon: 'item/diamond_horse_armor.png',
+  isBlock: false
+}, {
+  label: '铁傀儡刷怪蛋',
+  value: 'minecraft:iron_golem_spawn_egg',
+  icon: 'item/iron_golem_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '红色地毯',
+  value: 'minecraft:red_carpet',
+  icon: 'item/red_carpet.png',
+  isBlock: true
+}, {
+  label: '金合欢木压力板',
+  value: 'minecraft:acacia_pressure_plate',
+  icon: 'item/acacia_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '碗',
+  value: 'minecraft:bowl',
+  icon: 'item/bowl.png',
+  isBlock: false
+}, {
+  label: '爱心纹样陶片',
+  value: 'minecraft:heart_pottery_sherd',
+  icon: 'item/heart_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '铁块',
+  value: 'minecraft:iron_block',
+  icon: 'item/iron_block.png',
+  isBlock: true
+}, {
+  label: '闪烁的西瓜片',
+  value: 'minecraft:glistering_melon_slice',
+  icon: 'item/glistering_melon_slice.png',
+  isBlock: false
+}, {
+  label: '蜡烛',
+  value: 'minecraft:candle',
+  icon: 'item/candle.png',
+  isBlock: true
+}, {
+  label: '磨制闪长岩',
+  value: 'minecraft:polished_diorite',
+  icon: 'item/polished_diorite.png',
+  isBlock: true
+}, {
+  label: '去皮云杉木',
+  value: 'minecraft:stripped_spruce_wood',
+  icon: 'item/stripped_spruce_wood.png',
+  isBlock: true
+}, {
+  label: '铜活板门',
+  value: 'minecraft:copper_trapdoor',
+  icon: 'item/copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '重质测重压力板',
+  value: 'minecraft:heavy_weighted_pressure_plate',
+  icon: 'item/heavy_weighted_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '燧石',
+  value: 'minecraft:flint',
+  icon: 'item/flint.png',
+  isBlock: false
+}, {
+  label: '白色带釉陶瓦',
+  value: 'minecraft:white_glazed_terracotta',
+  icon: 'item/white_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '闪长岩台阶',
+  value: 'minecraft:diorite_slab',
+  icon: 'item/diorite_slab.png',
+  isBlock: true
+}, {
+  label: '瓶子草荚果',
+  value: 'minecraft:pitcher_pod',
+  icon: 'item/pitcher_pod.png',
+  isBlock: true
+}, {
+  label: '棕色羊毛',
+  value: 'minecraft:brown_wool',
+  icon: 'item/brown_wool.png',
+  isBlock: true
+}, {
+  label: '淡灰色床',
+  value: 'minecraft:light_gray_bed',
+  icon: 'item/light_gray_bed.png',
+  isBlock: true
+}, {
+  label: '红色下界砖墙',
+  value: 'minecraft:red_nether_brick_wall',
+  icon: 'item/red_nether_brick_wall.png',
+  isBlock: true
+}, {
+  label: '蛋糕',
+  value: 'minecraft:cake',
+  icon: 'item/cake.png',
+  isBlock: true
+}, {
+  label: '幻翼刷怪蛋',
+  value: 'minecraft:phantom_spawn_egg',
+  icon: 'item/phantom_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '荧石粉',
+  value: 'minecraft:glowstone_dust',
+  icon: 'item/glowstone_dust.png',
+  isBlock: false
+}, {
+  label: '铜灯',
+  value: 'minecraft:copper_bulb',
+  icon: 'item/copper_bulb.png',
+  isBlock: true
+}, {
+  label: '嗅探兽蛋',
+  value: 'minecraft:sniffer_egg',
+  icon: 'item/sniffer_egg.png',
+  isBlock: true
+}, {
+  label: '丛林树叶',
+  value: 'minecraft:jungle_leaves',
+  icon: 'item/jungle_leaves.png',
+  isBlock: true
+}, {
+  label: '切制铜块',
+  value: 'minecraft:cut_copper',
+  icon: 'item/cut_copper.png',
+  isBlock: true
+}, {
+  label: '涂蜡的切制铜块',
+  value: 'minecraft:waxed_cut_copper',
+  icon: 'item/waxed_cut_copper.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:vex_armor_trim_smithing_template',
+  icon: 'item/vex_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '涂蜡的锈蚀铜门',
+  value: 'minecraft:waxed_weathered_copper_door',
+  icon: 'item/waxed_weathered_copper_door.png',
+  isBlock: true
+}, {
+  label: '糖',
+  value: 'minecraft:sugar',
+  icon: 'item/sugar.png',
+  isBlock: false
+}, {
+  label: '绿色旗帜',
+  value: 'minecraft:green_banner',
+  icon: 'item/green_banner.png',
+  isBlock: true
+}, {
+  label: '红色蘑菇方块',
+  value: 'minecraft:red_mushroom_block',
+  icon: 'item/red_mushroom_block.png',
+  isBlock: true
+}, {
+  label: '发光浆果',
+  value: 'minecraft:glow_berries',
+  icon: 'item/glow_berries.png',
+  isBlock: true
+}, {
+  label: '粗铜块',
+  value: 'minecraft:raw_copper_block',
+  icon: 'item/raw_copper_block.png',
+  isBlock: true
+}, {
+  label: '棕色蜡烛',
+  value: 'minecraft:brown_candle',
+  icon: 'item/brown_candle.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀切制铜块',
+  value: 'minecraft:waxed_weathered_cut_copper',
+  icon: 'item/waxed_weathered_cut_copper.png',
+  isBlock: true
+}, {
+  label: '睡莲',
+  value: 'minecraft:lily_pad',
+  icon: 'item/lily_pad.png',
+  isBlock: true
+}, {
+  label: '黄色染色玻璃',
+  value: 'minecraft:yellow_stained_glass',
+  icon: 'item/yellow_stained_glass.png',
+  isBlock: true
+}, {
+  label: '南瓜种子',
+  value: 'minecraft:pumpkin_seeds',
+  icon: 'item/pumpkin_seeds.png',
+  isBlock: true
+}, {
+  label: '氧化的铜门',
+  value: 'minecraft:oxidized_copper_door',
+  icon: 'item/oxidized_copper_door.png',
+  isBlock: true
+}, {
+  label: '砂土',
+  value: 'minecraft:coarse_dirt',
+  icon: 'item/coarse_dirt.png',
+  isBlock: true
+}, {
+  label: '失活的鹿角珊瑚',
+  value: 'minecraft:dead_horn_coral',
+  icon: 'item/dead_horn_coral.png',
+  isBlock: true
+}, {
+  label: '磨制花岗岩',
+  value: 'minecraft:polished_granite',
+  icon: 'item/polished_granite.png',
+  isBlock: true
+}, {
+  label: '海龟刷怪蛋',
+  value: 'minecraft:turtle_spawn_egg',
+  icon: 'item/turtle_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '深色橡木台阶',
+  value: 'minecraft:dark_oak_slab',
+  icon: 'item/dark_oak_slab.png',
+  isBlock: true
+}, {
+  label: '石英砖',
+  value: 'minecraft:quartz_bricks',
+  icon: 'item/quartz_bricks.png',
+  isBlock: true
+}, {
+  label: '女巫刷怪蛋',
+  value: 'minecraft:witch_spawn_egg',
+  icon: 'item/witch_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '磨制黑石楼梯',
+  value: 'minecraft:polished_blackstone_stairs',
+  icon: 'item/polished_blackstone_stairs.png',
+  isBlock: true
+}, {
+  label: '白色潜影盒',
+  value: 'minecraft:white_shulker_box',
+  icon: 'item/white_shulker_box.png',
+  isBlock: true
+}, {
+  label: '红色旗帜',
+  value: 'minecraft:red_banner',
+  icon: 'item/red_banner.png',
+  isBlock: true
+}, {
+  label: '红树木门',
+  value: 'minecraft:mangrove_door',
+  icon: 'item/mangrove_door.png',
+  isBlock: true
+}, {
+  label: '矮草丛',
+  value: 'minecraft:short_grass',
+  icon: 'item/short_grass.png',
+  isBlock: true
+}, {
+  label: '红树木栅栏门',
+  value: 'minecraft:mangrove_fence_gate',
+  icon: 'item/mangrove_fence_gate.png',
+  isBlock: true
+}, {
+  label: '深色橡木告示牌',
+  value: 'minecraft:dark_oak_sign',
+  icon: 'item/dark_oak_sign.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_ward',
+  icon: 'item/music_disc_ward.png',
+  isBlock: false
+}, {
+  label: '铁活板门',
+  value: 'minecraft:iron_trapdoor',
+  icon: 'item/iron_trapdoor.png',
+  isBlock: true
+}, {
+  label: '棕色潜影盒',
+  value: 'minecraft:brown_shulker_box',
+  icon: 'item/brown_shulker_box.png',
+  isBlock: true
+}, {
+  label: '海晶石',
+  value: 'minecraft:prismarine',
+  icon: 'item/prismarine.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_precipice',
+  icon: 'item/music_disc_precipice.png',
+  isBlock: false
+}, {
+  label: '仙人掌',
+  value: 'minecraft:cactus',
+  icon: 'item/cactus.png',
+  isBlock: true
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:mojang_banner_pattern',
+  icon: 'item/mojang_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '泥砖楼梯',
+  value: 'minecraft:mud_brick_stairs',
+  icon: 'item/mud_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '强化深板岩',
+  value: 'minecraft:reinforced_deepslate',
+  icon: 'item/reinforced_deepslate.png',
+  isBlock: true
+}, {
+  label: '熟羊肉',
+  value: 'minecraft:cooked_mutton',
+  icon: 'item/cooked_mutton.png',
+  isBlock: false
+}, {
+  label: '诡异菌核',
+  value: 'minecraft:warped_hyphae',
+  icon: 'item/warped_hyphae.png',
+  isBlock: true
+}, {
+  label: '雪球',
+  value: 'minecraft:snowball',
+  icon: 'item/snowball.png',
+  isBlock: false
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_13',
+  icon: 'item/music_disc_13.png',
+  isBlock: false
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_11',
+  icon: 'item/music_disc_11.png',
+  isBlock: false
+}, {
+  label: '淡灰色混凝土粉末',
+  value: 'minecraft:light_gray_concrete_powder',
+  icon: 'item/light_gray_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '熟鳕鱼',
+  value: 'minecraft:cooked_cod',
+  icon: 'item/cooked_cod.png',
+  isBlock: false
+}, {
+  label: '鲑鱼刷怪蛋',
+  value: 'minecraft:salmon_spawn_egg',
+  icon: 'item/salmon_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '去皮绯红菌核',
+  value: 'minecraft:stripped_crimson_hyphae',
+  icon: 'item/stripped_crimson_hyphae.png',
+  isBlock: true
+}, {
+  label: '黑色蜡烛',
+  value: 'minecraft:black_candle',
+  icon: 'item/black_candle.png',
+  isBlock: true
+}, {
+  label: '平滑玄武岩',
+  value: 'minecraft:smooth_basalt',
+  icon: 'item/smooth_basalt.png',
+  isBlock: true
+}, {
+  label: '活塞',
+  value: 'minecraft:piston',
+  icon: 'item/piston.png',
+  isBlock: true
+}, {
+  label: '淡灰色染料',
+  value: 'minecraft:light_gray_dye',
+  icon: 'item/light_gray_dye.png',
+  isBlock: false
+}, {
+  label: '红色郁金香',
+  value: 'minecraft:red_tulip',
+  icon: 'item/red_tulip.png',
+  isBlock: true
+}, {
+  label: '蓝色混凝土粉末',
+  value: 'minecraft:blue_concrete_powder',
+  icon: 'item/blue_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '绿色床',
+  value: 'minecraft:green_bed',
+  icon: 'item/green_bed.png',
+  isBlock: true
+}, {
+  label: '凋灵骷髅头颅',
+  value: 'minecraft:wither_skeleton_skull',
+  icon: 'item/wither_skeleton_skull.png',
+  isBlock: true
+}, {
+  label: '铁栏杆',
+  value: 'minecraft:iron_bars',
+  icon: 'item/iron_bars.png',
+  isBlock: true
+}, {
+  label: '珍宝纹样陶片',
+  value: 'minecraft:prize_pottery_sherd',
+  icon: 'item/prize_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '粉红色羊毛',
+  value: 'minecraft:pink_wool',
+  icon: 'item/pink_wool.png',
+  isBlock: true
+}, {
+  label: '橙色床',
+  value: 'minecraft:orange_bed',
+  icon: 'item/orange_bed.png',
+  isBlock: true
+}, {
+  label: '失活的脑纹珊瑚',
+  value: 'minecraft:dead_brain_coral',
+  icon: 'item/dead_brain_coral.png',
+  isBlock: true
+}, {
+  label: '火药',
+  value: 'minecraft:gunpowder',
+  icon: 'item/gunpowder.png',
+  isBlock: false
+}, {
+  label: '锁链护腿',
+  value: 'minecraft:chainmail_leggings',
+  icon: 'item/chainmail_leggings.png',
+  isBlock: false
+}, {
+  label: '流浪商人刷怪蛋',
+  value: 'minecraft:wandering_trader_spawn_egg',
+  icon: 'item/wandering_trader_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '空地图',
+  value: 'minecraft:map',
+  icon: 'item/map.png',
+  isBlock: false
+}, {
+  label: '磨制闪长岩台阶',
+  value: 'minecraft:polished_diorite_slab',
+  icon: 'item/polished_diorite_slab.png',
+  isBlock: true
+}, {
+  label: '骨块',
+  value: 'minecraft:bone_block',
+  icon: 'item/bone_block.png',
+  isBlock: true
+}, {
+  label: '龙息',
+  value: 'minecraft:dragon_breath',
+  icon: 'item/dragon_breath.png',
+  isBlock: false
+}, {
+  label: '铁砧',
+  value: 'minecraft:anvil',
+  icon: 'item/anvil.png',
+  isBlock: true
+}, {
+  label: '锈蚀的切制铜块',
+  value: 'minecraft:weathered_cut_copper',
+  icon: 'item/weathered_cut_copper.png',
+  isBlock: true
+}, {
+  label: '灰化土',
+  value: 'minecraft:podzol',
+  icon: 'item/podzol.png',
+  isBlock: true
+}, {
+  label: '石头压力板',
+  value: 'minecraft:stone_pressure_plate',
+  icon: 'item/stone_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '末地石砖墙',
+  value: 'minecraft:end_stone_brick_wall',
+  icon: 'item/end_stone_brick_wall.png',
+  isBlock: true
+}, {
+  label: '切制铜楼梯',
+  value: 'minecraft:cut_copper_stairs',
+  icon: 'item/cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '深板岩圆石',
+  value: 'minecraft:cobbled_deepslate',
+  icon: 'item/cobbled_deepslate.png',
+  isBlock: true
+}, {
+  label: '苔石砖台阶',
+  value: 'minecraft:mossy_stone_brick_slab',
+  icon: 'item/mossy_stone_brick_slab.png',
+  isBlock: true
+}, {
+  label: '蜂巢',
+  value: 'minecraft:bee_nest',
+  icon: 'item/bee_nest.png',
+  isBlock: true
+}, {
+  label: '黄绿色混凝土',
+  value: 'minecraft:lime_concrete',
+  icon: 'item/lime_concrete.png',
+  isBlock: true
+}, {
+  label: '失活的气泡珊瑚块',
+  value: 'minecraft:dead_bubble_coral_block',
+  icon: 'item/dead_bubble_coral_block.png',
+  isBlock: true
+}, {
+  label: '棕色地毯',
+  value: 'minecraft:brown_carpet',
+  icon: 'item/brown_carpet.png',
+  isBlock: true
+}, {
+  label: '青色陶瓦',
+  value: 'minecraft:cyan_terracotta',
+  icon: 'item/cyan_terracotta.png',
+  isBlock: true
+}, {
+  label: '诡异木栅栏门',
+  value: 'minecraft:warped_fence_gate',
+  icon: 'item/warped_fence_gate.png',
+  isBlock: true
+}, {
+  label: '煤炭',
+  value: 'minecraft:coal',
+  icon: 'item/coal.png',
+  isBlock: false
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_stal',
+  icon: 'item/music_disc_stal.png',
+  isBlock: false
+}, {
+  label: '深色橡木楼梯',
+  value: 'minecraft:dark_oak_stairs',
+  icon: 'item/dark_oak_stairs.png',
+  isBlock: true
+}, {
+  label: '丛林木活板门',
+  value: 'minecraft:jungle_trapdoor',
+  icon: 'item/jungle_trapdoor.png',
+  isBlock: true
+}, {
+  label: '海晶石台阶',
+  value: 'minecraft:prismarine_slab',
+  icon: 'item/prismarine_slab.png',
+  isBlock: true
+}, {
+  label: '气泡珊瑚块',
+  value: 'minecraft:bubble_coral_block',
+  icon: 'item/bubble_coral_block.png',
+  isBlock: true
+}, {
+  label: '烈焰棒',
+  value: 'minecraft:blaze_rod',
+  icon: 'item/blaze_rod.png',
+  isBlock: false
+}, {
+  label: '磨制凝灰岩墙',
+  value: 'minecraft:polished_tuff_wall',
+  icon: 'item/polished_tuff_wall.png',
+  isBlock: true
+}, {
+  label: '悬挂式诡异木告示牌',
+  value: 'minecraft:warped_hanging_sign',
+  icon: 'item/warped_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '切石机',
+  value: 'minecraft:stonecutter',
+  icon: 'item/stonecutter.png',
+  isBlock: true
+}, {
+  label: '调试棒',
+  value: 'minecraft:debug_stick',
+  icon: 'item/debug_stick.png',
+  isBlock: false
+}, {
+  label: '锈蚀的雕纹铜块',
+  value: 'minecraft:weathered_chiseled_copper',
+  icon: 'item/weathered_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '黏液球',
+  value: 'minecraft:slime_ball',
+  icon: 'item/slime_ball.png',
+  isBlock: false
+}, {
+  label: '僵尸村民刷怪蛋',
+  value: 'minecraft:zombie_villager_spawn_egg',
+  icon: 'item/zombie_villager_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '深色橡木',
+  value: 'minecraft:dark_oak_wood',
+  icon: 'item/dark_oak_wood.png',
+  isBlock: true
+}, {
+  label: '黑石台阶',
+  value: 'minecraft:blackstone_slab',
+  icon: 'item/blackstone_slab.png',
+  isBlock: true
+}, {
+  label: '棕色陶瓦',
+  value: 'minecraft:brown_terracotta',
+  icon: 'item/brown_terracotta.png',
+  isBlock: true
+}, {
+  label: '白桦木台阶',
+  value: 'minecraft:birch_slab',
+  icon: 'item/birch_slab.png',
+  isBlock: true
+}, {
+  label: '绯红木活板门',
+  value: 'minecraft:crimson_trapdoor',
+  icon: 'item/crimson_trapdoor.png',
+  isBlock: true
+}, {
+  label: '书',
+  value: 'minecraft:book',
+  icon: 'item/book.png',
+  isBlock: false
+}, {
+  label: '斑驳的铜活板门',
+  value: 'minecraft:exposed_copper_trapdoor',
+  icon: 'item/exposed_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '鸡刷怪蛋',
+  value: 'minecraft:chicken_spawn_egg',
+  icon: 'item/chicken_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '粗铜',
+  value: 'minecraft:raw_copper',
+  icon: 'item/raw_copper.png',
+  isBlock: false
+}, {
+  label: '白桦木告示牌',
+  value: 'minecraft:birch_sign',
+  icon: 'item/birch_sign.png',
+  isBlock: true
+}, {
+  label: '失活的管珊瑚扇',
+  value: 'minecraft:dead_tube_coral_fan',
+  icon: 'item/dead_tube_coral_fan.png',
+  isBlock: true
+}, {
+  label: '牛刷怪蛋',
+  value: 'minecraft:cow_spawn_egg',
+  icon: 'item/cow_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '橡木台阶',
+  value: 'minecraft:oak_slab',
+  icon: 'item/oak_slab.png',
+  isBlock: true
+}, {
+  label: '黄色床',
+  value: 'minecraft:yellow_bed',
+  icon: 'item/yellow_bed.png',
+  isBlock: true
+}, {
+  label: '竹台阶',
+  value: 'minecraft:bamboo_slab',
+  icon: 'item/bamboo_slab.png',
+  isBlock: true
+}, {
+  label: '不可合成的滞留型药水',
+  value: 'minecraft:lingering_potion',
+  icon: 'item/lingering_potion.png',
+  isBlock: false
+}, {
+  label: '裂纹石砖',
+  value: 'minecraft:cracked_stone_bricks',
+  icon: 'item/cracked_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '附魔台',
+  value: 'minecraft:enchanting_table',
+  icon: 'item/enchanting_table.png',
+  isBlock: true
+}, {
+  label: '骨头',
+  value: 'minecraft:bone',
+  icon: 'item/bone.png',
+  isBlock: false
+}, {
+  label: '花盆',
+  value: 'minecraft:flower_pot',
+  icon: 'item/flower_pot.png',
+  isBlock: true
+}, {
+  label: '黑色地毯',
+  value: 'minecraft:black_carpet',
+  icon: 'item/black_carpet.png',
+  isBlock: true
+}, {
+  label: '绿色染料',
+  value: 'minecraft:green_dye',
+  icon: 'item/green_dye.png',
+  isBlock: false
+}, {
+  label: '橡木告示牌',
+  value: 'minecraft:oak_sign',
+  icon: 'item/oak_sign.png',
+  isBlock: true
+}, {
+  label: '诡异木栅栏',
+  value: 'minecraft:warped_fence',
+  icon: 'item/warped_fence.png',
+  isBlock: true
+}, {
+  label: '灰色蜡烛',
+  value: 'minecraft:gray_candle',
+  icon: 'item/gray_candle.png',
+  isBlock: true
+}, {
+  label: '橙色染料',
+  value: 'minecraft:orange_dye',
+  icon: 'item/orange_dye.png',
+  isBlock: false
+}, {
+  label: '下界金矿石',
+  value: 'minecraft:nether_gold_ore',
+  icon: 'item/nether_gold_ore.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:netherite_upgrade_smithing_template',
+  icon: 'item/netherite_upgrade_smithing_template.png',
+  isBlock: false
+}, {
+  label: '竹告示牌',
+  value: 'minecraft:bamboo_sign',
+  icon: 'item/bamboo_sign.png',
+  isBlock: true
+}, {
+  label: '宝库',
+  value: 'minecraft:vault',
+  icon: 'item/vault.png',
+  isBlock: true
+}, {
+  label: '棕色旗帜',
+  value: 'minecraft:brown_banner',
+  icon: 'item/brown_banner.png',
+  isBlock: true
+}, {
+  label: '幽匿脉络',
+  value: 'minecraft:sculk_vein',
+  icon: 'item/sculk_vein.png',
+  isBlock: true
+}, {
+  label: '绿色染色玻璃',
+  value: 'minecraft:green_stained_glass',
+  icon: 'item/green_stained_glass.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:flow_armor_trim_smithing_template',
+  icon: 'item/flow_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '品红色带釉陶瓦',
+  value: 'minecraft:magenta_glazed_terracotta',
+  icon: 'item/magenta_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '云杉木板',
+  value: 'minecraft:spruce_planks',
+  icon: 'item/spruce_planks.png',
+  isBlock: true
+}, {
+  label: '切制砂岩',
+  value: 'minecraft:cut_sandstone',
+  icon: 'item/cut_sandstone.png',
+  isBlock: true
+}, {
+  label: '红色羊毛',
+  value: 'minecraft:red_wool',
+  icon: 'item/red_wool.png',
+  isBlock: true
+}, {
+  label: '皮革裤子',
+  value: 'minecraft:leather_leggings',
+  icon: 'item/leather_leggings.png',
+  isBlock: false
+}, {
+  label: '皮革靴子',
+  value: 'minecraft:leather_boots',
+  icon: 'item/leather_boots.png',
+  isBlock: false
+}, {
+  label: '紫水晶碎片',
+  value: 'minecraft:amethyst_shard',
+  icon: 'item/amethyst_shard.png',
+  isBlock: false
+}, {
+  label: '拴绳',
+  value: 'minecraft:lead',
+  icon: 'item/lead.png',
+  isBlock: false
+}, {
+  label: '红色染色玻璃',
+  value: 'minecraft:red_stained_glass',
+  icon: 'item/red_stained_glass.png',
+  isBlock: true
+}, {
+  label: '铁马铠',
+  value: 'minecraft:iron_horse_armor',
+  icon: 'item/iron_horse_armor.png',
+  isBlock: false
+}, {
+  label: '举臂纹样陶片',
+  value: 'minecraft:arms_up_pottery_sherd',
+  icon: 'item/arms_up_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '金合欢木船',
+  value: 'minecraft:acacia_boat',
+  icon: 'item/acacia_boat.png',
+  isBlock: false
+}, {
+  label: '蓝色潜影盒',
+  value: 'minecraft:blue_shulker_box',
+  icon: 'item/blue_shulker_box.png',
+  isBlock: true
+}, {
+  label: '花岗岩楼梯',
+  value: 'minecraft:granite_stairs',
+  icon: 'item/granite_stairs.png',
+  isBlock: true
+}, {
+  label: '铁锹',
+  value: 'minecraft:iron_shovel',
+  icon: 'item/iron_shovel.png',
+  isBlock: false
+}, {
+  label: '氧化的雕纹铜块',
+  value: 'minecraft:oxidized_chiseled_copper',
+  icon: 'item/oxidized_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '安山岩楼梯',
+  value: 'minecraft:andesite_stairs',
+  icon: 'item/andesite_stairs.png',
+  isBlock: true
+}, {
+  label: '音符盒',
+  value: 'minecraft:note_block',
+  icon: 'item/note_block.png',
+  isBlock: true
+}, {
+  label: '涂蜡的铜块',
+  value: 'minecraft:waxed_copper_block',
+  icon: 'item/waxed_copper_block.png',
+  isBlock: true
+}, {
+  label: '金锹',
+  value: 'minecraft:golden_shovel',
+  icon: 'item/golden_shovel.png',
+  isBlock: false
+}, {
+  label: '泥坯',
+  value: 'minecraft:packed_mud',
+  icon: 'item/packed_mud.png',
+  isBlock: true
+}, {
+  label: '下界合金锭',
+  value: 'minecraft:netherite_ingot',
+  icon: 'item/netherite_ingot.png',
+  isBlock: false
+}, {
+  label: '花岗岩墙',
+  value: 'minecraft:granite_wall',
+  icon: 'item/granite_wall.png',
+  isBlock: true
+}, {
+  label: '海龟鳞甲',
+  value: 'minecraft:turtle_scute',
+  icon: 'item/turtle_scute.png',
+  isBlock: false
+}, {
+  label: '去皮白桦原木',
+  value: 'minecraft:stripped_birch_log',
+  icon: 'item/stripped_birch_log.png',
+  isBlock: true
+}, {
+  label: '锈蚀的切制铜楼梯',
+  value: 'minecraft:weathered_cut_copper_stairs',
+  icon: 'item/weathered_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '橡木栅栏',
+  value: 'minecraft:oak_fence',
+  icon: 'item/oak_fence.png',
+  isBlock: true
+}, {
+  label: '云杉木船',
+  value: 'minecraft:spruce_boat',
+  icon: 'item/spruce_boat.png',
+  isBlock: false
+}, {
+  label: '去皮竹块',
+  value: 'minecraft:stripped_bamboo_block',
+  icon: 'item/stripped_bamboo_block.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_wait',
+  icon: 'item/music_disc_wait.png',
+  isBlock: false
+}, {
+  label: '红树木压力板',
+  value: 'minecraft:mangrove_pressure_plate',
+  icon: 'item/mangrove_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '火焰弹',
+  value: 'minecraft:fire_charge',
+  icon: 'item/fire_charge.png',
+  isBlock: false
+}, {
+  label: '海晶碎片',
+  value: 'minecraft:prismarine_shard',
+  icon: 'item/prismarine_shard.png',
+  isBlock: false
+}, {
+  label: '暗海晶石楼梯',
+  value: 'minecraft:dark_prismarine_stairs',
+  icon: 'item/dark_prismarine_stairs.png',
+  isBlock: true
+}, {
+  label: '侦测器',
+  value: 'minecraft:observer',
+  icon: 'item/observer.png',
+  isBlock: true
+}, {
+  label: '悬挂式丛林木告示牌',
+  value: 'minecraft:jungle_hanging_sign',
+  icon: 'item/jungle_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '金矿石',
+  value: 'minecraft:gold_ore',
+  icon: 'item/gold_ore.png',
+  isBlock: true
+}, {
+  label: '炼药锅',
+  value: 'minecraft:cauldron',
+  icon: 'item/cauldron.png',
+  isBlock: true
+}, {
+  label: '黑色旗帜',
+  value: 'minecraft:black_banner',
+  icon: 'item/black_banner.png',
+  isBlock: true
+}, {
+  label: '去皮红树木',
+  value: 'minecraft:stripped_mangrove_wood',
+  icon: 'item/stripped_mangrove_wood.png',
+  isBlock: true
+}, {
+  label: '锈蚀的铜块',
+  value: 'minecraft:weathered_copper',
+  icon: 'item/weathered_copper.png',
+  isBlock: true
+}, {
+  label: '闪长岩墙',
+  value: 'minecraft:diorite_wall',
+  icon: 'item/diorite_wall.png',
+  isBlock: true
+}, {
+  label: '白桦木',
+  value: 'minecraft:birch_wood',
+  icon: 'item/birch_wood.png',
+  isBlock: true
+}, {
+  label: '黄色染料',
+  value: 'minecraft:yellow_dye',
+  icon: 'item/yellow_dye.png',
+  isBlock: false
+}, {
+  label: '去皮诡异菌柄',
+  value: 'minecraft:stripped_warped_stem',
+  icon: 'item/stripped_warped_stem.png',
+  isBlock: true
+}, {
+  label: '下界疣块',
+  value: 'minecraft:nether_wart_block',
+  icon: 'item/nether_wart_block.png',
+  isBlock: true
+}, {
+  label: '雕纹石砖',
+  value: 'minecraft:chiseled_stone_bricks',
+  icon: 'item/chiseled_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '灵魂灯笼',
+  value: 'minecraft:soul_lantern',
+  icon: 'item/soul_lantern.png',
+  isBlock: true
+}, {
+  label: '锈蚀的铜灯',
+  value: 'minecraft:weathered_copper_bulb',
+  icon: 'item/weathered_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '监守者刷怪蛋',
+  value: 'minecraft:warden_spawn_egg',
+  icon: 'item/warden_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '去皮橡木原木',
+  value: 'minecraft:stripped_oak_log',
+  icon: 'item/stripped_oak_log.png',
+  isBlock: true
+}, {
+  label: '脑纹珊瑚',
+  value: 'minecraft:brain_coral',
+  icon: 'item/brain_coral.png',
+  isBlock: true
+}, {
+  label: '循环型命令方块',
+  value: 'minecraft:repeating_command_block',
+  icon: 'item/repeating_command_block.png',
+  isBlock: true
+}, {
+  label: '黏土',
+  value: 'minecraft:clay',
+  icon: 'item/clay.png',
+  isBlock: true
+}, {
+  label: '橡木',
+  value: 'minecraft:oak_wood',
+  icon: 'item/oak_wood.png',
+  isBlock: true
+}, {
+  label: '淡蓝色染色玻璃',
+  value: 'minecraft:light_blue_stained_glass',
+  icon: 'item/light_blue_stained_glass.png',
+  isBlock: true
+}, {
+  label: '附魔书',
+  value: 'minecraft:enchanted_book',
+  icon: 'item/enchanted_book.png',
+  isBlock: false
+}, {
+  label: '海带',
+  value: 'minecraft:kelp',
+  icon: 'item/kelp.png',
+  isBlock: true
+}, {
+  label: '樱花原木',
+  value: 'minecraft:cherry_log',
+  icon: 'item/cherry_log.png',
+  isBlock: true
+}, {
+  label: '灰色地毯',
+  value: 'minecraft:gray_carpet',
+  icon: 'item/gray_carpet.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:rib_armor_trim_smithing_template',
+  icon: 'item/rib_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:eye_armor_trim_smithing_template',
+  icon: 'item/eye_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '平滑砂岩台阶',
+  value: 'minecraft:smooth_sandstone_slab',
+  icon: 'item/smooth_sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '樱花木栅栏',
+  value: 'minecraft:cherry_fence',
+  icon: 'item/cherry_fence.png',
+  isBlock: true
+}, {
+  label: '玫瑰丛',
+  value: 'minecraft:rose_bush',
+  icon: 'item/rose_bush.png',
+  isBlock: true
+}, {
+  label: '粗金',
+  value: 'minecraft:raw_gold',
+  icon: 'item/raw_gold.png',
+  isBlock: false
+}, {
+  label: '金护腿',
+  value: 'minecraft:golden_leggings',
+  icon: 'item/golden_leggings.png',
+  isBlock: false
+}, {
+  label: '石头',
+  value: 'minecraft:stone',
+  icon: 'item/stone.png',
+  isBlock: true
+}, {
+  label: '丁香',
+  value: 'minecraft:lilac',
+  icon: 'item/lilac.png',
+  isBlock: true
+}, {
+  label: '鹦鹉刷怪蛋',
+  value: 'minecraft:parrot_spawn_egg',
+  icon: 'item/parrot_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '管珊瑚',
+  value: 'minecraft:tube_coral',
+  icon: 'item/tube_coral.png',
+  isBlock: true
+}, {
+  label: '富饶纹样陶片',
+  value: 'minecraft:plenty_pottery_sherd',
+  icon: 'item/plenty_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '连锁型命令方块',
+  value: 'minecraft:chain_command_block',
+  icon: 'item/chain_command_block.png',
+  isBlock: true
+}, {
+  label: '石砖楼梯',
+  value: 'minecraft:stone_brick_stairs',
+  icon: 'item/stone_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '锈蚀的铜格栅',
+  value: 'minecraft:weathered_copper_grate',
+  icon: 'item/weathered_copper_grate.png',
+  isBlock: true
+}, {
+  label: '雕纹凝灰岩砖',
+  value: 'minecraft:chiseled_tuff_bricks',
+  icon: 'item/chiseled_tuff_bricks.png',
+  isBlock: true
+}, {
+  label: '磨制安山岩台阶',
+  value: 'minecraft:polished_andesite_slab',
+  icon: 'item/polished_andesite_slab.png',
+  isBlock: true
+}, {
+  label: '磨制黑石砖',
+  value: 'minecraft:polished_blackstone_bricks',
+  icon: 'item/polished_blackstone_bricks.png',
+  isBlock: true
+}, {
+  label: '云杉树苗',
+  value: 'minecraft:spruce_sapling',
+  icon: 'item/spruce_sapling.png',
+  isBlock: true
+}, {
+  label: '丛林木运输船',
+  value: 'minecraft:jungle_chest_boat',
+  icon: 'item/jungle_chest_boat.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:wayfinder_armor_trim_smithing_template',
+  icon: 'item/wayfinder_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '下界合金碎片',
+  value: 'minecraft:netherite_scrap',
+  icon: 'item/netherite_scrap.png',
+  isBlock: false
+}, {
+  label: '圆石台阶',
+  value: 'minecraft:cobblestone_slab',
+  icon: 'item/cobblestone_slab.png',
+  isBlock: true
+}, {
+  label: '大型蕨',
+  value: 'minecraft:large_fern',
+  icon: 'item/large_fern.png',
+  isBlock: true
+}, {
+  label: '诡异木按钮',
+  value: 'minecraft:warped_button',
+  icon: 'item/warped_button.png',
+  isBlock: true
+}, {
+  label: '奶桶',
+  value: 'minecraft:milk_bucket',
+  icon: 'item/milk_bucket.png',
+  isBlock: false
+}, {
+  label: '追溯指针',
+  value: 'minecraft:recovery_compass',
+  icon: 'item/recovery_compass.png',
+  isBlock: false
+}, {
+  label: '竹筏',
+  value: 'minecraft:bamboo_raft',
+  icon: 'item/bamboo_raft.png',
+  isBlock: false
+}, {
+  label: '绊线钩',
+  value: 'minecraft:tripwire_hook',
+  icon: 'item/tripwire_hook.png',
+  isBlock: true
+}, {
+  label: '黄绿色染色玻璃',
+  value: 'minecraft:lime_stained_glass',
+  icon: 'item/lime_stained_glass.png',
+  isBlock: true
+}, {
+  label: '下界疣',
+  value: 'minecraft:nether_wart',
+  icon: 'item/nether_wart.png',
+  isBlock: true
+}, {
+  label: '结构方块',
+  value: 'minecraft:structure_block',
+  icon: 'item/structure_block.png',
+  isBlock: true
+}, {
+  label: '潜影盒',
+  value: 'minecraft:shulker_box',
+  icon: 'item/shulker_box.png',
+  isBlock: true
+}, {
+  label: '红树木运输船',
+  value: 'minecraft:mangrove_chest_boat',
+  icon: 'item/mangrove_chest_boat.png',
+  isBlock: false
+}, {
+  label: '钻石靴子',
+  value: 'minecraft:diamond_boots',
+  icon: 'item/diamond_boots.png',
+  isBlock: false
+}, {
+  label: '石头台阶',
+  value: 'minecraft:stone_slab',
+  icon: 'item/stone_slab.png',
+  isBlock: true
+}, {
+  label: '裂纹磨制黑石砖',
+  value: 'minecraft:cracked_polished_blackstone_bricks',
+  icon: 'item/cracked_polished_blackstone_bricks.png',
+  isBlock: true
+}, {
+  label: '沙子',
+  value: 'minecraft:sand',
+  icon: 'item/sand.png',
+  isBlock: true
+}, {
+  label: '面包',
+  value: 'minecraft:bread',
+  icon: 'item/bread.png',
+  isBlock: false
+}, {
+  label: '斑驳的铜门',
+  value: 'minecraft:exposed_copper_door',
+  icon: 'item/exposed_copper_door.png',
+  isBlock: true
+}, {
+  label: '锈蚀的切制铜台阶',
+  value: 'minecraft:weathered_cut_copper_slab',
+  icon: 'item/weathered_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '村民刷怪蛋',
+  value: 'minecraft:villager_spawn_egg',
+  icon: 'item/villager_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '灰色旗帜',
+  value: 'minecraft:gray_banner',
+  icon: 'item/gray_banner.png',
+  isBlock: true
+}, {
+  label: '悬挂式白桦木告示牌',
+  value: 'minecraft:birch_hanging_sign',
+  icon: 'item/birch_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '刮削纹样陶片',
+  value: 'minecraft:scrape_pottery_sherd',
+  icon: 'item/scrape_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '垂钓纹样陶片',
+  value: 'minecraft:angler_pottery_sherd',
+  icon: 'item/angler_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '橡木压力板',
+  value: 'minecraft:oak_pressure_plate',
+  icon: 'item/oak_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '紫色蜡烛',
+  value: 'minecraft:purple_candle',
+  icon: 'item/purple_candle.png',
+  isBlock: true
+}, {
+  label: '行商羊驼刷怪蛋',
+  value: 'minecraft:trader_llama_spawn_egg',
+  icon: 'item/trader_llama_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '鹦鹉螺壳',
+  value: 'minecraft:nautilus_shell',
+  icon: 'item/nautilus_shell.png',
+  isBlock: false
+}, {
+  label: '深板岩瓦',
+  value: 'minecraft:deepslate_tiles',
+  icon: 'item/deepslate_tiles.png',
+  isBlock: true
+}, {
+  label: '时钟',
+  value: 'minecraft:clock',
+  icon: 'item/clock.png',
+  isBlock: false
+}, {
+  label: '绒球葱',
+  value: 'minecraft:allium',
+  icon: 'item/allium.png',
+  isBlock: true
+}, {
+  label: '磨制玄武岩',
+  value: 'minecraft:polished_basalt',
+  icon: 'item/polished_basalt.png',
+  isBlock: true
+}, {
+  label: '幽匿催发体',
+  value: 'minecraft:sculk_catalyst',
+  icon: 'item/sculk_catalyst.png',
+  isBlock: true
+}, {
+  label: '粉红色染色玻璃板',
+  value: 'minecraft:pink_stained_glass_pane',
+  icon: 'item/pink_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '覆地苔藓',
+  value: 'minecraft:moss_carpet',
+  icon: 'item/moss_carpet.png',
+  isBlock: true
+}, {
+  label: '木锹',
+  value: 'minecraft:wooden_shovel',
+  icon: 'item/wooden_shovel.png',
+  isBlock: false
+}, {
+  label: '书与笔',
+  value: 'minecraft:writable_book',
+  icon: 'item/writable_book.png',
+  isBlock: false
+}, {
+  label: '云杉木栅栏门',
+  value: 'minecraft:spruce_fence_gate',
+  icon: 'item/spruce_fence_gate.png',
+  isBlock: true
+}, {
+  label: '木炭',
+  value: 'minecraft:charcoal',
+  icon: 'item/charcoal.png',
+  isBlock: false
+}, {
+  label: '拉杆',
+  value: 'minecraft:lever',
+  icon: 'item/lever.png',
+  isBlock: true
+}, {
+  label: '激活铁轨',
+  value: 'minecraft:activator_rail',
+  icon: 'item/activator_rail.png',
+  isBlock: true
+}, {
+  label: '生鲑鱼',
+  value: 'minecraft:salmon',
+  icon: 'item/salmon.png',
+  isBlock: false
+}, {
+  label: '刷子',
+  value: 'minecraft:brush',
+  icon: 'item/brush.png',
+  isBlock: false
+}, {
+  label: '苔石砖墙',
+  value: 'minecraft:mossy_stone_brick_wall',
+  icon: 'item/mossy_stone_brick_wall.png',
+  isBlock: true
+}, {
+  label: '青色羊毛',
+  value: 'minecraft:cyan_wool',
+  icon: 'item/cyan_wool.png',
+  isBlock: true
+}, {
+  label: '探险纹样陶片',
+  value: 'minecraft:explorer_pottery_sherd',
+  icon: 'item/explorer_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '淡灰色染色玻璃',
+  value: 'minecraft:light_gray_stained_glass',
+  icon: 'item/light_gray_stained_glass.png',
+  isBlock: true
+}, {
+  label: '僵尸猪灵刷怪蛋',
+  value: 'minecraft:zombified_piglin_spawn_egg',
+  icon: 'item/zombified_piglin_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '胡萝卜',
+  value: 'minecraft:carrot',
+  icon: 'item/carrot.png',
+  isBlock: true
+}, {
+  label: '绯红木板',
+  value: 'minecraft:crimson_planks',
+  icon: 'item/crimson_planks.png',
+  isBlock: true
+}, {
+  label: '海晶石墙',
+  value: 'minecraft:prismarine_wall',
+  icon: 'item/prismarine_wall.png',
+  isBlock: true
+}, {
+  label: '粗金块',
+  value: 'minecraft:raw_gold_block',
+  icon: 'item/raw_gold_block.png',
+  isBlock: true
+}, {
+  label: '黄绿色染色玻璃板',
+  value: 'minecraft:lime_stained_glass_pane',
+  icon: 'item/lime_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '方解石',
+  value: 'minecraft:calcite',
+  icon: 'item/calcite.png',
+  isBlock: true
+}, {
+  label: '白桦木板',
+  value: 'minecraft:birch_planks',
+  icon: 'item/birch_planks.png',
+  isBlock: true
+}, {
+  label: '火珊瑚扇',
+  value: 'minecraft:fire_coral_fan',
+  icon: 'item/fire_coral_fan.png',
+  isBlock: true
+}, {
+  label: '发射器',
+  value: 'minecraft:dispenser',
+  icon: 'item/dispenser.png',
+  isBlock: true
+}, {
+  label: '苔石砖',
+  value: 'minecraft:mossy_stone_bricks',
+  icon: 'item/mossy_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '去皮丛林木',
+  value: 'minecraft:stripped_jungle_wood',
+  icon: 'item/stripped_jungle_wood.png',
+  isBlock: true
+}, {
+  label: '黑石墙',
+  value: 'minecraft:blackstone_wall',
+  icon: 'item/blackstone_wall.png',
+  isBlock: true
+}, {
+  label: '蓝色羊毛',
+  value: 'minecraft:blue_wool',
+  icon: 'item/blue_wool.png',
+  isBlock: true
+}, {
+  label: '红色带釉陶瓦',
+  value: 'minecraft:red_glazed_terracotta',
+  icon: 'item/red_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '下界之星',
+  value: 'minecraft:nether_star',
+  icon: 'item/nether_star.png',
+  isBlock: false
+}, {
+  label: '氧化的切制铜台阶',
+  value: 'minecraft:oxidized_cut_copper_slab',
+  icon: 'item/oxidized_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '深层金矿石',
+  value: 'minecraft:deepslate_gold_ore',
+  icon: 'item/deepslate_gold_ore.png',
+  isBlock: true
+}, {
+  label: '末地石砖楼梯',
+  value: 'minecraft:end_stone_brick_stairs',
+  icon: 'item/end_stone_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '末影螨刷怪蛋',
+  value: 'minecraft:endermite_spawn_egg',
+  icon: 'item/endermite_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '涂蜡的斑驳切制铜块',
+  value: 'minecraft:waxed_exposed_cut_copper',
+  icon: 'item/waxed_exposed_cut_copper.png',
+  isBlock: true
+}, {
+  label: '品红色混凝土',
+  value: 'minecraft:magenta_concrete',
+  icon: 'item/magenta_concrete.png',
+  isBlock: true
+}, {
+  label: '马铃薯',
+  value: 'minecraft:potato',
+  icon: 'item/potato.png',
+  isBlock: true
+}, {
+  label: '青色带釉陶瓦',
+  value: 'minecraft:cyan_glazed_terracotta',
+  icon: 'item/cyan_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '头颅纹样陶片',
+  value: 'minecraft:skull_pottery_sherd',
+  icon: 'item/skull_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '涂蜡的氧化切制铜块',
+  value: 'minecraft:waxed_oxidized_cut_copper',
+  icon: 'item/waxed_oxidized_cut_copper.png',
+  isBlock: true
+}, {
+  label: '红石块',
+  value: 'minecraft:redstone_block',
+  icon: 'item/redstone_block.png',
+  isBlock: true
+}, {
+  label: '骆驼刷怪蛋',
+  value: 'minecraft:camel_spawn_egg',
+  icon: 'item/camel_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '金合欢原木',
+  value: 'minecraft:acacia_log',
+  icon: 'item/acacia_log.png',
+  isBlock: true
+}, {
+  label: '涂蜡的铜门',
+  value: 'minecraft:waxed_copper_door',
+  icon: 'item/waxed_copper_door.png',
+  isBlock: true
+}, {
+  label: '黄绿色蜡烛',
+  value: 'minecraft:lime_candle',
+  icon: 'item/lime_candle.png',
+  isBlock: true
+}, {
+  label: '石锄',
+  value: 'minecraft:stone_hoe',
+  icon: 'item/stone_hoe.png',
+  isBlock: false
+}, {
+  label: '海晶石砖台阶',
+  value: 'minecraft:prismarine_brick_slab',
+  icon: 'item/prismarine_brick_slab.png',
+  isBlock: true
+}, {
+  label: '紫珀楼梯',
+  value: 'minecraft:purpur_stairs',
+  icon: 'item/purpur_stairs.png',
+  isBlock: true
+}, {
+  label: '棕色混凝土粉末',
+  value: 'minecraft:brown_concrete_powder',
+  icon: 'item/brown_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:raiser_armor_trim_smithing_template',
+  icon: 'item/raiser_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '紫色带釉陶瓦',
+  value: 'minecraft:purple_glazed_terracotta',
+  icon: 'item/purple_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '磨制黑石台阶',
+  value: 'minecraft:polished_blackstone_slab',
+  icon: 'item/polished_blackstone_slab.png',
+  isBlock: true
+}, {
+  label: '金合欢木台阶',
+  value: 'minecraft:acacia_slab',
+  icon: 'item/acacia_slab.png',
+  isBlock: true
+}, {
+  label: '黄色带釉陶瓦',
+  value: 'minecraft:yellow_glazed_terracotta',
+  icon: 'item/yellow_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '磨制凝灰岩楼梯',
+  value: 'minecraft:polished_tuff_stairs',
+  icon: 'item/polished_tuff_stairs.png',
+  isBlock: true
+}, {
+  label: '平滑砂岩',
+  value: 'minecraft:smooth_sandstone',
+  icon: 'item/smooth_sandstone.png',
+  isBlock: true
+}, {
+  label: '饰纹陶罐',
+  value: 'minecraft:decorated_pot',
+  icon: 'item/decorated_pot.png',
+  isBlock: true
+}, {
+  label: '干草捆',
+  value: 'minecraft:hay_block',
+  icon: 'item/hay_block.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀铜灯',
+  value: 'minecraft:waxed_weathered_copper_bulb',
+  icon: 'item/waxed_weathered_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '下界砖台阶',
+  value: 'minecraft:nether_brick_slab',
+  icon: 'item/nether_brick_slab.png',
+  isBlock: true
+}, {
+  label: '石化橡木台阶',
+  value: 'minecraft:petrified_oak_slab',
+  icon: 'item/petrified_oak_slab.png',
+  isBlock: true
+}, {
+  label: '紫色地毯',
+  value: 'minecraft:purple_carpet',
+  icon: 'item/purple_carpet.png',
+  isBlock: true
+}, {
+  label: '皮革帽子',
+  value: 'minecraft:leather_helmet',
+  icon: 'item/leather_helmet.png',
+  isBlock: false
+}, {
+  label: '甜浆果',
+  value: 'minecraft:sweet_berries',
+  icon: 'item/sweet_berries.png',
+  isBlock: true
+}, {
+  label: '灰色潜影盒',
+  value: 'minecraft:gray_shulker_box',
+  icon: 'item/gray_shulker_box.png',
+  isBlock: true
+}, {
+  label: '橡木按钮',
+  value: 'minecraft:oak_button',
+  icon: 'item/oak_button.png',
+  isBlock: true
+}, {
+  label: '凝灰岩砖楼梯',
+  value: 'minecraft:tuff_brick_stairs',
+  icon: 'item/tuff_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '粉红色床',
+  value: 'minecraft:pink_bed',
+  icon: 'item/pink_bed.png',
+  isBlock: true
+}, {
+  label: '蓝色染色玻璃',
+  value: 'minecraft:blue_stained_glass',
+  icon: 'item/blue_stained_glass.png',
+  isBlock: true
+}, {
+  label: '绯红木压力板',
+  value: 'minecraft:crimson_pressure_plate',
+  icon: 'item/crimson_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '金合欢木告示牌',
+  value: 'minecraft:acacia_sign',
+  icon: 'item/acacia_sign.png',
+  isBlock: true
+}, {
+  label: '金块',
+  value: 'minecraft:gold_block',
+  icon: 'item/gold_block.png',
+  isBlock: true
+}, {
+  label: '熔岩桶',
+  value: 'minecraft:lava_bucket',
+  icon: 'item/lava_bucket.png',
+  isBlock: false
+}, {
+  label: '氧化的铜灯',
+  value: 'minecraft:oxidized_copper_bulb',
+  icon: 'item/oxidized_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '末地烛',
+  value: 'minecraft:end_rod',
+  icon: 'item/end_rod.png',
+  isBlock: true
+}, {
+  label: '铁斧',
+  value: 'minecraft:iron_axe',
+  icon: 'item/iron_axe.png',
+  isBlock: false
+}, {
+  label: '橙色蜡烛',
+  value: 'minecraft:orange_candle',
+  icon: 'item/orange_candle.png',
+  isBlock: true
+}, {
+  label: '云杉木台阶',
+  value: 'minecraft:spruce_slab',
+  icon: 'item/spruce_slab.png',
+  isBlock: true
+}, {
+  label: '涂蜡的氧化切制铜台阶',
+  value: 'minecraft:waxed_oxidized_cut_copper_slab',
+  icon: 'item/waxed_oxidized_cut_copper_slab.png',
+  isBlock: true
+}, {
+  label: '荧石',
+  value: 'minecraft:glowstone',
+  icon: 'item/glowstone.png',
+  isBlock: true
+}, {
+  label: '甜菜汤',
+  value: 'minecraft:beetroot_soup',
+  icon: 'item/beetroot_soup.png',
+  isBlock: false
+}, {
+  label: '云杉木告示牌',
+  value: 'minecraft:spruce_sign',
+  icon: 'item/spruce_sign.png',
+  isBlock: true
+}, {
+  label: '云杉木栅栏',
+  value: 'minecraft:spruce_fence',
+  icon: 'item/spruce_fence.png',
+  isBlock: true
+}, {
+  label: '去皮橡木',
+  value: 'minecraft:stripped_oak_wood',
+  icon: 'item/stripped_oak_wood.png',
+  isBlock: true
+}, {
+  label: '紫色床',
+  value: 'minecraft:purple_bed',
+  icon: 'item/purple_bed.png',
+  isBlock: true
+}, {
+  label: '紫色潜影盒',
+  value: 'minecraft:purple_shulker_box',
+  icon: 'item/purple_shulker_box.png',
+  isBlock: true
+}, {
+  label: '灰色羊毛',
+  value: 'minecraft:gray_wool',
+  icon: 'item/gray_wool.png',
+  isBlock: true
+}, {
+  label: '玻璃瓶',
+  value: 'minecraft:glass_bottle',
+  icon: 'item/glass_bottle.png',
+  isBlock: false
+}, {
+  label: '粉红色花簇',
+  value: 'minecraft:pink_petals',
+  icon: 'item/pink_petals.png',
+  isBlock: true
+}, {
+  label: '去皮金合欢原木',
+  value: 'minecraft:stripped_acacia_log',
+  icon: 'item/stripped_acacia_log.png',
+  isBlock: true
+}, {
+  label: '土径',
+  value: 'minecraft:dirt_path',
+  icon: 'item/dirt_path.png',
+  isBlock: true
+}, {
+  label: '青色染色玻璃',
+  value: 'minecraft:cyan_stained_glass',
+  icon: 'item/cyan_stained_glass.png',
+  isBlock: true
+}, {
+  label: '甜菜根',
+  value: 'minecraft:beetroot',
+  icon: 'item/beetroot.png',
+  isBlock: false
+}, {
+  label: '安山岩',
+  value: 'minecraft:andesite',
+  icon: 'item/andesite.png',
+  isBlock: true
+}, {
+  label: '美西螈桶',
+  value: 'minecraft:axolotl_bucket',
+  icon: 'item/axolotl_bucket.png',
+  isBlock: false
+}, {
+  label: '金合欢树苗',
+  value: 'minecraft:acacia_sapling',
+  icon: 'item/acacia_sapling.png',
+  isBlock: true
+}, {
+  label: '绯红木门',
+  value: 'minecraft:crimson_door',
+  icon: 'item/crimson_door.png',
+  isBlock: true
+}, {
+  label: '海草',
+  value: 'minecraft:seagrass',
+  icon: 'item/seagrass.png',
+  isBlock: true
+}, {
+  label: '火把花种子',
+  value: 'minecraft:torchflower_seeds',
+  icon: 'item/torchflower_seeds.png',
+  isBlock: true
+}, {
+  label: '白色蜡烛',
+  value: 'minecraft:white_candle',
+  icon: 'item/white_candle.png',
+  isBlock: true
+}, {
+  label: '末地石',
+  value: 'minecraft:end_stone',
+  icon: 'item/end_stone.png',
+  isBlock: true
+}, {
+  label: '紫珀柱',
+  value: 'minecraft:purpur_pillar',
+  icon: 'item/purpur_pillar.png',
+  isBlock: true
+}, {
+  label: '铁靴子',
+  value: 'minecraft:iron_boots',
+  icon: 'item/iron_boots.png',
+  isBlock: false
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_chirp',
+  icon: 'item/music_disc_chirp.png',
+  isBlock: false
+}, {
+  label: '采矿纹样陶片',
+  value: 'minecraft:miner_pottery_sherd',
+  icon: 'item/miner_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '梯子',
+  value: 'minecraft:ladder',
+  icon: 'item/ladder.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀切制铜楼梯',
+  value: 'minecraft:waxed_weathered_cut_copper_stairs',
+  icon: 'item/waxed_weathered_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '唤魔者刷怪蛋',
+  value: 'minecraft:evoker_spawn_egg',
+  icon: 'item/evoker_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '运输矿车',
+  value: 'minecraft:chest_minecart',
+  icon: 'item/chest_minecart.png',
+  isBlock: false
+}, {
+  label: '铁矿石',
+  value: 'minecraft:iron_ore',
+  icon: 'item/iron_ore.png',
+  isBlock: true
+}, {
+  label: '红树原木',
+  value: 'minecraft:mangrove_log',
+  icon: 'item/mangrove_log.png',
+  isBlock: true
+}, {
+  label: '犰狳刷怪蛋',
+  value: 'minecraft:armadillo_spawn_egg',
+  icon: 'item/armadillo_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '白桦木栅栏',
+  value: 'minecraft:birch_fence',
+  icon: 'item/birch_fence.png',
+  isBlock: true
+}, {
+  label: '淡蓝色陶瓦',
+  value: 'minecraft:light_blue_terracotta',
+  icon: 'item/light_blue_terracotta.png',
+  isBlock: true
+}, {
+  label: '紫色旗帜',
+  value: 'minecraft:purple_banner',
+  icon: 'item/purple_banner.png',
+  isBlock: true
+}, {
+  label: '棕色染色玻璃板',
+  value: 'minecraft:brown_stained_glass_pane',
+  icon: 'item/brown_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '丛林原木',
+  value: 'minecraft:jungle_log',
+  icon: 'item/jungle_log.png',
+  isBlock: true
+}, {
+  label: '石英块',
+  value: 'minecraft:quartz_block',
+  icon: 'item/quartz_block.png',
+  isBlock: true
+}, {
+  label: '木锄',
+  value: 'minecraft:wooden_hoe',
+  icon: 'item/wooden_hoe.png',
+  isBlock: false
+}, {
+  label: '鹿角珊瑚扇',
+  value: 'minecraft:horn_coral_fan',
+  icon: 'item/horn_coral_fan.png',
+  isBlock: true
+}, {
+  label: '动力矿车',
+  value: 'minecraft:furnace_minecart',
+  icon: 'item/furnace_minecart.png',
+  isBlock: false
+}, {
+  label: '氧化的铜块',
+  value: 'minecraft:oxidized_copper',
+  icon: 'item/oxidized_copper.png',
+  isBlock: true
+}, {
+  label: '磨制黑石砖楼梯',
+  value: 'minecraft:polished_blackstone_brick_stairs',
+  icon: 'item/polished_blackstone_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '狐狸刷怪蛋',
+  value: 'minecraft:fox_spawn_egg',
+  icon: 'item/fox_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '去皮樱花木',
+  value: 'minecraft:stripped_cherry_wood',
+  icon: 'item/stripped_cherry_wood.png',
+  isBlock: true
+}, {
+  label: '西瓜',
+  value: 'minecraft:melon',
+  icon: 'item/melon.png',
+  isBlock: true
+}, {
+  label: '淡灰色混凝土',
+  value: 'minecraft:light_gray_concrete',
+  icon: 'item/light_gray_concrete.png',
+  isBlock: true
+}, {
+  label: '黄绿色潜影盒',
+  value: 'minecraft:lime_shulker_box',
+  icon: 'item/lime_shulker_box.png',
+  isBlock: true
+}, {
+  label: '黄绿色地毯',
+  value: 'minecraft:lime_carpet',
+  icon: 'item/lime_carpet.png',
+  isBlock: true
+}, {
+  label: '小麦种子',
+  value: 'minecraft:wheat_seeds',
+  icon: 'item/wheat_seeds.png',
+  isBlock: true
+}, {
+  label: '锁链靴子',
+  value: 'minecraft:chainmail_boots',
+  icon: 'item/chainmail_boots.png',
+  isBlock: false
+}, {
+  label: '黑色染色玻璃',
+  value: 'minecraft:black_stained_glass',
+  icon: 'item/black_stained_glass.png',
+  isBlock: true
+}, {
+  label: '蜂蜜块',
+  value: 'minecraft:honey_block',
+  icon: 'item/honey_block.png',
+  isBlock: true
+}, {
+  label: '脑纹珊瑚块',
+  value: 'minecraft:brain_coral_block',
+  icon: 'item/brain_coral_block.png',
+  isBlock: true
+}, {
+  label: '旋风棒',
+  value: 'minecraft:breeze_rod',
+  icon: 'item/breeze_rod.png',
+  isBlock: false
+}, {
+  label: '海晶石砖楼梯',
+  value: 'minecraft:prismarine_brick_stairs',
+  icon: 'item/prismarine_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '火珊瑚',
+  value: 'minecraft:fire_coral',
+  icon: 'item/fire_coral.png',
+  isBlock: true
+}, {
+  label: '粉红色染料',
+  value: 'minecraft:pink_dye',
+  icon: 'item/pink_dye.png',
+  isBlock: false
+}, {
+  label: '涂蜡的斑驳铜块',
+  value: 'minecraft:waxed_exposed_copper',
+  icon: 'item/waxed_exposed_copper.png',
+  isBlock: true
+}, {
+  label: '竹板',
+  value: 'minecraft:bamboo_planks',
+  icon: 'item/bamboo_planks.png',
+  isBlock: true
+}, {
+  label: '制图台',
+  value: 'minecraft:cartography_table',
+  icon: 'item/cartography_table.png',
+  isBlock: true
+}, {
+  label: '红砖台阶',
+  value: 'minecraft:brick_slab',
+  icon: 'item/brick_slab.png',
+  isBlock: true
+}, {
+  label: '金合欢木',
+  value: 'minecraft:acacia_wood',
+  icon: 'item/acacia_wood.png',
+  isBlock: true
+}, {
+  label: '镶金黑石',
+  value: 'minecraft:gilded_blackstone',
+  icon: 'item/gilded_blackstone.png',
+  isBlock: true
+}, {
+  label: '细雪桶',
+  value: 'minecraft:powder_snow_bucket',
+  icon: 'item/powder_snow_bucket.png',
+  isBlock: true
+}, {
+  label: '黑色羊毛',
+  value: 'minecraft:black_wool',
+  icon: 'item/black_wool.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:coast_armor_trim_smithing_template',
+  icon: 'item/coast_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '粉红色潜影盒',
+  value: 'minecraft:pink_shulker_box',
+  icon: 'item/pink_shulker_box.png',
+  isBlock: true
+}, {
+  label: '红石火把',
+  value: 'minecraft:redstone_torch',
+  icon: 'item/redstone_torch.png',
+  isBlock: true
+}, {
+  label: '红色床',
+  value: 'minecraft:red_bed',
+  icon: 'item/red_bed.png',
+  isBlock: true
+}, {
+  label: '橡树树叶',
+  value: 'minecraft:oak_leaves',
+  icon: 'item/oak_leaves.png',
+  isBlock: true
+}, {
+  label: '深板岩圆石楼梯',
+  value: 'minecraft:cobbled_deepslate_stairs',
+  icon: 'item/cobbled_deepslate_stairs.png',
+  isBlock: true
+}, {
+  label: '灰色染色玻璃',
+  value: 'minecraft:gray_stained_glass',
+  icon: 'item/gray_stained_glass.png',
+  isBlock: true
+}, {
+  label: '狼嚎纹样陶片',
+  value: 'minecraft:howl_pottery_sherd',
+  icon: 'item/howl_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '青色染色玻璃板',
+  value: 'minecraft:cyan_stained_glass_pane',
+  icon: 'item/cyan_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '树荫纹样陶片',
+  value: 'minecraft:shelter_pottery_sherd',
+  icon: 'item/shelter_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '橙色地毯',
+  value: 'minecraft:orange_carpet',
+  icon: 'item/orange_carpet.png',
+  isBlock: true
+}, {
+  label: '营火',
+  value: 'minecraft:campfire',
+  icon: 'item/campfire.png',
+  isBlock: true
+}, {
+  label: '氧化的切制铜楼梯',
+  value: 'minecraft:oxidized_cut_copper_stairs',
+  icon: 'item/oxidized_cut_copper_stairs.png',
+  isBlock: true
+}, {
+  label: '箱子',
+  value: 'minecraft:chest',
+  icon: 'item/chest.png',
+  isBlock: true
+}, {
+  label: '虫蚀深板岩',
+  value: 'minecraft:infested_deepslate',
+  icon: 'item/infested_deepslate.png',
+  isBlock: true
+}, {
+  label: '紫色染料',
+  value: 'minecraft:purple_dye',
+  icon: 'item/purple_dye.png',
+  isBlock: false
+}, {
+  label: '圆石墙',
+  value: 'minecraft:cobblestone_wall',
+  icon: 'item/cobblestone_wall.png',
+  isBlock: true
+}, {
+  label: '哞菇刷怪蛋',
+  value: 'minecraft:mooshroom_spawn_egg',
+  icon: 'item/mooshroom_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '云杉木',
+  value: 'minecraft:spruce_wood',
+  icon: 'item/spruce_wood.png',
+  isBlock: true
+}, {
+  label: '绿宝石',
+  value: 'minecraft:emerald',
+  icon: 'item/emerald.png',
+  isBlock: false
+}, {
+  label: '磨制深板岩台阶',
+  value: 'minecraft:polished_deepslate_slab',
+  icon: 'item/polished_deepslate_slab.png',
+  isBlock: true
+}, {
+  label: '末地传送门框架',
+  value: 'minecraft:end_portal_frame',
+  icon: 'item/end_portal_frame.png',
+  isBlock: true
+}, {
+  label: '海绵',
+  value: 'minecraft:sponge',
+  icon: 'item/sponge.png',
+  isBlock: true
+}, {
+  label: '青色潜影盒',
+  value: 'minecraft:cyan_shulker_box',
+  icon: 'item/cyan_shulker_box.png',
+  isBlock: true
+}, {
+  label: '僵尸马刷怪蛋',
+  value: 'minecraft:zombie_horse_spawn_egg',
+  icon: 'item/zombie_horse_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '淡灰色陶瓦',
+  value: 'minecraft:light_gray_terracotta',
+  icon: 'item/light_gray_terracotta.png',
+  isBlock: true
+}, {
+  label: '爆裂紫颂果',
+  value: 'minecraft:popped_chorus_fruit',
+  icon: 'item/popped_chorus_fruit.png',
+  isBlock: false
+}, {
+  label: '马刷怪蛋',
+  value: 'minecraft:horse_spawn_egg',
+  icon: 'item/horse_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '弩',
+  value: 'minecraft:crossbow',
+  icon: 'item/crossbow.png',
+  isBlock: false
+}, {
+  label: '钻石头盔',
+  value: 'minecraft:diamond_helmet',
+  icon: 'item/diamond_helmet.png',
+  isBlock: false
+}, {
+  label: '河豚刷怪蛋',
+  value: 'minecraft:pufferfish_spawn_egg',
+  icon: 'item/pufferfish_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '金锄',
+  value: 'minecraft:golden_hoe',
+  icon: 'item/golden_hoe.png',
+  isBlock: false
+}, {
+  label: '白色地毯',
+  value: 'minecraft:white_carpet',
+  icon: 'item/white_carpet.png',
+  isBlock: true
+}, {
+  label: '玩家的头',
+  value: 'minecraft:player_head',
+  icon: 'item/player_head.png',
+  isBlock: true
+}, {
+  label: '僵尸疣猪兽刷怪蛋',
+  value: 'minecraft:zoglin_spawn_egg',
+  icon: 'item/zoglin_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '成书',
+  value: 'minecraft:written_book',
+  icon: 'item/written_book.png',
+  isBlock: false
+}, {
+  label: '黄绿色旗帜',
+  value: 'minecraft:lime_banner',
+  icon: 'item/lime_banner.png',
+  isBlock: true
+}, {
+  label: '火把花',
+  value: 'minecraft:torchflower',
+  icon: 'item/torchflower.png',
+  isBlock: true
+}, {
+  label: '赭黄蛙明灯',
+  value: 'minecraft:ochre_froglight',
+  icon: 'item/ochre_froglight.png',
+  isBlock: true
+}, {
+  label: '煤炭块',
+  value: 'minecraft:coal_block',
+  icon: 'item/coal_block.png',
+  isBlock: true
+}, {
+  label: '虫蚀石砖',
+  value: 'minecraft:infested_stone_bricks',
+  icon: 'item/infested_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '磨制凝灰岩',
+  value: 'minecraft:polished_tuff',
+  icon: 'item/polished_tuff.png',
+  isBlock: true
+}, {
+  label: '不可合成的药箭',
+  value: 'minecraft:tipped_arrow',
+  icon: 'item/tipped_arrow.png',
+  isBlock: false
+}, {
+  label: '橙色陶瓦',
+  value: 'minecraft:orange_terracotta',
+  icon: 'item/orange_terracotta.png',
+  isBlock: true
+}, {
+  label: '荧光墨囊',
+  value: 'minecraft:glow_ink_sac',
+  icon: 'item/glow_ink_sac.png',
+  isBlock: false
+}, {
+  label: '涡流纹样陶片',
+  value: 'minecraft:flow_pottery_sherd',
+  icon: 'item/flow_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '河豚桶',
+  value: 'minecraft:pufferfish_bucket',
+  icon: 'item/pufferfish_bucket.png',
+  isBlock: false
+}, {
+  label: '兔子皮',
+  value: 'minecraft:rabbit_hide',
+  icon: 'item/rabbit_hide.png',
+  isBlock: false
+}, {
+  label: '知识之书',
+  value: 'minecraft:knowledge_book',
+  icon: 'item/knowledge_book.png',
+  isBlock: false
+}, {
+  label: '锈蚀的铜活板门',
+  value: 'minecraft:weathered_copper_trapdoor',
+  icon: 'item/weathered_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '红色下界砖楼梯',
+  value: 'minecraft:red_nether_brick_stairs',
+  icon: 'item/red_nether_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '白色床',
+  value: 'minecraft:white_bed',
+  icon: 'item/white_bed.png',
+  isBlock: true
+}, {
+  label: '鹿角珊瑚',
+  value: 'minecraft:horn_coral',
+  icon: 'item/horn_coral.png',
+  isBlock: true
+}, {
+  label: '红色染色玻璃板',
+  value: 'minecraft:red_stained_glass_pane',
+  icon: 'item/red_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '粉红色混凝土粉末',
+  value: 'minecraft:pink_concrete_powder',
+  icon: 'item/pink_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '橙色旗帜',
+  value: 'minecraft:orange_banner',
+  icon: 'item/orange_banner.png',
+  isBlock: true
+}, {
+  label: '切制砂岩台阶',
+  value: 'minecraft:cut_sandstone_slab',
+  icon: 'item/cut_sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '绿宝石块',
+  value: 'minecraft:emerald_block',
+  icon: 'item/emerald_block.png',
+  isBlock: true
+}, {
+  label: '末影龙刷怪蛋',
+  value: 'minecraft:ender_dragon_spawn_egg',
+  icon: 'item/ender_dragon_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '闪长岩',
+  value: 'minecraft:diorite',
+  icon: 'item/diorite.png',
+  isBlock: true
+}, {
+  label: '云杉木运输船',
+  value: 'minecraft:spruce_chest_boat',
+  icon: 'item/spruce_chest_boat.png',
+  isBlock: false
+}, {
+  label: '僵尸刷怪蛋',
+  value: 'minecraft:zombie_spawn_egg',
+  icon: 'item/zombie_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '织布机',
+  value: 'minecraft:loom',
+  icon: 'item/loom.png',
+  isBlock: true
+}, {
+  label: '丛林木船',
+  value: 'minecraft:jungle_boat',
+  icon: 'item/jungle_boat.png',
+  isBlock: false
+}, {
+  label: '斑驳的雕纹铜块',
+  value: 'minecraft:exposed_chiseled_copper',
+  icon: 'item/exposed_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '红色染料',
+  value: 'minecraft:red_dye',
+  icon: 'item/red_dye.png',
+  isBlock: false
+}, {
+  label: '粉红色带釉陶瓦',
+  value: 'minecraft:pink_glazed_terracotta',
+  icon: 'item/pink_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '失活的气泡珊瑚',
+  value: 'minecraft:dead_bubble_coral',
+  icon: 'item/dead_bubble_coral.png',
+  isBlock: true
+}, {
+  label: '青色床',
+  value: 'minecraft:cyan_bed',
+  icon: 'item/cyan_bed.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_far',
+  icon: 'item/music_disc_far.png',
+  isBlock: false
+}, {
+  label: '诡异木楼梯',
+  value: 'minecraft:warped_stairs',
+  icon: 'item/warped_stairs.png',
+  isBlock: true
+}, {
+  label: '山羊角',
+  value: 'minecraft:goat_horn',
+  icon: 'item/goat_horn.png',
+  isBlock: false
+}, {
+  label: '下界石英',
+  value: 'minecraft:quartz',
+  icon: 'item/quartz.png',
+  isBlock: false
+}, {
+  label: '红色陶瓦',
+  value: 'minecraft:red_terracotta',
+  icon: 'item/red_terracotta.png',
+  isBlock: true
+}, {
+  label: '木剑',
+  value: 'minecraft:wooden_sword',
+  icon: 'item/wooden_sword.png',
+  isBlock: false
+}, {
+  label: '紫色染色玻璃板',
+  value: 'minecraft:purple_stained_glass_pane',
+  icon: 'item/purple_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '锁链头盔',
+  value: 'minecraft:chainmail_helmet',
+  icon: 'item/chainmail_helmet.png',
+  isBlock: false
+}, {
+  label: '不死图腾',
+  value: 'minecraft:totem_of_undying',
+  icon: 'item/totem_of_undying.png',
+  isBlock: false
+}, {
+  label: '西瓜种子',
+  value: 'minecraft:melon_seeds',
+  icon: 'item/melon_seeds.png',
+  isBlock: true
+}, {
+  label: '书架',
+  value: 'minecraft:bookshelf',
+  icon: 'item/bookshelf.png',
+  isBlock: true
+}, {
+  label: '黄色染色玻璃板',
+  value: 'minecraft:yellow_stained_glass_pane',
+  icon: 'item/yellow_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '凝灰岩楼梯',
+  value: 'minecraft:tuff_stairs',
+  icon: 'item/tuff_stairs.png',
+  isBlock: true
+}, {
+  label: '黏性活塞',
+  value: 'minecraft:sticky_piston',
+  icon: 'item/sticky_piston.png',
+  isBlock: true
+}, {
+  label: '深板岩砖台阶',
+  value: 'minecraft:deepslate_brick_slab',
+  icon: 'item/deepslate_brick_slab.png',
+  isBlock: true
+}, {
+  label: '重锤',
+  value: 'minecraft:mace',
+  icon: 'item/mace.png',
+  isBlock: false
+}, {
+  label: '白色旗帜',
+  value: 'minecraft:white_banner',
+  icon: 'item/white_banner.png',
+  isBlock: true
+}, {
+  label: '热带鱼刷怪蛋',
+  value: 'minecraft:tropical_fish_spawn_egg',
+  icon: 'item/tropical_fish_spawn_egg.png',
+  isBlock: false
+}, {
+  label: 'TNT矿车',
+  value: 'minecraft:tnt_minecart',
+  icon: 'item/tnt_minecart.png',
+  isBlock: false
+}, {
+  label: '深层铁矿石',
+  value: 'minecraft:deepslate_iron_ore',
+  icon: 'item/deepslate_iron_ore.png',
+  isBlock: true
+}, {
+  label: '蓝色蜡烛',
+  value: 'minecraft:blue_candle',
+  icon: 'item/blue_candle.png',
+  isBlock: true
+}, {
+  label: '风弹',
+  value: 'minecraft:wind_charge',
+  icon: 'item/wind_charge.png',
+  isBlock: false
+}, {
+  label: '金剑',
+  value: 'minecraft:golden_sword',
+  icon: 'item/golden_sword.png',
+  isBlock: false
+}, {
+  label: '绯红菌索',
+  value: 'minecraft:crimson_roots',
+  icon: 'item/crimson_roots.png',
+  isBlock: true
+}, {
+  label: '狼铠',
+  value: 'minecraft:wolf_armor',
+  icon: 'item/wolf_armor.png',
+  isBlock: false
+}, {
+  label: '粉红色混凝土',
+  value: 'minecraft:pink_concrete',
+  icon: 'item/pink_concrete.png',
+  isBlock: true
+}, {
+  label: '拼图方块',
+  value: 'minecraft:jigsaw',
+  icon: 'item/jigsaw.png',
+  isBlock: true
+}, {
+  label: '草方块',
+  value: 'minecraft:grass_block',
+  icon: 'item/grass_block.png',
+  isBlock: true
+}, {
+  label: '可疑的沙子',
+  value: 'minecraft:suspicious_sand',
+  icon: 'item/suspicious_sand.png',
+  isBlock: true
+}, {
+  label: '花岗岩',
+  value: 'minecraft:granite',
+  icon: 'item/granite.png',
+  isBlock: true
+}, {
+  label: '雕纹凝灰岩',
+  value: 'minecraft:chiseled_tuff',
+  icon: 'item/chiseled_tuff.png',
+  isBlock: true
+}, {
+  label: '涂蜡的锈蚀雕纹铜块',
+  value: 'minecraft:waxed_weathered_chiseled_copper',
+  icon: 'item/waxed_weathered_chiseled_copper.png',
+  isBlock: true
+}, {
+  label: '氧化的铜活板门',
+  value: 'minecraft:oxidized_copper_trapdoor',
+  icon: 'item/oxidized_copper_trapdoor.png',
+  isBlock: true
+}, {
+  label: '诡异菌',
+  value: 'minecraft:warped_fungus',
+  icon: 'item/warped_fungus.png',
+  isBlock: true
+}, {
+  label: '棕色混凝土',
+  value: 'minecraft:brown_concrete',
+  icon: 'item/brown_concrete.png',
+  isBlock: true
+}, {
+  label: '樱花木运输船',
+  value: 'minecraft:cherry_chest_boat',
+  icon: 'item/cherry_chest_boat.png',
+  isBlock: false
+}, {
+  label: '心碎纹样陶片',
+  value: 'minecraft:heartbreak_pottery_sherd',
+  icon: 'item/heartbreak_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:guster_banner_pattern',
+  icon: 'item/guster_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '磨制黑石墙',
+  value: 'minecraft:polished_blackstone_wall',
+  icon: 'item/polished_blackstone_wall.png',
+  isBlock: true
+}, {
+  label: '小麦',
+  value: 'minecraft:wheat',
+  icon: 'item/wheat.png',
+  isBlock: false
+}, {
+  label: '诡异木活板门',
+  value: 'minecraft:warped_trapdoor',
+  icon: 'item/warped_trapdoor.png',
+  isBlock: true
+}, {
+  label: '平滑石英楼梯',
+  value: 'minecraft:smooth_quartz_stairs',
+  icon: 'item/smooth_quartz_stairs.png',
+  isBlock: true
+}, {
+  label: '下界砖墙',
+  value: 'minecraft:nether_brick_wall',
+  icon: 'item/nether_brick_wall.png',
+  isBlock: true
+}, {
+  label: '黑色混凝土',
+  value: 'minecraft:black_concrete',
+  icon: 'item/black_concrete.png',
+  isBlock: true
+}, {
+  label: '南瓜派',
+  value: 'minecraft:pumpkin_pie',
+  icon: 'item/pumpkin_pie.png',
+  isBlock: false
+}, {
+  label: '海晶砂粒',
+  value: 'minecraft:prismarine_crystals',
+  icon: 'item/prismarine_crystals.png',
+  isBlock: false
+}, {
+  label: '蓝冰',
+  value: 'minecraft:blue_ice',
+  icon: 'item/blue_ice.png',
+  isBlock: true
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:piglin_banner_pattern',
+  icon: 'item/piglin_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '涂蜡的氧化铜格栅',
+  value: 'minecraft:waxed_oxidized_copper_grate',
+  icon: 'item/waxed_oxidized_copper_grate.png',
+  isBlock: true
+}, {
+  label: '下界合金头盔',
+  value: 'minecraft:netherite_helmet',
+  icon: 'item/netherite_helmet.png',
+  isBlock: false
+}, {
+  label: '掠夺者刷怪蛋',
+  value: 'minecraft:pillager_spawn_egg',
+  icon: 'item/pillager_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '白色染料',
+  value: 'minecraft:white_dye',
+  icon: 'item/white_dye.png',
+  isBlock: false
+}, {
+  label: '热带鱼桶',
+  value: 'minecraft:tropical_fish_bucket',
+  icon: 'item/tropical_fish_bucket.png',
+  isBlock: false
+}, {
+  label: '锻造模板',
+  value: 'minecraft:bolt_armor_trim_smithing_template',
+  icon: 'item/bolt_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '白色羊毛',
+  value: 'minecraft:white_wool',
+  icon: 'item/white_wool.png',
+  isBlock: true
+}, {
+  label: '发光地衣',
+  value: 'minecraft:glow_lichen',
+  icon: 'item/glow_lichen.png',
+  isBlock: true
+}, {
+  label: '挚友纹样陶片',
+  value: 'minecraft:friend_pottery_sherd',
+  icon: 'item/friend_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '灰色床',
+  value: 'minecraft:gray_bed',
+  icon: 'item/gray_bed.png',
+  isBlock: true
+}, {
+  label: '兔子脚',
+  value: 'minecraft:rabbit_foot',
+  icon: 'item/rabbit_foot.png',
+  isBlock: false
+}, {
+  label: '青金石矿石',
+  value: 'minecraft:lapis_ore',
+  icon: 'item/lapis_ore.png',
+  isBlock: true
+}, {
+  label: '诡异木台阶',
+  value: 'minecraft:warped_slab',
+  icon: 'item/warped_slab.png',
+  isBlock: true
+}, {
+  label: '品红色床',
+  value: 'minecraft:magenta_bed',
+  icon: 'item/magenta_bed.png',
+  isBlock: true
+}, {
+  label: 'TNT',
+  value: 'minecraft:tnt',
+  icon: 'item/tnt.png',
+  isBlock: true
+}, {
+  label: '命令方块',
+  value: 'minecraft:command_block',
+  icon: 'item/command_block.png',
+  isBlock: true
+}, {
+  label: '利刃纹样陶片',
+  value: 'minecraft:blade_pottery_sherd',
+  icon: 'item/blade_pottery_sherd.png',
+  isBlock: false
+}, {
+  label: '地图',
+  value: 'minecraft:filled_map',
+  icon: 'item/filled_map.png',
+  isBlock: false
+}, {
+  label: '竹马赛克楼梯',
+  value: 'minecraft:bamboo_mosaic_stairs',
+  icon: 'item/bamboo_mosaic_stairs.png',
+  isBlock: true
+}, {
+  label: '失活的火珊瑚扇',
+  value: 'minecraft:dead_fire_coral_fan',
+  icon: 'item/dead_fire_coral_fan.png',
+  isBlock: true
+}, {
+  label: '红砂岩楼梯',
+  value: 'minecraft:red_sandstone_stairs',
+  icon: 'item/red_sandstone_stairs.png',
+  isBlock: true
+}, {
+  label: '深色橡木门',
+  value: 'minecraft:dark_oak_door',
+  icon: 'item/dark_oak_door.png',
+  isBlock: true
+}, {
+  label: '煤矿石',
+  value: 'minecraft:coal_ore',
+  icon: 'item/coal_ore.png',
+  isBlock: true
+}, {
+  label: '运输竹筏',
+  value: 'minecraft:bamboo_chest_raft',
+  icon: 'item/bamboo_chest_raft.png',
+  isBlock: false
+}, {
+  label: '熟猪排',
+  value: 'minecraft:cooked_porkchop',
+  icon: 'item/cooked_porkchop.png',
+  isBlock: false
+}, {
+  label: '可疑的沙砾',
+  value: 'minecraft:suspicious_gravel',
+  icon: 'item/suspicious_gravel.png',
+  isBlock: true
+}, {
+  label: '诡异木告示牌',
+  value: 'minecraft:warped_sign',
+  icon: 'item/warped_sign.png',
+  isBlock: true
+}, {
+  label: '青色染料',
+  value: 'minecraft:cyan_dye',
+  icon: 'item/cyan_dye.png',
+  isBlock: false
+}, {
+  label: '潮涌核心',
+  value: 'minecraft:conduit',
+  icon: 'item/conduit.png',
+  isBlock: true
+}, {
+  label: '狼刷怪蛋',
+  value: 'minecraft:wolf_spawn_egg',
+  icon: 'item/wolf_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '凋灵玫瑰',
+  value: 'minecraft:wither_rose',
+  icon: 'item/wither_rose.png',
+  isBlock: true
+}, {
+  label: '白桦木活板门',
+  value: 'minecraft:birch_trapdoor',
+  icon: 'item/birch_trapdoor.png',
+  isBlock: true
+}, {
+  label: '岩浆块',
+  value: 'minecraft:magma_block',
+  icon: 'item/magma_block.png',
+  isBlock: true
+}, {
+  label: '豹猫刷怪蛋',
+  value: 'minecraft:ocelot_spawn_egg',
+  icon: 'item/ocelot_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '熟鲑鱼',
+  value: 'minecraft:cooked_salmon',
+  icon: 'item/cooked_salmon.png',
+  isBlock: false
+}, {
+  label: '潜影贝刷怪蛋',
+  value: 'minecraft:shulker_spawn_egg',
+  icon: 'item/shulker_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '红砖楼梯',
+  value: 'minecraft:brick_stairs',
+  icon: 'item/brick_stairs.png',
+  isBlock: true
+}, {
+  label: '不可合成的药水',
+  value: 'minecraft:potion',
+  icon: 'item/potion.png',
+  isBlock: false
+}, {
+  label: '樱花木按钮',
+  value: 'minecraft:cherry_button',
+  icon: 'item/cherry_button.png',
+  isBlock: true
+}, {
+  label: '苔石楼梯',
+  value: 'minecraft:mossy_cobblestone_stairs',
+  icon: 'item/mossy_cobblestone_stairs.png',
+  isBlock: true
+}, {
+  label: '玻璃板',
+  value: 'minecraft:glass_pane',
+  icon: 'item/glass_pane.png',
+  isBlock: true
+}, {
+  label: '劫掠兽刷怪蛋',
+  value: 'minecraft:ravager_spawn_egg',
+  icon: 'item/ravager_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '石英柱',
+  value: 'minecraft:quartz_pillar',
+  icon: 'item/quartz_pillar.png',
+  isBlock: true
+}, {
+  label: '深板岩砖楼梯',
+  value: 'minecraft:deepslate_brick_stairs',
+  icon: 'item/deepslate_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '金合欢木按钮',
+  value: 'minecraft:acacia_button',
+  icon: 'item/acacia_button.png',
+  isBlock: true
+}, {
+  label: '斑驳的铜灯',
+  value: 'minecraft:exposed_copper_bulb',
+  icon: 'item/exposed_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '灵魂营火',
+  value: 'minecraft:soul_campfire',
+  icon: 'item/soul_campfire.png',
+  isBlock: true
+}, {
+  label: '樱花木船',
+  value: 'minecraft:cherry_boat',
+  icon: 'item/cherry_boat.png',
+  isBlock: false
+}, {
+  label: '蜘蛛眼',
+  value: 'minecraft:spider_eye',
+  icon: 'item/spider_eye.png',
+  isBlock: false
+}, {
+  label: '铁轨',
+  value: 'minecraft:rail',
+  icon: 'item/rail.png',
+  isBlock: true
+}, {
+  label: '蓝色地毯',
+  value: 'minecraft:blue_carpet',
+  icon: 'item/blue_carpet.png',
+  isBlock: true
+}, {
+  label: '棕色染色玻璃',
+  value: 'minecraft:brown_stained_glass',
+  icon: 'item/brown_stained_glass.png',
+  isBlock: true
+}, {
+  label: '黑色陶瓦',
+  value: 'minecraft:black_terracotta',
+  icon: 'item/black_terracotta.png',
+  isBlock: true
+}, {
+  label: '凝灰岩台阶',
+  value: 'minecraft:tuff_slab',
+  icon: 'item/tuff_slab.png',
+  isBlock: true
+}, {
+  label: '白色郁金香',
+  value: 'minecraft:white_tulip',
+  icon: 'item/white_tulip.png',
+  isBlock: true
+}, {
+  label: '蜘蛛刷怪蛋',
+  value: 'minecraft:spider_spawn_egg',
+  icon: 'item/spider_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '猪灵的头',
+  value: 'minecraft:piglin_head',
+  icon: 'item/piglin_head.png',
+  isBlock: true
+}, {
+  label: '深色橡木原木',
+  value: 'minecraft:dark_oak_log',
+  icon: 'item/dark_oak_log.png',
+  isBlock: true
+}, {
+  label: '橡木楼梯',
+  value: 'minecraft:oak_stairs',
+  icon: 'item/oak_stairs.png',
+  isBlock: true
+}, {
+  label: '试炼刷怪笼',
+  value: 'minecraft:trial_spawner',
+  icon: 'item/trial_spawner.png',
+  isBlock: true
+}, {
+  label: '红石比较器',
+  value: 'minecraft:comparator',
+  icon: 'item/comparator.png',
+  isBlock: true
+}, {
+  label: '粉红色郁金香',
+  value: 'minecraft:pink_tulip',
+  icon: 'item/pink_tulip.png',
+  isBlock: true
+}, {
+  label: '涂蜡的斑驳铜门',
+  value: 'minecraft:waxed_exposed_copper_door',
+  icon: 'item/waxed_exposed_copper_door.png',
+  isBlock: true
+}, {
+  label: '玻璃',
+  value: 'minecraft:glass',
+  icon: 'item/glass.png',
+  isBlock: true
+}, {
+  label: '红石中继器',
+  value: 'minecraft:repeater',
+  icon: 'item/repeater.png',
+  isBlock: true
+}, {
+  label: '红树木按钮',
+  value: 'minecraft:mangrove_button',
+  icon: 'item/mangrove_button.png',
+  isBlock: true
+}, {
+  label: '校频幽匿感测体',
+  value: 'minecraft:calibrated_sculk_sensor',
+  icon: 'item/calibrated_sculk_sensor.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:snout_armor_trim_smithing_template',
+  icon: 'item/snout_armor_trim_smithing_template.png',
+  isBlock: false
+}, {
+  label: '石砖台阶',
+  value: 'minecraft:stone_brick_slab',
+  icon: 'item/stone_brick_slab.png',
+  isBlock: true
+}, {
+  label: '红砖墙',
+  value: 'minecraft:brick_wall',
+  icon: 'item/brick_wall.png',
+  isBlock: true
+}, {
+  label: '深色橡树树苗',
+  value: 'minecraft:dark_oak_sapling',
+  icon: 'item/dark_oak_sapling.png',
+  isBlock: true
+}, {
+  label: '音乐唱片',
+  value: 'minecraft:music_disc_cat',
+  icon: 'item/music_disc_cat.png',
+  isBlock: false
+}, {
+  label: '凝灰岩砖台阶',
+  value: 'minecraft:tuff_brick_slab',
+  icon: 'item/tuff_brick_slab.png',
+  isBlock: true
+}, {
+  label: '兔肉煲',
+  value: 'minecraft:rabbit_stew',
+  icon: 'item/rabbit_stew.png',
+  isBlock: false
+}, {
+  label: '附魔金苹果',
+  value: 'minecraft:enchanted_golden_apple',
+  icon: 'item/enchanted_golden_apple.png',
+  isBlock: false
+}, {
+  label: '灰色染料',
+  value: 'minecraft:gray_dye',
+  icon: 'item/gray_dye.png',
+  isBlock: false
+}, {
+  label: '屏障',
+  value: 'minecraft:barrier',
+  icon: 'item/barrier.png',
+  isBlock: true
+}, {
+  label: '发光鱿鱼刷怪蛋',
+  value: 'minecraft:glow_squid_spawn_egg',
+  icon: 'item/glow_squid_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '下界石英矿石',
+  value: 'minecraft:nether_quartz_ore',
+  icon: 'item/nether_quartz_ore.png',
+  isBlock: true
+}, {
+  label: '品红色染料',
+  value: 'minecraft:magenta_dye',
+  icon: 'item/magenta_dye.png',
+  isBlock: false
+}, {
+  label: '去皮绯红菌柄',
+  value: 'minecraft:stripped_crimson_stem',
+  icon: 'item/stripped_crimson_stem.png',
+  isBlock: true
+}, {
+  label: '纸',
+  value: 'minecraft:paper',
+  icon: 'item/paper.png',
+  isBlock: false
+}, {
+  label: '云杉原木',
+  value: 'minecraft:spruce_log',
+  icon: 'item/spruce_log.png',
+  isBlock: true
+}, {
+  label: '缠根泥土',
+  value: 'minecraft:rooted_dirt',
+  icon: 'item/rooted_dirt.png',
+  isBlock: true
+}, {
+  label: '雕纹书架',
+  value: 'minecraft:chiseled_bookshelf',
+  icon: 'item/chiseled_bookshelf.png',
+  isBlock: true
+}, {
+  label: '末地水晶',
+  value: 'minecraft:end_crystal',
+  icon: 'item/end_crystal.png',
+  isBlock: false
+}, {
+  label: '蓝色混凝土',
+  value: 'minecraft:blue_concrete',
+  icon: 'item/blue_concrete.png',
+  isBlock: true
+}, {
+  label: '可可豆',
+  value: 'minecraft:cocoa_beans',
+  icon: 'item/cocoa_beans.png',
+  isBlock: true
+}, {
+  label: '结构空位',
+  value: 'minecraft:structure_void',
+  icon: 'item/structure_void.png',
+  isBlock: true
+}, {
+  label: '紫颂果',
+  value: 'minecraft:chorus_fruit',
+  icon: 'item/chorus_fruit.png',
+  isBlock: false
+}, {
+  label: '绿色带釉陶瓦',
+  value: 'minecraft:green_glazed_terracotta',
+  icon: 'item/green_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '炽足兽刷怪蛋',
+  value: 'minecraft:strider_spawn_egg',
+  icon: 'item/strider_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '红色混凝土粉末',
+  value: 'minecraft:red_concrete_powder',
+  icon: 'item/red_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '幻翼膜',
+  value: 'minecraft:phantom_membrane',
+  icon: 'item/phantom_membrane.png',
+  isBlock: false
+}, {
+  label: '末影珍珠',
+  value: 'minecraft:ender_pearl',
+  icon: 'item/ender_pearl.png',
+  isBlock: false
+}, {
+  label: '水桶',
+  value: 'minecraft:water_bucket',
+  icon: 'item/water_bucket.png',
+  isBlock: false
+}, {
+  label: '铁护腿',
+  value: 'minecraft:iron_leggings',
+  icon: 'item/iron_leggings.png',
+  isBlock: false
+}, {
+  label: '钓鱼竿',
+  value: 'minecraft:fishing_rod',
+  icon: 'item/fishing_rod.png',
+  isBlock: false
+}, {
+  label: '缠怨藤',
+  value: 'minecraft:twisting_vines',
+  icon: 'item/twisting_vines.png',
+  isBlock: true
+}, {
+  label: '斑驳的铜块',
+  value: 'minecraft:exposed_copper',
+  icon: 'item/exposed_copper.png',
+  isBlock: true
+}, {
+  label: '磨制闪长岩楼梯',
+  value: 'minecraft:polished_diorite_stairs',
+  icon: 'item/polished_diorite_stairs.png',
+  isBlock: true
+}, {
+  label: '诡异菌岩',
+  value: 'minecraft:warped_nylium',
+  icon: 'item/warped_nylium.png',
+  isBlock: true
+}, {
+  label: '磨制深板岩墙',
+  value: 'minecraft:polished_deepslate_wall',
+  icon: 'item/polished_deepslate_wall.png',
+  isBlock: true
+}, {
+  label: '黄色潜影盒',
+  value: 'minecraft:yellow_shulker_box',
+  icon: 'item/yellow_shulker_box.png',
+  isBlock: true
+}, {
+  label: '木棍',
+  value: 'minecraft:stick',
+  icon: 'item/stick.png',
+  isBlock: false
+}, {
+  label: '锻造台',
+  value: 'minecraft:smithing_table',
+  icon: 'item/smithing_table.png',
+  isBlock: true
+}, {
+  label: '蓝色旗帜',
+  value: 'minecraft:blue_banner',
+  icon: 'item/blue_banner.png',
+  isBlock: true
+}, {
+  label: '白桦木门',
+  value: 'minecraft:birch_door',
+  icon: 'item/birch_door.png',
+  isBlock: true
+}, {
+  label: '孢子花',
+  value: 'minecraft:spore_blossom',
+  icon: 'item/spore_blossom.png',
+  isBlock: true
+}, {
+  label: '白色陶瓦',
+  value: 'minecraft:white_terracotta',
+  icon: 'item/white_terracotta.png',
+  isBlock: true
+}, {
+  label: '诡异菌柄',
+  value: 'minecraft:warped_stem',
+  icon: 'item/warped_stem.png',
+  isBlock: true
+}, {
+  label: '磨制黑石砖台阶',
+  value: 'minecraft:polished_blackstone_brick_slab',
+  icon: 'item/polished_blackstone_brick_slab.png',
+  isBlock: true
+}, {
+  label: '平滑砂岩楼梯',
+  value: 'minecraft:smooth_sandstone_stairs',
+  icon: 'item/smooth_sandstone_stairs.png',
+  isBlock: true
+}, {
+  label: '蒲公英',
+  value: 'minecraft:dandelion',
+  icon: 'item/dandelion.png',
+  isBlock: true
+}, {
+  label: '垂根',
+  value: 'minecraft:hanging_roots',
+  icon: 'item/hanging_roots.png',
+  isBlock: true
+}, {
+  label: '失活的鹿角珊瑚扇',
+  value: 'minecraft:dead_horn_coral_fan',
+  icon: 'item/dead_horn_coral_fan.png',
+  isBlock: true
+}, {
+  label: '淡蓝色带釉陶瓦',
+  value: 'minecraft:light_blue_glazed_terracotta',
+  icon: 'item/light_blue_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '樱花树叶',
+  value: 'minecraft:cherry_leaves',
+  icon: 'item/cherry_leaves.png',
+  isBlock: true
+}, {
+  label: '紫水晶块',
+  value: 'minecraft:amethyst_block',
+  icon: 'item/amethyst_block.png',
+  isBlock: true
+}, {
+  label: '去皮诡异菌核',
+  value: 'minecraft:stripped_warped_hyphae',
+  icon: 'item/stripped_warped_hyphae.png',
+  isBlock: true
+}, {
+  label: '深色橡木木板',
+  value: 'minecraft:dark_oak_planks',
+  icon: 'item/dark_oak_planks.png',
+  isBlock: true
+}, {
+  label: '涂蜡的铜灯',
+  value: 'minecraft:waxed_copper_bulb',
+  icon: 'item/waxed_copper_bulb.png',
+  isBlock: true
+}, {
+  label: '灰色混凝土粉末',
+  value: 'minecraft:gray_concrete_powder',
+  icon: 'item/gray_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '橡木门',
+  value: 'minecraft:oak_door',
+  icon: 'item/oak_door.png',
+  isBlock: true
+}, {
+  label: '失活的脑纹珊瑚块',
+  value: 'minecraft:dead_brain_coral_block',
+  icon: 'item/dead_brain_coral_block.png',
+  isBlock: true
+}, {
+  label: '竹门',
+  value: 'minecraft:bamboo_door',
+  icon: 'item/bamboo_door.png',
+  isBlock: true
+}, {
+  label: '橙色染色玻璃',
+  value: 'minecraft:orange_stained_glass',
+  icon: 'item/orange_stained_glass.png',
+  isBlock: true
+}, {
+  label: '悬挂式云杉木告示牌',
+  value: 'minecraft:spruce_hanging_sign',
+  icon: 'item/spruce_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '下界砖楼梯',
+  value: 'minecraft:nether_brick_stairs',
+  icon: 'item/nether_brick_stairs.png',
+  isBlock: true
+}, {
+  label: '棕色带釉陶瓦',
+  value: 'minecraft:brown_glazed_terracotta',
+  icon: 'item/brown_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '金合欢树叶',
+  value: 'minecraft:acacia_leaves',
+  icon: 'item/acacia_leaves.png',
+  isBlock: true
+}, {
+  label: '丛林木台阶',
+  value: 'minecraft:jungle_slab',
+  icon: 'item/jungle_slab.png',
+  isBlock: true
+}, {
+  label: '毒马铃薯',
+  value: 'minecraft:poisonous_potato',
+  icon: 'item/poisonous_potato.png',
+  isBlock: false
+}, {
+  label: '三叉戟',
+  value: 'minecraft:trident',
+  icon: 'item/trident.png',
+  isBlock: false
+}, {
+  label: '竹子',
+  value: 'minecraft:bamboo',
+  icon: 'item/bamboo.png',
+  isBlock: true
+}, {
+  label: '粗铁块',
+  value: 'minecraft:raw_iron_block',
+  icon: 'item/raw_iron_block.png',
+  isBlock: true
+}, {
+  label: '红砂岩台阶',
+  value: 'minecraft:red_sandstone_slab',
+  icon: 'item/red_sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '深色橡木运输船',
+  value: 'minecraft:dark_oak_chest_boat',
+  icon: 'item/dark_oak_chest_boat.png',
+  isBlock: false
+}, {
+  label: '橙色混凝土粉末',
+  value: 'minecraft:orange_concrete_powder',
+  icon: 'item/orange_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '沙砾',
+  value: 'minecraft:gravel',
+  icon: 'item/gravel.png',
+  isBlock: true
+}, {
+  label: '涂蜡的氧化铜门',
+  value: 'minecraft:waxed_oxidized_copper_door',
+  icon: 'item/waxed_oxidized_copper_door.png',
+  isBlock: true
+}, {
+  label: '丛林木告示牌',
+  value: 'minecraft:jungle_sign',
+  icon: 'item/jungle_sign.png',
+  isBlock: true
+}, {
+  label: '收纳袋',
+  value: 'minecraft:bundle',
+  icon: 'item/bundle.png',
+  isBlock: false
+}, {
+  label: '深层煤矿石',
+  value: 'minecraft:deepslate_coal_ore',
+  icon: 'item/deepslate_coal_ore.png',
+  isBlock: true
+}, {
+  label: '雪',
+  value: 'minecraft:snow',
+  icon: 'item/snow.png',
+  isBlock: true
+}, {
+  label: '棕色蘑菇',
+  value: 'minecraft:brown_mushroom',
+  icon: 'item/brown_mushroom.png',
+  isBlock: true
+}, {
+  label: '红树树叶',
+  value: 'minecraft:mangrove_leaves',
+  icon: 'item/mangrove_leaves.png',
+  isBlock: true
+}, {
+  label: '青蛙卵',
+  value: 'minecraft:frogspawn',
+  icon: 'item/frogspawn.png',
+  isBlock: true
+}, {
+  label: '悬挂式樱花木告示牌',
+  value: 'minecraft:cherry_hanging_sign',
+  icon: 'item/cherry_hanging_sign.png',
+  isBlock: true
+}, {
+  label: '紫珀块',
+  value: 'minecraft:purpur_block',
+  icon: 'item/purpur_block.png',
+  isBlock: true
+}, {
+  label: '蜜脾',
+  value: 'minecraft:honeycomb',
+  icon: 'item/honeycomb.png',
+  isBlock: false
+}, {
+  label: '海洋之心',
+  value: 'minecraft:heart_of_the_sea',
+  icon: 'item/heart_of_the_sea.png',
+  isBlock: false
+}, {
+  label: '旋风人刷怪蛋',
+  value: 'minecraft:breeze_spawn_egg',
+  icon: 'item/breeze_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '绿色染色玻璃板',
+  value: 'minecraft:green_stained_glass_pane',
+  icon: 'item/green_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '冰',
+  value: 'minecraft:ice',
+  icon: 'item/ice.png',
+  isBlock: true
+}, {
+  label: '黑色带釉陶瓦',
+  value: 'minecraft:black_glazed_terracotta',
+  icon: 'item/black_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '失活的鹿角珊瑚块',
+  value: 'minecraft:dead_horn_coral_block',
+  icon: 'item/dead_horn_coral_block.png',
+  isBlock: true
+}, {
+  label: '虫蚀苔石砖',
+  value: 'minecraft:infested_mossy_stone_bricks',
+  icon: 'item/infested_mossy_stone_bricks.png',
+  isBlock: true
+}, {
+  label: '海泡菜',
+  value: 'minecraft:sea_pickle',
+  icon: 'item/sea_pickle.png',
+  isBlock: true
+}, {
+  label: '下界砖块',
+  value: 'minecraft:nether_bricks',
+  icon: 'item/nether_bricks.png',
+  isBlock: true
+}, {
+  label: '泥砖台阶',
+  value: 'minecraft:mud_brick_slab',
+  icon: 'item/mud_brick_slab.png',
+  isBlock: true
+}, {
+  label: '北极熊刷怪蛋',
+  value: 'minecraft:polar_bear_spawn_egg',
+  icon: 'item/polar_bear_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '铜锭',
+  value: 'minecraft:copper_ingot',
+  icon: 'item/copper_ingot.png',
+  isBlock: false
+}, {
+  label: '平滑石头',
+  value: 'minecraft:smooth_stone',
+  icon: 'item/smooth_stone.png',
+  isBlock: true
+}, {
+  label: '石剑',
+  value: 'minecraft:stone_sword',
+  icon: 'item/stone_sword.png',
+  isBlock: false
+}, {
+  label: '深板岩砖墙',
+  value: 'minecraft:deepslate_brick_wall',
+  icon: 'item/deepslate_brick_wall.png',
+  isBlock: true
+}, {
+  label: '诡异木压力板',
+  value: 'minecraft:warped_pressure_plate',
+  icon: 'item/warped_pressure_plate.png',
+  isBlock: true
+}, {
+  label: '青金石',
+  value: 'minecraft:lapis_lazuli',
+  icon: 'item/lapis_lazuli.png',
+  isBlock: false
+}, {
+  label: '凝灰岩砖',
+  value: 'minecraft:tuff_bricks',
+  icon: 'item/tuff_bricks.png',
+  isBlock: true
+}, {
+  label: '白桦树苗',
+  value: 'minecraft:birch_sapling',
+  icon: 'item/birch_sapling.png',
+  isBlock: true
+}, {
+  label: '恶魂刷怪蛋',
+  value: 'minecraft:ghast_spawn_egg',
+  icon: 'item/ghast_spawn_egg.png',
+  isBlock: false
+}, {
+  label: '竹马赛克',
+  value: 'minecraft:bamboo_mosaic',
+  icon: 'item/bamboo_mosaic.png',
+  isBlock: true
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:skull_banner_pattern',
+  icon: 'item/skull_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '去皮深色橡木',
+  value: 'minecraft:stripped_dark_oak_wood',
+  icon: 'item/stripped_dark_oak_wood.png',
+  isBlock: true
+}, {
+  label: '雕纹深板岩',
+  value: 'minecraft:chiseled_deepslate',
+  icon: 'item/chiseled_deepslate.png',
+  isBlock: true
+}, {
+  label: '砂岩台阶',
+  value: 'minecraft:sandstone_slab',
+  icon: 'item/sandstone_slab.png',
+  isBlock: true
+}, {
+  label: '远古残骸',
+  value: 'minecraft:ancient_debris',
+  icon: 'item/ancient_debris.png',
+  isBlock: true
+}, {
+  label: '钻石锄',
+  value: 'minecraft:diamond_hoe',
+  icon: 'item/diamond_hoe.png',
+  isBlock: false
+}, {
+  label: '白色混凝土粉末',
+  value: 'minecraft:white_concrete_powder',
+  icon: 'item/white_concrete_powder.png',
+  isBlock: true
+}, {
+  label: '淡蓝色床',
+  value: 'minecraft:light_blue_bed',
+  icon: 'item/light_blue_bed.png',
+  isBlock: true
+}, {
+  label: '打火石',
+  value: 'minecraft:flint_and_steel',
+  icon: 'item/flint_and_steel.png',
+  isBlock: false
+}, {
+  label: '闪长岩楼梯',
+  value: 'minecraft:diorite_stairs',
+  icon: 'item/diorite_stairs.png',
+  isBlock: true
+}, {
+  label: '石镐',
+  value: 'minecraft:stone_pickaxe',
+  icon: 'item/stone_pickaxe.png',
+  isBlock: false
+}, {
+  label: '黑色染色玻璃板',
+  value: 'minecraft:black_stained_glass_pane',
+  icon: 'item/black_stained_glass_pane.png',
+  isBlock: true
+}, {
+  label: '砂岩',
+  value: 'minecraft:sandstone',
+  icon: 'item/sandstone.png',
+  isBlock: true
+}, {
+  label: '下界砖栅栏',
+  value: 'minecraft:nether_brick_fence',
+  icon: 'item/nether_brick_fence.png',
+  isBlock: true
+}, {
+  label: '生鳕鱼',
+  value: 'minecraft:cod',
+  icon: 'item/cod.png',
+  isBlock: false
+}, {
+  label: '旗帜图案',
+  value: 'minecraft:flow_banner_pattern',
+  icon: 'item/flow_banner_pattern.png',
+  isBlock: false
+}, {
+  label: '橡木原木',
+  value: 'minecraft:oak_log',
+  icon: 'item/oak_log.png',
+  isBlock: true
+}, {
+  label: '红石粉',
+  value: 'minecraft:redstone',
+  icon: 'item/redstone.png',
+  isBlock: true
+}, {
+  label: '铃兰',
+  value: 'minecraft:lily_of_the_valley',
+  icon: 'item/lily_of_the_valley.png',
+  isBlock: true
+}, {
+  label: '金合欢木运输船',
+  value: 'minecraft:acacia_chest_boat',
+  icon: 'item/acacia_chest_boat.png',
+  isBlock: false
+}, {
+  label: '蓝色带釉陶瓦',
+  value: 'minecraft:blue_glazed_terracotta',
+  icon: 'item/blue_glazed_terracotta.png',
+  isBlock: true
+}, {
+  label: '丛林木板',
+  value: 'minecraft:jungle_planks',
+  icon: 'item/jungle_planks.png',
+  isBlock: true
+}, {
+  label: '丛林木栅栏门',
+  value: 'minecraft:jungle_fence_gate',
+  icon: 'item/jungle_fence_gate.png',
+  isBlock: true
+}, {
+  label: '紫珀台阶',
+  value: 'minecraft:purpur_slab',
+  icon: 'item/purpur_slab.png',
+  isBlock: true
+}, {
+  label: '下界合金锄',
+  value: 'minecraft:netherite_hoe',
+  icon: 'item/netherite_hoe.png',
+  isBlock: false
+}, {
+  label: '黄色混凝土',
+  value: 'minecraft:yellow_concrete',
+  icon: 'item/yellow_concrete.png',
+  isBlock: true
+}, {
+  label: '向日葵',
+  value: 'minecraft:sunflower',
+  icon: 'item/sunflower.png',
+  isBlock: true
+}, {
+  label: '锻造模板',
+  value: 'minecraft:host_armor_trim_smithing_template',
+  icon: 'item/host_armor_trim_smithing_template.png',
+  isBlock: false
+}]
