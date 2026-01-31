@@ -172,7 +172,7 @@ const isSelected = (comp) => store.selectedComponent === comp
             :class="isSelected(frame) ? 'bg-[#1e1e1e] border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-[#151515] border-slate-700 hover:border-slate-600'"
             @click.stop="selectFrame(frame)">
             <div class="flex flex-col items-center gap-1 w-6 shrink-0 pt-1">
-              <span class="text-[10px] font-mono text-slate-500">#{{ index + 1 }}</span>
+              <span class="text-[10px] font-mono text-slate-500">#{{ index }}</span>
               <div class="opacity-0 group-hover:opacity-100 flex flex-col gap-1 transition-opacity">
                 <button class="p-0.5 hover:text-blue-400 text-slate-500" @click.stop="handleMoveFrame(index, -1)"
                   title="上移">
@@ -191,7 +191,7 @@ const isSelected = (comp) => store.selectedComponent === comp
                 class="p-2 rounded bg-[#252525] border border-slate-700 hover:border-blue-500/50 hover:bg-[#2a2a2a] transition-colors group/box">
                 <div class="flex items-center gap-2 mb-1">
                   <span class="text-[10px] font-bold text-blue-400">
-                    {{ store.getTranslatableLabel(frame.dialogBox?.name) || '未知角色' }} 
+                    {{ store.getTranslatableLabel(frame.dialogBox?.name) || '未知角色' }}
                   </span>
                 </div>
                 <div class="text-xs text-slate-300 font-mono line-clamp-2 leading-relaxed">
