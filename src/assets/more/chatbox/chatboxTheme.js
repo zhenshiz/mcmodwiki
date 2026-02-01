@@ -84,6 +84,8 @@ export class Attachment extends AutoClean {
     this.textAlign = textAlign.LEFT
     this.textColor = -1
     this.lineBreak = false
+
+    this._hidden = false
   }
 
   static {
@@ -268,6 +270,8 @@ export class Component extends AutoClean {
 
     // Java: public List<RenderEvent> renderEvents;
     this.renderEvents = []
+
+    this._hidden = false
   }
 
   static {
@@ -440,6 +444,8 @@ export class Portrait extends Component {
     this.customAnimation = []
     // Java: public Attachment[] attachment;
     this.attachment = []
+
+    this._hidden = true
   }
 
   static {
@@ -551,6 +557,8 @@ export class FunctionButton extends Portrait {
     this.renderOrder = 30
 
     this.x = null
+
+    this._hidden = false
   }
 
   static {
@@ -600,6 +608,8 @@ export class Option extends Portrait {
     this.optionChatX = DEFAULT_FLOAT
     this.optionChatY = DEFAULT_FLOAT
     this.textAlign = textAlign.LEFT
+
+    this._hidden = false
   }
 
   static {
@@ -649,7 +659,7 @@ export class Option extends Portrait {
       }
     })
   }
-} 
+}
 
 // 对话框
 export class DialogBox extends Portrait {
@@ -666,6 +676,8 @@ export class DialogBox extends Portrait {
     this.textX = DEFAULT_FLOAT
     this.textY = DEFAULT_FLOAT
     this.textAlign = textAlign.LEFT
+
+    this._hidden = false
   }
 
   static {

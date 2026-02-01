@@ -378,100 +378,104 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
 </script>
 
 <template>
-    <div v-if="store.viewMode === 'theme' && model" :key="store.currentFile?.path || 'theme-view'"
-        class="relative border border-slate-700 shadow-2xl origin-top-left" :style="canvasStyle"
-        @mousedown.stop="store.selectComponent(null)">
+  <div v-if="store.viewMode === 'theme' && model" :key="store.currentFile?.path || 'theme-view'"
+       class="relative border border-slate-700 shadow-2xl origin-top-left" :style="canvasStyle"
+       @mousedown.stop="store.selectComponent(null)">
 
-        <div class="absolute -top-8 left-0 text-white/40 text-xs pointer-events-none whitespace-nowrap font-mono">
-            {{ baseDimensions.width }} x {{ baseDimensions.height }}
-        </div>
+    <div class="absolute -top-8 left-0 text-white/40 text-xs pointer-events-none whitespace-nowrap font-mono">
+      {{ baseDimensions.width }} x {{ baseDimensions.height }}
+    </div>
 
-        <template v-if="model.portrait">
-            <template v-for="(portrait, key) in model.portrait" :key="key">
-                <InteractItem :ref="(el) => setComponentRef(el, key)" v-show="!portrait.hidden" :component="portrait"
-                    :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
-                    :is-selected="isSel(portrait)"
-                    :resizable="formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE)" :label="key"
-                    @select="store.selectComponent(portrait, key)"
-                    :override-style="getSpecialStyle(portrait, baseDimensions.width, baseDimensions.height)">
+    <template v-if="model.portrait">
+      <template v-for="(portrait, key) in model.portrait" :key="key">
+        <InteractItem :ref="(el) => setComponentRef(el, key)" v-show="!portrait._hidden" :component="portrait"
+                      :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
+                      :is-selected="isSel(portrait)"
+                      :resizable="formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE)" :label="key"
+                      @select="store.selectComponent(portrait, key)"
+                      :override-style="getSpecialStyle(portrait, baseDimensions.width, baseDimensions.height)">
 
-                    <div class="w-full h-full flex items-center justify-center overflow-hidden relative"
-                        :class="{ 'bg-purple-500/10 border border-purple-500/30 text-purple-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE), 'bg-blue-500/10 border border-blue-500/30 text-blue-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD), 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM) }">
-                        <template
-                            v-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE) || !portrait.type">
-                            <img v-if="store.getTextureUrl(portrait.texture)"
-                                :src="store.getTextureUrl(portrait.texture)" class="w-full h-full object-fill pixelated"
-                                draggable="false" />
-                            <span v-else class="text-xs">{{ key }}</span>
-                        </template>
+          <div class="w-full h-full flex items-center justify-center overflow-hidden relative"
+               :class="{
+                            'border border-purple-500/30 text-purple-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE),
+                            'border border-blue-500/30 text-blue-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD),
+                            'border border-yellow-500/30 text-yellow-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM)
+                        }">
+            <template
+              v-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE) || !portrait.type">
+              <img v-if="store.getTextureUrl(portrait.texture)"
+                   :src="store.getTextureUrl(portrait.texture)" class="w-full h-full object-fill pixelated"
+                   draggable="false" />
+              <span v-else class="text-xs">{{ key }}</span>
+            </template>
 
-                        <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD)">
-                            <img :key="portrait.texture" :src="getHeadUrl((portrait.texture))"
-                                class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false"
-                                @error="(e) => e.target.src = getHeadUrl('@s')" />
-                        </template>
+            <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD)">
+              <img :key="portrait.texture" :src="getHeadUrl((portrait.texture))"
+                   class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false"
+                   @error="(e) => e.target.src = getHeadUrl('@s')" />
+            </template>
 
-                        <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM)">
-                            <img v-if="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', ''))"
-                                :src="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', '')).icon"
-                                class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false" />
-                            <div v-else class="flex flex-col items-center justify-center p-1 text-center w-full h-full">
+            <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM)">
+              <img v-if="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', ''))"
+                   :src="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', '')).icon"
+                   class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false" />
+              <div v-else class="flex flex-col items-center justify-center p-1 text-center w-full h-full">
                                 <span class="text-[10px] font-mono leading-tight break-all">{{ portrait.texture ||
-                                    'Item'
-                                    }}</span>
-                            </div>
-                        </template>
-                    </div>
-                </InteractItem>
+                                'Item'
+                                  }}</span>
+              </div>
+            </template>
+          </div>
+        </InteractItem>
 
-                <template v-if="portrait.attachment && !portrait.hidden">
-                    <InteractItem v-for="(att, idx) in portrait.attachment" :key="`${key}_att_${idx}`"
+        <template v-if="portrait.attachment && !portrait._hidden">
+          <InteractItem v-for="(att, idx) in portrait.attachment" :key="`${key}_att_${idx}`"
                         :component="getAttachmentWrapper(portrait, att)" :container-w="baseDimensions.width"
                         :container-h="baseDimensions.height" :scale="scale" :is-selected="isSel(att)"
                         :label="`Attach #${idx + 1}`" @select="store.selectComponent(att, `${key}_att_${idx}`)">
-                        <div class="w-full h-full border border-dashed border-green-400/30 bg-green-400/5 relative overflow-hidden flex"
-                            :class="{ 'items-center justify-center': formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXTURE) }">
-                            <template v-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXTURE)">
-                                <img v-if="att.value && store.getTextureUrl(att.value)"
-                                    :src="store.getTextureUrl(att.value)" class="w-full h-full object-fill pixelated"
-                                    draggable="false" />
-                                <span v-else class="text-[8px] text-green-300 opacity-70">图片附件</span>
-                            </template>
-                            <template v-else-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXT)">
-                                <div class="w-full h-full p-1" :style="getAttachmentTextStyle(att)">
-                                    {{ att.value || 'Text' }}
-                                </div>
-                            </template>
-                            <span v-else
-                                class="text-[8px] text-green-300 opacity-70 flex items-center justify-center w-full">未知类型</span>
-                        </div>
-                    </InteractItem>
-                </template>
-            </template>
-        </template>
-
-        <InteractItem v-if="model.dialogBox && !model.dialogBox.hidden" :component="model.dialogBox"
-            :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
-            :is-selected="isSel(model.dialogBox)" label="DialogBox"
-            @select="store.selectComponent(model.dialogBox, '@dialog')">
-
-            <div class="w-full h-full relative">
-
-                <img v-if="store.getTextureUrl(model.dialogBox.texture)"
-                    :src="store.getTextureUrl(model.dialogBox.texture)"
-                    class="absolute inset-0 w-full h-full object-fill pixelated select-none pointer-events-none"
-                    draggable="false" />
-
-                <div v-else
-                    class="w-full h-full bg-blue-500/10 border-2 border-dashed border-blue-500/30 flex items-center justify-center">
-                    <div class="text-center p-1 pointer-events-none">
-                        <span class="text-blue-300 text-xs font-bold">Dialog Box Area</span><br>
-                        <span class="opacity-50 text-[10px] text-blue-200">请在右侧设置贴图</span>
-                    </div>
+            <div class="w-full h-full border border-dashed border-green-400/30 relative overflow-hidden flex"
+                 :class="{ 'items-center justify-center': formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXTURE) }">
+              <template v-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXTURE)">
+                <img v-if="att.value && store.getTextureUrl(att.value)"
+                     :src="store.getTextureUrl(att.value)" class="w-full h-full object-fill pixelated"
+                     draggable="false" />
+                <span v-else class="text-[8px] text-green-300 opacity-70">图片附件</span>
+              </template>
+              <template v-else-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXT)">
+                <div class="w-full h-full p-1" :style="getAttachmentTextStyle(att)">
+                  {{ att.value || 'Text' }}
                 </div>
+              </template>
+              <span v-else
+                    class="text-[8px] text-green-300 opacity-70 flex items-center justify-center w-full">未知类型</span>
+            </div>
+          </InteractItem>
+        </template>
+      </template>
+    </template>
 
-                <div class="absolute text-yellow-200 font-bold whitespace-nowrap pointer-events-none select-none"
-                    :style="{
+    <InteractItem v-if="model.dialogBox && !model.dialogBox._hidden" :component="model.dialogBox"
+                  :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
+                  :is-selected="isSel(model.dialogBox)" label="DialogBox"
+                  @select="store.selectComponent(model.dialogBox, '@dialog')">
+
+      <div class="w-full h-full relative">
+
+        <img v-if="store.getTextureUrl(model.dialogBox.texture)"
+             :src="store.getTextureUrl(model.dialogBox.texture)"
+             class="absolute inset-0 w-full h-full object-fill pixelated select-none pointer-events-none"
+             draggable="false" />
+
+        <div v-else
+             class="w-full h-full border-2 border-dashed border-blue-500/30 flex items-center justify-center">
+          <div class="text-center p-1 pointer-events-none">
+            <span class="text-blue-300 text-xs font-bold">Dialog Box Area</span><br>
+            <span class="opacity-50 text-[10px] text-blue-200">请在右侧设置贴图</span>
+          </div>
+        </div>
+
+        <div class="absolute text-yellow-200 font-bold whitespace-nowrap pointer-events-none select-none"
+             :style="{
                         left: `${(model.dialogBox.nameX || 0) / 100 * baseDimensions.width}px`,
                         top: `${(model.dialogBox.nameY || 0) / 100 * baseDimensions.height}px`,
                         textAlign: (model.dialogBox.textAlign || 'left').toLowerCase(),
@@ -479,10 +483,10 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                         fontFamily: 'Minecraft, monospace',
                         textShadow: '2px 2px 0px #3f3f3f'
                     }">
-                    {{ model.dialogBox._name }}
-                </div>
+          {{ model.dialogBox._name }}
+        </div>
 
-                <div class="absolute text-white pointer-events-none select-none" :style="{
+        <div class="absolute text-white pointer-events-none select-none" :style="{
                     left: `${(model.dialogBox.textX || 0) / 100 * baseDimensions.width}px`,
                     top: `${(model.dialogBox.textY || 0) / 100 * baseDimensions.height}px`,
                     width: model.dialogBox.lineWidth ? `${(model.dialogBox.lineWidth / 100) * baseDimensions.width}px` : 'auto',
@@ -494,33 +498,33 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                     wordBreak: 'break-word',
                     textShadow: '2px 2px 0px #3f3f3f'
                 }">
-                    {{ model.dialogBox._text }}
-                </div>
+          {{ model.dialogBox._text }}
+        </div>
 
+      </div>
+    </InteractItem>
+
+    <template v-if="model.option && !model.option._hidden">
+      <template
+        v-for="(text, index) in (model.option._text && model.option._text.length ? model.option._text : ['测试内容'])"
+        :key="index">
+
+        <InteractItem v-if="index === 0" :component="model.option" :container-w="baseDimensions.width"
+                      :container-h="baseDimensions.height" :scale="scale" :is-selected="isSel(model.option)"
+                      label="Options" :override-style="getOptionRankStyle(model.option, 0, baseDimensions)"
+                      @select="store.selectComponent(model.option, '@option')">
+
+          <div class="w-full h-full relative">
+            <img v-if="store.getTextureUrl(model.option.texture)"
+                 :src="store.getTextureUrl(model.option.texture)"
+                 class="absolute inset-0 w-full h-full object-fill pixelated select-none pointer-events-none"
+                 draggable="false" />
+            <div v-else
+                 class="w-full h-full border-2 border-dashed border-green-500/50 flex items-center justify-center">
+              <span class="text-[10px] text-green-200 opacity-50 font-mono" v-if="!text">Option Box</span>
             </div>
-        </InteractItem>
 
-        <template v-if="model.option && !model.option.hidden">
-            <template
-                v-for="(text, index) in (model.option._text && model.option._text.length ? model.option._text : ['测试内容'])"
-                :key="index">
-
-                <InteractItem v-if="index === 0" :component="model.option" :container-w="baseDimensions.width"
-                    :container-h="baseDimensions.height" :scale="scale" :is-selected="isSel(model.option)"
-                    label="Options" :override-style="getOptionRankStyle(model.option, 0, baseDimensions)"
-                    @select="store.selectComponent(model.option, '@option')">
-
-                    <div class="w-full h-full relative">
-                        <img v-if="store.getTextureUrl(model.option.texture)"
-                            :src="store.getTextureUrl(model.option.texture)"
-                            class="absolute inset-0 w-full h-full object-fill pixelated select-none pointer-events-none"
-                            draggable="false" />
-                        <div v-else
-                            class="w-full h-full bg-green-500/20 border-2 border-dashed border-green-500/50 flex items-center justify-center">
-                            <span class="text-[10px] text-green-200 opacity-50 font-mono" v-if="!text">Option Box</span>
-                        </div>
-
-                        <div class="absolute pointer-events-none select-none whitespace-nowrap" :style="{
+            <div class="absolute pointer-events-none select-none whitespace-nowrap" :style="{
                             width: '100%',
                             left: `${(model.option.optionChatX || 0) / 100 * baseDimensions.width}px`,
                             top: `${(model.option.optionChatY || 0) / 100 * baseDimensions.height}px`,
@@ -533,22 +537,22 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                             flexDirection: 'column',
                             justifyContent: 'center'
                         }">
-                            {{ text }}
-                        </div>
-                    </div>
-                </InteractItem>
+              {{ text }}
+            </div>
+          </div>
+        </InteractItem>
 
-                <div v-else class="absolute select-none"
-                    :style="getOptionRankStyle(model.option, index, baseDimensions)">
+        <div v-else class="absolute select-none"
+             :style="getOptionRankStyle(model.option, index, baseDimensions)">
 
-                    <div class="w-full h-full relative">
-                        <img v-if="store.getTextureUrl(model.option.texture)"
-                            :src="store.getTextureUrl(model.option.texture)"
-                            class="absolute inset-0 w-full h-full object-fill pixelated" draggable="false" />
-                        <div v-else class="w-full h-full bg-green-500/10 border border-dashed border-green-500/30">
-                        </div>
+          <div class="w-full h-full relative">
+            <img v-if="store.getTextureUrl(model.option.texture)"
+                 :src="store.getTextureUrl(model.option.texture)"
+                 class="absolute inset-0 w-full h-full object-fill pixelated" draggable="false" />
+            <div v-else class="w-full h-full border border-dashed border-green-500/30">
+            </div>
 
-                        <div class="absolute whitespace-nowrap" :style="{
+            <div class="absolute whitespace-nowrap" :style="{
                             width: '100%',
                             left: `${(model.option.optionChatX || 0) / 100 * baseDimensions.width}px`,
                             top: `${(model.option.optionChatY || 0) / 100 * baseDimensions.height}px`,
@@ -559,60 +563,60 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                             color: 'white',
                             textShadow: '2px 2px 0px #3f3f3f'
                         }">
-                            {{ text }}
-                        </div>
-                    </div>
-                </div>
-
-            </template>
-        </template>
-
-        <InteractItem v-if="model.keyPrompt && model.keyPrompt.visible" :component="model.keyPrompt"
-            :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
-            :is-selected="isSel(model.keyPrompt)" :resizable="false" label="KeyPrompt" :auto-size="true"
-            @select="store.selectComponent(model.keyPrompt, '@keyPrompt')">
-            <div class="flex items-center gap-1 px-1 py-0.5 whitespace-nowrap pointer-events-none select-none">
-                <div class="flex items-center gap-0.5"><img :src="rightMouse"
-                        class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">确定</span></div>
-                <div class="flex items-center gap-0.5"><img :src="scrollMouse"
-                        class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">切换选项</span></div>
-                <div class="w-1"></div>
-                <div class="flex items-center gap-0.5">
-                    <div :class="keyBtnClass"><span :class="keyTextClass">Esc</span></div>
-                    <span :class="labelClass">关闭对话框</span>
-                </div>
-                <div class="w-1"></div>
-                <div class="flex items-center gap-0.5">
-                    <div :class="keyBtnClass"><span :class="keyTextClass">Ctrl</span></div>
-                    <span :class="labelClass">快进对话</span>
-                </div>
-                <div class="w-1"></div>
-                <div class="flex items-center gap-0.5">
-                    <div :class="keyBtnClass"><span :class="keyTextClass">F6</span></div>
-                    <span :class="labelClass">自动播放</span>
-                </div>
+              {{ text }}
             </div>
-        </InteractItem>
+          </div>
+        </div>
 
-        <template v-if="model.functionalButton">
-            <InteractItem v-for="(btn, index) in model.functionalButton" :key="index" v-show="!btn.hidden"
-                :component="getSmartButton(btn, index)" :container-w="baseDimensions.width"
-                :container-h="baseDimensions.height" :scale="scale" :is-selected="isSel(btn)"
-                :label="`Btn ${index + 1}`" @select="store.selectComponent(btn, `btn_${index}`)">
+      </template>
+    </template>
 
-                <div class="w-full h-full relative">
-                    <img v-if="getFunctionButtonUrl(btn)" :src="getFunctionButtonUrl(btn)"
-                        class="w-full h-full object-fill pixelated select-none pointer-events-none" draggable="false" />
+    <InteractItem v-if="model.keyPrompt && model.keyPrompt.visible" :component="model.keyPrompt"
+                  :container-w="baseDimensions.width" :container-h="baseDimensions.height" :scale="scale"
+                  :is-selected="isSel(model.keyPrompt)" :resizable="false" label="KeyPrompt" :auto-size="true"
+                  @select="store.selectComponent(model.keyPrompt, '@keyPrompt')">
+      <div class="flex items-center gap-1 px-1 py-0.5 whitespace-nowrap pointer-events-none select-none">
+        <div class="flex items-center gap-0.5"><img :src="rightMouse"
+                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">确定</span></div>
+        <div class="flex items-center gap-0.5"><img :src="scrollMouse"
+                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">切换选项</span></div>
+        <div class="w-1"></div>
+        <div class="flex items-center gap-0.5">
+          <div :class="keyBtnClass"><span :class="keyTextClass">Esc</span></div>
+          <span :class="labelClass">关闭对话框</span>
+        </div>
+        <div class="w-1"></div>
+        <div class="flex items-center gap-0.5">
+          <div :class="keyBtnClass"><span :class="keyTextClass">Ctrl</span></div>
+          <span :class="labelClass">快进对话</span>
+        </div>
+        <div class="w-1"></div>
+        <div class="flex items-center gap-0.5">
+          <div :class="keyBtnClass"><span :class="keyTextClass">F6</span></div>
+          <span :class="labelClass">自动播放</span>
+        </div>
+      </div>
+    </InteractItem>
 
-                    <div v-else
-                        class="w-full h-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-300 text-[10px]">
-                        {{ btn.type || btn.functionType || 'BTN' }}
-                    </div>
-                </div>
-            </InteractItem>
-        </template>
+    <template v-if="model.functionalButton">
+      <InteractItem v-for="(btn, index) in model.functionalButton" :key="index" v-show="!btn._hidden"
+                    :component="getSmartButton(btn, index)" :container-w="baseDimensions.width"
+                    :container-h="baseDimensions.height" :scale="scale" :is-selected="isSel(btn)"
+                    :label="`Btn ${index + 1}`" @select="store.selectComponent(btn, `btn_${index}`)">
 
-        <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 pointer-events-none text-4xl font-bold select-none whitespace-nowrap z-0" />
-    </div>
+        <div class="w-full h-full relative">
+          <img v-if="getFunctionButtonUrl(btn)" :src="getFunctionButtonUrl(btn)"
+               class="w-full h-full object-fill pixelated select-none pointer-events-none" draggable="false" />
+
+          <div v-else
+               class="w-full h-full border border-orange-500/30 flex items-center justify-center text-orange-300 text-[10px]">
+            {{ btn.type || btn.functionType || 'BTN' }}
+          </div>
+        </div>
+      </InteractItem>
+    </template>
+
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 pointer-events-none text-4xl font-bold select-none whitespace-nowrap z-0" />
+  </div>
 </template>

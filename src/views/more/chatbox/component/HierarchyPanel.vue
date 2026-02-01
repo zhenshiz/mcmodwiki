@@ -3,9 +3,23 @@ import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useChatBoxEditorStore } from '@/stores'
 // 引入主题相关类
-import { Attachment, DialogBox, FunctionButton, KeyPrompt, Option, Portrait } from '@/assets/more/chatbox/chatboxTheme.js'
+import {
+  Attachment,
+  DialogBox,
+  FunctionButton,
+  KeyPrompt,
+  Option,
+  Portrait
+} from '@/assets/more/chatbox/chatboxTheme.js'
 // 引入对话相关类
-import { ChatBoxDialogues, DialogueDialogBox, DialogueFrame, DialogueOption, DialoguePortrait, DialogueVideo } from '@/assets/more/chatbox/chatboxDialogues.js'
+import {
+  ChatBoxDialogues,
+  DialogueDialogBox,
+  DialogueFrame,
+  DialogueOption,
+  DialoguePortrait,
+  DialogueVideo
+} from '@/assets/more/chatbox/chatboxDialogues.js'
 import { useDialog } from '@/components/register/useDialog.js'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import { useMessage } from '@/components/register/useMessage.js'
@@ -30,7 +44,7 @@ const selectItem = (component, clazz, key) => {
 
 const toggleVisibility = (e, component) => {
   e.stopPropagation()
-  component.hidden = !component.hidden
+  component._hidden = !component._hidden
 }
 
 const togglePortraitExpand = (key) => {
@@ -187,9 +201,9 @@ const jumpToGroup = (key) => {
               <Icon icon="lucide:message-square" width="12" class="opacity-70" />
               <span>对话框 (DialogBox)</span>
             </div>
-            <Icon :icon="model.dialogBox.hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
+            <Icon :icon="model.dialogBox._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
               class="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity"
-              :class="{ 'opacity-100 text-slate-500': model.dialogBox.hidden }"
+              :class="{ 'opacity-100 text-slate-500': model.dialogBox._hidden }"
               @click="toggleVisibility($event, model.dialogBox)" />
           </div>
           <div
@@ -200,9 +214,9 @@ const jumpToGroup = (key) => {
               <Icon icon="lucide:list" width="12" class="opacity-70" />
               <span>选项样式 (Option)</span>
             </div>
-            <Icon :icon="model.option.hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
+            <Icon :icon="model.option._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
               class="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity"
-              :class="{ 'opacity-100 text-slate-500': model.option.hidden }"
+              :class="{ 'opacity-100 text-slate-500': model.option._hidden }"
               @click="toggleVisibility($event, model.option)" />
           </div>
           <div
@@ -258,7 +272,7 @@ const jumpToGroup = (key) => {
                   @click="playAnimation($event, key)" />
                 <Icon icon="lucide:paperclip" width="12" class="hover:text-green-400 text-slate-500 mr-1" title="添加附件"
                   @click="addAttachment($event, portrait, key)" />
-                <Icon :icon="portrait.hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-white"
+                <Icon :icon="portrait._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-white"
                   @click="toggleVisibility($event, portrait)" />
                 <Icon icon="lucide:trash-2" width="12" class="hover:text-red-400 text-slate-500"
                   @click="deletePortrait($event, key)" />
@@ -311,8 +325,8 @@ const jumpToGroup = (key) => {
               <span class="text-[10px] opacity-50 ml-1">({{ btn.functionType }})</span>
             </div>
             <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Icon :icon="btn.hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-white"
-                :class="{ 'opacity-100 text-slate-400': btn.hidden }" @click="toggleVisibility($event, btn)" />
+              <Icon :icon="btn._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-white"
+                :class="{ 'opacity-100 text-slate-400': btn._hidden }" @click="toggleVisibility($event, btn)" />
               <Icon icon="lucide:trash-2" width="12" class="hover:text-red-400 text-slate-500"
                 @click="deleteButton($event, index)" />
             </div>

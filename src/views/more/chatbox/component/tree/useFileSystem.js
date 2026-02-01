@@ -22,6 +22,12 @@ import {
   DialogueOptionList,
   DialoguePortrait,
 } from '@/assets/more/chatbox/chatboxDialogues.js'
+import { formatUtil } from '@/utils/formatUtil.js'
+
+const PORTRAIT_MIGRATION_MAP = {
+  'value': 'texture',
+  'selectTexture': 'hoverTexture'
+}
 
 export function useFileSystem() {
   const rootHandle = ref(null)
@@ -203,6 +209,8 @@ export const themeService = {
           const p = new Portrait()
           Object.assign(p, val)
 
+          formatUtil.migrateLegacyProperties(p, val, PORTRAIT_MIGRATION_MAP)
+
           // 恢复附件
           if (Array.isArray(val.attachment)) {
             p.attachment = val.attachment.map((attData) => {
@@ -303,6 +311,8 @@ export const dialogueService = {
                 } else {
                   const p = new DialogueReplacePortrait()
                   Object.assign(p, pData)
+
+                  formatUtil.migrateLegacyProperties(p, pData, PORTRAIT_MIGRATION_MAP)
                   return p
                 }
               })
@@ -352,6 +362,7 @@ export const resourceService = {
       for await (const entry of dirHandle.values()) {
         if (entry.kind === 'file') {
           const lowerName = entry.name.toLowerCase()
+          // 支持图片资源
           if (
             lowerName.endsWith('.png') ||
             lowerName.endsWith('.jpg') ||
@@ -360,13 +371,31 @@ export const resourceService = {
             const file = await entry.getFile()
             const blobUrl = URL.createObjectURL(file)
 
-            const relativePath = [...pathStack, entry.name].join('/')
+            const parts = [...pathStack, entry.name]
+            let resourceLocation = parts.join('/') // 默认兜底
 
-            textureMap.set(relativePath, blobUrl)
+            // 1. 查找 'assets' 目录的位置
+            const assetsIndex = parts.indexOf('assets')
+
+            if (assetsIndex !== -1) {
+              if (parts.length > assetsIndex + 2) {
+                const namespace = parts[assetsIndex + 1]
+                const path = parts.slice(assetsIndex + 2).join('/')
+                resourceLocation = `${namespace}:${path}`
+              }
+            } else {
+              if (parts.length > 1) {
+                const namespace = parts[0]
+                const path = parts.slice(1).join('/')
+                resourceLocation = `${namespace}:${path}`
+              }
+            }
+            textureMap.set(resourceLocation, blobUrl)
 
             suggestions.push({
               label: entry.name,
-              value: relativePath,
+              value: resourceLocation,
+              description: resourceLocation
             })
           }
         } else if (entry.kind === 'directory') {
