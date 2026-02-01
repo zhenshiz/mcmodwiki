@@ -756,6 +756,10 @@ export class AnimationSequence extends AutoClean {
       props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: '{time}帧' }
     })
   }
+
+  toJSON() {
+    return this.keyframes
+  }
 }
 
 //主题文件
@@ -791,7 +795,7 @@ export class ChatBoxTheme extends AutoClean {
     ChatBoxTheme.defineField('customAnimation', {
       label: '全局动画库',
       type: EditorTypes.MAP,
-      props: { valueConstructor: AnimationSequence, keyLabel: '动画 ID' }
+      props: { valueConstructor: AnimationSequence, displayTemplate: '{key}' }
     })
   }
 

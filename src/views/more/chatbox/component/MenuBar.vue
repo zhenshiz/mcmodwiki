@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useChatBoxEditorStore } from '@/stores'
 import { useFileSystem } from './tree/useFileSystem.js'
 import Dropdown from '@/components/Dropdown.vue'
@@ -125,6 +125,7 @@ const onDrop = async (e) => {
 // 保存项目
 const handleSave = async () => {
   await store.saveProject()
+  await store.refreshGlobalIndex()
 }
 </script>
 
@@ -142,7 +143,7 @@ const handleSave = async () => {
           <div class="menu-item">文件 (File)</div>
         </template>
         <div class="flex flex-col py-1 min-w-[180px]">
-          
+
           <button class="menu-action" @click="handleViewJson" :disabled="!store.currentModel">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:file-code" width="14" />
@@ -199,7 +200,7 @@ const handleSave = async () => {
 
     <Modal v-model:show="translatableVisible" title="翻译键" width="60%">
       <div class="flex flex-col gap-3 p-3 w-full text-slate-700 dark:text-slate-200">
-        
+
         <div class="flex flex-row gap-4 items-center">
           <Input v-model="translatableSearch"
                  default-model="search"
@@ -211,7 +212,7 @@ const handleSave = async () => {
           <Button @click="addLang" is-toggle-color>
             <Icon icon="lucide:globe" width="14" class="mr-1"/>添加语言
           </Button>
-          
+
           <ShowJsonCopy :value="store.getTranslatableJSON(languageJson)">
             <template #footer>
               <Autocomplete class="max-w-[100px]" v-model="languageJson"
@@ -291,10 +292,10 @@ const handleSave = async () => {
 
     <Modal v-model:show="jsonViewVisible" title="JSON预览" width="60%">
       <div class="relative flex flex-col h-[70vh] bg-[#1e1e1e] text-slate-300">
-        
+
         <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700 bg-[#252526]">
           <span class="text-xs text-slate-500 font-mono">Current JSON Model</span>
-          <button 
+          <button
             class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs transition-colors shadow-sm"
             @click="handleCopyJson"
           >

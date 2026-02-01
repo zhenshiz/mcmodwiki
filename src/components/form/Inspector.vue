@@ -58,19 +58,33 @@ const COMPONENT_MAP = {
 const allAnimationOptions = computed(() => {
   const options = [...builtinAnimations]
 
+  const allKeys = new Set()
+
+  store.globalAnimations.forEach(key => allKeys.add(key))
+
   if (store.currentModel && store.currentModel.customAnimation) {
-    const customKeys = Object.keys(store.currentModel.customAnimation)
-    customKeys.forEach(key => {
-      if (!options.some(opt => opt.value === key)) {
-        options.push({
-          label: `${key} (自定义)`,
-          value: key
-        })
-      }
-    })
+    Object.keys(store.currentModel.customAnimation).forEach(key => allKeys.add(key))
   }
 
+  allKeys.forEach(key => {
+    if (!options.some(opt => opt.value === key)) {
+      options.push({
+        label: `${key} (自定义)`,
+        value: key
+      })
+    }
+  })
+
   return options
+})
+
+const allPortraitsOptions = computed(() => {
+  return store.globalPortraits.map(i => {
+    return {
+      label: i,
+      value: i
+    }
+  })
 })
 
 const dataSourceMap = computed(() => ({
@@ -81,7 +95,8 @@ const dataSourceMap = computed(() => ({
   [autoCompleteDataSources.ENCHANTMENT]: enchantmentSuggestions,
   [autoCompleteDataSources.ATTRIBUTE]: attributeSuggestions,
   [autoCompleteDataSources.PRESET_ANIMATION]: allAnimationOptions.value,
-  [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions
+  [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions,
+  [autoCompleteDataSources.PORTRAIT]: allPortraitsOptions.value
 }))
 
 const getDynamicOptions = (field) => {
@@ -117,8 +132,8 @@ const fieldConfigs = computed(() => {
 // 4. 字段是否被修改
 const isFieldModified = (key) => {
   // 如果 model 为空，视为未修改（或者默认状态）
-  if (!props.model) return false 
-  
+  if (!props.model) return false
+
   const current = props.model[key]
   const def = defaultInstance.value ? defaultInstance.value[key] : undefined
   return current !== def && current !== null && current !== undefined
@@ -135,7 +150,7 @@ const resetField = (key) => {
 const sortedFields = computed(() => {
   const list = []
   // 用于 showIf 判断的对象：有 model 用 model，没 model 用默认空实例
-  const modelForCheck = props.model || defaultInstance.value 
+  const modelForCheck = props.model || defaultInstance.value
 
   Object.entries(fieldConfigs.value).forEach(([key, config]) => {
     // 检查 showIf，如果没有 model 也会基于默认值检查
@@ -166,7 +181,7 @@ const getBindValue = (field) => {
 // 更新值：有 model 直接改，无 model 则实例化并 emit
 const handleUpdate = (field, val) => {
   const key = field.modelKey || field.key
-  
+
   if (props.model) {
     // 正常模式
     props.model[key] = val
@@ -181,20 +196,24 @@ const handleUpdate = (field, val) => {
 
 <template>
   <div class="flex flex-col w-full px-1">
-    
+
     <template v-for="field in sortedFields" :key="field.key">
-      <InspectorItem 
-        :label="field.label" 
-        :tips="field.tips" 
+      <InspectorItem
+        :label="field.label"
+        :tips="field.tips"
         :is-modified="isFieldModified(field.modelKey || field.key)"
         @reset="resetField(field.modelKey || field.key)"
       >
-        <component 
-          :is="COMPONENT_MAP[field.type] || 'input'" 
+        <component
+          :is="COMPONENT_MAP[field.type] || 'input'"
           :model-value="getBindValue(field)"
           @update:modelValue="(val) => handleUpdate(field, val)"
-          v-bind="{ ...field.props, options: getDynamicOptions(field) || field.props?.options }" 
-          class="w-full" 
+          v-bind="{
+            ...field.props,
+            options: getDynamicOptions(field) || field.props?.options,
+            optionsResolver: (key) => getDynamicOptions({ props: { dataSource: key } })
+          }"
+          class="w-full"
         />
       </InspectorItem>
     </template>

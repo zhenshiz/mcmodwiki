@@ -1,26 +1,26 @@
 import { ref } from 'vue'
 import {
+  AnimationSequence,
+  Attachment,
+  BaseRenderEvent,
   ChatBoxTheme,
   DialogBox,
   FunctionButton,
+  Keyframe,
   KeyPrompt,
   Option,
   Portrait,
-  Attachment,
-  Keyframe,
-  AnimationSequence,
-  BaseRenderEvent,
-  PortraitRenderEvent,
+  PortraitRenderEvent
 } from '@/assets/more/chatbox/chatboxTheme.js'
 import {
   ChatBoxDialogues,
+  DialogueDialogBox,
   DialogueFrame,
   DialogueOption,
-  DialogueVideo,
-  DialogueDialogBox,
-  DialogueReplacePortrait,
   DialogueOptionList,
   DialoguePortrait,
+  DialogueReplacePortrait,
+  DialogueVideo
 } from '@/assets/more/chatbox/chatboxDialogues.js'
 import { formatUtil } from '@/utils/formatUtil.js'
 
@@ -104,12 +104,60 @@ export function useFileSystem() {
     await writable.close()
   }
 
+  const scanProjectIndex = async (dirHandle) => {
+    const animationKeys = new Set()
+    const portraitKeys = new Set()
+
+    const traverse = async (handle) => {
+      for await (const entry of handle.values()) {
+        if (entry.kind === 'directory') {
+          await traverse(entry)
+        } else if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+          try {
+            const file = await entry.getFile()
+            const text = await file.text()
+
+            // 简单检查是否包含关键字，避免解析无关大文件
+            let shouldParse = false
+            if (text.includes('"customAnimation"')) shouldParse = true
+            if (text.includes('"portrait"')) shouldParse = true
+
+            if (shouldParse) {
+              const json = JSON.parse(text)
+
+              // 提取动画 Key
+              if (json.customAnimation) {
+                Object.keys(json.customAnimation).forEach(k => animationKeys.add(k))
+              }
+              // 提取立绘 Key
+              if (json.portrait) {
+                Object.keys(json.portrait).forEach(k => portraitKeys.add(k))
+              }
+            }
+          } catch (e) {
+            // 忽略解析失败
+          }
+        }
+      }
+    }
+
+    if (dirHandle) {
+      await traverse(dirHandle)
+    }
+
+    return {
+      animations: Array.from(animationKeys),
+      portraits: Array.from(portraitKeys)
+    }
+  }
+
   return {
     rootHandle,
     openDirectory,
     readFile,
     saveFile,
     scanDirectory,
+    scanProjectIndex
   }
 }
 

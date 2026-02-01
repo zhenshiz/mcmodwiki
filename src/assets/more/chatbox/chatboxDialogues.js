@@ -16,7 +16,7 @@ export class DialogueDialogBox extends AutoClean {
     this.text = ''
   }
 
-  static { 
+  static {
     DialogueDialogBox.defineField('name', {
       label: '名称',
       type: EditorTypes.AUTOCOMPLETE,
@@ -186,9 +186,10 @@ export class DialogueReplacePortrait extends Portrait {
   static {
     DialogueReplacePortrait.defineField('id', {
       label: '立绘 ID',
-      type: EditorTypes.INPUT,
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.PORTRAIT }
     })
-    
+
     DialogueReplacePortrait.defineField('replace', {
       label: '覆盖模式',
       type: EditorTypes.SWITCH,
@@ -208,7 +209,11 @@ export class DialoguePortrait extends AutoClean {
       label: '立绘列表',
       type: EditorTypes.ANY_ARR,
       props: {
-        types: ['string', 'object'],
+        types: [{
+          value: 'string',
+          editorType: EditorTypes.AUTOCOMPLETE,
+          props: { dataSource: autoCompleteDataSources.PORTRAIT }
+        }, 'object'],
         objectConstructor: DialogueReplacePortrait,
         displayTemplate: '{id}'
       }

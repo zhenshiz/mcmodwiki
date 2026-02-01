@@ -21,24 +21,41 @@ const props = defineProps({
     type: Function,
     required: true
   },
-  keyLabel: {
-    type: String,
-    default: 'Key'
+  displayTemplate: {
+    type: [String, Function],
+    default: ''
   }
 })
 
 const emit = defineEmits(['update:modelValue'])
 const { openInput } = usePrompt()
+const dialog = useDialog()
 
 const showModal = ref(false)
 const editingKey = ref('')
 const editingValue = ref(null)
 
-const dialog = useDialog()
+const renderLabel = (item, key) => {
+  if (!item) return 'Null Item'
 
+  if (typeof props.displayTemplate === 'function') {
+    return props.displayTemplate(item, key)
+  }
 
-// 将 Map 对象转为数组，用于 Draggable 渲染
-// 结构: [{ key: 'id1', value: obj1 }, { key: 'id2', value: obj2 }]
+  if (props.displayTemplate && typeof props.displayTemplate === 'string') {
+    return props.displayTemplate.replace(/\{(.*?)}/g, (_, k) => {
+      // Special case: allow {key} to print the Map key
+      if (k === 'key' || k === '$key') return key
+      return item[k] ?? ''
+    })
+  }
+
+  if (item.constructor && item.constructor.name && item.constructor.name !== 'Object') {
+    return item.constructor.name
+  }
+  return 'Object'
+}
+
 const mapList = computed({
   get: () => {
     return Object.keys(props.modelValue).map(key => ({
@@ -47,7 +64,6 @@ const mapList = computed({
     }))
   },
   set: (newList) => {
-    // 拖拽排序后，根据新数组顺序重新生成 Map
     const newMap = {}
     newList.forEach(item => {
       newMap[item.key] = item.value
@@ -56,24 +72,18 @@ const mapList = computed({
   }
 })
 
-
-// 辅助函数：在修改 Map 时，保持原有的 Key 顺序，或者就地重命名
 const updateMapStable = (oldKey, newKey, newValue) => {
   const newMap = {}
-  // 遍历旧的 Key 列表 (保持顺序)
   Object.keys(props.modelValue).forEach(k => {
     if (k === oldKey) {
-      // 找到了当前正在编辑的项，使用新 Key 和新 Value
       newMap[newKey] = newValue
     } else {
-      // 其他项保持不变
       newMap[k] = props.modelValue[k]
     }
   })
   emit('update:modelValue', newMap)
 }
 
-// 新增 Key (新增的自然在最后，或者你可以改为 unshift 插在最前)
 const handleAdd = () => {
   openInput({
     title: t('新建项'),
@@ -84,7 +94,6 @@ const handleAdd = () => {
         alert(t('该 ID 已存在，请使用其他 ID'))
         return
       }
-      // 新增时，直接追加到最后
       const newVal = new props.valueConstructor()
       const newMap = { ...props.modelValue, [newKey]: newVal }
       emit('update:modelValue', newMap)
@@ -92,7 +101,6 @@ const handleAdd = () => {
   })
 }
 
-// 删除 Key
 const handleRemove = (key) => {
   dialog.warning({
     title: t('删除'),
@@ -103,23 +111,18 @@ const handleRemove = (key) => {
       emit('update:modelValue', newMap)
     }
   })
-
 }
 
-// 打开编辑 Value
 const openEdit = (key, value) => {
   editingKey.value = key
   editingValue.value = value
   showModal.value = true
 }
 
-// 保存 Value (关键修改：使用 updateMapStable)
 const onSave = (newItem) => {
-  // 这里的 Key 没变，只是 Value 变了，但我们依然用这个函数来确保顺序不乱
   updateMapStable(editingKey.value, editingKey.value, newItem)
 }
 
-// 重命名 Key (关键修改：使用 updateMapStable)
 const handleRename = (oldKey) => {
   openInput({
     title: t('重命名 ID'),
@@ -130,7 +133,6 @@ const handleRename = (oldKey) => {
         alert(t('ID 已存在'))
         return
       }
-      // 就地替换 Key，保持位置不变
       updateMapStable(oldKey, newKey, props.modelValue[oldKey])
     }
   })
@@ -182,8 +184,9 @@ const handleRename = (oldKey) => {
                       :title="element.key">
                   {{ element.key }}
                 </span>
-                <span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono">
-                  {{ element.value.constructor.name || 'Object' }}
+
+                <span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate ml-1">
+                  {{ renderLabel(element.value, element.key) }}
                 </span>
               </div>
 
@@ -212,16 +215,8 @@ const handleRename = (oldKey) => {
     <ObjectDialog
       v-model:show="showModal"
       :model="editingValue"
-      :title="`${label}: ${editingKey}`"
+      :title="`${editingKey}`"
       @confirm="onSave"
     />
   </div>
 </template>
-
-<style scoped>
-/* 拖拽时的幽灵样式 */
-.sortable-ghost {
-  opacity: 0.5;
-  background: rgba(0, 192, 245, 0.1);
-}
-</style>

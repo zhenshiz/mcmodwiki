@@ -14,6 +14,7 @@ const handleGlobalKeydown = async (e) => {
   if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
     e.preventDefault()
     await editorStore.saveProject()
+    await editorStore.refreshGlobalIndex()
   }
 }
 

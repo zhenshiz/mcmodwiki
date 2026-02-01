@@ -4,8 +4,13 @@ import { useChatBoxEditorStore } from '@/stores'
 import { Icon } from '@iconify/vue'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import { useMessage } from '@/components/register/useMessage.js'
-import { ChatBoxDialogues, DialogueDialogBox, DialogueFrame, DialogueOption, DialoguePortrait, DialogueVideo } from '@/assets/more/chatbox/chatboxDialogues.js'
+import {
+  ChatBoxDialogues,
+  DialogueDialogBox,
+  DialogueFrame
+} from '@/assets/more/chatbox/chatboxDialogues.js'
 import { useDialog } from '@/components/register/useDialog'
+import draggable from 'vuedraggable' // 引入 draggable
 
 const store = useChatBoxEditorStore()
 const prompt = usePrompt()
@@ -19,13 +24,34 @@ const activeGroupKey = ref(null)
 const model = computed(() => store.currentModel)
 const dialoguesMap = computed(() => model.value?.dialogues || {})
 
-// 获取当前组的所有帧
-const currentFrames = computed(() => {
-  if (!activeGroupKey.value || !dialoguesMap.value[activeGroupKey.value]) return []
-  return dialoguesMap.value[activeGroupKey.value]
+// === 核心逻辑：组列表拖拽适配 ===
+const groupList = computed({
+  get: () => {
+    if (!model.value || !model.value.dialogues) return []
+    return Object.entries(model.value.dialogues).map(([key, frames]) => ({ key, frames }))
+  },
+  set: (newArr) => {
+    // 拖拽后，根据新数组顺序重建对象，利用 JS 对象保留插入顺序的特性
+    const newMap = {}
+    newArr.forEach(item => {
+      newMap[item.key] = item.frames
+    })
+    model.value.dialogues = newMap
+  }
 })
 
-// === 左侧：组操作 ===
+const frameList = computed({
+  get: () => {
+    if (!activeGroupKey.value || !dialoguesMap.value[activeGroupKey.value]) return []
+    return dialoguesMap.value[activeGroupKey.value]
+  },
+  set: (val) => {
+    if (activeGroupKey.value && model.value.dialogues) {
+      model.value.dialogues[activeGroupKey.value] = val
+    }
+  }
+})
+
 const handleAddGroup = () => {
   prompt.openInput({
     title: '新建剧情片段 (Group)',
@@ -60,26 +86,33 @@ const selectGroup = (key) => {
   store.selectDialoguesComponent(model.value, ChatBoxDialogues, 'Global Settings')
 }
 
-// === 右侧：帧操作 ===
 const handleAddFrame = () => {
   if (!activeGroupKey.value) return
   const newFrame = new DialogueFrame()
+  // 给点默认值方便调试
+  newFrame.dialogBox.name = 'Steve'
   model.value.dialogues[activeGroupKey.value].push(newFrame)
+}
+
+const handleDuplicateFrame = (index) => {
+  const list = model.value.dialogues[activeGroupKey.value]
+  const sourceFrame = list[index]
+
+  // 1. 深拷贝数据 (转JSON再转回是去除引用的最快方法，虽然会丢失方法)
+  const rawData = JSON.parse(JSON.stringify(sourceFrame))
+
+  // 2. 重新实例化 (确保拥有 DialogueFrame 的方法和原型链)
+  const newFrame = new DialogueFrame()
+  Object.assign(newFrame, rawData) // 简单的混合，如果类结构复杂可能需要更严谨的反序列化逻辑
+
+  // 3. 插入到当前位置下方
+  list.splice(index + 1, 0, newFrame)
+  message.success('已复制对话')
 }
 
 const handleDeleteFrame = (index) => {
   model.value.dialogues[activeGroupKey.value].splice(index, 1)
   store.selectComponent(null)
-}
-
-const handleMoveFrame = (index, direction) => {
-  const list = model.value.dialogues[activeGroupKey.value]
-  const targetIndex = index + direction
-  if (targetIndex < 0 || targetIndex >= list.length) return
-
-  const temp = list[index]
-  list[index] = list[targetIndex]
-  list[targetIndex] = temp
 }
 
 const selectFramePart = (frame, clazz, part) => {
@@ -108,46 +141,66 @@ const isSelected = (comp) => store.selectedComponent === comp
 </script>
 
 <template>
-  <div class="flex w-full h-full bg-[#1e1e1e] text-slate-300 overflow-hidden" @click.self="selectGlobal" @mousedown.stop
-    @wheel.stop>
+  <div class="flex w-full h-full bg-[#1e1e1e] text-slate-300 overflow-hidden"
+       @click.self="selectGlobal" @mousedown.stop
+       @wheel.stop>
 
     <div class="w-64 flex flex-col border-r border-slate-700 bg-[#001529] shrink-0">
-      <div class="h-10 flex items-center justify-between px-3 border-b border-slate-700 bg-[#002033]">
+      <div
+        class="h-10 flex items-center justify-between px-3 border-b border-slate-700 bg-[#002033]">
         <span class="text-xs font-bold text-slate-400 uppercase">剧情片段 (Groups)</span>
         <button class="p-1 hover:bg-blue-600 rounded text-slate-400 hover:text-white transition"
-          @click.stop="handleAddGroup" title="新建组">
+                @click.stop="handleAddGroup" title="新建组">
           <Icon icon="lucide:plus" width="14" />
         </button>
       </div>
 
-      <div class="flex-1 overflow-y-auto p-2 space-y-1">
-        <template v-if="model && model.dialogues">
-          <div v-for="(frames, key) in model.dialogues" :key="key"
-            class="group flex items-center justify-between px-3 py-2 rounded cursor-pointer text-xs transition-colors border border-transparent"
-            :class="activeGroupKey === key ? 'bg-blue-600/20 border-blue-500 text-blue-100' : 'hover:bg-slate-700/50'"
-            @click.stop="selectGroup(key)">
-            <div class="flex items-center gap-2 overflow-hidden">
-              <Icon icon="lucide:folder" class="shrink-0 opacity-70"
-                :class="activeGroupKey === key ? 'text-blue-400' : ''" />
-              <span class="truncate font-mono">{{ key }}</span>
-              <span class="text-[10px] opacity-50 ml-1">({{ frames.length }})</span>
+      <div class="flex-1 overflow-y-auto p-2">
+        <draggable
+          v-model="groupList"
+          item-key="key"
+          handle=".group-drag-handle"
+          animation="200"
+          ghost-class="ghost"
+          class="space-y-1"
+        >
+          <template #item="{ element: group }">
+            <div
+              class="group flex items-center justify-between px-3 py-2 rounded cursor-pointer text-xs transition-colors border border-transparent"
+              :class="activeGroupKey === group.key ? 'bg-blue-600/20 border-blue-500 text-blue-100' : 'hover:bg-slate-700/50'"
+              @click.stop="selectGroup(group.key)"
+            >
+              <div class="flex items-center gap-2 overflow-hidden flex-1">
+                <Icon icon="lucide:grip-vertical"
+                      class="group-drag-handle shrink-0 opacity-30 hover:opacity-100 cursor-move"
+                      width="12" />
+
+                <Icon icon="lucide:folder" class="shrink-0 opacity-70"
+                      :class="activeGroupKey === group.key ? 'text-blue-400' : ''" />
+                <span class="truncate font-mono">{{ group.key }}</span>
+              </div>
+
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] opacity-50 ml-1">({{ group.frames.length }})</span>
+                <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition"
+                        @click.stop="handleDeleteGroup(group.key)">
+                  <Icon icon="lucide:trash-2" width="12" />
+                </button>
+              </div>
             </div>
+          </template>
+        </draggable>
 
-            <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition"
-              @click.stop="handleDeleteGroup(key)">
-              <Icon icon="lucide:trash-2" width="12" />
-            </button>
-          </div>
-        </template>
-
-        <div v-if="!model || Object.keys(model.dialogues).length === 0" class="text-center py-8 text-slate-600 text-xs">
+        <div v-if="!model || Object.keys(model.dialogues).length === 0"
+             class="text-center py-8 text-slate-600 text-xs">
           暂无剧情片段<br>点击右上角 + 添加
         </div>
       </div>
     </div>
 
     <div class="flex-1 flex flex-col min-w-0 bg-[#000d1a]" @click.self="selectGlobal">
-      <div class="h-10 flex items-center justify-between px-4 border-b border-slate-700 bg-[#001529]/50"
+      <div
+        class="h-10 flex items-center justify-between px-4 border-b border-slate-700 bg-[#001529]/50"
         @click.self="selectGlobal">
         <div class="flex items-center gap-2">
           <Icon icon="lucide:message-square-quote" class="text-slate-500" />
@@ -157,61 +210,80 @@ const isSelected = (comp) => store.selectedComponent === comp
         </div>
 
         <button v-if="activeGroupKey"
-          class="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs transition shadow-sm"
-          @click.stop="handleAddFrame">
+                class="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs transition shadow-sm"
+                @click.stop="handleAddFrame">
           <Icon icon="lucide:plus" width="12" />
           <span>添加对话</span>
         </button>
       </div>
 
-      <div class="flex-1 overflow-y-auto p-4 space-y-3" @click.self="selectGlobal">
+      <div class="flex-1 overflow-y-auto p-4" @click.self="selectGlobal">
 
-        <template v-if="activeGroupKey && currentFrames.length > 0">
-          <div v-for="(frame, index) in currentFrames" :key="index"
-            class="relative flex gap-3 p-3 rounded-lg border transition-all cursor-pointer group"
-            :class="isSelected(frame) ? 'bg-[#1e1e1e] border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-[#151515] border-slate-700 hover:border-slate-600'"
-            @click.stop="selectFrame(frame)">
-            <div class="flex flex-col items-center gap-1 w-6 shrink-0 pt-1">
-              <span class="text-[10px] font-mono text-slate-500">#{{ index }}</span>
-              <div class="opacity-0 group-hover:opacity-100 flex flex-col gap-1 transition-opacity">
-                <button class="p-0.5 hover:text-blue-400 text-slate-500" @click.stop="handleMoveFrame(index, -1)"
-                  title="上移">
-                  <Icon icon="lucide:chevron-up" width="14" />
-                </button>
-                <button class="p-0.5 hover:text-blue-400 text-slate-500" @click.stop="handleMoveFrame(index, 1)"
-                  title="下移">
-                  <Icon icon="lucide:chevron-down" width="14" />
-                </button>
-              </div>
-            </div>
-
-            <div class="flex-1 min-w-0 flex flex-col gap-2">
-
+        <template v-if="activeGroupKey && frameList.length > 0">
+          <draggable
+            v-model="frameList"
+            item-key="uuid"
+            handle=".frame-drag-handle"
+            animation="200"
+            ghost-class="ghost"
+            class="space-y-3"
+          >
+            <template #item="{ element: frame, index }">
               <div
-                class="p-2 rounded bg-[#252525] border border-slate-700 hover:border-blue-500/50 hover:bg-[#2a2a2a] transition-colors group/box">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="text-[10px] font-bold text-blue-400">
-                    {{ store.getTranslatableLabel(frame.dialogBox?.name) || '未知角色' }}
-                  </span>
+                class="relative flex gap-3 p-3 rounded-lg border transition-all cursor-pointer group"
+                :class="isSelected(frame) ? 'bg-[#1e1e1e] border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-[#151515] border-slate-700 hover:border-slate-600'"
+                @click.stop="selectFrame(frame)"
+              >
+                <div class="flex flex-col items-center gap-1 w-6 shrink-0 pt-1">
+                  <span class="text-[10px] font-mono text-slate-500 select-none">#{{ index + 1
+                    }}</span>
+                  <div class="frame-drag-handle p-1 text-slate-600 hover:text-slate-300 cursor-move"
+                       title="按住拖拽排序">
+                    <Icon icon="lucide:grip-horizontal" width="16" />
+                  </div>
                 </div>
-                <div class="text-xs text-slate-300 font-mono line-clamp-2 leading-relaxed">
-                  {{ store.getTranslatableLabel(frame.dialogBox?.text) || '( 空对话内容 )' }}
+
+                <div class="flex-1 min-w-0 flex flex-col gap-2">
+                  <div
+                    class="p-2 rounded bg-[#252525] border border-slate-700 hover:border-blue-500/50 hover:bg-[#2a2a2a] transition-colors group/box">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-[10px] font-bold text-blue-400">
+                        {{ store.getTranslatableLabel(frame.dialogBox?.name) || '未知角色' }}
+                      </span>
+                    </div>
+                    <div
+                      class="text-xs text-slate-300 font-mono line-clamp-2 leading-relaxed select-none">
+                      {{ store.getTranslatableLabel(frame.dialogBox?.text) || '( 空对话内容 )' }}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    class="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded transition"
+                    title="复制此对话"
+                    @click.stop="handleDuplicateFrame(index)">
+                    <Icon icon="lucide:copy" width="14" />
+                  </button>
+                  <button
+                    class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded transition"
+                    title="删除"
+                    @click.stop="handleDeleteFrame(index)">
+                    <Icon icon="lucide:trash-2" width="14" />
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <button
-              class="absolute top-2 right-2 p-1.5 text-slate-600 hover:text-red-400 hover:bg-red-400/10 rounded transition opacity-0 group-hover:opacity-100"
-              @click.stop="handleDeleteFrame(index)">
-              <Icon icon="lucide:x" width="14" />
-            </button>
-          </div>
+            </template>
+          </draggable>
         </template>
 
-        <div v-else-if="activeGroupKey" class="flex flex-col items-center justify-center h-64 text-slate-600 gap-3">
+        <div v-else-if="activeGroupKey"
+             class="flex flex-col items-center justify-center h-64 text-slate-600 gap-3">
           <Icon icon="lucide:message-square-plus" width="32" class="opacity-50" />
           <div class="text-xs">此片段暂无对话</div>
-          <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">立即添加</button>
+          <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">立即添加
+          </button>
         </div>
 
         <div v-else class="flex flex-col items-center justify-center h-full text-slate-600 gap-2">
@@ -241,5 +313,12 @@ const isSelected = (comp) => store.selectedComponent === comp
 
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
+}
+
+/* 拖拽时的幽灵样式 */
+.ghost {
+  opacity: 0.5;
+  border: 1px dashed #3b82f6 !important;
+  background: #1e3a8a !important;
 }
 </style>

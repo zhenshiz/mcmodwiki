@@ -117,7 +117,8 @@ export const autoCompleteDataSources = formatUtil.createEnum({
   EFFECT: 'EFFECT',
   ATTRIBUTE: 'ATTRIBUTE',
   PRESET_ANIMATION: 'PRESET_ANIMATION',
-  TRANSLATABLE_KEYS: 'TRANSLATABLE_KEYS'
+  TRANSLATABLE_KEYS: 'TRANSLATABLE_KEYS',
+  PORTRAIT: 'PORTRAIT'
 })
 
 export const builtinAnimations = [
