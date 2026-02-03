@@ -9,46 +9,37 @@ export class AutoClean {
    */
   toJSON() {
     const defaults = new this.constructor()
-
     const result = {}
-    let hasData = false
 
-    // 遍历当前对象的所有属性
     for (const key of Object.keys(this)) {
       const currentValue = this[key]
       const defaultValue = defaults[key]
 
-      // 忽略以 _ 开头的私有字段
       if (key.startsWith('_')) continue
 
-      // 如果当前值是 AutoClean 的子类（嵌套对象），递归调用它的 toJSON
+      // 处理数组
       if (Array.isArray(currentValue)) {
         if (currentValue.length > 0) {
           result[key] = currentValue
-          hasData = true
         }
         continue
       }
 
-      // 如果是对象（且不是 null）
+      // 处理对象 (包括子 AutoClean 实例)
       if (currentValue && typeof currentValue === 'object') {
         if (!_.isEqual(currentValue, defaultValue)) {
           result[key] = currentValue
-          hasData = true
         }
         continue
       }
 
-      // 基础类型 (String, Number, Boolean)
-      // 只有当值不等于默认值，且不为 null/undefined 时才保留
+      // 基础类型
       if (currentValue !== defaultValue && currentValue !== null && currentValue !== undefined) {
         result[key] = currentValue
-        hasData = true
       }
     }
 
-    // 如果整个对象所有字段都是默认值，返回 undefined，这样 JSON.stringify 会直接忽略这个键
-    return hasData ? result : undefined
+    return result
   }
 
   /**

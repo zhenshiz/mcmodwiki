@@ -195,7 +195,6 @@ export const themeService = {
       if (jsonContent.dialogBox) {
         model.dialogBox = new DialogBox()
         Object.assign(model.dialogBox, jsonContent.dialogBox)
-        // 🔥 恢复渲染事件 (使用基础事件类)
         model.dialogBox.renderEvents = this._hydrateRenderEvents(
           jsonContent.dialogBox.renderEvents,
           BaseRenderEvent,
@@ -206,7 +205,6 @@ export const themeService = {
       if (jsonContent.option) {
         model.option = new Option()
         Object.assign(model.option, jsonContent.option)
-        // 🔥 恢复渲染事件
         model.option.renderEvents = this._hydrateRenderEvents(
           jsonContent.option.renderEvents,
           BaseRenderEvent,
@@ -224,7 +222,6 @@ export const themeService = {
         model.functionalButton = jsonContent.functionalButton.map((btnData) => {
           const btn = new FunctionButton()
           Object.assign(btn, btnData)
-          // 🔥 恢复渲染事件
           btn.renderEvents = this._hydrateRenderEvents(btnData.renderEvents, BaseRenderEvent)
           return btn
         })

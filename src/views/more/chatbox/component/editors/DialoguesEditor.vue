@@ -4,13 +4,10 @@ import { useChatBoxEditorStore } from '@/stores'
 import { Icon } from '@iconify/vue'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import { useMessage } from '@/components/register/useMessage.js'
-import {
-  ChatBoxDialogues,
-  DialogueDialogBox,
-  DialogueFrame
-} from '@/assets/more/chatbox/chatboxDialogues.js'
+import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDialogues.js'
 import { useDialog } from '@/components/register/useDialog'
-import draggable from 'vuedraggable' // 引入 draggable
+import draggable from 'vuedraggable'
+import _ from 'lodash' // 引入 draggable
 
 const store = useChatBoxEditorStore()
 const prompt = usePrompt()
@@ -89,8 +86,6 @@ const selectGroup = (key) => {
 const handleAddFrame = () => {
   if (!activeGroupKey.value) return
   const newFrame = new DialogueFrame()
-  // 给点默认值方便调试
-  newFrame.dialogBox.name = 'Steve'
   model.value.dialogues[activeGroupKey.value].push(newFrame)
 }
 
@@ -98,14 +93,8 @@ const handleDuplicateFrame = (index) => {
   const list = model.value.dialogues[activeGroupKey.value]
   const sourceFrame = list[index]
 
-  // 1. 深拷贝数据 (转JSON再转回是去除引用的最快方法，虽然会丢失方法)
-  const rawData = JSON.parse(JSON.stringify(sourceFrame))
+  const newFrame = _.cloneDeep(sourceFrame)
 
-  // 2. 重新实例化 (确保拥有 DialogueFrame 的方法和原型链)
-  const newFrame = new DialogueFrame()
-  Object.assign(newFrame, rawData) // 简单的混合，如果类结构复杂可能需要更严谨的反序列化逻辑
-
-  // 3. 插入到当前位置下方
   list.splice(index + 1, 0, newFrame)
   message.success('已复制对话')
 }

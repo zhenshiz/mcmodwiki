@@ -12,6 +12,7 @@ import { usePrompt } from '@/components/register/usePrompt.js'
 import Autocomplete from '@/components/form/Autocomplete.vue'
 import Input from '@/components/form/Input.vue'
 import { useMessage } from '@/components/register/useMessage.js'
+import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 
 const store = useChatBoxEditorStore()
 const { openDirectory } = useFileSystem()
@@ -34,7 +35,8 @@ const langOptions = computed(() => {
 
 const currentJsonString = computed(() => {
   if (!store.currentModel) return ''
-  return JSON.stringify(store.currentModel, null, 2)
+  return `<pre language="json" isclosed="false"><code class="language-json">${JSON.stringify(store.currentModel, null, 2)}</code></pre>
+<p></p>`
 })
 
 // === 方法 ===
@@ -47,17 +49,6 @@ const openTranslatableModal = () => {
 // 打开JSON预览
 const handleViewJson = () => {
   jsonViewVisible.value = true
-}
-
-// 复制JSON
-const handleCopyJson = async () => {
-  try {
-    await navigator.clipboard.writeText(currentJsonString.value)
-    message.success('JSON 已复制到剪贴板')
-  } catch (err) {
-    message.error('复制失败，请手动复制')
-    console.error(err)
-  }
 }
 
 // 添加语言列
@@ -291,28 +282,7 @@ const handleSave = async () => {
     </Modal>
 
     <Modal v-model:show="jsonViewVisible" title="JSON预览" width="60%">
-      <div class="relative flex flex-col h-[70vh] bg-[#1e1e1e] text-slate-300">
-
-        <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700 bg-[#252526]">
-          <span class="text-xs text-slate-500 font-mono">Current JSON Model</span>
-          <button
-            class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs transition-colors shadow-sm"
-            @click="handleCopyJson"
-          >
-            <Icon icon="lucide:copy" width="12" />
-            <span>复制全部</span>
-          </button>
-        </div>
-
-        <div class="flex-1 overflow-auto p-4 custom-scrollbar bg-[#1e1e1e]">
-          <pre v-if="store.currentModel" class="font-mono text-xs leading-relaxed text-[#a6accd] select-text whitespace-pre-wrap break-all">{{ currentJsonString }}</pre>
-          <div v-else class="flex h-full items-center justify-center text-slate-600 text-xs gap-2">
-            <Icon icon="lucide:file-question" width="24" />
-            <span>暂无数据 (请先新建或打开文件)</span>
-          </div>
-        </div>
-
-      </div>
+      <MarkDownReadOnly :content="currentJsonString"></MarkDownReadOnly>
     </Modal>
 
   </div>
@@ -329,34 +299,5 @@ const handleSave = async () => {
 
 .menu-action .shortcut {
   @apply text-[10px] text-slate-400 ml-4;
-}
-
-/* 覆盖 Dropdown 的默认样式以匹配深色主题 */
-:deep(.dark .bg-dark-blue) {
-  background-color: #002033;
-  border-color: #1e293b;
-}
-
-/* 拖拽上传高亮样式 */
-.upload-drag {
-  border-color: #00c0f5 !important;
-  color: #00c0f5 !important;
-  background-color: rgba(0, 192, 245, 0.1) !important;
-}
-
-/* 弹窗内的自定义滚动条 */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #334155;
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-.custom-scrollbar::-webkit-scrollbar-corner {
-  background: #1e1e1e;
 }
 </style>
