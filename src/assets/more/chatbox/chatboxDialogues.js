@@ -1,6 +1,6 @@
 import { AutoClean } from '@/assets/generator/class'
 import { EditorTypes } from '@/assets/generator/editorType'
-import { BaseRenderEvent, Component, Portrait } from './chatboxTheme.js'
+import { BaseRenderEvent, Component, Portrait, PortraitRenderEvent } from './chatboxTheme.js'
 import {
   autoCompleteDataSources,
   eventType,
@@ -14,6 +14,7 @@ export class DialogueDialogBox extends AutoClean {
     super()
     this.name = ''
     this.text = ''
+    this.renderEvents = []
   }
 
   static {
@@ -26,6 +27,21 @@ export class DialogueDialogBox extends AutoClean {
       label: '对话内容',
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
+    })
+    DialogueDialogBox.defineField('renderEvents', {
+      label: '渲染事件',
+      type: EditorTypes.OBJECT_ARR,
+      tips: '本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）',
+      props: {
+        itemConstructor: BaseRenderEvent,
+        itemLabel: '渲染事件',
+        displayTemplate: (item) => {
+          const triggerEnum = renderEventTrigger('portrait')
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
+          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          return `${tLabel.value} -> ${eLabel.value}`
+        }
+      }
     })
   }
 }
@@ -103,6 +119,7 @@ export class DialogueOptionList extends AutoClean{
     super()
 
     this.options = []
+    this.renderEvents = []
   }
 
   static {
@@ -113,6 +130,21 @@ export class DialogueOptionList extends AutoClean{
         itemLabel: '选项',
         itemConstructor: DialogueOption,
         displayTemplate: (item)=> useChatBoxEditorStore().getTranslatableLabel(item.text)
+      }
+    })
+    DialogueOptionList.defineField('renderEvents', {
+      label: '渲染事件',
+      type: EditorTypes.OBJECT_ARR,
+      tips: '本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）',
+      props: {
+        itemConstructor: BaseRenderEvent,
+        itemLabel: '渲染事件',
+        displayTemplate: (item) => {
+          const triggerEnum = renderEventTrigger('portrait')
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
+          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          return `${tLabel.value} -> ${eLabel.value}`
+        }
       }
     })
   }
@@ -202,6 +234,7 @@ export class DialoguePortrait extends AutoClean {
   constructor() {
     super()
     this.portrait = []
+    this.renderEvents = []
   }
 
   static {
@@ -216,6 +249,20 @@ export class DialoguePortrait extends AutoClean {
         }, 'object'],
         objectConstructor: DialogueReplacePortrait,
         displayTemplate: '{id}'
+      }
+    })
+    DialoguePortrait.defineField('renderEvents', {
+      label: '渲染事件',
+      type: EditorTypes.OBJECT_ARR,
+      props: {
+        itemConstructor: PortraitRenderEvent,
+        itemLabel: '渲染事件',
+        displayTemplate: (item) => {
+          const triggerEnum = renderEventTrigger('portrait')
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
+          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          return `${tLabel.value} -> ${eLabel.value}`
+        }
       }
     })
   }
