@@ -14,7 +14,6 @@ import Switch from './Switch.vue'
 import StringArray from './array/StringArray.vue'
 import NumberArray from '@/components/form/array/NumberArray.vue'
 import BooleanArray from '@/components/form/array/BooleanArray.vue'
-import ObjectDialog from '@/components/form/ObjectDialog.vue'
 import ObjectArray from '@/components/form/array/ObjectArray.vue'
 import MapInspector from '@/components/form/map/MapInspector.vue'
 import AnyTypeInspector from '@/components/form/AnyTypeInspector.vue'
@@ -24,15 +23,16 @@ import { useChatBoxEditorStore } from '@/stores'
 import { blockSuggestions, effectSuggestions, itemSuggestions } from '@/assets/textures/mcTextures'
 import { enchantmentSuggestions } from '@/assets/textures/enchantment'
 import { attributeSuggestions } from '@/assets/textures/attribute'
+import Inspector from '@/components/form/Inspector.vue'
 
 const props = defineProps({
-  // 允许 model 为 null
   model: { type: Object, default: null },
-  // 新增：当 model 为 null 时，用于生成表单的类构造器
+  modelValue: { type: Object, default: undefined },
+  // 当对象为空时，用于初始化的构造函数
   clazz: { type: Function, default: null },
 })
 
-const emit = defineEmits(['init'])
+const emit = defineEmits(['init', 'update:modelValue'])
 
 const store = useChatBoxEditorStore()
 
@@ -45,7 +45,7 @@ const COMPONENT_MAP = {
   [EditorTypes.SELECT]: Select,
   [EditorTypes.SWITCH]: Switch,
   [EditorTypes.AUTOCOMPLETE]: Autocomplete,
-  [EditorTypes.OBJECT_DIALOG]: ObjectDialog,
+  [EditorTypes.OBJECT]: Inspector,
   [EditorTypes.MAP]: MapInspector,
   [EditorTypes.ANY]: AnyTypeInspector,
   [EditorTypes.STRING_ARR]: StringArray,
@@ -57,33 +57,22 @@ const COMPONENT_MAP = {
 
 const allAnimationOptions = computed(() => {
   const options = [...builtinAnimations]
-
   const allKeys = new Set()
-
   store.globalAnimations.forEach(key => allKeys.add(key))
-
   if (store.currentModel && store.currentModel.customAnimation) {
     Object.keys(store.currentModel.customAnimation).forEach(key => allKeys.add(key))
   }
-
   allKeys.forEach(key => {
     if (!options.some(opt => opt.value === key)) {
-      options.push({
-        label: `${key} (自定义)`,
-        value: key
-      })
+      options.push({ label: `${key} (自定义)`, value: key })
     }
   })
-
   return options
 })
 
 const allPortraitsOptions = computed(() => {
   return store.globalPortraits.map(i => {
-    return {
-      label: i,
-      value: i
-    }
+    return { label: i, value: i }
   })
 })
 
@@ -107,12 +96,14 @@ const getDynamicOptions = (field) => {
   return undefined
 }
 
-// 1. 获取目标构造函数 (优先实例，其次类)
-const targetConstructor = computed(() => {
-  return props.model?.constructor || props.clazz
+const currentModel = computed(() => {
+  return props.model ?? props.modelValue ?? null
 })
 
-// 2. 获取默认实例 (用于 showIf 判断和空值初始显示)
+const targetConstructor = computed(() => {
+  return currentModel.value?.constructor || props.clazz
+})
+
 const defaultInstance = computed(() => {
   if (!targetConstructor.value) return null
   try {
@@ -123,79 +114,63 @@ const defaultInstance = computed(() => {
   }
 })
 
-// 3. 获取元数据
 const fieldConfigs = computed(() => {
   if (!targetConstructor.value || !targetConstructor.value.getFieldConfigs) return {}
   return targetConstructor.value.getFieldConfigs()
 })
 
-// 4. 字段是否被修改
 const isFieldModified = (key) => {
-  // 如果 model 为空，视为未修改（或者默认状态）
-  if (!props.model) return false
-
-  const current = props.model[key]
+  if (!currentModel.value) return false
+  const current = currentModel.value[key]
   const def = defaultInstance.value ? defaultInstance.value[key] : undefined
   return current !== def && current !== null && current !== undefined
 }
 
-// 5. 重置字段
 const resetField = (key) => {
-  if (props.model && defaultInstance.value) {
-    props.model[key] = defaultInstance.value[key]
+  if (currentModel.value && defaultInstance.value) {
+    currentModel.value[key] = defaultInstance.value[key]
   }
 }
 
-// 6. 排序后的字段列表
 const sortedFields = computed(() => {
   const list = []
-  // 用于 showIf 判断的对象：有 model 用 model，没 model 用默认空实例
-  const modelForCheck = props.model || defaultInstance.value
+  const modelForCheck = currentModel.value || defaultInstance.value
 
   Object.entries(fieldConfigs.value).forEach(([key, config]) => {
-    // 检查 showIf，如果没有 model 也会基于默认值检查
     if (config.showIf && modelForCheck && !config.showIf(modelForCheck)) {
       return
     }
-
-    list.push({
-      key,
-      ...config
-    })
+    list.push({ key, ...config })
   })
 
   return list
 })
 
-// === 核心逻辑：空值处理代理 ===
-
-// 获取绑定值：有 model 取 model，无 model 取默认值
 const getBindValue = (field) => {
   const key = field.modelKey || field.key
-  if (props.model) {
-    return props.model[key]
+  if (currentModel.value) {
+    return currentModel.value[key]
   }
   return defaultInstance.value ? defaultInstance.value[key] : undefined
 }
 
-// 更新值：有 model 直接改，无 model 则实例化并 emit
 const handleUpdate = (field, val) => {
   const key = field.modelKey || field.key
 
-  if (props.model) {
-    // 正常模式
-    props.model[key] = val
+  if (currentModel.value) {
+    currentModel.value[key] = val
   } else if (targetConstructor.value) {
-    // 空对象模式：用户开始输入 -> 初始化对象
     const newInstance = new targetConstructor.value()
-    newInstance[key] = val // 写入当前修改的值
-    emit('init', newInstance) // 抛出给父组件赋值
+    newInstance[key] = val
+
+    emit('init', newInstance)
+    emit('update:modelValue', newInstance)
   }
 }
 </script>
 
 <template>
-  <div class="flex flex-col w-full px-1">
+  <div class="flex flex-col w-full px-1 pl-2">
 
     <template v-for="field in sortedFields" :key="field.key">
       <InspectorItem
@@ -208,6 +183,7 @@ const handleUpdate = (field, val) => {
           :is="COMPONENT_MAP[field.type] || 'input'"
           :model-value="getBindValue(field)"
           @update:modelValue="(val) => handleUpdate(field, val)"
+          @init="(val) => handleUpdate(field, val)"
           v-bind="{
             ...field.props,
             options: getDynamicOptions(field) || field.props?.options,

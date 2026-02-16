@@ -13,8 +13,8 @@ export const EditorTypes = {
   SWITCH: 'switch',
   // 自动补全输入框
   AUTOCOMPLETE: 'autocomplete',
-  // 对象弹窗
-  OBJECT_DIALOG: 'object_dialog',
+  // 对象
+  OBJECT: 'object',
   // map
   MAP: 'map',
   //不定类型

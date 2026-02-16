@@ -46,6 +46,24 @@ export class DialogueDialogBox extends AutoClean {
   }
 }
 
+//点击事件
+export class Click extends AutoClean {
+  constructor() {
+    super()
+    this.type = ''
+    this.value = ''
+  }
+
+  static {
+    Click.defineField('type', {
+      label: '点击事件类型',
+      type: EditorTypes.SELECT,
+      props: { options: eventType.values() }
+    })
+    Click.defineField('value', { label: '事件参数', type: EditorTypes.INPUT })
+  }
+}
+
 //选项
 export class DialogueOption extends AutoClean {
   constructor() {
@@ -56,11 +74,7 @@ export class DialogueOption extends AutoClean {
     this.next = ''
     this.tooltip = ''
 
-
-    // Java 中 Click 是嵌套类，这里为了方便编辑，扁平化处理
-    // 序列化时需要组装成 click: { type, value }
-    this.clickType = ''
-    this.clickValue = ''
+    this.click = new Click()
   }
 
   static {
@@ -81,36 +95,11 @@ export class DialogueOption extends AutoClean {
       tips: '填数字为当前分组对应序号的对话，字符串是跳转到对应的分组，不填默认下一句话，this留在当前对话'
     })
     DialogueOption.defineField('tooltip', { label: '悬浮提示', type: EditorTypes.INPUT })
-
-    DialogueOption.defineField('clickType', {
-      label: '点击事件类型',
-      type: EditorTypes.SELECT,
-      props: { options: eventType.values() }
+    DialogueOption.defineField('click', {
+      label: '点击事件',
+      type: EditorTypes.OBJECT,
+      props: { clazz: Click }
     })
-    DialogueOption.defineField('clickValue', { label: '事件参数', type: EditorTypes.INPUT })
-  }
-
-  // 序列化时将扁平属性转回 Java 嵌套结构
-  toJSON() {
-    const { clickType, clickValue, ...rest } = this
-    return {
-      ...rest,
-      click: {
-        type: clickType,
-        value: clickValue
-      }
-    }
-  }
-
-  // 反序列化辅助 (在 parse 时调用)
-  static fromJSON(json) {
-    const instance = new DialogueOption()
-    Object.assign(instance, json)
-    if (json.click) {
-      instance.clickType = json.click.type
-      instance.clickValue = json.click.value
-    }
-    return instance
   }
 }
 
