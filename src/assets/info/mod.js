@@ -74,7 +74,7 @@ export const modList = () => {
         }
       ],
       moreUtil: [],
-      modVersion: '1.0.4'
+      modVersion: '1.0.6'
     }
   ]
 }
