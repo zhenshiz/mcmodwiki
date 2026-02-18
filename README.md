@@ -1,10 +1,15 @@
-# How to Provide Your Translation
-Open the `src/assets/translatable` folder, where all the localization files are located under the lang folder. The file names should follow the naming conventions used within the Minecraft mod. Then, provide the corresponding translations for each key in the JSON files. Finally, open the `translatable.js` file, and add the corresponding enum in language.enum. Add your translated files to onlyLang (this step can also be handled by the author; you only need to provide the translation).
+# How to Contribute Translations
 
-# How to Add a Wiki MarkDown File
-You can generate the markdown file using the website's built-in markdown editor. The website will automatically fill in the file name, and you can then add it to the `public/md/mod_name` folder. Finally, add the mod information in `mod.js`.
+Open the `src/languages/messages` folder; all language files are located here. For example, `zh-CN.mjs` is the Chinese language file, and `en-US.mjs` is the English language file. You can simply provide the translated `.mjs` file, and I can help place it in the correct location and provide the corresponding language configuration.
 
-If you must use your own markdown file, make sure to check the following:
+However, if you prefer to submit a Pull Request (PR) and set up all the configurations yourself, you are certainly welcome to do so:
 
-Does your markdown support the display format used by this project?
-Does your file name comply with the naming convention? The standard format is `${mc_version}_${mod_loader}_${mod_version}_${language}.md`.
+1. In `src/assets/info/web.js`, find the `languageList` object. You can add your language type here. The `key` should be the language code, and the `value` should be the display name of the language.
+2. Add your corresponding language `.mjs` file to the `src/languages/messages` folder.
+3. In the `src/languages/index.js` file, find the `messages` property. Configure your language code and link it to the corresponding language file within this property.
+
+# How to Contribute Translations for Mod Documentation
+
+You can find the documentation for specific mods in the directory `public/md/ModName/Language`. You can copy the content of the documentation into the rich text editor on this website to edit it. Once edited, export it as a `.md` file and place it in the folder corresponding to the target language. This will allow the website to display the documentation in other languages.
+
+**PS:** If you do not configure your language in `src/assets/info/web.js`, the website will be unable to switch to the documentation in your language. Therefore, please ensure this configuration is present. It is also highly recommended to provide the corresponding `.mjs` translation file for the interface as well.
