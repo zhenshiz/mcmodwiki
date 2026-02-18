@@ -15,6 +15,8 @@ export const EditorTypes = {
   AUTOCOMPLETE: 'autocomplete',
   // 对象
   OBJECT: 'object',
+  // 对象弹窗
+  OBJECT_DIALOG: 'object_dialog',
   // map
   MAP: 'map',
   //不定类型

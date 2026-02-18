@@ -6,6 +6,7 @@ import { Icon } from '@iconify/vue'
 // 引入拆分后的组件
 import ThemeEditor from './editors/ThemeEditor.vue'
 import DialogueEditor from './editors/DialoguesEditor.vue'
+import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
 
@@ -13,10 +14,10 @@ const BASE_HEIGHT = 1080
 
 const currentRatio = ref('16:9')
 const ratios = [
-  { label: '16:9 (标准)', value: '16:9' },
-  { label: '16:10 (宽屏)', value: '16:10' },
-  { label: '4:3 (旧式)', value: '4:3' },
-  { label: '21:9 (超宽)', value: '21:9' }
+  { label: t('16:9 (标准)'), value: '16:9' },
+  { label: t('16:10 (宽屏)'), value: '16:10' },
+  { label: t('4:3 (旧式)'), value: '4:3' },
+  { label: t('21:9 (超宽)'), value: '21:9' }
 ]
 
 const baseDimensions = computed(() => {
@@ -100,7 +101,7 @@ onUnmounted(() => {
     <div v-if="store.viewMode === 'empty'"
          class="absolute inset-0 flex flex-col items-center justify-center text-slate-600 gap-2 pointer-events-none">
       <div class="text-4xl opacity-20">⌘</div>
-      <div>请在左侧选择一个文件开始编辑</div>
+      <div>{{ t('请在左侧选择一个文件开始编辑') }}</div>
     </div>
 
     <div v-else-if="store.viewMode === 'theme'"
@@ -131,7 +132,7 @@ onUnmounted(() => {
       </div>
       <div class="w-px h-4 bg-slate-600"></div>
       <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-500">比例</span>
+        <span class="text-xs text-slate-500">{{ t('比例') }}</span>
         <select v-model="currentRatio"
                 class="bg-transparent text-xs text-slate-300 outline-none cursor-pointer hover:text-white border-b border-transparent hover:border-slate-500 transition-colors">
           <option v-for="r in ratios" :key="r.value" :value="r.value" class="bg-[#002033]">

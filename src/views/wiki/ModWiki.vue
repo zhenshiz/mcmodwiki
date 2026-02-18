@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { modList } from '@/assets/info/mod.js'
 import { Icon } from '@iconify/vue'
@@ -12,8 +12,7 @@ import { useMessage } from '@/components/register/useMessage.js'
 
 const pageStore = usePageStore()
 const route = useRoute()
-const { t } = useVoerkaI18n(i18nScope)
-const language = computed(() => i18nScope.activeLanguage)
+const { t, activeLanguage: language } = useVoerkaI18n(i18nScope)
 const isDark = computed(() => pageStore.isDark)
 const router = useRouter()
 const message = useMessage()
@@ -21,7 +20,7 @@ const message = useMessage()
 const pageInfo = ref({
   name: '',
   version: '',
-  moreUtil: [],
+  moreUtil: () => [],
   availableHere: [],
   markdown: '',
   treeData: []
@@ -90,7 +89,7 @@ const loadMarkdown = async (mod, lang, fileName) => {
 
 const selectFile = async (fileName) => {
   currentFileName.value = fileName
-  const mod = modList.find(item => item.lang === route.params.name)
+  const mod = modList().find(item => item.lang === route.params.name)
   if (!mod) return
 
   const modKey = (mod.name || route.params.name).toLowerCase()
@@ -107,24 +106,30 @@ const loadModInfo = async () => {
   // 重置状态
   pageInfo.value.markdown = ''
   pageInfo.value.name = ''
+  pageInfo.value.treeData = []
+  if (mdRenderer.value) {
+    mdRenderer.value.headings = []
+  }
 
-  const mod = modList.find(item => item.lang === route.params.name)
+  const mod = modList().find(item => item.lang === route.params.name)
   if (!mod) return
 
   pageInfo.value.name = mod.lang
   pageInfo.value.version = mod.modVersion
   pageInfo.value.availableHere = mod.availableHere || []
-  pageInfo.value.moreUtil = mod.moreUtil || []
+  pageInfo.value.moreUtil = mod.moreUtil
 
   const modKey = (mod.name || route.params.name).toLowerCase()
   const files = getFilesForMod(modKey, language.value)
 
   // ⚠️ 核心修改：如果当前语言和默认配置都没有文件，说明该模组确实没文档
-  if (files.length === 0 && (!mod.files || mod.files.length === 0)) {
+  if (files.length === 0) {
     message.warning(t('当前语言没有文档哦，请使用其它语言'))
+    currentFileName.value = ''
+    return
   }
 
-  const finalFiles = files.length > 0 ? files : (mod.files || [])
+  const finalFiles = files
 
   pageInfo.value.treeData = buildFileTree(finalFiles)
 
@@ -191,9 +196,9 @@ watch([language, () => route.params.name], () => loadModInfo())
           </div>
         </div>
 
-        <div v-if="pageInfo.moreUtil.length" class="mb-6">
+        <div v-if="pageInfo.moreUtil().length" class="mb-6">
           <div class="space-y-2">
-            <div v-for="(item, index) in pageInfo.moreUtil" :key="index"
+            <div v-for="(item, index) in pageInfo.moreUtil()" :key="index"
                  @click="router.push(item.router)"
                  class="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border-l-4 border-l-transparent hover:border-l-blue-500 bg-gray-100/50 dark:bg-slate-800/50">
                             <span class="text-sm dark:text-gray-300 ml-2">{{ item.lang

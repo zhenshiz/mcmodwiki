@@ -24,6 +24,7 @@ import { blockSuggestions, effectSuggestions, itemSuggestions } from '@/assets/t
 import { enchantmentSuggestions } from '@/assets/textures/enchantment'
 import { attributeSuggestions } from '@/assets/textures/attribute'
 import Inspector from '@/components/form/Inspector.vue'
+import ObjectDialog from '@/components/form/ObjectDialog.vue'
 
 const props = defineProps({
   model: { type: Object, default: null },
@@ -46,6 +47,7 @@ const COMPONENT_MAP = {
   [EditorTypes.SWITCH]: Switch,
   [EditorTypes.AUTOCOMPLETE]: Autocomplete,
   [EditorTypes.OBJECT]: Inspector,
+  [EditorTypes.OBJECT_DIALOG]: ObjectDialog,
   [EditorTypes.MAP]: MapInspector,
   [EditorTypes.ANY]: AnyTypeInspector,
   [EditorTypes.STRING_ARR]: StringArray,
@@ -195,7 +197,7 @@ const handleUpdate = (field, val) => {
     </template>
 
     <div v-if="sortedFields.length === 0" class="text-xs text-slate-500 p-2 text-center">
-      无配置项
+      {{ t('无配置项') }}
     </div>
   </div>
 </template>

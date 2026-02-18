@@ -11,7 +11,7 @@ const props = defineProps({
   },
   variant: {
     type: String,
-    default: 'outline', // 默认改为最常用的全边框模式
+    default: 'outline',
     validator(value) {
       return ['outline', 'underline', 'filled', 'ghost'].includes(value)
     },

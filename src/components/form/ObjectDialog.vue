@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import Modal from '@/components/Modal.vue'
 import Inspector from './Inspector.vue'
-import { $t } from '@/languages/index.js'
+import { t } from '@/languages/index.js'
 
 const props = defineProps({
   show: Boolean,
@@ -13,7 +13,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: $t('编辑对象')
+    default: t('编辑对象')
   },
   clazz: { type: Function, default: null }
 })

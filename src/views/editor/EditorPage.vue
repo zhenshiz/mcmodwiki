@@ -125,7 +125,8 @@ watch(
 
         <div class="flex flex-row items-center justify-between mt-5 mb-5">
           <div class="ml-2 center flex-row gap-3 h-full ">
-            <Input v-model:modelValue="form.filename" placeholder="请输入文件名" defaultModel="search"
+            <Input v-model:modelValue="form.filename" :placeholder="t('请输入文件名')"
+                   defaultModel="search"
               @update:modelValue="newValue => editTopicStore.setTopicInfo({ filename: newValue })" />
           </div>
           <div class="flex items-center justify-end">

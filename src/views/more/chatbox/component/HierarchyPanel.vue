@@ -23,6 +23,7 @@ import {
 import { useDialog } from '@/components/register/useDialog.js'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import { useMessage } from '@/components/register/useMessage.js'
+import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
 const model = computed(() => store.currentModel)
@@ -54,13 +55,13 @@ const togglePortraitExpand = (key) => {
 const addPortrait = (e) => {
   e.stopPropagation()
   prompt.openInput({
-    title: '新建立绘',
-    message: '请输入新立绘的 ID (Key):',
+    title: t('新建立绘'),
+    message: t('请输入新立绘的 ID (Key):'),
     defaultValue: 'new_portrait',
     onPositiveClick: (key) => {
       if (key && model.value) {
         if (model.value.portrait[key]) {
-          message.warning('该 ID 已存在！')
+          message.warning(t('该 ID 已存在！'))
           return
         }
         model.value.portrait[key] = new Portrait()
@@ -72,8 +73,8 @@ const addPortrait = (e) => {
 const deletePortrait = (e, key) => {
   e.stopPropagation()
   dialog.warning({
-    title: '删除立绘',
-    content: `确定要删除立绘 "${key}" 吗？`,
+    title: t('删除立绘'),
+    content: t('确定要删除立绘 "{}" 吗？', key),
     onPositiveClick: () => {
       delete model.value.portrait[key]
       if (store.selectedComponentKey === key) store.clearSelection()
@@ -92,8 +93,8 @@ const addButton = (e) => {
 const deleteButton = (e, index) => {
   e.stopPropagation()
   dialog.warning({
-    title: '删除按钮',
-    content: `确定删除该按钮吗？`,
+    title: t('删除按钮'),
+    content: t('确定删除该按钮吗？'),
     onPositiveClick: () => {
       model.value.functionalButton.splice(index, 1)
       store.clearSelection()
@@ -111,8 +112,8 @@ const addAttachment = (e, portrait, key) => {
 const deleteAttachment = (e, portrait, index) => {
   e.stopPropagation()
   dialog.warning({
-    title: '删除渲染附件',
-    content: `确定要删除该附件吗？`,
+    title: t('删除渲染附件'),
+    content: t('确定要删除该附件吗？'),
     onPositiveClick: () => {
       const target = portrait.attachment[index]
       if (store.selectedComponent === target) store.clearSelection()
@@ -140,12 +141,12 @@ const selectDialoguesItem = (component, clazz, key) => {
 const addDialogueGroup = (e) => {
   e?.stopPropagation()
   prompt.openInput({
-    title: '新建剧情片段',
-    message: '请输入唯一的组 ID (例如: chapter_1):',
+    title: t('新建剧情片段'),
+    message: t('请输入唯一的组 ID (例如: chapter_1):'),
     onPositiveClick: (key) => {
       if (!key) return
       if (model.value.dialogues[key]) {
-        message.error('该组名已存在')
+        message.error(t('该组名已存在'))
         return
       }
       model.value.dialogues[key] = []
@@ -156,8 +157,8 @@ const addDialogueGroup = (e) => {
 const deleteDialogueGroup = (e, key) => {
   e?.stopPropagation()
   dialog.warning({
-    title: '删除剧情片段',
-    content: `确定要删除组 "${key}" 及其所有内容吗？`,
+    title: t('删除剧情片段'),
+    content: t('确定要删除组 "{}" 及其所有内容吗？', key),
     onPositiveClick: () => {
       delete model.value.dialogues[key]
     }
@@ -188,7 +189,7 @@ const jumpToGroup = (key) => {
           @click="isComponentsOpen = !isComponentsOpen">
           <div class="flex items-center gap-1">
             <Icon :icon="isComponentsOpen ? 'lucide:chevron-down' : 'lucide:chevron-right'" width="12" />
-            <span>核心组件 (Core)</span>
+            <span>{{ t('核心组件') }}</span>
           </div>
         </div>
 
@@ -199,7 +200,7 @@ const jumpToGroup = (key) => {
             @click="selectItem(model.dialogBox, DialogBox, '@dialog')">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:message-square" width="12" class="opacity-70" />
-              <span>对话框 (DialogBox)</span>
+              <span>{{ t('对话框') }}</span>
             </div>
             <Icon :icon="model.dialogBox._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
               class="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity"
@@ -212,7 +213,7 @@ const jumpToGroup = (key) => {
             @click="selectItem(model.option, Option, '@option')">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:list" width="12" class="opacity-70" />
-              <span>选项样式 (Option)</span>
+              <span>{{ t('选项样式') }}</span>
             </div>
             <Icon :icon="model.option._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12"
               class="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity"
@@ -225,7 +226,7 @@ const jumpToGroup = (key) => {
             @click="selectItem(model.keyPrompt, KeyPrompt, '@keyPrompt')">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:keyboard" width="12" class="opacity-70" />
-              <span>按键提示 (KeyPrompt)</span>
+              <span>{{ t('按键提示') }}</span>
             </div>
             <Icon :icon="!model.keyPrompt.visible ? 'lucide:eye-off' : 'lucide:eye'" width="12"
               class="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity"
@@ -241,7 +242,7 @@ const jumpToGroup = (key) => {
           @click="isPortraitsOpen = !isPortraitsOpen">
           <div class="flex items-center gap-1">
             <Icon :icon="isPortraitsOpen ? 'lucide:chevron-down' : 'lucide:chevron-right'" width="12" />
-            <span>立绘组 (Portraits)</span>
+            <span>{{ t('立绘组') }}</span>
             <span class="text-slate-600 font-normal ml-1">{{ Object.keys(model.portrait || {}).length }}</span>
           </div>
           <div
@@ -268,9 +269,10 @@ const jumpToGroup = (key) => {
               </div>
 
               <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Icon icon="lucide:play" width="12" class="hover:text-green-400 text-slate-500 mr-1" title="播放动画"
+                <Icon icon="lucide:play" width="12" class="hover:text-green-400 text-slate-500 mr-1"
                   @click="playAnimation($event, key)" />
-                <Icon icon="lucide:paperclip" width="12" class="hover:text-green-400 text-slate-500 mr-1" title="添加附件"
+                <Icon icon="lucide:paperclip" width="12"
+                      class="hover:text-green-400 text-slate-500 mr-1"
                   @click="addAttachment($event, portrait, key)" />
                 <Icon :icon="portrait._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-white"
                   @click="toggleVisibility($event, portrait)" />
@@ -304,12 +306,12 @@ const jumpToGroup = (key) => {
           @click="isButtonsOpen = !isButtonsOpen">
           <div class="flex items-center gap-1">
             <Icon :icon="isButtonsOpen ? 'lucide:chevron-down' : 'lucide:chevron-right'" width="12" />
-            <span>功能按钮 (Buttons)</span>
+            <span>{{ t('功能按钮') }}</span>
             <span class="text-slate-600 font-normal ml-1">{{ (model.functionalButton || []).length }}</span>
           </div>
           <div
             class="p-0.5 rounded hover:bg-slate-600 text-slate-400 hover:text-white opacity-0 group-hover/header:opacity-100 transition-opacity"
-            title="添加按钮" @click="addButton">
+            @click="addButton">
             <Icon icon="lucide:plus" width="12" />
           </div>
         </div>
@@ -343,7 +345,7 @@ const jumpToGroup = (key) => {
       <div v-if="!isShowGlobal" class="flex flex-col gap-1">
 
         <div class="px-2 py-1.5 bg-blue-600/20 border-l-2 border-blue-500 text-blue-100 text-xs font-bold mb-1">
-          当前选中: 对话帧
+          {{ t('当前选中: 对话帧') }}
         </div>
 
         <div
@@ -351,7 +353,7 @@ const jumpToGroup = (key) => {
           :class="store.selectedComponentKey === 'basic' || !store.selectedComponentKey ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
           @click="selectDialoguesItem(currentFrame, DialogueFrame, 'basic')">
           <Icon icon="lucide:sliders" width="14" />
-          <span>基础配置 (Basic)</span>
+          <span>{{ t('基础配置') }}</span>
         </div>
 
         <div
@@ -359,7 +361,7 @@ const jumpToGroup = (key) => {
           :class="store.selectedComponentKey === 'dialogBox' ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
           @click="selectDialoguesItem(currentFrame.dialogBox, DialogueDialogBox, 'dialogBox')">
           <Icon icon="lucide:message-square" width="14" />
-          <span>对话框 (DialogBox)</span>
+          <span>{{ t('对话框') }}</span>
         </div>
 
         <div
@@ -368,7 +370,7 @@ const jumpToGroup = (key) => {
           @click="selectDialoguesItem(currentFrame.options, DialogueOption, 'option')">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:list" width="14" />
-            <span>选项分支 (Options)</span>
+            <span>{{ t('选项分支') }}</span>
           </div>
           <span class="text-[10px] opacity-60 bg-black/20 px-1 rounded">{{ currentFrame.options?.options?.length || 0 }}</span>
         </div>
@@ -379,7 +381,7 @@ const jumpToGroup = (key) => {
           @click="selectDialoguesItem(currentFrame.portrait, DialoguePortrait, 'portrait')">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:users" width="14" />
-            <span>立绘配置 (Portraits)</span>
+            <span>{{ t('立绘配置') }}</span>
           </div>
           <span class="text-[10px] opacity-60 bg-black/20 px-1 rounded">{{ currentFrame.portrait?.portrait?.length || 0 }}</span>
         </div>
@@ -390,7 +392,7 @@ const jumpToGroup = (key) => {
           @click="selectDialoguesItem(currentFrame.video, DialogueVideo, 'video')">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:video" width="14" />
-            <span>视频配置 (Video)</span>
+            <span>{{ t('视频配置') }}</span>
           </div>
           <div v-if="currentFrame.video?.path" class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
         </div>
@@ -400,7 +402,7 @@ const jumpToGroup = (key) => {
         <div class="px-3 py-2 text-xs cursor-pointer text-slate-500 hover:text-slate-300 flex items-center gap-2"
           @click="selectDialoguesItem(model, ChatBoxDialogues, 'Global')">
           <Icon icon="lucide:arrow-left" width="12" />
-          <span>返回全局配置</span>
+          <span>{{ t('返回全局配置') }}</span>
         </div>
 
       </div>
@@ -408,7 +410,7 @@ const jumpToGroup = (key) => {
       <div v-else class="flex flex-col gap-1">
 
         <div class="px-2 py-1.5 bg-purple-600/20 border-l-2 border-purple-500 text-purple-100 text-xs font-bold mb-1">
-          当前选中: 全局配置
+          {{ t('当前选中: 全局配置') }}
         </div>
 
         <div
@@ -416,15 +418,15 @@ const jumpToGroup = (key) => {
           :class="store.selectedComponent === model ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
           @click="selectDialoguesItem(model, ChatBoxDialogues, 'Global')">
           <Icon icon="lucide:settings" width="14" />
-          <span>全局参数 (Settings)</span>
+          <span>{{ t('全局参数') }}</span>
         </div>
 
         <div
           class="mt-4 px-2 flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase group/header">
-          <span>剧情分组 (Groups)</span>
+          <span>{{ t('剧情分组') }}</span>
           <Icon icon="lucide:plus" width="12"
-            class="cursor-pointer hover:text-white opacity-0 group-hover/header:opacity-100 transition-opacity"
-            title="新建分组" @click="addDialogueGroup" />
+                class="cursor-pointer hover:text-white opacity-0 group-hover/header:opacity-100 transition-opacity"
+                @click="addDialogueGroup" />
         </div>
 
         <div class="pl-2 flex flex-col gap-0.5 mt-1">
@@ -439,14 +441,14 @@ const jumpToGroup = (key) => {
             <div class="flex items-center gap-2">
               <span class="text-[10px] opacity-50 group-hover/item:hidden">{{ frames.length }}</span>
               <Icon icon="lucide:trash-2" width="12"
-                class="text-slate-600 hover:text-red-400 hidden group-hover/item:block cursor-pointer" title="删除分组"
+                    class="text-slate-600 hover:text-red-400 hidden group-hover/item:block cursor-pointer"
                 @click.stop="deleteDialogueGroup($event, key)" />
             </div>
           </div>
 
           <div v-if="!model.dialogues || Object.keys(model.dialogues).length === 0"
             class="text-[10px] text-slate-600 pl-2 italic">
-            暂无分组
+            {{ t('暂无分组') }}
           </div>
         </div>
 
@@ -455,8 +457,8 @@ const jumpToGroup = (key) => {
     </div>
 
     <div v-else class="flex flex-col items-center justify-center h-full text-slate-600 text-xs">
-      <div v-if="store.viewMode === 'empty'">请打开文件</div>
-      <div v-else>数据加载中...</div>
+      <div v-if="store.viewMode === 'empty'">{{ t('请打开文件') }}</div>
+      <div v-else>{{ t('数据加载中...') }}</div>
     </div>
   </div>
 </template>

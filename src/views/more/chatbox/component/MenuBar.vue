@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useChatBoxEditorStore } from '@/stores'
-import { useFileSystem } from './tree/useFileSystem.js'
 import Dropdown from '@/components/Dropdown.vue'
 import { Icon } from '@iconify/vue'
 
@@ -13,9 +12,9 @@ import Autocomplete from '@/components/form/Autocomplete.vue'
 import Input from '@/components/form/Input.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
+import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
-const { openDirectory } = useFileSystem()
 const prompt = usePrompt()
 const message = useMessage()
 
@@ -24,7 +23,7 @@ const translatableVisible = ref(false)
 const translatableSearch = ref('')
 const languageJson = ref()
 const isDragOver = ref(false)
-const jsonViewVisible = ref(false) // 源码查看弹窗状态
+const jsonViewVisible = ref(false)
 
 // === 计算属性 ===
 const langOptions = computed(() => {
@@ -54,8 +53,8 @@ const handleViewJson = () => {
 // 添加语言列
 const addLang = () => {
   prompt.openInput({
-    title: '添加语言列',
-    message: '请输入语言代码 (如 ja_jp)',
+    title: t('添加语言列'),
+    message: t('请输入语言代码 (如 ja_jp)'),
     onPositiveClick: (value) => {
       store.addColumn(value)
     }
@@ -70,8 +69,7 @@ async function readJsonFile(file, resultObj) {
     const langCode = file.name.replace(/\.json$/i, '')
     resultObj[langCode] = data
   } catch (e) {
-    console.error('读取 JSON 失败', e)
-    message.error(`读取文件 ${file.name} 失败`)
+    message.error(t('读取文件 {} 失败', file.name))
   }
 }
 
@@ -88,7 +86,7 @@ const loadFiles = async () => {
       await readJsonFile(file, results)
     }
     store.loadFromJson(results)
-    message.success('导入成功')
+    message.success(t('导入成功'))
   } catch (err) {
     if (err.name !== 'AbortError') console.error(err)
   }
@@ -110,7 +108,7 @@ const onDrop = async (e) => {
     await readJsonFile(file, results)
   }
   store.loadFromJson(results)
-  message.success(`成功导入 ${files.length} 个语言文件`)
+  message.success(t('成功导入 {} 个语言文件', files.length))
 }
 
 // 保存项目
@@ -131,14 +129,14 @@ const handleSave = async () => {
 
       <Dropdown placement="bottom-start" :offset="4">
         <template #trigger>
-          <div class="menu-item">文件 (File)</div>
+          <div class="menu-item">{{ t('文件') }}</div>
         </template>
         <div class="flex flex-col py-1 min-w-[180px]">
 
           <button class="menu-action" @click="handleViewJson" :disabled="!store.currentModel">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:file-code" width="14" />
-              <span>查看JSON</span>
+              <span>{{ t('查看JSON') }}</span>
             </div>
           </button>
 
@@ -147,7 +145,7 @@ const handleSave = async () => {
           <button class="menu-action" @click="handleSave" :disabled="!store.currentFile">
             <div class="flex items-center gap-2">
               <Icon icon="lucide:save" width="14" />
-              <span>保存</span>
+              <span>{{ t('保存') }}</span>
             </div>
             <span class="shortcut">Ctrl+S</span>
           </button>
@@ -156,13 +154,13 @@ const handleSave = async () => {
 
       <Dropdown placement="bottom-start" :offset="4">
         <template #trigger>
-          <div class="menu-item">编辑 (Edit)</div>
+          <div class="menu-item">{{ t('编辑') }}</div>
         </template>
         <div class="flex flex-col py-1 min-w-[180px]">
           <button class="menu-action" @click="openTranslatableModal">
             <div class="flex items-center gap-2">
               <Icon icon="material-symbols:translate" width="14" />
-              <span>管理翻译键...</span>
+              <span>{{ t('管理翻译键...') }}</span>
             </div>
           </button>
         </div>
@@ -170,13 +168,13 @@ const handleSave = async () => {
 
       <Dropdown trigger="hover" placement="bottom-start" :offset="4">
         <template #trigger>
-          <div class="menu-item">帮助 (Help)</div>
+          <div class="menu-item">{{ t('帮助') }}</div>
         </template>
         <div class="p-2 w-[200px]">
-          <div class="text-xs text-slate-500 mb-2">关于 ChatBox Editor</div>
+          <div class="text-xs text-slate-500 mb-2">{{ t('关于 ChatBox Editor') }}</div>
           <div class="text-[10px] text-slate-400">
-            这是一个用于 Minecraft ChatBox Mod 的可视化配置编辑器。
-            <br>编辑器对应模组版本v1.1
+            {{ t('这是一个用于 Minecraft ChatBox Mod 的可视化配置编辑器。') }}
+            <br>{{ t('编辑器对应模组版本v1.1') }}
           </div>
         </div>
       </Dropdown>
@@ -186,28 +184,30 @@ const handleSave = async () => {
     <div class="flex-1"></div>
 
     <div v-if="store.currentFile" class="text-slate-500 text-[10px] mr-2">
-      正在编辑: {{ store.currentFile.name }}
+      {{ t('正在编辑:', store.currentFile.name) }}
     </div>
 
-    <Modal v-model:show="translatableVisible" title="翻译键" width="60%">
+    <Modal v-model:show="translatableVisible" :title="t('翻译键')" width="60%">
       <div class="flex flex-col gap-3 p-3 w-full text-slate-700 dark:text-slate-200">
 
         <div class="flex flex-row gap-4 items-center">
           <Input v-model="translatableSearch"
                  default-model="search"
-                 placeholder="搜索 Key..."
+                 :placeholder="t('搜索 Key...')"
                  class="flex-1" />
           <Button @click="store.addRow()" is-toggle-color>
-            <Icon icon="lucide:plus" width="14" class="mr-1"/>添加 Key
+            <Icon icon="lucide:plus" width="14" class="mr-1" />
+            {{ t('添加 Key') }}
           </Button>
           <Button @click="addLang" is-toggle-color>
-            <Icon icon="lucide:globe" width="14" class="mr-1"/>添加语言
+            <Icon icon="lucide:globe" width="14" class="mr-1" />
+            {{ t('添加语言') }}
           </Button>
 
           <ShowJsonCopy :value="store.getTranslatableJSON(languageJson)">
             <template #footer>
               <Autocomplete class="max-w-[100px]" v-model="languageJson"
-                            :options="langOptions" placeholder="选择语言导出" clearable />
+                            :options="langOptions" :placeholder="t('选择语言导出')" clearable />
             </template>
           </ShowJsonCopy>
 
@@ -218,11 +218,10 @@ const handleSave = async () => {
             @dragover="onDragOver"
             @dragleave="onDragLeave"
             @drop="onDrop"
-            title="点击选择或拖拽 .json 语言文件"
           >
             <div class="flex flex-row items-center gap-2">
               <Icon width="18" icon="material-symbols:upload" />
-              <span class="whitespace-nowrap text-xs">导入</span>
+              <span class="whitespace-nowrap text-xs">{{ t('导入') }}</span>
             </div>
           </div>
         </div>
@@ -242,11 +241,12 @@ const handleSave = async () => {
             <div class="flex flex-row justify-between items-center mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
               <div class="font-bold text-sm flex flex-row w-full items-center gap-2">
                 <span class="text-blue-500 whitespace-nowrap text-xs uppercase font-mono bg-blue-500/10 px-1.5 py-0.5 rounded">Key</span>
-                <Input v-model="row.key" class="flex-1 font-mono text-sm" placeholder="输入翻译键名 (例如: item.sword.name)" />
+                <Input v-model="row.key" class="flex-1 font-mono text-sm"
+                       :placeholder="t('输入翻译键名 (例如: item.sword.name)')" />
               </div>
               <button
                 class="ml-2 text-slate-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"
-                @click="store.removeRow(rowIndex)" title="删除此 Key">
+                @click="store.removeRow(rowIndex)">
                 <Icon icon="lucide:trash-2" width="16" />
               </button>
             </div>
@@ -261,12 +261,11 @@ const handleSave = async () => {
                 <Input
                   v-model="row.value[colIndex]"
                   class="flex-1 text-xs"
-                  :placeholder="`输入 ${langCode} 对应的内容`"
+                  :placeholder="t('输入 {} 对应的内容',langCode)"
                 />
                 <button
                   class="text-slate-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"
                   @click="store.removeColumn(colIndex)"
-                  :title="'删除语言列: ' + langCode"
                 >
                   <Icon icon="lucide:x" width="14" />
                 </button>
@@ -275,13 +274,13 @@ const handleSave = async () => {
           </div>
 
           <div v-if="store.translatableKeyRows.length === 0" class="text-center text-slate-500 py-8 text-xs">
-            暂无翻译数据，请添加 Key 或导入文件
+            {{ t('暂无翻译数据，请添加 Key 或导入文件') }}
           </div>
         </div>
       </div>
     </Modal>
 
-    <Modal v-model:show="jsonViewVisible" title="JSON预览" width="60%">
+    <Modal v-model:show="jsonViewVisible" :title="t('JSON预览')" width="60%">
       <MarkDownReadOnly :content="currentJsonString"></MarkDownReadOnly>
     </Modal>
 

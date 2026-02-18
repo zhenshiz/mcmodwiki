@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
 import MarkDownEmoji from '@/components/markdown/Emoji.vue'
@@ -8,6 +8,7 @@ import Dialog from '@/components/Dialog.vue'
 import ModeToggle from '@/components/markdown/ModeToggle.vue'
 import { t } from '@/languages'
 import { formatUtil } from '@/utils/formatUtil'
+import NumberInput from '@/components/form/NumberInput.vue'
 
 const message = useMessage()
 const props = defineProps({
@@ -39,16 +40,19 @@ const video = ref({
 const handleFullscreenToggle = () => emit('toggle-fullscreen')
 const checkFullscreen = () => isFullscreen.value = !!document.fullscreenElement
 
-const videoType = formatUtil.createEnum([
-  { label: 'BiliBili', value: 'BiliBili' },
-  { label: 'YouTube', value: 'YouTube' }
-])
+const videoType = formatUtil.createEnum({
+  BiliBili: 'BiliBili',
+  YouTube: 'YouTube'
+})
 
 const videoLabel = computed(() => {
   switch (video.value.type) {
-    case 'BiliBili': return 'BV'
-    case 'YouTube': return t('视频链接URL') // 直接使用中文
-    default: return ''
+    case 'BiliBili':
+      return 'BV'
+    case 'YouTube':
+      return t('视频链接URL')
+    default:
+      return ''
   }
 })
 
@@ -108,8 +112,6 @@ const insertVideo = () => {
   video.value = { type: 'BiliBili', url: '', width: 640, height: 480 }
 }
 
-// --- 菜单配置 (使用 computed 以支持动态切换语言) ---
-// 直接填入你提供的中文文案，voerka-i18n 会自动提取
 const commandList = computed(() => [
   {
     name: 'headings',
@@ -125,12 +127,12 @@ const commandList = computed(() => [
     name: 'admonition',
     icon: 'lucide:info',
     children: [
-      { type: 'info', icon: 'material-symbols:info-outline', label: '信息提示' },
-      { type: 'warning', icon: 'material-symbols:warning-outline-rounded', label: '警告提示' },
-      { type: 'important', icon: 'material-symbols:priority-high-rounded', label: '重要提示' }
+      { type: 'info', icon: 'material-symbols:info-outline', label: t('信息提示') },
+      { type: 'warning', icon: 'material-symbols:warning-outline-rounded', label: t('警告提示') },
+      { type: 'important', icon: 'material-symbols:priority-high-rounded', label: t('重要提示') }
     ].map(item => ({
       icon: item.icon,
-      lang: t(item.label),
+      lang: item.label,
       click: () => props.editor.chain().focus().setAdmonition({ type: item.type }).run()
     }))
   },
@@ -201,14 +203,9 @@ const commandList = computed(() => [
     icon: 'material-symbols:schema-outline',
     lang: t('图表'),
     click: () => props.editor.chain().focus().setMermaid({
-      code: 'graph TD\n  A[开始] --> B{判断}\n  B -- 是 --> C[执行]\n  B -- 否 --> D[结束]',
+      code: t('graph TD\n  A[开始] --> B{判断}\n  B -- 是 --> C[执行]\n  B -- 否 --> D[结束]'),
       hideCode: false
     }).run()
-  },
-  {
-    icon: 'tabler:eye-off',
-    lang: t('遮蔽文本'),
-    click: () => props.editor.chain().focus().setHiddenText({ show: false }).run()
   }
 ])
 
@@ -269,7 +266,7 @@ onUnmounted(() => {
             :icon="isFullscreen ? 'lucide:minimize' : 'lucide:maximize'" />
         </template>
         <div class="dark:bg-dark-blue text-text-blue p-1 rounded">
-          {{ t(isFullscreen ? '退出全屏' : '全屏模式') }}
+          {{ t(isFullscreen ? t('退出全屏') : t('全屏模式')) }}
         </div>
       </Popover>
     </div>

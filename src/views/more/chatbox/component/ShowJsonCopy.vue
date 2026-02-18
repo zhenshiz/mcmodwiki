@@ -24,7 +24,7 @@ const json = computed(() => {
   <Button is-toggle-color :rounded-size="3" @click="visible = true">
     生成JSON
   </Button>
-  <Modal v-model:show="visible" title="生成JSON">
+  <Modal v-model:show="visible" :title="t('生成JSON')">
       <div class="center flex-col size-full">
         <MarkDownReadOnly :content="json" />
       </div>

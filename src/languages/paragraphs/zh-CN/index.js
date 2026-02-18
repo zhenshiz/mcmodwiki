@@ -1,4 +1,3 @@
-// { paragrapgId: ()=>import('./<paragrapgId>') }
 export default {
-	
+	'notice' : () => import('./notice')
 }

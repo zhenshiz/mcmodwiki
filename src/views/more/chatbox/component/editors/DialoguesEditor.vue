@@ -7,7 +7,8 @@ import { useMessage } from '@/components/register/useMessage.js'
 import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDialogues.js'
 import { useDialog } from '@/components/register/useDialog'
 import draggable from 'vuedraggable'
-import _ from 'lodash' // 引入 draggable
+import _ from 'lodash'
+import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
 const prompt = usePrompt()
@@ -51,12 +52,12 @@ const frameList = computed({
 
 const handleAddGroup = () => {
   prompt.openInput({
-    title: '新建剧情片段 (Group)',
-    message: '请输入唯一的组 ID (例如: chapter_1_start)',
+    title: t('新建剧情片段 (组)'),
+    message: t('请输入唯一的组 ID (例如: chapter_1_start)'),
     onPositiveClick: (val) => {
       if (!val) return
       if (dialoguesMap.value[val]) {
-        message.error('该组名已存在')
+        message.error(t('该组名已存在'))
         return
       }
       model.value.dialogues[val] = []
@@ -67,8 +68,8 @@ const handleAddGroup = () => {
 
 const handleDeleteGroup = (key) => {
   dialog.warning({
-    title: '删除剧情片段',
-    content: `确定要删除剧情片段 "${key}" 吗？此操作无法撤销。`,
+    title: t('删除剧情片段'),
+    content: t('确定要删除剧情片段 "{}" 吗？此操作无法撤销。', key),
     onPositiveClick: () => {
       delete model.value.dialogues[key]
       if (activeGroupKey.value === key) {
@@ -96,7 +97,7 @@ const handleDuplicateFrame = (index) => {
   const newFrame = _.cloneDeep(sourceFrame)
 
   list.splice(index + 1, 0, newFrame)
-  message.success('已复制对话')
+  message.success(t('已复制对话'))
 }
 
 const handleDeleteFrame = (index) => {
@@ -137,9 +138,9 @@ const isSelected = (comp) => store.selectedComponent === comp
     <div class="w-64 flex flex-col border-r border-slate-700 bg-[#001529] shrink-0">
       <div
         class="h-10 flex items-center justify-between px-3 border-b border-slate-700 bg-[#002033]">
-        <span class="text-xs font-bold text-slate-400 uppercase">剧情片段 (Groups)</span>
+        <span class="text-xs font-bold text-slate-400 uppercase">{{ t('剧情片段(组)') }}</span>
         <button class="p-1 hover:bg-blue-600 rounded text-slate-400 hover:text-white transition"
-                @click.stop="handleAddGroup" title="新建组">
+                @click.stop="handleAddGroup">
           <Icon icon="lucide:plus" width="14" />
         </button>
       </div>
@@ -182,7 +183,7 @@ const isSelected = (comp) => store.selectedComponent === comp
 
         <div v-if="!model || Object.keys(model.dialogues).length === 0"
              class="text-center py-8 text-slate-600 text-xs">
-          暂无剧情片段<br>点击右上角 + 添加
+          {{ t('暂无剧情片段') }}<br>{{ t('点击右上角 + 添加') }}
         </div>
       </div>
     </div>
@@ -194,7 +195,7 @@ const isSelected = (comp) => store.selectedComponent === comp
         <div class="flex items-center gap-2">
           <Icon icon="lucide:message-square-quote" class="text-slate-500" />
           <span class="text-sm font-bold text-slate-200">
-            {{ activeGroupKey || '未选择组' }}
+            {{ activeGroupKey || t('未选择组') }}
           </span>
         </div>
 
@@ -202,7 +203,7 @@ const isSelected = (comp) => store.selectedComponent === comp
                 class="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs transition shadow-sm"
                 @click.stop="handleAddFrame">
           <Icon icon="lucide:plus" width="12" />
-          <span>添加对话</span>
+          <span>{{ t('添加对话') }}</span>
         </button>
       </div>
 
@@ -226,8 +227,8 @@ const isSelected = (comp) => store.selectedComponent === comp
                 <div class="flex flex-col items-center gap-1 w-6 shrink-0 pt-1">
                   <span class="text-[10px] font-mono text-slate-500 select-none">#{{ index + 1
                     }}</span>
-                  <div class="frame-drag-handle p-1 text-slate-600 hover:text-slate-300 cursor-move"
-                       title="按住拖拽排序">
+                  <div
+                    class="frame-drag-handle p-1 text-slate-600 hover:text-slate-300 cursor-move">
                     <Icon icon="lucide:grip-horizontal" width="16" />
                   </div>
                 </div>
@@ -237,12 +238,12 @@ const isSelected = (comp) => store.selectedComponent === comp
                     class="p-2 rounded bg-[#252525] border border-slate-700 hover:border-blue-500/50 hover:bg-[#2a2a2a] transition-colors group/box">
                     <div class="flex items-center gap-2 mb-1">
                       <span class="text-[10px] font-bold text-blue-400">
-                        {{ store.getTranslatableLabel(frame.dialogBox?.name) || '未知角色' }}
+                        {{ store.getTranslatableLabel(frame.dialogBox?.name) || t('未知角色') }}
                       </span>
                     </div>
                     <div
                       class="text-xs text-slate-300 font-mono line-clamp-2 leading-relaxed select-none">
-                      {{ store.getTranslatableLabel(frame.dialogBox?.text) || '( 空对话内容 )' }}
+                      {{ store.getTranslatableLabel(frame.dialogBox?.text) || t('( 空对话内容 )') }}
                     </div>
                   </div>
                 </div>
@@ -251,13 +252,11 @@ const isSelected = (comp) => store.selectedComponent === comp
                   class="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     class="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded transition"
-                    title="复制此对话"
                     @click.stop="handleDuplicateFrame(index)">
                     <Icon icon="lucide:copy" width="14" />
                   </button>
                   <button
                     class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded transition"
-                    title="删除"
                     @click.stop="handleDeleteFrame(index)">
                     <Icon icon="lucide:trash-2" width="14" />
                   </button>
@@ -270,14 +269,15 @@ const isSelected = (comp) => store.selectedComponent === comp
         <div v-else-if="activeGroupKey"
              class="flex flex-col items-center justify-center h-64 text-slate-600 gap-3">
           <Icon icon="lucide:message-square-plus" width="32" class="opacity-50" />
-          <div class="text-xs">此片段暂无对话</div>
-          <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">立即添加
+          <div class="text-xs">{{ t('此片段暂无对话') }}</div>
+          <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">
+            {{ t('立即添加') }}
           </button>
         </div>
 
         <div v-else class="flex flex-col items-center justify-center h-full text-slate-600 gap-2">
           <Icon icon="lucide:arrow-left" width="24" class="animate-pulse" />
-          <span class="text-xs">请先在左侧选择或新建一个剧情片段</span>
+          <span class="text-xs">{{ t('请先在左侧选择或新建一个剧情片段') }}</span>
         </div>
 
       </div>

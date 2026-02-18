@@ -41,7 +41,7 @@ const rootModel = computed(() => store.currentModel)
 
       <div v-else class="flex-1 flex flex-col items-center justify-center text-slate-500 gap-2 opacity-50 h-full">
         <Icon icon="lucide:box-select" width="40" stroke-width="1" />
-        <span class="text-xs">请先打开一个主题/对话文件</span>
+        <span class="text-xs">{{ t('请先打开一个主题/对话文件') }}</span>
       </div>
 
     </div>

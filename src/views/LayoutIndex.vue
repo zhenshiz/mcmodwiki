@@ -10,7 +10,7 @@ import { useVoerkaI18n } from '@voerkai18n/vue'
 import { webUtil } from '@/utils/webUtil.js'
 import { useEventListener } from '@vueuse/core'
 import { languageList, webHref } from '@/assets/info/web.js'
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const { languages } = useVoerkaI18n(i18nScope)
 
@@ -22,7 +22,7 @@ const searchVisible = ref(false)
 const search = ref('')
 const searchList = ref([])
 const change = () => {
-  searchList.value = modList.filter(item => item.lang.toLowerCase().includes(search.value.toLowerCase()))
+  searchList.value = modList().filter(item => item.lang.toLowerCase().includes(search.value.toLowerCase()))
 }
 
 const toggleTheme = () => {
@@ -98,9 +98,9 @@ onMounted(() => {
         <div class="z-10 flex flex-row items-center">
           <div class="ml-5 text-xl font-bold dark:text-white">MCModWiki</div>
         </div>
-        
+
         <div class="hidden z-10 sm:flex flex-row items-center">
-          
+
           <Dropdown>
             <template #trigger>
               <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
@@ -121,28 +121,29 @@ onMounted(() => {
             {{ t('编辑') }}
           </Link>
 
-          <Dropdown v-if="modList.length">
+          <Dropdown v-if="modList().length">
             <template #trigger>
               <div class="cursor-pointer m-2 text-lg text-text-blue whitespace-nowrap">
                 {{ t('模组') }}
               </div>
             </template>
             <div class="flex flex-col py-2">
-              <Link v-for="(item, index) in modList" class="m-2 text-lg text-text-blue"
+              <Link v-for="(item, index) in modList()" class="m-2 text-lg text-text-blue"
                     :href="`/wiki/${item.lang}`" hoverLineType="toFlanks" :key="index">
-                {{ item.lang }}
+                {{ t(item.lang) }}
               </Link>
             </div>
           </Dropdown>
 
-          <Dropdown v-if="moreUtilList.length">
+          <Dropdown v-if="moreUtilList().length">
             <template #trigger>
               <div class="cursor-pointer text-lg text-text-blue m-2 whitespace-nowrap">
                 {{ t('更多') }}
               </div>
             </template>
             <div class="flex flex-col py-2">
-              <Link v-for="(item, index) in moreUtilList" class="m-2 text-lg text-text-blue" :href="item.router"
+              <Link v-for="(item, index) in moreUtilList()" class="m-2 text-lg text-text-blue"
+                    :href="item.router"
                 hoverLineType="toFlanks" :key="index">
                 {{ t(item.lang) }}
               </Link>
@@ -150,7 +151,7 @@ onMounted(() => {
           </Dropdown>
 
           <div class="center h-[30px] p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
-            
+
             <Dropdown>
               <template #trigger>
                 <Icon width="35" height="35" icon="flowbite:language-outline" class="cursor-pointer dark:text-white" />
@@ -163,10 +164,10 @@ onMounted(() => {
                 </div>
                 <div class="flex flex-row items-center justify-center px-4 py-2 border-t dark:border-gray-600 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   @click="openWeb(webHref.translatable)">
-                  <Translate id="notice" class="text-xs text-center">
-                    找不到您的语言？<br>
-                    点击这里协助翻译
-                  </Translate>
+                  <div class="text-xs text-center">
+                    {{ t('找不到您的语言？') }}<br>
+                    {{ t('点击这里协助翻译') }}
+                  </div>
                   <Icon class="ml-2" width="20" height="20" icon="quill:link-out" />
                 </div>
               </div>

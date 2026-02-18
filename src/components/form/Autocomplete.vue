@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
-import { Translate } from '@/languages'
+import { t } from '@/languages/index.js'
 
 const props = defineProps({
   // 双向绑定的值
@@ -17,7 +17,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请输入或选择'
+    default: t('请输入或选择')
   },
   disabled: {
     type: Boolean,
@@ -216,8 +216,8 @@ const handleClear = (e) => {
       </template>
 
       <div v-else class="text-center text-gray-400 py-2 text-xs">
-        <span class="block mb-1">无匹配预设</span>
-        <span class="text-blue-400">使用: {{ query }}</span>
+        <span class="block mb-1">{{ t('无匹配预设') }}</span>
+        <span class="text-blue-400">{{ t('使用: {}', query) }}</span>
       </div>
     </div>
   </Popover>

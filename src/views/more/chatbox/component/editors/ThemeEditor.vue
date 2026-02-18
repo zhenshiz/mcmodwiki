@@ -7,13 +7,14 @@ import scrollMouse from '@/assets/more/chatbox/assets/chatbox/textures/key/scrol
 import { getHeadUrl } from '@/utils/mcHelper.js'
 import { formatUtil } from '@/utils/formatUtil.js'
 import {
-    attachmentType,
-    DEFAULT_BTN_TEXTURES,
-    portraitType,
-    USER_DEFINED_PRESETS
+  attachmentType,
+  DEFAULT_BTN_TEXTURES,
+  portraitType,
+  USER_DEFINED_PRESETS
 } from '@/assets/more/chatbox/enumTypes.js'
 import { itemSuggestions } from '@/assets/textures/mcTextures'
 import gsap from 'gsap'
+import { t } from '../../../../../languages/index.js'
 
 const store = useChatBoxEditorStore()
 const model = computed(() => store.currentModel)
@@ -439,7 +440,7 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                 <img v-if="att.value && store.getTextureUrl(att.value)"
                      :src="store.getTextureUrl(att.value)" class="w-full h-full object-fill pixelated"
                      draggable="false" />
-                <span v-else class="text-[8px] text-green-300 opacity-70">图片附件</span>
+                <span v-else class="text-[8px] text-green-300 opacity-70">{{ t('图片附件') }}</span>
               </template>
               <template v-else-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXT)">
                 <div class="w-full h-full p-1" :style="getAttachmentTextStyle(att)">
@@ -447,7 +448,8 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                 </div>
               </template>
               <span v-else
-                    class="text-[8px] text-green-300 opacity-70 flex items-center justify-center w-full">未知类型</span>
+                    class="text-[8px] text-green-300 opacity-70 flex items-center justify-center w-full">{{ t('未知类型')
+                }}</span>
             </div>
           </InteractItem>
         </template>
@@ -469,8 +471,8 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
         <div v-else
              class="w-full h-full border-2 border-dashed border-blue-500/30 flex items-center justify-center">
           <div class="text-center p-1 pointer-events-none">
-            <span class="text-blue-300 text-xs font-bold">Dialog Box Area</span><br>
-            <span class="opacity-50 text-[10px] text-blue-200">请在右侧设置贴图</span>
+            <span class="text-blue-300 text-xs font-bold">{{ t('对话框') }}</span><br>
+            <span class="opacity-50 text-[10px] text-blue-200">{{ t('请在右侧设置贴图') }}</span>
           </div>
         </div>
 
@@ -506,7 +508,7 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
 
     <template v-if="model.option && !model.option._hidden">
       <template
-        v-for="(text, index) in (model.option._text && model.option._text.length ? model.option._text : ['测试内容'])"
+        v-for="(text, index) in (model.option._text && model.option._text.length ? model.option._text : ['test'])"
         :key="index">
 
         <InteractItem v-if="index === 0" :component="model.option" :container-w="baseDimensions.width"
@@ -521,7 +523,8 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                  draggable="false" />
             <div v-else
                  class="w-full h-full border-2 border-dashed border-green-500/50 flex items-center justify-center">
-              <span class="text-[10px] text-green-200 opacity-50 font-mono" v-if="!text">Option Box</span>
+              <span class="text-[10px] text-green-200 opacity-50 font-mono"
+                    v-if="!text">{{ t('选项') }}</span>
             </div>
 
             <div class="absolute pointer-events-none select-none whitespace-nowrap" :style="{
@@ -577,23 +580,25 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                   @select="store.selectComponent(model.keyPrompt, '@keyPrompt')">
       <div class="flex items-center gap-1 px-1 py-0.5 whitespace-nowrap pointer-events-none select-none">
         <div class="flex items-center gap-0.5"><img :src="rightMouse"
-                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">确定</span></div>
+                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span
+          :class="labelClass">{{ t('确定') }}</span></div>
         <div class="flex items-center gap-0.5"><img :src="scrollMouse"
-                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span :class="labelClass">切换选项</span></div>
+                                                    class="w-[40px] h-[40px] object-contain pixelated" /><span
+          :class="labelClass">{{ t('切换选项') }}</span></div>
         <div class="w-1"></div>
         <div class="flex items-center gap-0.5">
           <div :class="keyBtnClass"><span :class="keyTextClass">Esc</span></div>
-          <span :class="labelClass">关闭对话框</span>
+          <span :class="labelClass">{{ t('关闭对话框') }}</span>
         </div>
         <div class="w-1"></div>
         <div class="flex items-center gap-0.5">
           <div :class="keyBtnClass"><span :class="keyTextClass">Ctrl</span></div>
-          <span :class="labelClass">快进对话</span>
+          <span :class="labelClass">{{ t('快进对话') }}</span>
         </div>
         <div class="w-1"></div>
         <div class="flex items-center gap-0.5">
           <div :class="keyBtnClass"><span :class="keyTextClass">F6</span></div>
-          <span :class="labelClass">自动播放</span>
+          <span :class="labelClass">{{ t('自动播放') }}</span>
         </div>
       </div>
     </InteractItem>

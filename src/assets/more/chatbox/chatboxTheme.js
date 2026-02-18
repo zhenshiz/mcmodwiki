@@ -13,10 +13,11 @@ import {
   textAlign
 } from '@/assets/more/chatbox/enumTypes.js'
 import { formatUtil } from '@/utils/formatUtil'
+import { t } from '@/languages/index.js'
 
 const DEFAULT_FLOAT = 0.0
 
-const EDITOR_NONE = '游戏内生效，本编辑器无效'
+const EDITOR_NONE = t('游戏内生效，本编辑器无效')
 
 const showOnlyIn = (...types) => {
   return (model) => types.some((t) => formatUtil.equalsIgnoreCase(model.type, t))
@@ -36,21 +37,21 @@ export class BaseRenderEvent extends AutoClean {
 
   static {
     BaseRenderEvent.defineField('trigger', {
-      label: '触发时机',
+      label: t('触发时机'),
       type: EditorTypes.SELECT,
       props: {
         options: renderEventTrigger().values()
       }
     })
     BaseRenderEvent.defineField('type', {
-      label: '事件类型',
+      label: t('事件类型'),
       type: EditorTypes.SELECT,
       props: {
         options: eventType.values()
       }
     })
     BaseRenderEvent.defineField('value', {
-      label: '事件参数',
+      label: t('事件参数'),
       type: EditorTypes.INPUT
     })
   }
@@ -90,55 +91,55 @@ export class Attachment extends AutoClean {
 
   static {
     Attachment.defineField('type', {
-      label: '附件类型',
+      label: t('附件类型'),
       type: EditorTypes.SELECT,
       props: { options: attachmentType.values() }
     })
     Attachment.defineField('texture_value', {
       modelKey: 'value',
-      label: '图片路径',
+      label: t('图片路径'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE },
       showIf: showOnlyIn(attachmentType.TEXTURE)
     })
     Attachment.defineField('text_value', {
       modelKey: 'value',
-      label: '文本内容',
+      label: t('文本内容'),
       type: EditorTypes.INPUT,
       showIf: showOnlyIn(attachmentType.TEXT)
     })
-    Attachment.defineField('x', { label: 'X 坐标 (%)', type: EditorTypes.NUMBER_INPUT })
-    Attachment.defineField('y', { label: 'Y 坐标 (%)', type: EditorTypes.NUMBER_INPUT })
+    Attachment.defineField('x', { label: t('X 坐标 (%)'), type: EditorTypes.NUMBER_INPUT })
+    Attachment.defineField('y', { label: t('Y 坐标 (%)'), type: EditorTypes.NUMBER_INPUT })
     Attachment.defineField('height', {
-      label: '高度',
+      label: t('高度'),
       type: EditorTypes.NUMBER_INPUT,
       showIf: showOnlyIn(attachmentType.TEXTURE)
     })
     Attachment.defineField('texture_width', {
       modelKey: 'width',
-      label: '宽度',
+      label: t('宽度'),
       type: EditorTypes.NUMBER_INPUT,
       showIf: showOnlyIn(attachmentType.TEXTURE)
     })
     Attachment.defineField('text_width', {
       modelKey: 'width',
-      label: '行宽',
+      label: t('行宽'),
       type: EditorTypes.NUMBER_INPUT,
       showIf: showOnlyIn(attachmentType.TEXT)
     })
     Attachment.defineField('textAlign', {
-      label: '文本对齐',
+      label: t('文本对齐'),
       type: EditorTypes.SELECT,
       props: { options: textAlign.values() },
       showIf: showOnlyIn(attachmentType.TEXT)
     })
     Attachment.defineField('lineBreak', {
-      label: '自动换行',
+      label: t('自动换行'),
       type: EditorTypes.SWITCH,
       showIf: showOnlyIn(attachmentType.TEXT)
     })
     Attachment.defineField('textColor', {
-      label: '文本颜色',
+      label: t('文本颜色'),
       type: EditorTypes.COLOR,
       showIf: showOnlyIn(attachmentType.TEXT)
     })
@@ -190,61 +191,61 @@ export class Keyframe extends AutoClean {
 
   static {
     Keyframe.defineField('time', {
-      label: '持续时间 (帧)',
-      tips: '动画持续的帧数 (默认60帧=1秒)',
+      label: t('持续时间 (帧)'),
+      tips: t('动画持续的帧数 (默认60帧=1秒)'),
       type: EditorTypes.NUMBER_INPUT
     })
     Keyframe.defineField('easing', {
-      label: '缓动函数',
+      label: t('缓动函数'),
       type: EditorTypes.SELECT,
       props: { options: easing.values() }
     })
     Keyframe.defineField('x', {
-      label: 'X 坐标 (%)',
-      tips: '绝对定位：直接移动到屏幕宽度的百分比位置',
+      label: t('X 坐标 (%)'),
+      tips: t('绝对定位：直接移动到屏幕宽度的百分比位置'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Keyframe.defineField('y', {
-      label: 'Y 坐标 (%)',
-      tips: '绝对定位：直接移动到屏幕高度的百分比位置',
+      label: t('Y 坐标 (%)'),
+      tips: t('绝对定位：直接移动到屏幕高度的百分比位置'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Keyframe.defineField('xOffset', {
-      label: 'X 偏移 (%)',
-      tips: '相对偏移：基于当前位置，再叠加屏幕宽度的百分比位移',
+      label: t('X 偏移 (%)'),
+      tips: t('相对偏移：基于当前位置，再叠加屏幕宽度的百分比位移'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Keyframe.defineField('yOffset', {
-      label: 'Y 偏移 (%)',
-      tips: '相对偏移：基于当前位置，再叠加屏幕高度的百分比位移',
+      label: t('Y 偏移 (%)'),
+      tips: t('相对偏移：基于当前位置，再叠加屏幕高度的百分比位移'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Keyframe.defineField('scale', {
-      label: '缩放',
+      label: t('缩放'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.1 }
     })
     Keyframe.defineField('angle', {
-      label: '旋转',
+      label: t('旋转'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 1 }
     })
     Keyframe.defineField('opacity', {
-      label: '透明度',
+      label: t('透明度'),
       type: EditorTypes.SLIDER,
       props: { min: 0, max: 100 }
     })
     Keyframe.defineField('brightness', {
-      label: '亮度',
+      label: t('亮度'),
       type: EditorTypes.SLIDER,
       props: { min: 0, max: 200 }
     })
     Keyframe.defineField('texture', {
-      label: '切换材质',
+      label: t('切换材质'),
       tips: EDITOR_NONE,
       type: EditorTypes.INPUT
     })
@@ -275,73 +276,73 @@ export class Component extends AutoClean {
   }
 
   static {
-    Component.defineField('hidden', { label: '默认隐藏', type: EditorTypes.SWITCH })
+    Component.defineField('hidden', { label: t('默认隐藏'), type: EditorTypes.SWITCH })
     Component.defineField('x', {
-      label: 'X坐标 (%)',
+      label: t('X坐标 (%)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Component.defineField('y', {
-      label: 'Y坐标 (%)',
+      label: t('Y坐标 (%)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.5 }
     })
     Component.defineField('renderOrder', {
-      label: '层级 (Z)',
+      label: t('层级 (Z)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 1 }
     })
     Component.defineField('width', {
-      label: '宽度 (%)',
+      label: t('宽度 (%)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { min: 0 }
     })
     Component.defineField('height', {
-      label: '高度 (%)',
+      label: t('高度 (%)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { min: 0 }
     })
     Component.defineField('alignX', {
-      label: '水平对齐',
+      label: t('水平对齐'),
       type: EditorTypes.SELECT,
       props: { options: alignXList.values() }
     })
     Component.defineField('alignY', {
-      label: '垂直对齐',
+      label: t('垂直对齐'),
       type: EditorTypes.SELECT,
       props: { options: alignYList.values() }
     })
     Component.defineField('scale', {
-      label: '缩放',
+      label: t('缩放'),
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 0.1 }
     })
     Component.defineField('angle', {
-      label: '旋转',
+      label: t('旋转'),
       type: EditorTypes.SLIDER,
       props: { min: -180, max: 180 }
     })
     Component.defineField('opacity', {
-      label: '透明度',
+      label: t('透明度'),
       type: EditorTypes.SLIDER,
       props: { min: 0, max: 100 }
     })
     Component.defineField('brightness', {
-      label: '亮度',
+      label: t('亮度'),
       type: EditorTypes.SLIDER,
       props: { min: 0, max: 200 }
     })
     Component.defineField('renderEvents', {
-      label: '渲染事件',
+      label: t('渲染事件'),
       type: EditorTypes.OBJECT_ARR,
-      tips: '本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）',
+      tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
       props: {
         itemConstructor: BaseRenderEvent,
-        itemLabel: '渲染事件',
+        itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
-          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
+          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
           return `${tLabel.value} -> ${eLabel.value}`
         }
       }
@@ -399,23 +400,23 @@ export class KeyPrompt extends Component {
   }
 
   static {
-    KeyPrompt.defineField('visible', { label: '启用提示', type: EditorTypes.SWITCH })
+    KeyPrompt.defineField('visible', { label: t('启用提示'), type: EditorTypes.SWITCH })
     KeyPrompt.defineField('mouseTextureWidth', {
-      label: '鼠标图标宽 (px)',
+      label: t('鼠标图标宽 (px)'),
       type: EditorTypes.NUMBER_INPUT
     })
     KeyPrompt.defineField('mouseTextureHeight', {
-      label: '鼠标图标高 (px)',
+      label: t('鼠标图标高 (px)'),
       type: EditorTypes.NUMBER_INPUT
     })
     KeyPrompt.defineField('rightClickTexture', {
-      label: '右键图标',
+      label: t('右键图标'),
       tips: EDITOR_NONE,
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
     KeyPrompt.defineField('scrollTexture', {
-      label: '滚轮图标',
+      label: t('滚轮图标'),
       tips: EDITOR_NONE,
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
@@ -450,7 +451,7 @@ export class Portrait extends Component {
 
   static {
     Portrait.defineField('type', {
-      label: '类型',
+      label: t('类型'),
       type: EditorTypes.SELECT,
       props: { options: portraitType.values() }
     })
@@ -458,14 +459,14 @@ export class Portrait extends Component {
     // 仅当类型为图片时
     Portrait.defineField('texture_texture', {
       modelKey: 'texture',
-      label: '图片路径',
+      label: t('图片路径'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE },
       showIf: showOnlyIn(portraitType.TEXTURE)
     })
     Portrait.defineField('texture_hoverTexture', {
       modelKey: 'hoverTexture',
-      label: '鼠标悬浮时图片',
+      label: t('鼠标悬浮时图片'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE },
       showIf: showOnlyIn(portraitType.TEXTURE)
@@ -473,26 +474,26 @@ export class Portrait extends Component {
     // 仅当类型为 ITEM 时
     Portrait.defineField('item_texture', {
       modelKey: 'texture',
-      label: '物品 ID',
+      label: t('物品 ID'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.ITEM },
       showIf: showOnlyIn(portraitType.ITEM)
     })
     Portrait.defineField('item_hoverTexture', {
       modelKey: 'hoverTexture',
-      label: '鼠标悬浮时物品',
+      label: t('鼠标悬浮时物品'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.ITEM },
       showIf: showOnlyIn(portraitType.ITEM)
     })
     Portrait.defineField('itemCount', {
-      label: '数量',
+      label: t('数量'),
       type: EditorTypes.NUMBER_INPUT,
       props: { min: 1, step: 1 },
       showIf: showOnlyIn(portraitType.ITEM)
     })
     Portrait.defineField('customItemData', {
-      label: '自定义物品模型数据',
+      label: t('自定义物品模型数据'),
       type: EditorTypes.NUMBER_INPUT,
       tips: EDITOR_NONE,
       props: { step: 1 },
@@ -501,32 +502,32 @@ export class Portrait extends Component {
     // 仅当类型为 PLAYER_HEAD 时
     Portrait.defineField('player_head_texture', {
       modelKey: 'texture',
-      label: '玩家 ID',
+      label: t('玩家 ID'),
       type: EditorTypes.INPUT,
       showIf: showOnlyIn(portraitType.PLAYER_HEAD)
     })
     Portrait.defineField('player_head_hoverTexture', {
       modelKey: 'hoverTexture',
-      label: '鼠标悬浮时玩家ID',
+      label: t('鼠标悬浮时玩家ID'),
       type: EditorTypes.INPUT,
       showIf: showOnlyIn(portraitType.PLAYER_HEAD)
     })
     Portrait.defineField('animation', {
-      label: '预设动画',
+      label: t('预设动画'),
       type: EditorTypes.AUTOCOMPLETE,
-      tips: '只能获取当前主题文件的预设动画补全，但是你可以使用其它主题文件的预设动画',
+      tips: t('只能获取当前主题文件的预设动画补全，但是你可以使用其它主题文件的预设动画'),
       props: { dataSource: autoCompleteDataSources.PRESET_ANIMATION }
     })
     Portrait.defineField('customAnimation', {
-      label: '自定义动画',
+      label: t('自定义动画'),
       type: EditorTypes.OBJECT_ARR,
-      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: '{time}帧' }
+      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: t('{time}帧') }
     })
-    Portrait.defineField('loop', { label: '循环播放', type: EditorTypes.SWITCH })
+    Portrait.defineField('loop', { label: t('循环播放'), type: EditorTypes.SWITCH })
     Portrait.defineField('attachment', {
-      label: '渲染附件',
+      label: t('渲染附件'),
       type: EditorTypes.OBJECT_ARR,
-      props: { itemConstructor: Attachment, itemLabel: '渲染附件' }
+      props: { itemConstructor: Attachment, itemLabel: t('渲染附件') }
     })
 
     //item要去除width和height
@@ -564,17 +565,17 @@ export class FunctionButton extends Portrait {
   static {
     FunctionButton.defineField('functionType', {
       modelKey: 'type',
-      label: '功能类型',
+      label: t('功能类型'),
       type: EditorTypes.SELECT,
       props: { options: functionalButtonType.values() }
     })
     FunctionButton.defineField('texture', {
-      label: '贴图',
+      label: t('贴图'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
     FunctionButton.defineField('hoverTexture', {
-      label: '鼠标悬浮时或功能激活时的贴图',
+      label: t('鼠标悬浮时或功能激活时的贴图'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
@@ -614,32 +615,32 @@ export class Option extends Portrait {
 
   static {
     Option.defineField('_text', {
-      label: '预览内容',
+      label: t('预览内容'),
       type: EditorTypes.STRING_ARR,
-      tips: '仅用于预览内容，不保存'
+      tips: t('仅用于预览内容，不保存')
     })
 
     Option.defineField('texture', {
-      label: '选项贴图',
+      label: t('选项贴图'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
     Option.defineField('textAlign', {
-      label: '文字对齐',
+      label: t('文字对齐'),
       type: EditorTypes.SELECT,
       props: { options: textAlign.values() }
     })
     Option.defineField('lockTexture', {
-      label: '锁定图标',
+      label: t('锁定图标'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
     Option.defineField('optionChatX', {
-      label: '文字 X 偏移',
+      label: t('文字 X 偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
     Option.defineField('optionChatY', {
-      label: '文字 Y 偏移',
+      label: t('文字 Y 偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
 
@@ -682,44 +683,44 @@ export class DialogBox extends Portrait {
 
   static {
     DialogBox.defineField('_name', {
-      label: '预览名字',
+      label: t('预览名字'),
       type: EditorTypes.INPUT,
-      tips: '仅用于预览名字位置，不保存'
+      tips: t('仅用于预览名字位置，不保存')
     })
     DialogBox.defineField('_text', {
-      label: '预览内容',
+      label: t('预览内容'),
       type: EditorTypes.INPUT,
-      tips: '仅用于预览内容位置和换行，不保存'
+      tips: t('仅用于预览内容位置和换行，不保存')
     })
 
     DialogBox.defineField('texture', {
-      label: '对话框贴图',
+      label: t('对话框贴图'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
     DialogBox.defineField('lineWidth', {
-      label: '换行宽度',
+      label: t('换行宽度'),
       type: EditorTypes.NUMBER_INPUT
     })
     DialogBox.defineField('textAlign', {
-      label: '文字对齐',
+      label: t('文字对齐'),
       type: EditorTypes.SELECT,
       props: { options: textAlign.values() }
     })
     DialogBox.defineField('nameX', {
-      label: '名字 X偏移',
+      label: t('名字 X偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
     DialogBox.defineField('nameY', {
-      label: '名字 Y偏移',
+      label: t('名字 Y偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
     DialogBox.defineField('textX', {
-      label: '内容 X偏移',
+      label: t('内容 X偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
     DialogBox.defineField('textY', {
-      label: '内容 Y偏移',
+      label: t('内容 Y偏移'),
       type: EditorTypes.NUMBER_INPUT
     })
 
@@ -751,9 +752,9 @@ export class AnimationSequence extends AutoClean {
 
   static {
     AnimationSequence.defineField('keyframes', {
-      label: '关键帧列表',
+      label: t('关键帧列表'),
       type: EditorTypes.OBJECT_ARR,
-      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: '{time}帧' }
+      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: t('{time}帧') }
     })
   }
 
@@ -789,11 +790,11 @@ export class ChatBoxTheme extends AutoClean {
 
   static {
     ChatBoxTheme.defineField('_bgColor', {
-      label: '背景颜色',
+      label: t('背景颜色'),
       type: EditorTypes.COLOR
     })
     ChatBoxTheme.defineField('customAnimation', {
-      label: '全局动画库',
+      label: t('全局动画库'),
       type: EditorTypes.MAP,
       props: { valueConstructor: AnimationSequence, displayTemplate: '{key}' }
     })

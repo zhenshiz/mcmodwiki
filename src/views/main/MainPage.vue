@@ -14,7 +14,7 @@ const router =useRouter()
       class="w-full grid grid-cols-1 sm:grid-cols-3 p-2 m-2">
       <div
         class="center flex-col gap-2 border-2 rounded border-dashed border-text-gray hover:border-text-blue m-5 pt-5 pb-5"
-        v-for="item in modList">
+        v-for="item in modList()">
         <Image :size="150" :src="item.icon" />
         <div class="title">{{ item.lang }}</div>
         <div> {{ t(item.description) }}</div>

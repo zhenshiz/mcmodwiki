@@ -79,7 +79,7 @@ const addStep = () => {
     content: [
       {
         type: 'admonitionTitle',
-        content: [{ type: 'text', text: `第 ${stepCount.value + 1} 步` }]
+        content: [{ type: 'text', text: t('第{}步', stepCount.value + 1) }]
       },
       { type: 'admonitionContent', content: [{ type: 'paragraph' }] }
     ]

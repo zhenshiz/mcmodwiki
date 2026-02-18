@@ -1,6 +1,7 @@
 <script setup>
 import BaseArrayInspector from './BaseArrayInspector.vue'
 import Input from '@/components/form/Input.vue'
+import { t } from '@/languages/index.js'
 
 defineProps({
   modelValue: Array,
@@ -20,7 +21,7 @@ const emit = defineEmits(['update:modelValue'])
       <Input
         :model-value="item"
         @update:modelValue="update"
-        placeholder="请输入文本..."
+        :placeholder="t('请输入文本...')"
         class="w-full text-xs"
       />
     </template>

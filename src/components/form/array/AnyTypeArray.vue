@@ -9,6 +9,7 @@ import NumberInput from '@/components/form/NumberInput.vue'
 import Switch from '@/components/form/Switch.vue'
 import AutoComplete from '@/components/form/Autocomplete.vue'
 import { EditorTypes } from '@/assets/generator/editorType.js'
+import { t } from '@/languages/index.js'
 
 const props = defineProps({
   modelValue: {
@@ -228,7 +229,7 @@ const renderObjectLabel = (item, index) => {
 
             <div v-else class="text-[10px] text-red-400 flex items-center gap-1">
               <Icon icon="lucide:alert-circle" width="12" />
-              <span>不支持的组件类型</span>
+              <span>{{ t('不支持的组件类型') }}</span>
             </div>
 
           </div>
@@ -240,7 +241,7 @@ const renderObjectLabel = (item, index) => {
       v-model:show="showModal"
       :model="editingItem"
       :clazz="objectConstructor"
-      :title="`编辑对象 #${editingIndex + 1}`"
+      :title="t('编辑对象 #{}',editingIndex + 1)"
       @confirm="onSaveObject"
     />
   </div>

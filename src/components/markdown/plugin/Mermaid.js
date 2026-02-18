@@ -39,7 +39,7 @@ export const Mermaid = Node.create({
 
   renderHTML({ node, HTMLAttributes }) {
     return [
-      'div', // 改用 div，彻底避开 pre 的全局样式
+      'div',
       mergeAttributes(HTMLAttributes, {
         class: 'mermaid-render-container',
         'data-type': 'mermaid'

@@ -1,23 +1,23 @@
-import { VoerkaI18nScope } from "@voerkai18n/runtime"
-import storage  from "./storage"
-import formatters from "@voerkai18n/formatters"
-import paragraphs from "./paragraphs"
-import idMap from "./messages/idMap.json"
-import { component } from "./component"
-import loader from "./loader"
-import { transform } from "./transform"
-import settings from "./settings.json"
-import defaultMessages from "./messages/zh-CN"  
+import { VoerkaI18nScope } from '@voerkai18n/runtime'
+import storage from './storage'
+import formatters from '@voerkai18n/formatters'
+import paragraphs from './paragraphs'
+import idMap from './messages/idMap.json'
+import { component } from './component'
+import loader from './loader'
+import { transform } from './transform'
+import settings from './settings.json'
+import defaultMessages from './messages/zh-CN'
+import enUSMessage from './messages/en-US.mjs'
 
- 
 
-const messages = { 
-    'zh-CN'    : defaultMessages,
-    'en-US'    : ()=>import("./messages/en-US.js"),
+const messages = {
+  'zh-CN': defaultMessages,
+  'en-US': enUSMessage
 }
 
 
-export const i18nScope = new VoerkaI18nScope({    
+export const i18nScope = new VoerkaI18nScope({
     id: "mcmod_wiki__0_0_0",                                  // 当前作用域的id
     idMap,                                              // 消息id映射列表
     formatters,                                         // 格式化器
@@ -28,7 +28,7 @@ export const i18nScope = new VoerkaI18nScope({
     loader,                                             // 语言包加载器
     transform,                                          // 翻译结果转换器
     ...settings
-}) 
+})
 
 
 export const t = i18nScope.t

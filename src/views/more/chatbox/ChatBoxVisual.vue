@@ -43,9 +43,9 @@ const startResize = (direction, e) => {
     if (direction === 'left') {
       leftWidth.value = Math.max(150, Math.min(500, startLeft + dx))
     } else if (direction === 'right') {
-      rightWidth.value = Math.max(200, Math.min(600, startRight - dx)) // 向左拖是减小 x，所以宽度增加
+      rightWidth.value = Math.max(200, Math.min(600, startRight - dx))
     } else if (direction === 'bottom') {
-      bottomHeight.value = Math.max(100, Math.min(600, startBottom - dy)) // 向上拖是减小 y，所以高度增加
+      bottomHeight.value = Math.max(100, Math.min(600, startBottom - dy))
     } else if (direction === 'hierarchy') {
       hierarchyHeight.value = Math.max(100, Math.min(800, startHierarchy + dy))
     }

@@ -1,12 +1,13 @@
-import { Node, mergeAttributes, createBlockMarkdownSpec } from '@tiptap/core'
+import { createBlockMarkdownSpec, mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import StepsComponent from '@/components/markdown/components/StepsComponent.vue'
+import { t } from '@/languages/index.js'
 
 // 1. 步骤条项 (单个步骤)
 export const StepItem = Node.create({
   name: 'stepItem',
   group: 'block',
-  content: 'admonitionTitle admonitionContent', // 复用你之前的标题和内容节点名，或者新建
+  content: 'admonitionTitle admonitionContent',
   isolating: true,
   defining: true,
   parseHTML() { return [{ tag: 'div[data-type="step-item"]' }] },
@@ -47,12 +48,12 @@ export const StepItem = Node.create({
 export const Steps = Node.create({
   name: 'steps',
   group: 'block',
-  content: 'stepItem+', // 至少包含一个步骤项
+  content: 'stepItem+',
   draggable: true,
 
   addAttributes() {
     return {
-      currentStep: { default: 0 } // 记录当前显示第几步
+      currentStep: { default: 0 }
     }
   },
 
@@ -74,11 +75,17 @@ export const Steps = Node.create({
             type: this.name,
             content: [
               { type: 'stepItem', content: [
-                  { type: 'admonitionTitle', content: [{ type: 'text', text: '第一步' }] },
-                  { type: 'admonitionContent', content: [{ type: 'paragraph', content: [{ type: 'text', text: '在这里输入内容' }] }] }
+                  { type: 'admonitionTitle', content: [{ type: 'text', text: t('第一步') }] },
+                  {
+                    type: 'admonitionContent',
+                    content: [{
+                      type: 'paragraph',
+                      content: [{ type: 'text', text: t('在这里输入内容') }]
+                    }]
+                  }
                 ]},
               { type: 'stepItem', content: [
-                  { type: 'admonitionTitle', content: [{ type: 'text', text: '第二步' }] },
+                  { type: 'admonitionTitle', content: [{ type: 'text', text: t('第二步') }] },
                   { type: 'admonitionContent', content: [{ type: 'paragraph' }] }
                 ]}
             ]

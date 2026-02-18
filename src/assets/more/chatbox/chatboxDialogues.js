@@ -7,6 +7,7 @@ import {
   renderEventTrigger
 } from '@/assets/more/chatbox/enumTypes.js'
 import { useChatBoxEditorStore } from '@/stores/index.js'
+import { t } from '@/languages/index.js'
 
 //对话框
 export class DialogueDialogBox extends AutoClean {
@@ -19,26 +20,26 @@ export class DialogueDialogBox extends AutoClean {
 
   static {
     DialogueDialogBox.defineField('name', {
-      label: '名称',
+      label: t('名称'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
     })
     DialogueDialogBox.defineField('text', {
-      label: '对话内容',
+      label: t('对话内容'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
     })
     DialogueDialogBox.defineField('renderEvents', {
-      label: '渲染事件',
+      label: t('渲染事件'),
       type: EditorTypes.OBJECT_ARR,
-      tips: '本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）',
+      tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
       props: {
         itemConstructor: BaseRenderEvent,
-        itemLabel: '渲染事件',
+        itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
-          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
+          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
           return `${tLabel.value} -> ${eLabel.value}`
         }
       }
@@ -56,11 +57,11 @@ export class Click extends AutoClean {
 
   static {
     Click.defineField('type', {
-      label: '点击事件类型',
+      label: t('点击事件类型'),
       type: EditorTypes.SELECT,
       props: { options: eventType.values() }
     })
-    Click.defineField('value', { label: '事件参数', type: EditorTypes.INPUT })
+    Click.defineField('value', { label: t('事件参数'), type: EditorTypes.INPUT })
   }
 }
 
@@ -79,24 +80,24 @@ export class DialogueOption extends AutoClean {
 
   static {
     DialogueOption.defineField('text', {
-      label: '选项内容',
+      label: t('选项内容'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
     })
-    DialogueOption.defineField('isLock', { label: '是否锁定', type: EditorTypes.SWITCH })
+    DialogueOption.defineField('isLock', { label: t('是否锁定'), type: EditorTypes.SWITCH })
     DialogueOption.defineField('unlockCommand', {
-      label: '解锁指令',
+      label: t('解锁指令'),
       type: EditorTypes.INPUT,
-      tips: '例如: execute if score @s ...'
+      tips: t('例如: execute if score @s ...')
     })
     DialogueOption.defineField('next', {
-      label: '跳转对话',
+      label: t('跳转对话'),
       type: EditorTypes.INPUT,
-      tips: '填数字为当前分组对应序号的对话，字符串是跳转到对应的分组，不填默认下一句话，this留在当前对话'
+      tips: t('填数字为当前分组对应序号的对话，字符串是跳转到对应的分组，不填默认下一句话，this留在当前对话')
     })
-    DialogueOption.defineField('tooltip', { label: '悬浮提示', type: EditorTypes.INPUT })
+    DialogueOption.defineField('tooltip', { label: t('悬浮提示'), type: EditorTypes.INPUT })
     DialogueOption.defineField('click', {
-      label: '点击事件',
+      label: t('点击事件'),
       type: EditorTypes.OBJECT,
       props: { clazz: Click }
     })
@@ -113,25 +114,25 @@ export class DialogueOptionList extends AutoClean{
 
   static {
     DialogueOptionList.defineField('options', {
-      label: '选项配置',
+      label: t('选项配置'),
       type: EditorTypes.OBJECT_ARR,
       props: {
-        itemLabel: '选项',
+        itemLabel: t('选项'),
         itemConstructor: DialogueOption,
         displayTemplate: (item)=> useChatBoxEditorStore().getTranslatableLabel(item.text)
       }
     })
     DialogueOptionList.defineField('renderEvents', {
-      label: '渲染事件',
+      label: t('渲染事件'),
       type: EditorTypes.OBJECT_ARR,
-      tips: '本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）',
+      tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
       props: {
         itemConstructor: BaseRenderEvent,
-        itemLabel: '渲染事件',
+        itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
-          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
+          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
           return `${tLabel.value} -> ${eLabel.value}`
         }
       }
@@ -162,13 +163,13 @@ export class DialogueVideo extends Component {
 
   static {
     DialogueVideo.defineField('path', {
-      label: '视频路径',
+      label: t('视频路径'),
       type: EditorTypes.INPUT,
-      tips: '相对于 .minecraft 文件夹或绝对路径'
+      tips: t('相对于 .minecraft 文件夹或绝对路径')
     })
-    DialogueVideo.defineField('canControl', { label: '允许控制', type: EditorTypes.SWITCH })
-    DialogueVideo.defineField('canSkip', { label: '允许跳过', type: EditorTypes.SWITCH })
-    DialogueVideo.defineField('loop', { label: '循环播放', type: EditorTypes.SWITCH })
+    DialogueVideo.defineField('canControl', { label: t('允许控制'), type: EditorTypes.SWITCH })
+    DialogueVideo.defineField('canSkip', { label: t('允许跳过'), type: EditorTypes.SWITCH })
+    DialogueVideo.defineField('loop', { label: t('循环播放'), type: EditorTypes.SWITCH })
   }
 }
 
@@ -206,15 +207,15 @@ export class DialogueReplacePortrait extends Portrait {
 
   static {
     DialogueReplacePortrait.defineField('id', {
-      label: '立绘 ID',
+      label: t('立绘 ID'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.PORTRAIT }
     })
 
     DialogueReplacePortrait.defineField('replace', {
-      label: '覆盖模式',
+      label: t('覆盖模式'),
       type: EditorTypes.SWITCH,
-      tips: '开启后，将替换掉场上同 ID 的旧立绘，而不是添加新立绘'
+      tips: t('开启后，将替换掉场上同 ID 的旧立绘，而不是添加新立绘')
     })
   }
 }
@@ -228,7 +229,7 @@ export class DialoguePortrait extends AutoClean {
 
   static {
     DialoguePortrait.defineField('portrait', {
-      label: '立绘列表',
+      label: t('立绘列表'),
       type: EditorTypes.ANY_ARR,
       props: {
         types: [{
@@ -241,15 +242,15 @@ export class DialoguePortrait extends AutoClean {
       }
     })
     DialoguePortrait.defineField('renderEvents', {
-      label: '渲染事件',
+      label: t('渲染事件'),
       type: EditorTypes.OBJECT_ARR,
       props: {
         itemConstructor: PortraitRenderEvent,
-        itemLabel: '渲染事件',
+        itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
-          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
+          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
           return `${tLabel.value} -> ${eLabel.value}`
         }
       }
@@ -281,34 +282,34 @@ export class DialogueFrame extends AutoClean {
 
   static {
     DialogueFrame.defineField('sound', {
-      label: '播放音效',
+      label: t('播放音效'),
       type: EditorTypes.INPUT
     })
-    DialogueFrame.defineField('command', { label: '执行指令', type: EditorTypes.INPUT })
+    DialogueFrame.defineField('command', { label: t('执行指令'), type: EditorTypes.INPUT })
     DialogueFrame.defineField('backgroundImage', {
-      label: '背景图片',
+      label: t('背景图片'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
 
     // === 立绘控制 ===
-    DialogueFrame.defineField('clearOldPortrait', { label: '清除旧立绘', type: EditorTypes.SWITCH })
+    DialogueFrame.defineField('clearOldPortrait', { label: t('清除旧立绘'), type: EditorTypes.SWITCH })
     DialogueFrame.defineField('removePortrait', {
-      label: '移除指定立绘',
+      label: t('移除指定立绘'),
       type: EditorTypes.STRING_ARR,
-      tips: '输入要移除的立绘 ID'
+      tips: t('输入要移除的立绘 ID')
     })
 
     DialogueFrame.defineField('renderEvents', {
-      label: '渲染事件',
+      label: t('渲染事件'),
       type: EditorTypes.OBJECT_ARR,
       props: {
         itemConstructor: BaseRenderEvent,
-        itemLabel: '渲染事件',
+        itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || '未选择时机'
-          const eLabel = eventType.getLabel(item.type) || item.type || '未选择类型'
+          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
+          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
           return `${tLabel.value} -> ${eLabel.value}`
         }
       }
@@ -338,39 +339,39 @@ export class ChatBoxDialogues extends AutoClean {
 
   static {
     ChatBoxDialogues.defineField('$introduce', {
-      label: '标识',
+      label: t('标识'),
       type: EditorTypes.INPUT,
-      tips: '纯装饰作用，仅提供建议填写'
+      tips: t('纯装饰作用，仅提供建议填写')
     })
-    ChatBoxDialogues.defineField('isEsc', { label: '允许 ESC 跳过', type: EditorTypes.SWITCH })
-    ChatBoxDialogues.defineField('isPause', { label: '对话时暂停游戏', type: EditorTypes.SWITCH })
+    ChatBoxDialogues.defineField('isEsc', { label: t('允许 ESC 跳过'), type: EditorTypes.SWITCH })
+    ChatBoxDialogues.defineField('isPause', { label: t('对话时暂停游戏'), type: EditorTypes.SWITCH })
     ChatBoxDialogues.defineField('isHistoricalSkip', {
-      label: '允许历史回溯',
+      label: t('允许历史回溯'),
       type: EditorTypes.SWITCH
     })
-    ChatBoxDialogues.defineField('isScreen', { label: '是否为屏幕主题', type: EditorTypes.SWITCH })
+    ChatBoxDialogues.defineField('isScreen', { label: t('是否为屏幕主题'), type: EditorTypes.SWITCH })
     ChatBoxDialogues.defineField('theme', {
-      label: '绑定的主题文件',
+      label: t('绑定的主题文件'),
       type: EditorTypes.INPUT,
-      tips: '进入对话时会自动设置为这个主题'
+      tips: t('进入对话时会自动设置为这个主题')
     })
     ChatBoxDialogues.defineField('animationFPS', {
-      label: '动画 FPS',
+      label: t('动画 FPS'),
       type: EditorTypes.NUMBER_INPUT
     })
     ChatBoxDialogues.defineField('autoPlayTick', {
-      label: '自动播放间隔 (Tick)',
+      label: t('自动播放间隔 (Tick)'),
       type: EditorTypes.NUMBER_INPUT
     })
     ChatBoxDialogues.defineField('maxTriggerCount', {
-      label: '最大触发次数',
+      label: t('最大触发次数'),
       type: EditorTypes.NUMBER_INPUT,
-      tips: '-1 为无限'
+      tips: t('-1 为无限')
     })
     ChatBoxDialogues.defineField('criteria', {
-      label: '进度触发条件',
+      label: t('进度触发条件'),
       type: EditorTypes.INPUT,
-      tips: 'JSON 格式的进度触发器'
+      tips: t('JSON 格式的进度触发器')
     })
   }
 }

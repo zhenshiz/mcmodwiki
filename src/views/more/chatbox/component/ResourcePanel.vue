@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useChatBoxEditorStore } from '@/stores'
+import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
 const searchQuery = ref('')
@@ -22,7 +23,7 @@ const handleImportClick = () => {
 }
 
 const copyPath = (path) => {
-  navigator.clipboard.writeText(path).then(() => console.log('已复制:', path))
+  navigator.clipboard.writeText(path)
 }
 </script>
 
@@ -30,7 +31,7 @@ const copyPath = (path) => {
   <div class="flex flex-col h-full bg-[#002033]">
     <div
       class="px-3 py-1 text-xs font-bold uppercase bg-[#001529] text-slate-400 border-b border-slate-700 flex justify-between items-center h-[32px] shrink-0">
-      <span>RESOURCES (ASSETS)</span>
+      <span>{{ t('资源包(ASSETS)') }}</span>
 
       <div class="flex items-center gap-2">
         <div class="relative flex items-center" v-if="store.textureMap.size > 0">
@@ -38,14 +39,13 @@ const copyPath = (path) => {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="搜索贴图..."
+            :placeholder="t('搜索贴图...')"
             class="bg-[#002941] border border-slate-600 rounded-full text-xs pl-6 pr-2 py-0.5 text-slate-200 w-32 focus:border-blue-500 focus:outline-none placeholder-slate-600"
           >
         </div>
 
         <button
           class="cursor-pointer hover:text-white flex items-center gap-1 transition-colors"
-          title="导入资源包文件夹 (assets)"
           @click="handleImportClick"
         >
           <Icon icon="lucide:image-plus" width="14" />
@@ -57,7 +57,7 @@ const copyPath = (path) => {
 
       <div v-if="store.isProcessingResources"
            class="absolute inset-0 flex items-center justify-center bg-[#002941]/80 z-20">
-        <span class="text-xs text-blue-400 animate-pulse">正在扫描资源...</span>
+        <span class="text-xs text-blue-400 animate-pulse">{{ t('正在扫描资源...') }}</span>
       </div>
 
       <div v-else-if="store.textureMap.size === 0"
@@ -65,8 +65,8 @@ const copyPath = (path) => {
         <div class="text-center">
           <div class="text-2xl mb-2 opacity-50">📦</div>
           <div class="text-xs">
-            点击右上角导入<br>
-            <code class="bg-slate-800 px-1 rounded text-slate-400">assets</code> 文件夹
+            {{ t('点击右上角导入') }}<br>
+            <code class="bg-slate-800 px-1 rounded text-slate-400">assets</code> {{ t('文件夹') }}
           </div>
         </div>
       </div>

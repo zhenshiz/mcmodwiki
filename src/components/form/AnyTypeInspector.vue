@@ -5,8 +5,8 @@ import Input from './Input.vue'
 import NumberInput from './NumberInput.vue'
 import Switch from './Switch.vue'
 import Inspector from './Inspector.vue'
-import AutoComplete from './Autocomplete.vue' // 1. 引入 AutoComplete
-import { EditorTypes } from '@/assets/generator/editorType.js' // 2. 引入类型常量
+import AutoComplete from './Autocomplete.vue'
+import { EditorTypes } from '@/assets/generator/editorType.js'
 
 const props = defineProps({
   modelValue: {
@@ -50,7 +50,7 @@ const STANDARD_TYPES = {
     value: 'string',
     icon: 'lucide:type',
     defaultValue: '',
-    editorType: EditorTypes.INPUT // 默认为普通 Input
+    editorType: EditorTypes.INPUT
   },
   number: {
     label: 'Number',
@@ -94,26 +94,20 @@ watch(() => props.modelValue, (val) => {
   currentType.value = detectType(val)
 }, { immediate: true })
 
-// 计算完整的选项列表 (合并默认配置与用户配置)
 const typeOptions = computed(() => {
   return props.types.map(t => {
-    // 处理简写: 'string'
     if (typeof t === 'string') {
       return STANDARD_TYPES[t] || { label: t, value: t, icon: 'lucide:help-circle' }
     }
-    // 处理对象: { value: 'string', editorType: 'autocomplete' ... }
     const standard = STANDARD_TYPES[t.value] || {}
     return {
-      ...standard, // 默认值
-      ...t,        // 用户覆盖 (editorType, props, label 等)
-      // 确保 props 存在
+      ...standard,
+      ...t,
       props: { ...(standard.props || {}), ...(t.props || {}) }
     }
   })
 })
 
-// 获取当前激活的配置项 (核心)
-// 用于在 template 中判断到底用哪个组件渲染
 const activeOption = computed(() => {
   return typeOptions.value.find(opt => opt.value === currentType.value) || STANDARD_TYPES.string
 })
@@ -210,12 +204,12 @@ const handleTypeSwitch = (typeOpt) => {
           v-bind="activeOption.props"
         />
         <div v-else class="text-xs text-red-400">
-          数据结构错误: 预期 Object，实际 {{ typeof modelValue }}
+          {{ t('数据结构错误: 预期 Object，实际{}', typeof modelValue) }}
         </div>
       </div>
 
       <div v-else class="text-xs text-gray-500 italic">
-        暂不支持编辑类型: {{ currentType }}
+        {{ t('暂不支持编辑类型: {}', currentType) }}
       </div>
 
     </div>

@@ -6,6 +6,7 @@ import { t } from '@/languages'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import draggable from 'vuedraggable'
 import { useDialog } from '@/components/register/useDialog.js'
+import { useMessage } from '@/components/register/useMessage.js'
 
 const props = defineProps({
   modelValue: {
@@ -91,7 +92,7 @@ const handleAdd = () => {
     onPositiveClick: (newKey) => {
       if (!newKey) return
       if (Object.prototype.hasOwnProperty.call(props.modelValue, newKey)) {
-        alert(t('该 ID 已存在，请使用其他 ID'))
+        useMessage().error(t('该 ID 已存在，请使用其他 ID'))
         return
       }
       const newVal = new props.valueConstructor()
@@ -104,7 +105,7 @@ const handleAdd = () => {
 const handleRemove = (key) => {
   dialog.warning({
     title: t('删除'),
-    content: t(`确定要删除 ${key} 吗？`),
+    content: t('确定要删除 {} 吗？',key),
     onPositiveClick: () => {
       const newMap = { ...props.modelValue }
       delete newMap[key]
@@ -130,7 +131,7 @@ const handleRename = (oldKey) => {
     onPositiveClick: (newKey) => {
       if (!newKey || newKey === oldKey) return
       if (props.modelValue[newKey]) {
-        alert(t('ID 已存在'))
+        useMessage().error(t('ID 已存在'))
         return
       }
       updateMapStable(oldKey, newKey, props.modelValue[oldKey])

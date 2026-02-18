@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
 
@@ -100,7 +100,6 @@ const handleSelect = (option) => {
             flex items-center gap-2 px-2 py-2 rounded cursor-pointer transition-colors text-sm
             hover:bg-blue-50 dark:hover:bg-slate-700
           " :class="{
-            /* 🔥 这里也使用匹配函数来决定高亮样式 */
             'text-blue-500 font-medium bg-blue-50 dark:bg-slate-800': isValueMatch(modelValue, item.value),
             'text-gray-700 dark:text-gray-200': !isValueMatch(modelValue, item.value)
         }" @click="handleSelect(item)">
@@ -114,7 +113,7 @@ const handleSelect = (option) => {
                 </div>
             </template>
 
-            <div v-else class="text-center text-gray-400 py-3 text-sm">暂无数据</div>
+          <div v-else class="text-center text-gray-400 py-3 text-sm">{{ t('暂无数据') }}</div>
         </div>
     </Popover>
 </template>

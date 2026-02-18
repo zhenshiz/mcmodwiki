@@ -1,9 +1,10 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { ref, onMounted, computed, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import mermaid from 'mermaid'
 import { usePageStore } from '@/stores/index.js'
-import { Translate } from '@/languages'
+import { t, Translate } from '@/languages'
+import { useDialog } from '@/components/register/useDialog.js'
 
 const props = defineProps(nodeViewProps)
 const localCode = ref(props.node.attrs.code)
@@ -56,9 +57,13 @@ const handleUpdate = () => {
 
 const confirmPermanentHide = () => {
   if (!props.editor.isEditable) return
-  if (window.confirm('永久关闭后，该图表的源码编辑区将不再显示，确定吗？')) {
-    props.updateAttributes({ hideCode: true })
-  }
+  useDialog().warning({
+    title: t('警告'),
+    content: t('永久关闭后，该图表的源码编辑区将不再显示，确定吗？'),
+    onPositiveClick: () => {
+      props.updateAttributes({ hideCode: true })
+    }
+  })
 }
 
 onMounted(renderChart)
@@ -102,11 +107,12 @@ onMounted(renderChart)
           >
             <path d="m9 18 6-6-6-6" />
           </svg>
-          <translate
+          <div
             class="text-[10px] uppercase tracking-wider font-bold transition-colors"
             :class="isDark ? 'text-slate-400 group-hover:text-blue-400' : 'text-blue-400 group-hover:text-blue-600'"
-            message="Mermaid 源码"
-          />
+          >
+            {{ t('Mermaid 源码')}}
+          </div>
         </div>
 
         <button

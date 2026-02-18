@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import BaseArrayInspector from './BaseArrayInspector.vue'
 import ObjectDialog from '../ObjectDialog.vue'
+import { t } from '@/languages/index.js'
 
 const props = defineProps({
   modelValue: {
@@ -56,7 +57,7 @@ const onSave = (newItem) => {
 
 const renderLabel = (item, index) => {
   if (!item) return 'Null Item'
-  
+
   if (typeof props.displayTemplate === 'function') {
     return props.displayTemplate(item, index)
   }
@@ -105,7 +106,7 @@ const renderLabel = (item, index) => {
       v-model:show="showModal"
       :model="editingItem"
       :clazz="itemConstructor"
-      :title="`编辑 ${itemLabel}`"
+      :title="t('编辑 {}',itemLabel)"
       @confirm="onSave"
     />
   </div>
