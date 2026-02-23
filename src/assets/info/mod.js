@@ -73,7 +73,7 @@ export const modList = () => {
           href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptshop'
         }
       ],
-      moreUtil: [],
+      moreUtil: ()=>[],
       modVersion: '1.0.6'
     }
   ]
