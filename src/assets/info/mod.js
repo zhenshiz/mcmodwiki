@@ -2,6 +2,8 @@ import ChatBox from '@/assets/textures/mod/cahtbox.png'
 import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
 import { t } from '@/languages/index.js'
 
+const EMPTY_MORE_UTIL = () => []
+
 const availableHere = {
   CURSE_FORGE: {
     name: 'CurseForge',
@@ -53,7 +55,7 @@ export const modList = () => {
         }
       ],
       moreUtil: () => [moreUtilList()[0]],
-      modVersion: '1.1'
+      modVersion: '1.1.1'
     },
     {
       lang: 'ViScriptShop',
@@ -73,7 +75,7 @@ export const modList = () => {
           href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptshop'
         }
       ],
-      moreUtil: ()=>[],
+      moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.0.6'
     }
   ]
