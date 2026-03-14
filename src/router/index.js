@@ -15,6 +15,10 @@ const routes = [
     component: () => import('@/views/more/chatbox/ChatBoxVisual.vue')
   },
   {
+    path: '/particlex/editor',
+    component: () => import('@/views/more/particlex/ParticleEditor.vue')
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 404,
     component: () => import('@/views/error/NotFound.vue')

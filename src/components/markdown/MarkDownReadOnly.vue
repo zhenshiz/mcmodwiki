@@ -3,7 +3,6 @@ import { defineExpose, onBeforeUnmount, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import { TableKit } from '@tiptap/extension-table'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import TaskList from '@tiptap/extension-task-list'
@@ -31,6 +30,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table-of-contents'
 import { TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
+import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
 
 const props = defineProps({
   content: { type: String, default: '' }
@@ -60,7 +60,7 @@ const editor = useEditor({
     CodeBlockLowlight.configure({ lowlight }),
     BetterLink,
     Image.configure({ allowBase64: true }),
-    TableKit,
+    CustomTable,
     Superscript,
     Subscript,
     TaskList,

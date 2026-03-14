@@ -22,7 +22,8 @@ export const alignYList = formatUtil.createEnum({
 export const portraitType = formatUtil.createEnum({
   TEXTURE: t('图片'),
   PLAYER_HEAD: t('玩家头像'),
-  ITEM: t('物品')
+  ITEM: t('物品'),
+  ENTITY: t('实体')
 })
 
 export const attachmentType = formatUtil.createEnum({
@@ -34,6 +35,11 @@ export const functionalButtonType = formatUtil.createEnum({
   LOG: t('历史记录'),
   FASTFORWARD: t('快进'),
   AUTOPLAY: t('自动播放')
+})
+
+export const stareAtType = formatUtil.createEnum({
+  MOUSE: t('看向鼠标（仅screen模式可用）'),
+  POINT: t('看向固定位置')
 })
 
 export const DEFAULT_BTN_TEXTURES = {
@@ -118,7 +124,9 @@ export const autoCompleteDataSources = formatUtil.createEnum({
   ATTRIBUTE: 'ATTRIBUTE',
   PRESET_ANIMATION: 'PRESET_ANIMATION',
   TRANSLATABLE_KEYS: 'TRANSLATABLE_KEYS',
-  PORTRAIT: 'PORTRAIT'
+  PORTRAIT: 'PORTRAIT',
+  ENTITY: 'ENTITY',
+  LIVING_ENTITY: 'LIVING_ENTITY'
 })
 
 export const builtinAnimations = [

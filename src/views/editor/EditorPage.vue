@@ -38,6 +38,56 @@ const handleInputCodeMarkdown = (event) => {
   saveMarkdown(target.value)
 }
 
+const openMarkdownFilePicker = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.md,.markdown,text/markdown,text/plain'
+  input.onchange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 10 * 1024 * 1024) {
+      message.warning(t('文件过大（>10MB），可能会导致页面卡顿'))
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const content = String(reader.result || '')
+
+      const filename = file.name
+        .replace(/\.markdown$/i, '')
+        .replace(/\.md$/i, '')
+
+      editTopicStore.setTopicInfo({
+        filename,
+        content,
+        mode: 'preview'
+      })
+
+      lastScrollTop.value = 0
+      message.success(t('已导入Markdown文件'))
+    }
+    reader.onerror = () => {
+      message.error(t('读取文件失败'))
+    }
+    reader.readAsText(file)
+  }
+  input.click()
+}
+
+const importMd = () => {
+  if (form.value.content && String(form.value.content).trim().length > 0) {
+    dialog.warning({
+      title: t('导入Markdown文件'),
+      content: t('导入会覆盖当前编辑器内容，是否继续？'),
+      onPositiveClick: () => openMarkdownFilePicker()
+    })
+    return
+  }
+
+  openMarkdownFilePicker()
+}
+
 // 下载 MD 逻辑保持不变
 const downloadMd = async () => {
   dialog.warning({
@@ -137,6 +187,10 @@ watch(
             <Button class="w-48 h-10 text-lg mr-2 center" @click="downloadMd" :color="isDark ? '#66cffc' : '#0071d5'"
               :background="isDark ? '#000' : '#fff'" is-toggle-color>
               {{ t('生成Markdown文件') }}
+            </Button>
+            <Button class="w-48 h-10 text-lg mr-2 center" @click="importMd" :color="isDark ? '#66cffc' : '#0071d5'"
+              :background="isDark ? '#000' : '#fff'" is-toggle-color>
+              {{ t('导入Markdown文件') }}
             </Button>
           </div>
         </div>

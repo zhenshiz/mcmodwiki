@@ -28,7 +28,7 @@ const isFullscreen = ref(false)
 
 const url = ref({ href: '', text: '' })
 const picUrl = ref('')
-const tableModal = ref({ row: 0, col: 0 })
+const tableModal = ref({ row: 2, col: 2 })
 const video = ref({
   type: 'BiliBili',
   url: '',
@@ -89,6 +89,7 @@ const insertTable = () => {
   props.editor.chain().focus()
     .insertTable({ rows: tableModal.value.row, cols: tableModal.value.col, withHeaderRow: true })
     .run()
+  tableModal.value = { row: 2, col: 2 }
 }
 
 const insertVideo = () => {

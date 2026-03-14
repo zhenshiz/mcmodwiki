@@ -28,10 +28,16 @@ export const modLoader = [
 ]
 
 export const moreUtilList = () => {
-  return [{
-    lang: t('JSON生成器'),
-    router: '/chatbox/visual'
-  }]
+  return [
+    {
+      lang: t('ChatBox编辑器'),
+      router: '/chatbox/visual'
+    },
+    {
+      lang: t('粒子编辑器'),
+      router: '/particlex/editor'
+    }
+  ]
 }
 
 export const modList = () => {
@@ -76,7 +82,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.8'
+      modVersion: '1.0.9'
     }
   ]
 }

@@ -398,10 +398,12 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
 
           <div class="w-full h-full flex items-center justify-center overflow-hidden relative"
                :class="{
-                            'border border-purple-500/30 text-purple-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE),
-                            'border border-blue-500/30 text-blue-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD),
-                            'border border-yellow-500/30 text-yellow-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM)
-                        }">
+                    'border border-purple-500/30 text-purple-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE),
+                    'border border-blue-500/30 text-blue-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD),
+                    'border border-yellow-500/30 text-yellow-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM),
+                    'border border-green-500/30 text-green-300 bg-green-500/10': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ENTITY)
+                }">
+
             <template
               v-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE) || !portrait.type">
               <img v-if="store.getTextureUrl(portrait.texture)"
@@ -421,11 +423,19 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
                    :src="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', '')).icon"
                    class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false" />
               <div v-else class="flex flex-col items-center justify-center p-1 text-center w-full h-full">
-                                <span class="text-[10px] font-mono leading-tight break-all">{{ portrait.texture ||
-                                'Item'
-                                  }}</span>
+                <span
+                  class="text-[10px] font-mono leading-tight break-all">{{ portrait.texture || 'Item'
+                  }}</span>
               </div>
             </template>
+
+            <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.ENTITY)">
+              <div
+                class="flex flex-col items-center justify-center p-1 text-center w-full h-full select-none pointer-events-none">
+                {{ t('需在游戏内测试大小，此处立绘大小为固定值仅供参考') }}
+              </div>
+            </template>
+
           </div>
         </InteractItem>
 

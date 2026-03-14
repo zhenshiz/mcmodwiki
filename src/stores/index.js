@@ -9,3 +9,4 @@ export default pinia
 export * from './modules/page.js'
 export * from './modules/editTopic.js'
 export * from './modules/chatboxEditor.js'
+export * from './modules/particleEditor.js'

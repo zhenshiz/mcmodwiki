@@ -161,6 +161,9 @@ dependencies:
   tailwind-scrollbar:
     specifier: 3.1.0
     version: 3.1.0(tailwindcss@3.4.19)
+  three:
+    specifier: ^0.183.2
+    version: 0.183.2
   unplugin-auto-import:
     specifier: ^0.18.5
     version: 0.18.6(@vueuse/core@14.1.0)
@@ -7777,6 +7780,10 @@ packages:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
     dependencies:
       any-promise: 1.3.0
+
+  /three@0.183.2:
+    resolution: {integrity: sha512-di3BsL2FEQ1PA7Hcvn4fyJOlxRRgFYBpMTcyOgkwJIaDOdJMebEFPA+t98EvjuljDx4hNulAGwF6KIjtwI5jgQ==}
+    dev: false
 
   /tinybounce@1.2.0:
     resolution: {integrity: sha512-PmBqt4B0DnZrHbs24WE0XthPO1bZYKSeMj6KOG00GIk7R6tlsAkq/wCaxMU9eYPPAmp6+HMzOtiQOj2qKIf8kg==}

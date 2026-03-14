@@ -25,6 +25,7 @@ import { enchantmentSuggestions } from '@/assets/textures/enchantment'
 import { attributeSuggestions } from '@/assets/textures/attribute'
 import Inspector from '@/components/form/Inspector.vue'
 import ObjectDialog from '@/components/form/ObjectDialog.vue'
+import { entitySuggestions, livingEntitySuggestions } from '@/assets/textures/entity.js'
 
 const props = defineProps({
   model: { type: Object, default: null },
@@ -87,7 +88,9 @@ const dataSourceMap = computed(() => ({
   [autoCompleteDataSources.ATTRIBUTE]: attributeSuggestions,
   [autoCompleteDataSources.PRESET_ANIMATION]: allAnimationOptions.value,
   [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions,
-  [autoCompleteDataSources.PORTRAIT]: allPortraitsOptions.value
+  [autoCompleteDataSources.PORTRAIT]: allPortraitsOptions.value,
+  [autoCompleteDataSources.ENTITY]: entitySuggestions,
+  [autoCompleteDataSources.LIVING_ENTITY]: livingEntitySuggestions
 }))
 
 const getDynamicOptions = (field) => {

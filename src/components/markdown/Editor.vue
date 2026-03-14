@@ -1,12 +1,9 @@
 <script setup>
+import { ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 //插件
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import { TableKit } from '@tiptap/extension-table'
-import TableRow from '@tiptap/extension-table-row'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import TaskList from '@tiptap/extension-task-list'
@@ -38,6 +35,7 @@ import { html as beautifyHtml } from 'js-beautify'
 import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table-of-contents'
 import { TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
+import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
 
 // 存储提取的标题
 const headings = ref([])
@@ -52,6 +50,8 @@ const props = defineProps({
 const emit = defineEmits(['update:valueMarkdown', 'update:mode'])
 const lowlight = createLowlight(common)
 mermaid.initialize({ startOnLoad: false })
+
+const lastEmittedHtml = ref(null)
 
 const editor = useEditor({
   content: props.valueMarkdown,
@@ -69,10 +69,7 @@ const editor = useEditor({
     Image.configure({
       allowBase64: true
     }),
-    TableKit,
-    TableRow,
-    TableHeader,
-    TableCell,
+    CustomTable,
     Superscript,
     Subscript,
     TaskList,
@@ -115,6 +112,7 @@ const editor = useEditor({
       preserve_newlines: true,
       unformatted: ['code', 'pre', 'em', 'strong', 'span']
     })
+    lastEmittedHtml.value = formattedHtml
     emit('update:valueMarkdown', formattedHtml)
   },
   editorProps: {
@@ -145,6 +143,21 @@ const editor = useEditor({
     },
   }
 })
+
+watch(
+  () => props.valueMarkdown,
+  (next) => {
+    if (!editor.value) return
+
+    const html = next ?? ''
+
+    // 避免把本编辑器 onUpdate 发出的内容再 set 回来，导致光标跳动/频繁重渲染
+    if (lastEmittedHtml.value === html) return
+    if (editor.value.getHTML() === html) return
+
+    editor.value.commands.setContent(html, false)
+  }
+)
 
 const shouldShowMenu = ({ editor, state }) => {
   const { selection } = state

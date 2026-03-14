@@ -18,6 +18,8 @@ const store = useChatBoxEditorStore()
 const prompt = usePrompt()
 const message = useMessage()
 
+const chatBoxVersion = '1.1.1'
+
 // === 状态定义 ===
 const translatableVisible = ref(false)
 const translatableSearch = ref('')
@@ -174,7 +176,7 @@ const handleSave = async () => {
           <div class="text-xs text-slate-500 mb-2">{{ t('关于 ChatBox Editor') }}</div>
           <div class="text-[10px] text-slate-400">
             {{ t('这是一个用于 Minecraft ChatBox Mod 的可视化配置编辑器。') }}
-            <br>{{ t('编辑器对应模组版本v1.1') }}
+            <br>{{ t('编辑器对应模组版本v{}', chatBoxVersion) }}
           </div>
         </div>
       </Dropdown>
@@ -182,10 +184,6 @@ const handleSave = async () => {
     </div>
 
     <div class="flex-1"></div>
-
-    <div v-if="store.currentFile" class="text-slate-500 text-[10px] mr-2">
-      {{ t('正在编辑:', store.currentFile.name) }}
-    </div>
 
     <Modal v-model:show="translatableVisible" :title="t('翻译键')" width="60%">
       <div class="flex flex-col gap-3 p-3 w-full text-slate-700 dark:text-slate-200">

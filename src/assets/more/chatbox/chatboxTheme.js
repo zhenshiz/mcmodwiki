@@ -10,6 +10,7 @@ import {
   functionalButtonType,
   portraitType,
   renderEventTrigger,
+  stareAtType,
   textAlign
 } from '@/assets/more/chatbox/enumTypes.js'
 import { formatUtil } from '@/utils/formatUtil'
@@ -350,10 +351,15 @@ export class Component extends AutoClean {
   }
 
   getStyle(screenW, screenH) {
-    const rawX = (this.x / 100) * screenW
-    const rawY = (this.y / 100) * screenH
-    const rawW = (this.width / 100) * screenW
-    const rawH = (this.height / 100) * screenH
+    let rawX = (this.x / 100) * screenW
+    let rawY = (this.y / 100) * screenH
+    let rawW = (this.width / 100) * screenW
+    let rawH = (this.height / 100) * screenH
+
+    if (formatUtil.equalsIgnoreCase(this.type, portraitType.ENTITY)) {
+      rawW = 300
+      rawH = 600
+    }
 
     let finalX = rawX
     if (formatUtil.equalsIgnoreCase(this.alignX, 'CENTER')) {
@@ -446,6 +452,12 @@ export class Portrait extends Component {
     // Java: public Attachment[] attachment;
     this.attachment = []
 
+    //实体渲染相关参数
+    this.yOffset = 0
+    this.stareAt = ''
+    this.stareAtX = 0
+    this.stareAtY = 0
+
     this._hidden = true
   }
 
@@ -454,6 +466,13 @@ export class Portrait extends Component {
       label: t('类型'),
       type: EditorTypes.SELECT,
       props: { options: portraitType.values() }
+    })
+    //item要去除width和height
+    Portrait.defineOverride('width', {
+      showIf: hideIn(portraitType.ITEM, portraitType.ENTITY)
+    })
+    Portrait.defineOverride('height', {
+      showIf: hideIn(portraitType.ITEM, portraitType.ENTITY)
     })
 
     // 仅当类型为图片时
@@ -471,7 +490,7 @@ export class Portrait extends Component {
       props: { dataSource: autoCompleteDataSources.TEXTURE },
       showIf: showOnlyIn(portraitType.TEXTURE)
     })
-    // 仅当类型为 ITEM 时
+    // 仅当类型为物品时
     Portrait.defineField('item_texture', {
       modelKey: 'texture',
       label: t('物品 ID'),
@@ -499,7 +518,7 @@ export class Portrait extends Component {
       props: { step: 1 },
       showIf: showOnlyIn(portraitType.ITEM)
     })
-    // 仅当类型为 PLAYER_HEAD 时
+    // 仅当类型为玩家头像时
     Portrait.defineField('player_head_texture', {
       modelKey: 'texture',
       label: t('玩家 ID'),
@@ -512,36 +531,81 @@ export class Portrait extends Component {
       type: EditorTypes.INPUT,
       showIf: showOnlyIn(portraitType.PLAYER_HEAD)
     })
+    // 仅当类型为实体时
+    Portrait.defineField('entity_texture', {
+      modelKey: 'texture',
+      label: t('渲染的实体'),
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.LIVING_ENTITY },
+      showIf: showOnlyIn(portraitType.ENTITY)
+    })
+    Portrait.defineOverride('entity_width', {
+      modelKey: 'width',
+      label: t('宽度（px）'),
+      tips: t('不填会正常展示实体渲染的大小，这里填了会限制渲染的区域'),
+      type: EditorTypes.NUMBER_INPUT,
+      showIf: showOnlyIn(portraitType.ENTITY)
+    })
+    Portrait.defineOverride('entity_height', {
+      modelKey: 'height',
+      label: t('高度（px）'),
+      tips: t('不填会正常展示实体渲染的大小，这里填了会限制渲染的区域'),
+      type: EditorTypes.NUMBER_INPUT,
+      showIf: showOnlyIn(portraitType.ENTITY)
+    })
+    Portrait.defineField('yOffset', {
+      label: t('垂直偏移量'),
+      type: EditorTypes.NUMBER_INPUT,
+      tips: t('你只想渲染玩家的上半身，可以把这个值设置成合适的正数（向下移）'),
+      showIf: showOnlyIn(portraitType.ENTITY)
+    })
+    Portrait.defineField('stareAt', {
+      label: t('实体看向窗口的位置选项'),
+      type: EditorTypes.SELECT,
+      props: { options: stareAtType.values() },
+      showIf: showOnlyIn(portraitType.ENTITY)
+    })
+    Portrait.defineField('stareAtX', {
+      label: t('实体看向窗口的X位置（%）'),
+      type: EditorTypes.NUMBER_INPUT,
+      showIf: model => formatUtil.equalsIgnoreCase(model.type, portraitType.ENTITY) && formatUtil.equalsIgnoreCase(model.stareAt, stareAtType.POINT)
+    })
+    Portrait.defineField('stareAtY', {
+      label: t('实体看向窗口的Y位置（%）'),
+      type: EditorTypes.NUMBER_INPUT,
+      showIf: model => formatUtil.equalsIgnoreCase(model.type, portraitType.ENTITY) && formatUtil.equalsIgnoreCase(model.stareAt, stareAtType.POINT)
+    })
+
     Portrait.defineField('animation', {
       label: t('预设动画'),
       type: EditorTypes.AUTOCOMPLETE,
       tips: t('只能获取当前主题文件的预设动画补全，但是你可以使用其它主题文件的预设动画'),
-      props: { dataSource: autoCompleteDataSources.PRESET_ANIMATION }
+      props: { dataSource: autoCompleteDataSources.PRESET_ANIMATION },
+      showIf: hideIn(portraitType.ENTITY)
     })
     Portrait.defineField('customAnimation', {
       label: t('自定义动画'),
       type: EditorTypes.OBJECT_ARR,
-      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: t('{time}帧') }
+      props: { itemConstructor: Keyframe, itemLabel: 'Keyframe', displayTemplate: t('{time}帧') },
+      showIf: hideIn(portraitType.ENTITY)
     })
-    Portrait.defineField('loop', { label: t('循环播放'), type: EditorTypes.SWITCH })
+    Portrait.defineField('loop', {
+      label: t('循环播放'),
+      type: EditorTypes.SWITCH,
+      showIf: hideIn(portraitType.ENTITY)
+    })
     Portrait.defineField('attachment', {
       label: t('渲染附件'),
       type: EditorTypes.OBJECT_ARR,
-      props: { itemConstructor: Attachment, itemLabel: t('渲染附件') }
-    })
-
-    //item要去除width和height
-    Portrait.defineOverride('width', {
-      showIf: hideIn(portraitType.ITEM)
-    })
-    Portrait.defineOverride('height', {
-      showIf: hideIn(portraitType.ITEM)
+      props: { itemConstructor: Attachment, itemLabel: t('渲染附件') },
+      showIf: hideIn(portraitType.ENTITY)
     })
     // 覆盖渲染事件使用更加丰富的那版
     Portrait.defineOverride('renderEvents', {
       props: {
         itemConstructor: PortraitRenderEvent
-      }
+      },
+      showIf: hideIn(portraitType.ENTITY)
     })
   }
 }
