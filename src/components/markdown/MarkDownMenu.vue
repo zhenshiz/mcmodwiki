@@ -204,7 +204,7 @@ const commandList = computed(() => [
     icon: 'material-symbols:schema-outline',
     lang: t('图表'),
     click: () => props.editor.chain().focus().setMermaid({
-      code: t('graph TD\n  A[开始] --> B{判断}\n  B -- 是 --> C[执行]\n  B -- 否 --> D[结束]'),
+      code: t("graph TD\n  A[开始] --> B{判断}\n  B -- 是 --> C[执行]\n  B -- 否 --> D[结束]"),
       hideCode: false
     }).run()
   }
