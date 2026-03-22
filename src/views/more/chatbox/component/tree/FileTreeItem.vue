@@ -8,7 +8,7 @@ const props = defineProps({
   selectedPath: { type: String, default: '' }
 })
 
-const emit = defineEmits(['toggle', 'select'])
+const emit = defineEmits(['toggle', 'select', 'select-any'])
 
 // 缩进计算
 const indentStyle = computed(() => ({
@@ -34,6 +34,7 @@ const iconColor = computed(() => {
 })
 
 const handleClick = () => {
+  emit('select-any', props.node)
   if (props.node.isFolder) {
     emit('toggle', props.node)
   } else {
@@ -46,7 +47,7 @@ const handleClick = () => {
   <div>
     <div
       class="flex items-center py-1 cursor-pointer select-none hover:bg-[#2a2d2e] transition-colors text-sm border-l-2 border-transparent"
-      :class="{ 'bg-[#37373d] border-blue-500': !node.isFolder && selectedPath === node.path }"
+      :class="{ 'bg-[#37373d] border-blue-500': selectedPath === node.path }"
       :style="indentStyle"
       @click="handleClick"
     >
@@ -60,7 +61,8 @@ const handleClick = () => {
 
       <Icon :icon="iconName" class="w-4 h-4 mr-2 shrink-0" :class="iconColor" />
 
-      <span class="truncate text-gray-300" :class="{ 'text-white font-medium': selectedPath === node.path }">
+      <span class="truncate text-gray-300" :title="node.path"
+            :class="{ 'text-white font-medium': selectedPath === node.path }">
         {{ node.name }}
       </span>
     </div>
@@ -74,6 +76,7 @@ const handleClick = () => {
         :selected-path="selectedPath"
         @toggle="emit('toggle', $event)"
         @select="emit('select', $event)"
+        @select-any="emit('select-any', $event)"
       />
     </div>
   </div>

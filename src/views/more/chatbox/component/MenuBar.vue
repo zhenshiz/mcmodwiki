@@ -13,12 +13,14 @@ import Input from '@/components/form/Input.vue'
 import { useMessage } from '@/components/register/useMessage.js'
 import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import { t } from '@/languages/index.js'
+import { shortcutUtil } from '@/utils/shortcutUtil.js'
 
 const store = useChatBoxEditorStore()
 const prompt = usePrompt()
 const message = useMessage()
 
 const chatBoxVersion = '1.1.1'
+const saveShortcutLabel = `${shortcutUtil.getPrimaryModifierKeyLabel()}+S`
 
 // === 状态定义 ===
 const translatableVisible = ref(false)
@@ -149,7 +151,7 @@ const handleSave = async () => {
               <Icon icon="lucide:save" width="14" />
               <span>{{ t('保存') }}</span>
             </div>
-            <span class="shortcut">Ctrl+S</span>
+            <span class="shortcut">{{ saveShortcutLabel }}</span>
           </button>
         </div>
       </Dropdown>

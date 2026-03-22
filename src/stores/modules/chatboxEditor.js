@@ -24,6 +24,7 @@ export const useChatBoxEditorStore = defineStore(
     // === 状态 (State) ===
     const fileTree = ref([])
     const currentFile = ref(null)
+    const selectedTreeNode = ref(null)
     const viewMode = ref('empty')
     const currentModel = ref(null)
     const currentDialogue = ref('')
@@ -54,6 +55,15 @@ export const useChatBoxEditorStore = defineStore(
       const { animations, portraits } = await fs.scanProjectIndex(rootHandle.value)
       globalAnimations.value = animations
       globalPortraits.value = portraits
+    }
+
+    const refreshFileTree = async () => {
+      if (!rootHandle.value) return
+      fileTree.value = await fs.scanDirectory(rootHandle.value)
+    }
+
+    const selectTreeNode = (node) => {
+      selectedTreeNode.value = node
     }
 
     const addRow = () => {
@@ -168,6 +178,7 @@ export const useChatBoxEditorStore = defineStore(
         await refreshGlobalIndex()
 
         currentFile.value = null
+        selectedTreeNode.value = null
         currentModel.value = null
         currentDialogue.value = ''
         viewMode.value = 'empty'
@@ -259,6 +270,121 @@ export const useChatBoxEditorStore = defineStore(
       }
     }
 
+    const findNodeByPath = (nodes, targetPath) => {
+      for (const node of nodes || []) {
+        if (node.path === targetPath) return node
+        if (node.isFolder) {
+          const found = findNodeByPath(node.children, targetPath)
+          if (found) return found
+        }
+      }
+      return null
+    }
+
+    const getTargetDirFromNode = (node) => {
+      if (!rootHandle.value) return null
+      if (!node) return rootHandle.value
+      if (node.isFolder) return node.handle
+      return node.parentHandle || rootHandle.value
+    }
+
+    const getTargetPathForChild = (baseNode, childName) => {
+      if (!baseNode) return childName
+      if (baseNode.isFolder) return `${baseNode.path}/${childName}`
+      const parentPath = baseNode.path?.includes('/') ? baseNode.path.split('/').slice(0, -1).join('/') : ''
+      return parentPath ? `${parentPath}/${childName}` : childName
+    }
+
+    const createFolder = async ({ baseNode, name }) => {
+      if (!rootHandle.value) {
+        message.warning('请先打开 data 文件夹')
+        return
+      }
+      const dirName = (name || '').trim()
+      if (!dirName) return
+      if (dirName.includes('/') || dirName.includes('\\')) {
+        message.error('文件夹名不能包含斜杠')
+        return
+      }
+
+      try {
+        const targetDir = getTargetDirFromNode(baseNode || selectedTreeNode.value)
+        await fs.createDirectory(targetDir, dirName)
+        await refreshFileTree()
+        message.success(`已创建文件夹: ${dirName}`)
+      } catch (err) {
+        console.error('创建文件夹失败', err)
+        message.error(`创建失败: ${err.message || err}`)
+      }
+    }
+
+    const createJsonFile = async ({ baseNode, name, openAfterCreate = true }) => {
+      if (!rootHandle.value) {
+        message.warning('请先打开 data 文件夹')
+        return
+      }
+
+      let fileName = (name || '').trim()
+      if (!fileName) return
+      if (fileName.includes('/') || fileName.includes('\\')) {
+        message.error('文件名不能包含斜杠')
+        return
+      }
+      if (!fileName.toLowerCase().endsWith('.json')) fileName += '.json'
+
+      try {
+        const targetNode = baseNode || selectedTreeNode.value
+        const targetDir = getTargetDirFromNode(targetNode)
+        await fs.createFile(targetDir, fileName, '{\n}\n')
+        const targetPath = getTargetPathForChild(targetNode, fileName)
+        await refreshFileTree()
+        message.success(`已创建文件: ${fileName}`)
+
+        if (openAfterCreate) {
+          const newNode = findNodeByPath(fileTree.value, targetPath)
+          if (newNode) {
+            selectTreeNode(newNode)
+            await loadFile(newNode)
+          }
+        }
+      } catch (err) {
+        console.error('创建文件失败', err)
+        message.error(`创建失败: ${err.message || err}`)
+      }
+    }
+
+    const deleteTreeEntry = async ({ node }) => {
+      const target = node || selectedTreeNode.value
+      if (!rootHandle.value || !target) return
+      if (!target.parentHandle) {
+        message.error('无法删除根目录')
+        return
+      }
+
+      try {
+        await fs.deleteEntry(target.parentHandle, target.name, { recursive: !!target.isFolder })
+
+        if (currentFile.value?.path === target.path) {
+          currentFile.value = null
+          currentModel.value = null
+          currentDialogue.value = ''
+          viewMode.value = 'empty'
+          clearSelection()
+        }
+
+        if (selectedTreeNode.value?.path === target.path) {
+          selectedTreeNode.value = null
+        }
+
+        await refreshFileTree()
+        await refreshGlobalIndex()
+        message.success(`已删除: ${target.name}`)
+      } catch (err) {
+        console.error('删除失败', err)
+        message.error(`删除失败: ${err.message || err}`)
+      }
+    }
+
     const currentFrame = ref(null)
     const isShowGlobal = ref(true)
 
@@ -332,6 +458,7 @@ export const useChatBoxEditorStore = defineStore(
     return {
       fileTree,
       currentFile,
+      selectedTreeNode,
       currentModel,
       currentDialogue,
       viewMode,
@@ -356,6 +483,11 @@ export const useChatBoxEditorStore = defineStore(
       openProject,
       loadFile,
       saveProject,
+      refreshFileTree,
+      selectTreeNode,
+      createFolder,
+      createJsonFile,
+      deleteTreeEntry,
       selectComponent,
       clearSelection,
       importAssets,

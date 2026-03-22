@@ -32,10 +32,6 @@ export const moreUtilList = () => {
     {
       lang: t('ChatBox编辑器'),
       router: '/chatbox/visual'
-    },
-    {
-      lang: t('粒子编辑器'),
-      router: '/particlex/editor'
     }
   ]
 }
@@ -82,7 +78,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.9'
+      modVersion: '1.1.0 beta'
     }
   ]
 }

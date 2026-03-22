@@ -10,6 +10,15 @@ import { generateCommand, generateMcFunction, parseMcFunction, validateCommand }
 export const useParticleEditorStore = defineStore('particleEditor', () => {
   // ==================== 状态 ====================
 
+  // 工程元信息（用于明确“先创建/打开工程再编辑”的工作流）
+  const projectMeta = ref({
+    version: 1,
+    name: '',
+    createdAt: '',
+    updatedAt: '',
+  })
+  const projectLoaded = ref(false)
+
   // 当前选择的粒子类型
   const selectedType = ref('parameter')
 
@@ -103,6 +112,16 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
 
   const usesExpression = computed(() => canUseShapeBuilder.value)
 
+  const hasProject = computed(() => projectLoaded.value && !!projectMeta.value.createdAt)
+
+  // 编辑器辅助：目标点/时长，用于一键计算初速度（不直接参与指令参数）
+  const aimHelper = ref({
+    target: { x: 2, y: 0, z: 0 },
+    duration: 20,
+    gravity: -0.04,
+    velocityScale: 5,
+  })
+
   // ==================== 方法 ====================
 
   /**
@@ -136,6 +155,64 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
   const updateNestedConfig = (parent, key, value) => {
     if (particleConfig.value[parent]) {
       particleConfig.value[parent][key] = value
+    }
+  }
+
+  const setAimTarget = (next) => {
+    aimHelper.value.target = {
+      ...aimHelper.value.target,
+      ...(next || {}),
+    }
+  }
+
+  const snapAimTargetToGround = (groundY = 0) => {
+    const y = Number(groundY)
+    aimHelper.value.target = {
+      ...aimHelper.value.target,
+      y: Number.isFinite(y) ? y : 0,
+    }
+  }
+
+  const setAimDuration = (ticks) => {
+    const t = Math.max(1, Math.floor(Number(ticks) || 1))
+    aimHelper.value.duration = t
+  }
+
+  const setAimGravity = (g) => {
+    const gv = Number(g)
+    aimHelper.value.gravity = Number.isFinite(gv) ? gv : aimHelper.value.gravity
+  }
+
+  const setVelocityScale = (scale) => {
+    const s = Math.max(0.1, Number(scale) || 5)
+    aimHelper.value.velocityScale = s
+  }
+
+  const applyVelocityFromTarget = ({ useGravity = false } = {}) => {
+    const origin = particleConfig.value.pos || { x: 0, y: 0, z: 0 }
+    const target = aimHelper.value.target || { x: 0, y: 0, z: 0 }
+    const t = Math.max(1, Math.floor(Number(aimHelper.value.duration) || 1))
+
+    const dx = (Number(target.x) || 0) - (Number(origin.x) || 0)
+    const dy = (Number(target.y) || 0) - (Number(origin.y) || 0)
+    const dz = (Number(target.z) || 0) - (Number(origin.z) || 0)
+
+    let vx = dx / t
+    let vy = dy / t
+    let vz = dz / t
+
+    if (useGravity) {
+      const g = Number(aimHelper.value.gravity) || 0
+      // 离散模拟（与编辑器预览一致）：vy = vy + g; y = y + vy
+      // y_t = y0 + t*vy0 + g*t(t+1)/2
+      vy = (dy - g * (t * (t + 1) / 2)) / t
+      particleConfig.value.speedExpression = `vy=vy+(${g})`
+    }
+
+    particleConfig.value.speed = {
+      vx: Number(vx.toFixed(4)),
+      vy: Number(vy.toFixed(4)),
+      vz: Number(vz.toFixed(4)),
     }
   }
 
@@ -499,6 +576,18 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
           }
 
           updateProjectCommands()
+          projectLoaded.value = true
+          if (!projectMeta.value.createdAt) {
+            const now = new Date().toISOString()
+            projectMeta.value = {
+              version: 1,
+              name: file?.name?.replace(/\.mcfunction$/i, '') || 'Imported',
+              createdAt: now,
+              updatedAt: now,
+            }
+          } else {
+            projectMeta.value.updatedAt = new Date().toISOString()
+          }
           resolve(project)
         } catch (error) {
           reject(error)
@@ -513,7 +602,7 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
   /**
    * 重置配置
    */
-  const resetConfig = () => {
+  const _resetAllState = () => {
     particleConfig.value = {
       type: 'parameter',
       name: 'minecraft:end_rod',
@@ -564,6 +653,76 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
         mode: 'sphere',
       },
     }
+
+    selectedType.value = 'parameter'
+    particleConfig.value.type = 'parameter'
+  }
+
+  const resetConfig = () => {
+    _resetAllState()
+  }
+
+  const newProject = (name = '') => {
+    _resetAllState()
+    const now = new Date().toISOString()
+    projectMeta.value = {
+      version: 1,
+      name: (name || '').trim() || `ExParticle_${new Date().toLocaleString('zh-CN').replace(/[/:]/g, '-')}`,
+      createdAt: now,
+      updatedAt: now,
+    }
+    projectLoaded.value = true
+    updateGeneratedCommands()
+  }
+
+  const exportProjectFile = () => {
+    if (!hasProject.value) return
+    projectMeta.value.updatedAt = new Date().toISOString()
+
+    const payload = {
+      version: 1,
+      meta: projectMeta.value,
+      selectedType: selectedType.value,
+      particleConfig: particleConfig.value,
+      shapeBuilder: shapeBuilder.value,
+      projectConfig: projectConfig.value
+    }
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const safeName = (projectMeta.value.name || 'project').replace(/[\\/:*?"<>|]+/g, '_')
+    link.href = url
+    link.download = `${safeName}.particlex.json`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  const importProjectFile = async (file) => {
+    const text = await file.text()
+    const json = JSON.parse(text)
+    if (!json || typeof json !== 'object') throw new Error('无效工程文件')
+    if (!json.particleConfig) throw new Error('工程文件缺少 particleConfig')
+
+    _resetAllState()
+
+    projectMeta.value = json.meta || {
+      version: 1,
+      name: file?.name?.replace(/\.particlex\.json$/i, '') || 'Imported',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    projectLoaded.value = true
+
+    selectedType.value = json.selectedType || 'parameter'
+    setParticleType(selectedType.value)
+    Object.assign(particleConfig.value, json.particleConfig)
+    if (json.shapeBuilder) shapeBuilder.value = json.shapeBuilder
+    if (json.projectConfig) projectConfig.value = json.projectConfig
+
+    updateProjectCommands()
   }
 
   // ==================== 监听配置变化 ====================
@@ -581,6 +740,10 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
 
   return {
     // 状态
+    projectMeta,
+    projectLoaded,
+    hasProject,
+    aimHelper,
     selectedType,
     particleConfig,
     projectConfig,
@@ -600,6 +763,12 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
     setParticleType,
     updateConfig,
     updateNestedConfig,
+    setAimTarget,
+    snapAimTargetToGround,
+    setAimDuration,
+    setAimGravity,
+    setVelocityScale,
+    applyVelocityFromTarget,
     generateCurrentCommand,
     updateGeneratedCommands,
     loadTemplate,
@@ -616,6 +785,9 @@ export const useParticleEditorStore = defineStore('particleEditor', () => {
     updateProjectCommands,
     exportMcFunction,
     importMcFunction,
-    resetConfig
+    resetConfig,
+    newProject,
+    exportProjectFile,
+    importProjectFile
   }
 })

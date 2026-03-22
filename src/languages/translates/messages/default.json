@@ -1919,7 +1919,7 @@
         "$id": 687
     },
     "(支持 Ctrl+S 直接保存)": {
-        "en-US": "(Supports Ctrl+S to save directly)",
+        "en-US": "(Supports {}+S to save directly)",
         "$files": [
             "src/views/more/chatbox/component/FileExplorer.vue(1508-1528)"
         ],

@@ -266,7 +266,7 @@ export default {
   "779": "Click top-right",
   "780": "Open Local",
   "781": "Folder",
-  "782": "(Ctrl+S to Save)",
+  "782": "({}+S to Save)",
   "783": "New Portrait",
   "784": "Enter ID (Key) for new Portrait:",
   "785": "ID already exists!",

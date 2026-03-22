@@ -5,6 +5,18 @@
 
 import * as THREE from 'three'
 
+const DEFAULT_PREVIEW_MAX_PARTICLES = 5000
+
+const mulberry32 = (seed) => {
+  let t = seed >>> 0
+  return () => {
+    t += 0x6D2B79F5
+    let r = Math.imul(t ^ (t >>> 15), 1 | t)
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r)
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296
+  }
+}
+
 /**
  * 简单的数学表达式解析器
  */
@@ -35,13 +47,13 @@ class MathExpressionParser {
   }
 
   /**
-   * 解析表达式并计算值
+   * 解析表达式并计算（仅返回被赋值过的变量）
    * @param {string} expression - 表达式字符串
    * @param {object} variables - 变量对象
-   * @returns {object} 计算结果
+   * @returns {object} 计算结果（仅包含表达式内赋值过的字段）
    */
-  evaluate(expression, variables = {}) {
-    const result = { x: 0, y: 0, z: 0 }
+  evaluateAssignments(expression, variables = {}) {
+    const result = {}
 
     // 分割表达式
     const statements = expression.split(';').filter(s => s.trim())
@@ -119,6 +131,12 @@ export class ParticleSystem {
     this.parser = new MathExpressionParser()
     this.animationId = null
     this.isPaused = false
+    this.demoRotate = false
+
+    // 用于“生命周期预览”的基准数据（tick=0）
+    this.basePositions = null // Float32Array
+    this.baseCount = 0
+    this.maxParticles = DEFAULT_PREVIEW_MAX_PARTICLES
   }
 
   /**
@@ -135,28 +153,67 @@ export class ParticleSystem {
       end = 6.28,
       calcInterval = 0.1,
       count = 500,
-      offset = { x: 0, y: 0, z: 0 }
+      offset = { x: 0, y: 0, z: 0 },
+      range = null
     } = config
 
     const positions = []
     const colors = []
-    const particleCount = Math.floor((end - begin) / calcInterval)
+    const seedRand = mulberry32(0xC0FFEE)
 
-    // 解析表达式并计算位置
-    for (let t = begin; t <= end; t += calcInterval) {
-      try {
-        const result = this.parser.evaluate(expression, { t })
+    // end < begin 代表“空帧/未生成”
+    if (typeof begin === 'number' && typeof end === 'number' && end < begin) {
+      return { count: 0, positions: [] }
+    }
+
+    // 如果没有 expression，则退化为“范围内随机点云”（更符合新手对 normal 的直觉）
+    const exprText = typeof expression === 'string' ? expression.trim() : ''
+    const hasExpression = !!exprText
+
+    if (!hasExpression) {
+      const dx = range?.dx ?? 0
+      const dy = range?.dy ?? 0
+      const dz = range?.dz ?? 0
+      const num = Math.min(Math.max(0, Number(count) || 0), this.maxParticles)
+
+      for (let i = 0; i < num; i++) {
+        const rx = (seedRand() * 2 - 1) * dx
+        const ry = (seedRand() * 2 - 1) * dy
+        const rz = (seedRand() * 2 - 1) * dz
 
         positions.push(
-          (result.x || 0) + (offset.x || 0),
-          (result.y || 0) + (offset.y || 0),
-          (result.z || 0) + (offset.z || 0)
+          (offset.x || 0) + rx,
+          (offset.y || 0) + ry,
+          (offset.z || 0) + rz
         )
-
-        // 默认颜色（蓝色）
         colors.push(0.2, 0.5, 1.0)
-      } catch (e) {
-        console.warn(`Failed to calculate particle at t=${t}`, e)
+      }
+    } else {
+      // 参数方程：t in [begin, end] step calcInterval
+      const b = Number(begin) || 0
+      const e = Number(end) || 0
+      let step = Number(calcInterval) || 0.1
+      step = Math.max(1e-6, step)
+
+      const estimated = Math.floor(Math.abs((e - b) / step)) + 1
+      if (estimated > this.maxParticles) {
+        step = Math.abs(e - b) / (this.maxParticles - 1)
+      }
+
+      for (let t = b; t <= e; t += step) {
+        try {
+          const assigned = this.parser.evaluateAssignments(exprText, { t })
+
+          // 表达式不一定会写全 x/y/z，兜底为 0
+          const x = (assigned.x ?? 0) + (offset.x || 0)
+          const y = (assigned.y ?? 0) + (offset.y || 0)
+          const z = (assigned.z ?? 0) + (offset.z || 0)
+
+          positions.push(x, y, z)
+          colors.push(0.2, 0.5, 1.0)
+        } catch (e) {
+          console.warn(`Failed to calculate particle at t=${t}`, e)
+        }
       }
     }
 
@@ -178,10 +235,17 @@ export class ParticleSystem {
     this.particles = new THREE.Points(geometry, material)
     this.scene.add(this.particles)
 
+    this.basePositions = new Float32Array(positions)
+    this.baseCount = positions.length / 3
+
     return {
       count: positions.length / 3,
       positions: positions
     }
+  }
+
+  setDemoRotate(enabled) {
+    this.demoRotate = !!enabled
   }
 
   /**
@@ -209,7 +273,88 @@ export class ParticleSystem {
   animate() {
     if (this.isPaused || !this.particles) return
 
-    this.particles.rotation.y += 0.005
+    // 默认不做“假旋转”动画，避免与 MC 内表现不一致
+    if (this.demoRotate) {
+      this.particles.rotation.y += 0.005
+    }
+  }
+
+  /**
+   * 按 tick 应用“运动预览”（基于 speed / speedExpression）
+   * 注意：这只是编辑器的近似模拟，目的是让作者看到生命周期变化，不保证 100% 与模组实现一致。
+   */
+  applyMotionPreview({
+                       tick = 0,
+                       age = 0,
+                       speed = { vx: 0, vy: 0, vz: 0 },
+                       speedExpression = '',
+                       speedStep = 0.1
+                     }) {
+    if (!this.particles || !this.basePositions) return
+
+    const totalTick = Math.max(0, Math.floor(Number(tick) || 0))
+    const lifeTick = Number(age) > 0 ? Math.min(totalTick, Math.floor(Number(age))) : totalTick
+    const step = Number(speedStep) || 0.1
+
+    const posAttr = this.particles.geometry.attributes.position
+    const out = posAttr.array
+
+    const base = this.basePositions
+    const n = this.baseCount
+
+    const svx = Number(speed?.vx) || 0
+    const svy = Number(speed?.vy) || 0
+    const svz = Number(speed?.vz) || 0
+
+    const spdExpr = typeof speedExpression === 'string' ? speedExpression.trim() : ''
+
+    // 无速度表达式：直接做线性平移（最符合作者直觉，也更快）
+    if (!spdExpr) {
+      for (let i = 0; i < n; i++) {
+        const idx = i * 3
+        out[idx] = base[idx] + svx * lifeTick
+        out[idx + 1] = base[idx + 1] + svy * lifeTick
+        out[idx + 2] = base[idx + 2] + svz * lifeTick
+      }
+      posAttr.needsUpdate = true
+      return
+    }
+
+    // 有速度表达式：逐 tick 模拟（允许表达式动态改变 vx/vy/vz）
+    for (let i = 0; i < n; i++) {
+      const idx = i * 3
+
+      let x = base[idx]
+      let y = base[idx + 1]
+      let z = base[idx + 2]
+
+      let vx = svx
+      let vy = svy
+      let vz = svz
+
+      for (let k = 0; k < lifeTick; k++) {
+        const t = k * step
+        const assigned = this.parser.evaluateAssignments(spdExpr, { t, x, y, z, vx, vy, vz })
+
+        if ('vx' in assigned) vx = Number(assigned.vx) || 0
+        if ('vy' in assigned) vy = Number(assigned.vy) || 0
+        if ('vz' in assigned) vz = Number(assigned.vz) || 0
+
+        if ('x' in assigned) x = Number(assigned.x) || 0
+        if ('y' in assigned) y = Number(assigned.y) || 0
+        if ('z' in assigned) z = Number(assigned.z) || 0
+
+        x += vx
+        y += vy
+        z += vz
+      }
+
+      out[idx] = x
+      out[idx + 1] = y
+      out[idx + 2] = z
+    }
+
+    posAttr.needsUpdate = true
   }
 
   /**
@@ -222,6 +367,9 @@ export class ParticleSystem {
       this.particles.material.dispose()
       this.particles = null
     }
+
+    this.basePositions = null
+    this.baseCount = 0
   }
 
   /**
@@ -270,9 +418,13 @@ export class Preview3DManager {
     this.pointer = new THREE.Vector2()
     this.circleGizmo = null
     this.lineGizmo = null
+    this.originGizmo = null
+    this.velocityGizmo = null
+    this.targetGizmo = null
     this.isGizmoDragging = false
     this.activeGizmoHandle = null
     this.activeGizmoType = null
+    this.gizmoDragContext = null
 
     // 绑定后的事件引用（用于正确 removeEventListener）
     this._onWindowResize = this.onWindowResize.bind(this)
@@ -352,6 +504,266 @@ export class Preview3DManager {
     window.addEventListener('mousemove', this._onMouseMove)
     window.addEventListener('mouseup', this._onMouseUp)
     this.domElement.addEventListener('wheel', this._onWheel, { passive: false })
+  }
+
+  setDemoRotate(enabled) {
+    if (!this.particleSystem) return
+    this.particleSystem.setDemoRotate(enabled)
+  }
+
+  /**
+   * 设置“位置(偏移)”gizmo，用于直接在 3D 里拖拽配置 pos
+   */
+  setOriginGizmo(options = {}) {
+    const { enabled, pos, onChange } = options
+
+    if (!enabled) {
+      this.clearOriginGizmo()
+      return
+    }
+
+    if (!this.originGizmo) {
+      this.originGizmo = this.createOriginGizmo()
+      this.scene.add(this.originGizmo.group)
+    }
+
+    if (typeof onChange === 'function') {
+      this.originGizmo.onChange = onChange
+    }
+
+    if (this.isGizmoDragging) return
+
+    if (pos) {
+      this.originGizmo.pos.set(pos.x || 0, pos.y || 0, pos.z || 0)
+    }
+
+    this.updateOriginGizmoVisual()
+  }
+
+  clearOriginGizmo() {
+    if (!this.originGizmo) return
+    this.scene.remove(this.originGizmo.group)
+    this.originGizmo.handle.geometry.dispose()
+    this.originGizmo.handle.material.dispose()
+    this.originGizmo = null
+    this.isGizmoDragging = false
+    this.activeGizmoHandle = null
+    this.activeGizmoType = null
+  }
+
+  createOriginGizmo() {
+    const group = new THREE.Group()
+    const geo = new THREE.SphereGeometry(0.14, 16, 16)
+    const mat = new THREE.MeshBasicMaterial({ color: 0xa78bfa }) // violet-400
+    const handle = new THREE.Mesh(geo, mat)
+    handle.userData = { gizmo: 'origin', role: 'pos' }
+    group.add(handle)
+
+    return {
+      group,
+      pos: new THREE.Vector3(0, 0, 0),
+      handle,
+      onChange: null,
+    }
+  }
+
+  updateOriginGizmoVisual() {
+    if (!this.originGizmo) return
+    this.originGizmo.handle.position.copy(this.originGizmo.pos)
+  }
+
+  /**
+   * 设置“速度”gizmo（显示一个向量箭头并允许拖拽）
+   */
+  setVelocityGizmo(options = {}) {
+    const { enabled, origin, velocity, scale = 5, onChange } = options
+
+    if (!enabled) {
+      this.clearVelocityGizmo()
+      return
+    }
+
+    if (!this.velocityGizmo) {
+      this.velocityGizmo = this.createVelocityGizmo()
+      this.scene.add(this.velocityGizmo.group)
+    }
+
+    if (typeof onChange === 'function') {
+      this.velocityGizmo.onChange = onChange
+    }
+
+    if (this.isGizmoDragging) return
+
+    this.velocityGizmo.scale = Math.max(0.1, Number(scale) || 5)
+
+    if (origin) {
+      this.velocityGizmo.origin.set(origin.x || 0, origin.y || 0, origin.z || 0)
+    }
+    if (velocity) {
+      this.velocityGizmo.velocity.set(velocity.vx || 0, velocity.vy || 0, velocity.vz || 0)
+    }
+
+    this.updateVelocityGizmoVisual()
+  }
+
+  clearVelocityGizmo() {
+    if (!this.velocityGizmo) return
+    this.scene.remove(this.velocityGizmo.group)
+    this.velocityGizmo.tipHandle.geometry.dispose()
+    this.velocityGizmo.tipHandle.material.dispose()
+    this.velocityGizmo.yHandle.geometry.dispose()
+    this.velocityGizmo.yHandle.material.dispose()
+    this.velocityGizmo.line.geometry.dispose()
+    this.velocityGizmo.line.material.dispose()
+    this.velocityGizmo.vLine.geometry.dispose()
+    this.velocityGizmo.vLine.material.dispose()
+    this.velocityGizmo = null
+    this.isGizmoDragging = false
+    this.activeGizmoHandle = null
+    this.activeGizmoType = null
+    this.gizmoDragContext = null
+  }
+
+  createVelocityGizmo() {
+    const group = new THREE.Group()
+
+    const tipGeo = new THREE.SphereGeometry(0.12, 16, 16)
+    const yGeo = new THREE.SphereGeometry(0.12, 16, 16)
+    const tipMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 }) // amber-400
+    const yMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee }) // cyan-400
+
+    const tipHandle = new THREE.Mesh(tipGeo, tipMat)
+    tipHandle.userData = { gizmo: 'velocity', role: 'xz' }
+    group.add(tipHandle)
+
+    const yHandle = new THREE.Mesh(yGeo, yMat)
+    yHandle.userData = { gizmo: 'velocity', role: 'y' }
+    group.add(yHandle)
+
+    const lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()])
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xfbbf24 })
+    const line = new THREE.Line(lineGeo, lineMat)
+    group.add(line)
+
+    const vLineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()])
+    const vLineMat = new THREE.LineBasicMaterial({ color: 0x22d3ee })
+    const vLine = new THREE.Line(vLineGeo, vLineMat)
+    group.add(vLine)
+
+    return {
+      group,
+      origin: new THREE.Vector3(0, 0, 0),
+      velocity: new THREE.Vector3(0, 0, 0),
+      scale: 5,
+      tipHandle,
+      yHandle,
+      line,
+      vLine,
+      onChange: null,
+    }
+  }
+
+  updateVelocityGizmoVisual() {
+    if (!this.velocityGizmo) return
+    const { origin, velocity, scale, tipHandle, yHandle, line, vLine } = this.velocityGizmo
+
+    const tip = origin.clone().add(velocity.clone().multiplyScalar(scale))
+    tipHandle.position.copy(tip)
+
+    const yPos = origin.clone().add(new THREE.Vector3(0, velocity.y * scale, 0))
+    yHandle.position.copy(yPos)
+
+    line.geometry.setFromPoints([origin.clone(), tip.clone()])
+    line.geometry.attributes.position.needsUpdate = true
+
+    vLine.geometry.setFromPoints([origin.clone(), yPos.clone()])
+    vLine.geometry.attributes.position.needsUpdate = true
+  }
+
+  /**
+   * 设置“目标点”gizmo（用于一键由目标计算速度）
+   */
+  setTargetGizmo(options = {}) {
+    const { enabled, target, onChange } = options
+
+    if (!enabled) {
+      this.clearTargetGizmo()
+      return
+    }
+
+    if (!this.targetGizmo) {
+      this.targetGizmo = this.createTargetGizmo()
+      this.scene.add(this.targetGizmo.group)
+    }
+
+    if (typeof onChange === 'function') {
+      this.targetGizmo.onChange = onChange
+    }
+
+    if (this.isGizmoDragging) return
+
+    if (target) {
+      this.targetGizmo.target.set(target.x || 0, target.y || 0, target.z || 0)
+    }
+
+    this.updateTargetGizmoVisual()
+  }
+
+  clearTargetGizmo() {
+    if (!this.targetGizmo) return
+    this.scene.remove(this.targetGizmo.group)
+    this.targetGizmo.handle.geometry.dispose()
+    this.targetGizmo.handle.material.dispose()
+    this.targetGizmo.yHandle.geometry.dispose()
+    this.targetGizmo.yHandle.material.dispose()
+    this.targetGizmo.vLine.geometry.dispose()
+    this.targetGizmo.vLine.material.dispose()
+    this.targetGizmo = null
+    this.isGizmoDragging = false
+    this.activeGizmoHandle = null
+    this.activeGizmoType = null
+    this.gizmoDragContext = null
+  }
+
+  createTargetGizmo() {
+    const group = new THREE.Group()
+
+    const geo = new THREE.SphereGeometry(0.14, 16, 16)
+    const mat = new THREE.MeshBasicMaterial({ color: 0xfb7185 }) // rose-400
+    const handle = new THREE.Mesh(geo, mat)
+    handle.userData = { gizmo: 'target', role: 'xz' }
+    group.add(handle)
+
+    const yGeo = new THREE.SphereGeometry(0.12, 16, 16)
+    const yMat = new THREE.MeshBasicMaterial({ color: 0x34d399 }) // emerald-400
+    const yHandle = new THREE.Mesh(yGeo, yMat)
+    yHandle.userData = { gizmo: 'target', role: 'y' }
+    group.add(yHandle)
+
+    const vLineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()])
+    const vLineMat = new THREE.LineBasicMaterial({ color: 0x34d399 })
+    const vLine = new THREE.Line(vLineGeo, vLineMat)
+    group.add(vLine)
+
+    return {
+      group,
+      target: new THREE.Vector3(2, 0, 0),
+      handle,
+      yHandle,
+      vLine,
+      onChange: null,
+    }
+  }
+
+  updateTargetGizmoVisual() {
+    if (!this.targetGizmo) return
+    const { target, handle, yHandle, vLine } = this.targetGizmo
+
+    handle.position.copy(target)
+    const yPos = new THREE.Vector3(target.x, target.y, target.z)
+    yHandle.position.copy(yPos)
+    vLine.geometry.setFromPoints([new THREE.Vector3(target.x, 0, target.z), yPos.clone()])
+    vLine.geometry.attributes.position.needsUpdate = true
   }
 
   /**
@@ -563,8 +975,117 @@ export class Preview3DManager {
     const targets = []
     if (this.circleGizmo) targets.push(this.circleGizmo.centerHandle, this.circleGizmo.radiusHandle)
     if (this.lineGizmo) targets.push(this.lineGizmo.startHandle, this.lineGizmo.endHandle)
+    if (this.originGizmo) targets.push(this.originGizmo.handle)
+    if (this.velocityGizmo) targets.push(this.velocityGizmo.tipHandle, this.velocityGizmo.yHandle)
+    if (this.targetGizmo) targets.push(this.targetGizmo.handle, this.targetGizmo.yHandle)
     if (targets.length === 0) return null
     return this.raycaster.intersectObjects(targets, false)[0] || null
+  }
+
+  updateVelocityGizmoDrag(e) {
+    if (!this.velocityGizmo || !this.activeGizmoHandle) return
+
+    const role = this.activeGizmoHandle.userData.role
+
+    if (role === 'y') {
+      if (!this.gizmoDragContext) return
+      const dy = e.clientY - this.gizmoDragContext.startClientY
+      const nextVy = this.gizmoDragContext.startValue + (-dy) * 0.01
+      this.velocityGizmo.velocity.y = nextVy
+      this.updateVelocityGizmoVisual()
+      if (typeof this.velocityGizmo.onChange === 'function') {
+        this.velocityGizmo.onChange({
+          vx: this.velocityGizmo.velocity.x,
+          vy: this.velocityGizmo.velocity.y,
+          vz: this.velocityGizmo.velocity.z,
+        })
+      }
+      return
+    }
+
+    this.getPointerNDC(e)
+    this.raycaster.setFromCamera(this.pointer, this.camera)
+
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -this.velocityGizmo.origin.y)
+    const hitPoint = new THREE.Vector3()
+    const ok = this.raycaster.ray.intersectPlane(plane, hitPoint)
+    if (!ok) return
+
+    const delta = hitPoint.clone().sub(this.velocityGizmo.origin)
+    this.velocityGizmo.velocity.x = delta.x / this.velocityGizmo.scale
+    this.velocityGizmo.velocity.z = delta.z / this.velocityGizmo.scale
+
+    this.updateVelocityGizmoVisual()
+
+    if (typeof this.velocityGizmo.onChange === 'function') {
+      this.velocityGizmo.onChange({
+        vx: this.velocityGizmo.velocity.x,
+        vy: this.velocityGizmo.velocity.y,
+        vz: this.velocityGizmo.velocity.z,
+      })
+    }
+  }
+
+  updateTargetGizmoDrag(e) {
+    if (!this.targetGizmo || !this.activeGizmoHandle) return
+
+    const role = this.activeGizmoHandle.userData.role
+    if (role === 'y') {
+      if (!this.gizmoDragContext) return
+      const dy = e.clientY - this.gizmoDragContext.startClientY
+      this.targetGizmo.target.y = this.gizmoDragContext.startValue + (-dy) * 0.02
+      this.updateTargetGizmoVisual()
+      if (typeof this.targetGizmo.onChange === 'function') {
+        this.targetGizmo.onChange({
+          x: this.targetGizmo.target.x,
+          y: this.targetGizmo.target.y,
+          z: this.targetGizmo.target.z,
+        })
+      }
+      return
+    }
+
+    this.getPointerNDC(e)
+    this.raycaster.setFromCamera(this.pointer, this.camera)
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -this.targetGizmo.target.y)
+    const hitPoint = new THREE.Vector3()
+    const ok = this.raycaster.ray.intersectPlane(plane, hitPoint)
+    if (!ok) return
+
+    this.targetGizmo.target.x = hitPoint.x
+    this.targetGizmo.target.z = hitPoint.z
+    this.updateTargetGizmoVisual()
+
+    if (typeof this.targetGizmo.onChange === 'function') {
+      this.targetGizmo.onChange({
+        x: this.targetGizmo.target.x,
+        y: this.targetGizmo.target.y,
+        z: this.targetGizmo.target.z,
+      })
+    }
+  }
+
+  updateOriginGizmoDrag(e) {
+    if (!this.originGizmo || !this.activeGizmoHandle) return
+
+    this.getPointerNDC(e)
+    this.raycaster.setFromCamera(this.pointer, this.camera)
+
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -this.originGizmo.pos.y)
+    const hitPoint = new THREE.Vector3()
+    const ok = this.raycaster.ray.intersectPlane(plane, hitPoint)
+    if (!ok) return
+
+    this.originGizmo.pos.copy(hitPoint)
+    this.updateOriginGizmoVisual()
+
+    if (typeof this.originGizmo.onChange === 'function') {
+      this.originGizmo.onChange({
+        x: this.originGizmo.pos.x,
+        y: this.originGizmo.pos.y,
+        z: this.originGizmo.pos.z,
+      })
+    }
   }
 
   updateCircleGizmoDrag(e) {
@@ -644,6 +1165,11 @@ export class Preview3DManager {
     return result
   }
 
+  applyMotionPreview(options) {
+    if (!this.isInitialized) return
+    this.particleSystem.applyMotionPreview(options)
+  }
+
   /**
    * 更新粒子颜色
    * @param {object} color - RGBA 颜色
@@ -719,6 +1245,21 @@ export class Preview3DManager {
       this.isGizmoDragging = true
       this.activeGizmoHandle = hit.object
       this.activeGizmoType = hit.object.userData?.gizmo || null
+      this.gizmoDragContext = null
+
+      const role = hit.object.userData?.role
+      if (this.activeGizmoType === 'velocity' && role === 'y' && this.velocityGizmo) {
+        this.gizmoDragContext = {
+          startClientY: e.clientY,
+          startValue: this.velocityGizmo.velocity.y,
+        }
+      }
+      if (this.activeGizmoType === 'target' && role === 'y' && this.targetGizmo) {
+        this.gizmoDragContext = {
+          startClientY: e.clientY,
+          startValue: this.targetGizmo.target.y,
+        }
+      }
       return
     }
 
@@ -732,7 +1273,10 @@ export class Preview3DManager {
    */
   onMouseMove(e) {
     if (this.isGizmoDragging) {
-      if (this.activeGizmoType === 'line') this.updateLineGizmoDrag(e)
+      if (this.activeGizmoType === 'origin') this.updateOriginGizmoDrag(e)
+      else if (this.activeGizmoType === 'velocity') this.updateVelocityGizmoDrag(e)
+      else if (this.activeGizmoType === 'target') this.updateTargetGizmoDrag(e)
+      else if (this.activeGizmoType === 'line') this.updateLineGizmoDrag(e)
       else this.updateCircleGizmoDrag(e)
       return
     }
@@ -762,6 +1306,7 @@ export class Preview3DManager {
     this.isGizmoDragging = false
     this.activeGizmoHandle = null
     this.activeGizmoType = null
+    this.gizmoDragContext = null
   }
 
   /**
@@ -792,6 +1337,9 @@ export class Preview3DManager {
 
     this.clearCircleGizmo()
     this.clearLineGizmo()
+    this.clearOriginGizmo()
+    this.clearVelocityGizmo()
+    this.clearTargetGizmo()
 
     window.removeEventListener('resize', this._onWindowResize)
     if (this.domElement) {

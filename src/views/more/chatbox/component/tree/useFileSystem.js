@@ -49,6 +49,7 @@ export function useFileSystem() {
         kind: entry.kind,
         isFolder: entry.kind === 'directory',
         handle: entry,
+        parentHandle: dirHandle,
         isOpen: true,
         children: [],
       }
@@ -65,18 +66,21 @@ export function useFileSystem() {
       nodes.push(node)
     }
 
-    // 排序：文件夹在前
-    return nodes.sort((a, b) => (a.isFolder === b.isFolder ? 0 : a.isFolder ? -1 : 1))
+    // 排序：文件夹在前，其次按名称排序
+    return nodes.sort((a, b) => {
+      if (a.isFolder !== b.isFolder) return a.isFolder ? -1 : 1
+      return a.name.localeCompare(b.name)
+    })
   }
 
   /**
    * 动作：打开文件夹
    */
-  const openDirectory = async () => {
+  const openDirectory = async (pickerId = 'chatbox-editor-working-dir') => {
     try {
       const handle = await window.showDirectoryPicker({
         mode: 'readwrite',
-        id: 'chatbox-editor-working-dir',
+        id: pickerId,
       })
       rootHandle.value = handle
       const tree = await scanDirectory(handle)
@@ -102,6 +106,38 @@ export function useFileSystem() {
     const writable = await fileHandle.createWritable()
     await writable.write(content)
     await writable.close()
+  }
+
+  /**
+   * 动作：创建文件夹
+   */
+  const createDirectory = async (parentDirHandle, dirName) => {
+    if (!parentDirHandle) throw new Error('无效的目录句柄')
+    return await parentDirHandle.getDirectoryHandle(dirName, { create: true })
+  }
+
+  /**
+   * 动作：创建文件（并写入初始内容）
+   */
+  const createFile = async (parentDirHandle, fileName, content = '') => {
+    if (!parentDirHandle) throw new Error('无效的目录句柄')
+    const fileHandle = await parentDirHandle.getFileHandle(fileName, { create: true })
+    await saveFile(fileHandle, content)
+    return fileHandle
+  }
+
+  /**
+   * 动作：删除文件/文件夹
+   * @param {FileSystemDirectoryHandle} parentDirHandle
+   * @param {string} entryName
+   * @param {{recursive?: boolean}} options
+   */
+  const deleteEntry = async (parentDirHandle, entryName, options = {}) => {
+    if (!parentDirHandle) throw new Error('无效的父目录句柄')
+    if (typeof parentDirHandle.removeEntry !== 'function') {
+      throw new Error('当前浏览器不支持删除文件 (removeEntry)')
+    }
+    await parentDirHandle.removeEntry(entryName, { recursive: !!options.recursive })
   }
 
   const scanProjectIndex = async (dirHandle) => {
@@ -156,6 +192,9 @@ export function useFileSystem() {
     openDirectory,
     readFile,
     saveFile,
+    createDirectory,
+    createFile,
+    deleteEntry,
     scanDirectory,
     scanProjectIndex
   }
