@@ -251,13 +251,13 @@ defineExpose({
   }
 
   h1 {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: bold;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 25px;
+      font-size: 26px;
       font-style: italic;
       font-weight: bold;
       margin-right: 10px;
@@ -267,13 +267,13 @@ defineExpose({
   }
 
   h2 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 600;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 600;
       font-style: italic;
       margin-right: 10px;
@@ -283,13 +283,13 @@ defineExpose({
   }
 
   h3 {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 600;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 21px;
+      font-size: 18px;
       font-weight: 600;
       font-style: italic;
       margin-right: 10px;
@@ -299,14 +299,14 @@ defineExpose({
   }
 
   h4 {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 19px;
+    font-weight: 500;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 19px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 500;
       font-style: italic;
       margin-right: 10px;
       line-height: 1.5;
@@ -315,14 +315,14 @@ defineExpose({
   }
 
   h5 {
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 500;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 17px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
       font-style: italic;
       margin-right: 10px;
       line-height: 1.5;
@@ -331,14 +331,14 @@ defineExpose({
   }
 
   h6 {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
 
     &:before {
       content: '#';
       color: var(--blue-5);
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 500;
       font-style: italic;
       margin-right: 10px;
       line-height: 1.5;

@@ -153,24 +153,19 @@ onBeforeUnmount(() => {
       scroll-margin-top: 40px;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    h1, h2, h3, h4, h5, h6 {
       margin-top: 15px;
       line-height: 1.5;
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 32px;
       font-weight: bold;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 25px;
+        font-size: 26px;
         font-style: italic;
         font-weight: bold;
         margin-right: 10px;
@@ -180,13 +175,13 @@ onBeforeUnmount(() => {
     }
 
     h2 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 600;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 23px;
+        font-size: 22px;
         font-weight: 600;
         font-style: italic;
         margin-right: 10px;
@@ -196,13 +191,13 @@ onBeforeUnmount(() => {
     }
 
     h3 {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 600;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 21px;
+        font-size: 18px;
         font-weight: 600;
         font-style: italic;
         margin-right: 10px;
@@ -212,14 +207,14 @@ onBeforeUnmount(() => {
     }
 
     h4 {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 19px;
+      font-weight: 500;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 19px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 500;
         font-style: italic;
         margin-right: 10px;
         line-height: 1.5;
@@ -228,14 +223,14 @@ onBeforeUnmount(() => {
     }
 
     h5 {
-      font-size: 22px;
-      font-weight: 600;
+      font-size: 17px;
+      font-weight: 500;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 17px;
-        font-weight: 600;
+        font-size: 14px;
+        font-weight: 500;
         font-style: italic;
         margin-right: 10px;
         line-height: 1.5;
@@ -244,14 +239,14 @@ onBeforeUnmount(() => {
     }
 
     h6 {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 500;
 
       &:before {
         content: '#';
         color: var(--blue-5);
-        font-size: 15px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 500;
         font-style: italic;
         margin-right: 10px;
         line-height: 1.5;
@@ -259,15 +254,11 @@ onBeforeUnmount(() => {
       }
     }
 
-    ul,
-    ol {
+    ul, ol {
       margin: 0.5rem 0;
     }
 
-    ul ul,
-    ul ol,
-    ol ul,
-    ol ol {
+    ul ul, ul ol, ol ul, ol ol {
       margin: 0.2rem 0 0.2rem 1.5rem;
     }
 
@@ -297,7 +288,7 @@ onBeforeUnmount(() => {
         display: flex;
         margin: 8px 0;
 
-        >label {
+        > label {
           flex: 0 0 auto;
           margin-right: 12px;
           user-select: none;
@@ -337,7 +328,7 @@ onBeforeUnmount(() => {
           }
         }
 
-        >div {
+        > div {
           flex: 1 1 auto;
           color: var(--font-color-2);
           line-height: 1.6;
@@ -348,7 +339,7 @@ onBeforeUnmount(() => {
         }
 
         &[data-checked="true"] {
-          >div {
+          > div {
             text-decoration: line-through;
             color: var(--font-color-0);
             opacity: 0.6;
@@ -382,10 +373,10 @@ onBeforeUnmount(() => {
 
       code {
         font-family: SF Mono,
-          Menlo,
-          Consolas,
-          Liberation Mono,
-          monospace;
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
         margin: 0 4px;
         background-color: var(--trans-blue-1);
         padding: 2px 4px;
@@ -400,17 +391,17 @@ onBeforeUnmount(() => {
       background-color: var(--trans-white-5);
       position: relative;
       box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05),
-        0 1px 4px hsla(0, 0%, 0%, 0.05),
-        0 2px 8px hsla(0, 0%, 0%, 0.05);
+      0 1px 4px hsla(0, 0%, 0%, 0.05),
+      0 2px 8px hsla(0, 0%, 0%, 0.05);
       overflow-x: auto;
 
       code {
         font-size: 15px;
         font-family: SF Mono,
-          Menlo,
-          Consolas,
-          Liberation Mono,
-          monospace;
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
         float: left;
         min-width: 100%;
 
@@ -498,7 +489,7 @@ onBeforeUnmount(() => {
 
     }
 
-    &>div:nth-child(1) {
+    & > div:nth-child(1) {
       transition: all 0.2s;
       margin: 0 auto;
       min-height: v-bind(editorHeight);
