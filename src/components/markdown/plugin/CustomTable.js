@@ -56,19 +56,41 @@ export const CustomTable = Node.create({
 
   addAttributes() {
     return {
-      withHeaderRow: { default: true },
-      data: { default: buildEmptyMatrix(2, 2) },
-      style: { default: null },
+      withHeaderRow: { default: true, rendered: false },
+      data: { default: buildEmptyMatrix(2, 2), rendered: false },
+      style: { default: null, rendered: false },
     }
   },
 
   parseHTML() {
     return [
       {
+        tag: 'table[data-type="custom-table"]',
+        getAttrs: (dom) => {
+          const tableEl = dom instanceof HTMLElement ? dom : dom?.nodeType === 1 ? dom : null
+          if (!tableEl) return false
+
+          const data = tableDomToMatrix(tableEl)
+          const withHeaderRowAttr = tableEl.getAttribute('data-with-header-row')
+          const withHeaderRow =
+            withHeaderRowAttr === 'true' ||
+            withHeaderRowAttr === '1' ||
+            (withHeaderRowAttr == null && detectHeaderRow(tableEl))
+
+          return {
+            withHeaderRow,
+            data,
+            style: tableEl.getAttribute('style') || null,
+          }
+        },
+      },
+      {
         tag: 'table',
         getAttrs: (dom) => {
-          const tableEl = dom instanceof HTMLElement ? dom : null
+          const tableEl = dom instanceof HTMLElement ? dom : dom?.nodeType === 1 ? dom : null
           if (!tableEl) return false
+          // 跳过已经被上面规则匹配的 custom-table
+          if (tableEl.getAttribute('data-type') === 'custom-table') return false
 
           const data = tableDomToMatrix(tableEl)
           const withHeaderRowAttr = tableEl.getAttribute('data-with-header-row')
