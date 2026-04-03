@@ -122,6 +122,127 @@
         ],
         "$id": 438
     },
+    "主题解析失败，已切换至文本模式": {
+        "en-US": "Theme parsing failed, switched to text mode",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(7137-7156)"
+        ],
+        "$id": 1253
+    },
+    "对话解析失败，已切换至文本模式": {
+        "en-US": "Dialogue parsing failed, switched to text mode",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(7761-7780)"
+        ],
+        "$id": 1254
+    },
+    "加载失败: {}": {
+        "en-US": "Load failed: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(8362-8374)"
+        ],
+        "$id": 1255
+    },
+    "没有打开的文件": {
+        "en-US": "No file open",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(8505-8516)"
+        ],
+        "$id": 1256
+    },
+    "保存成功": {
+        "en-US": "Saved successfully",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(9257-9265)"
+        ],
+        "$id": 1257
+    },
+    "保存失败": {
+        "en-US": "Save failed",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(9361-9369)"
+        ],
+        "$id": 1258
+    },
+    "请先打开 data 文件夹": {
+        "en-US": "Please open a data folder first",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(10423-10440)",
+            "src/stores/modules/chatboxEditor.js(11182-11199)"
+        ],
+        "$id": 1259
+    },
+    "文件夹名不能包含斜杠": {
+        "en-US": "Folder name cannot contain slashes",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(10624-10638)"
+        ],
+        "$id": 1260
+    },
+    "已创建文件夹: {}": {
+        "en-US": "Folder created: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(10877-10891)"
+        ],
+        "$id": 1261
+    },
+    "创建失败: {}": {
+        "en-US": "Create failed: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(10988-11000)",
+            "src/stores/modules/chatboxEditor.js(12168-12180)"
+        ],
+        "$id": 1262
+    },
+    "文件名不能包含斜杠": {
+        "en-US": "File name cannot contain slashes",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(11387-11400)"
+        ],
+        "$id": 1263
+    },
+    "已创建文件: {}": {
+        "en-US": "File created: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(11830-11843)"
+        ],
+        "$id": 1264
+    },
+    "无法删除根目录": {
+        "en-US": "Cannot delete root directory",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(12431-12442)"
+        ],
+        "$id": 1265
+    },
+    "已删除: {}": {
+        "en-US": "Deleted: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(13038-13049)"
+        ],
+        "$id": 1266
+    },
+    "删除失败: {}": {
+        "en-US": "Delete failed: {}",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(13147-13159)"
+        ],
+        "$id": 1267
+    },
+    "资源包加载完成: {} 个文件": {
+        "en-US": "Resource pack loaded: {} files",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(14495-14514)"
+        ],
+        "$id": 1268
+    },
+    "资源导入失败": {
+        "en-US": "Resource import failed",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js(14611-14621)"
+        ],
+        "$id": 1269
+    },
     "数据结构错误: 预期 Object，实际{}": {
         "en-US": "Data structure error: Expected Object, Actual{}",
         "$files": [
@@ -184,6 +305,121 @@
             "src/components/form/Select.vue(3974-3982)"
         ],
         "$id": 447
+    },
+    "1.21.1 NeoForge 开发者": {
+        "en-US": "1.21.1 NeoForge Developer",
+        "$files": [
+            "src/views/author/AuthorPage.vue(273-296)"
+        ],
+        "$id": 448
+    },
+    "写模组是工作，写Web才是生活": {
+        "en-US": "Writing mods is work, writing web is life",
+        "$files": [
+            "src/views/author/AuthorPage.vue(316-335)"
+        ],
+        "$id": 449
+    },
+    "主程序大人": {
+        "en-US": "Master Program",
+        "$files": [
+            "src/views/author/AuthorPage.vue(399-408)"
+        ],
+        "$id": 450
+    },
+    "此人很高冷，没有任何留言": {
+        "en-US": "This person is very cold and has not left any messages",
+        "$files": [
+            "src/views/author/AuthorPage.vue(428-444)"
+        ],
+        "$id": 451
+    },
+    "文件过大（>10MB），可能会导致页面卡顿": {
+        "en-US": "File is too large (>10MB), which may cause page lag",
+        "$files": [
+            "src/views/editor/EditorPage.vue(1613-1638)"
+        ],
+        "$id": 1164
+    },
+    "已导入Markdown文件": {
+        "en-US": "Markdown file imported",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2022-2039)"
+        ],
+        "$id": 1165
+    },
+    "读取文件失败": {
+        "en-US": "Failed to read file",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2097-2107)"
+        ],
+        "$id": 1166
+    },
+    "导入Markdown文件": {
+        "en-US": "Import Markdown file",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2302-2318)",
+            "src/views/editor/EditorPage.vue(7015-7031)"
+        ],
+        "$id": 1167
+    },
+    "导入会覆盖当前编辑器内容，是否继续？": {
+        "en-US": "Importing will overwrite current editor content. Continue?",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2336-2358)"
+        ],
+        "$id": 1168
+    },
+    "生成Markdown文件": {
+        "en-US": "Generate Markdown file",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2547-2563)",
+            "src/views/editor/EditorPage.vue(6769-6785)"
+        ],
+        "$id": 452
+    },
+    "请确定是否要生成Markdown文件": {
+        "en-US": "Please confirm if you want to generate Markdown files",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2579-2601)"
+        ],
+        "$id": 453
+    },
+    "生成文件需要的信息缺失，请检查你的文件名是否提供": {
+        "en-US": "The information required to generate the file is missing. Please check if your file name is provided",
+        "$files": [
+            "src/views/editor/EditorPage.vue(2705-2733)"
+        ],
+        "$id": 454
+    },
+    "已成功生成文件": {
+        "en-US": "Successfully generated file",
+        "$files": [
+            "src/views/editor/EditorPage.vue(3141-3152)"
+        ],
+        "$id": 455
+    },
+    "目录": {
+        "en-US": "catalogue",
+        "$files": [
+            "src/views/editor/EditorPage.vue(3788-3794)",
+            "src/views/wiki/ModWiki.vue(8236-8242)"
+        ],
+        "$id": 456
+    },
+    "请输入文件名": {
+        "en-US": "Please enter the file name",
+        "$files": [
+            "src/views/editor/EditorPage.vue(6078-6088)"
+        ],
+        "$id": 457
+    },
+    "功能展示": {
+        "en-US": "Feature Demo",
+        "$files": [
+            "src/views/editor/EditorPage.vue(6527-6535)"
+        ],
+        "$id": 458
     },
     "视频链接URL": {
         "en-US": "Video link URL",
@@ -450,121 +686,6 @@
         ],
         "$id": 498
     },
-    "1.21.1 NeoForge 开发者": {
-        "en-US": "1.21.1 NeoForge Developer",
-        "$files": [
-            "src/views/author/AuthorPage.vue(273-296)"
-        ],
-        "$id": 448
-    },
-    "写模组是工作，写Web才是生活": {
-        "en-US": "Writing mods is work, writing web is life",
-        "$files": [
-            "src/views/author/AuthorPage.vue(316-335)"
-        ],
-        "$id": 449
-    },
-    "主程序大人": {
-        "en-US": "Master Program",
-        "$files": [
-            "src/views/author/AuthorPage.vue(399-408)"
-        ],
-        "$id": 450
-    },
-    "此人很高冷，没有任何留言": {
-        "en-US": "This person is very cold and has not left any messages",
-        "$files": [
-            "src/views/author/AuthorPage.vue(428-444)"
-        ],
-        "$id": 451
-    },
-    "文件过大（>10MB），可能会导致页面卡顿": {
-        "en-US": "File is too large (>10MB), which may cause page lag",
-        "$files": [
-            "src/views/editor/EditorPage.vue(1613-1638)"
-        ],
-        "$id": 1164
-    },
-    "已导入Markdown文件": {
-        "en-US": "Markdown file imported",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2022-2039)"
-        ],
-        "$id": 1165
-    },
-    "读取文件失败": {
-        "en-US": "Failed to read file",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2097-2107)"
-        ],
-        "$id": 1166
-    },
-    "导入Markdown文件": {
-        "en-US": "Import Markdown file",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2302-2318)",
-            "src/views/editor/EditorPage.vue(7015-7031)"
-        ],
-        "$id": 1167
-    },
-    "导入会覆盖当前编辑器内容，是否继续？": {
-        "en-US": "Importing will overwrite current editor content. Continue?",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2336-2358)"
-        ],
-        "$id": 1168
-    },
-    "生成Markdown文件": {
-        "en-US": "Generate Markdown file",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2547-2563)",
-            "src/views/editor/EditorPage.vue(6769-6785)"
-        ],
-        "$id": 452
-    },
-    "请确定是否要生成Markdown文件": {
-        "en-US": "Please confirm if you want to generate Markdown files",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2579-2601)"
-        ],
-        "$id": 453
-    },
-    "生成文件需要的信息缺失，请检查你的文件名是否提供": {
-        "en-US": "The information required to generate the file is missing. Please check if your file name is provided",
-        "$files": [
-            "src/views/editor/EditorPage.vue(2705-2733)"
-        ],
-        "$id": 454
-    },
-    "已成功生成文件": {
-        "en-US": "Successfully generated file",
-        "$files": [
-            "src/views/editor/EditorPage.vue(3141-3152)"
-        ],
-        "$id": 455
-    },
-    "目录": {
-        "en-US": "catalogue",
-        "$files": [
-            "src/views/editor/EditorPage.vue(3788-3794)",
-            "src/views/wiki/ModWiki.vue(8236-8242)"
-        ],
-        "$id": 456
-    },
-    "请输入文件名": {
-        "en-US": "Please enter the file name",
-        "$files": [
-            "src/views/editor/EditorPage.vue(6078-6088)"
-        ],
-        "$id": 457
-    },
-    "功能展示": {
-        "en-US": "Feature Demo",
-        "$files": [
-            "src/views/editor/EditorPage.vue(6527-6535)"
-        ],
-        "$id": 458
-    },
     "小笨蛋，页面跑偏啦～": {
         "en-US": "Little fool, the page is off track~",
         "$files": [
@@ -585,6 +706,150 @@
             "src/views/error/NotFound.vue(626-652)"
         ],
         "$id": 461
+    },
+    "我们的 Minecraft 模组": {
+        "en-US": "Our Minecraft mods",
+        "$files": [
+            "src/views/main/MainPage.vue(323-343)"
+        ],
+        "$id": 499
+    },
+    "了解更多": {
+        "en-US": "Learn more",
+        "$files": [
+            "src/views/main/MainPage.vue(878-886)"
+        ],
+        "$id": 500
+    },
+    "当前语言没有文档哦，请使用其它语言": {
+        "en-US": "There are no documents available in the current language. Please use another language",
+        "$files": [
+            "src/views/wiki/ModWiki.vue(2583-2604)",
+            "src/views/wiki/ModWiki.vue(3773-3794)"
+        ],
+        "$id": 501
+    },
+    "获取途径": {
+        "en-US": "access method",
+        "$files": [
+            "src/views/wiki/ModWiki.vue(5591-5599)"
+        ],
+        "$id": 502
+    },
+    "文档": {
+        "en-US": "document",
+        "$files": [
+            "src/views/wiki/ModWiki.vue(7369-7375)"
+        ],
+        "$id": 503
+    },
+    "不支持的组件类型": {
+        "en-US": "Unsupported component types",
+        "$files": [
+            "src/components/form/array/AnyTypeArray.vue(6974-6986)"
+        ],
+        "$id": 659
+    },
+    "编辑对象 #{}": {
+        "en-US": "Edit Object#{}",
+        "$files": [
+            "src/components/form/array/AnyTypeArray.vue(7218-7230)"
+        ],
+        "$id": 660
+    },
+    "component.delete": {
+        "en-US": "Delete",
+        "$files": [
+            "src/components/form/array/BaseArrayInspector.vue(3573-3593)"
+        ],
+        "$id": 661
+    },
+    "空": {
+        "en-US": "empty",
+        "$files": [
+            "src/components/form/array/BaseArrayInspector.vue(3921-3926)"
+        ],
+        "$id": 662
+    },
+    "编辑 {}": {
+        "en-US": "Edit{}",
+        "$files": [
+            "src/components/form/array/ObjectArray.vue(2765-2774)"
+        ],
+        "$id": 663
+    },
+    "请输入文本...": {
+        "en-US": "Please enter text ..",
+        "$files": [
+            "src/components/form/array/StringArray.vue(580-592)"
+        ],
+        "$id": 664
+    },
+    "新建项": {
+        "en-US": "New Item",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(2155-2162)",
+            "src/components/form/map/MapInspector.vue(4039-4046)"
+        ],
+        "$id": 672
+    },
+    "请输入唯一的标识符 (ID)": {
+        "en-US": "Please enter a unique identifier (ID)",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(2182-2200)"
+        ],
+        "$id": 673
+    },
+    "该 ID 已存在，请使用其他 ID": {
+        "en-US": "This ID already exists, please use a different ID",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(2367-2388)"
+        ],
+        "$id": 674
+    },
+    "删除": {
+        "en-US": "delete",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(2643-2649)",
+            "src/components/form/map/MapInspector.vue(6071-6077)",
+            "src/views/more/chatbox/component/FileExplorer.vue(2333-2339)"
+        ],
+        "$id": 675
+    },
+    "确定要删除 {} 吗？": {
+        "en-US": "Are you sure you want to delete {}?",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(2665-2680)"
+        ],
+        "$id": 676
+    },
+    "重命名 ID": {
+        "en-US": "Rename ID",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(3113-3123)"
+        ],
+        "$id": 677
+    },
+    "ID 已存在": {
+        "en-US": "ID already exists",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(3299-3309)"
+        ],
+        "$id": 678
+    },
+    "重命名 Key": {
+        "en-US": "Rename Key",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(5812-5823)"
+        ],
+        "$id": 679
+    },
+    "暂无键值对": {
+        "en-US": "There are currently no key value pairs available",
+        "$files": [
+            "src/components/form/map/MapInspector.vue(6423-6432)"
+        ],
+        "$id": 680
     },
     "名称": {
         "en-US": "name",
@@ -611,8 +876,8 @@
             "src/assets/more/chatbox/chatboxDialogues.js(6626-6634)",
             "src/assets/more/chatbox/chatboxDialogues.js(8248-8256)",
             "src/assets/more/chatbox/chatboxDialogues.js(8371-8379)",
-            "src/assets/more/chatbox/chatboxTheme.js(8536-8544)",
-            "src/assets/more/chatbox/chatboxTheme.js(8721-8729)"
+            "src/assets/more/chatbox/chatboxTheme.js(8671-8679)",
+            "src/assets/more/chatbox/chatboxTheme.js(8856-8864)"
         ],
         "$id": 506
     },
@@ -621,7 +886,7 @@
         "$files": [
             "src/assets/more/chatbox/chatboxDialogues.js(1078-1125)",
             "src/assets/more/chatbox/chatboxDialogues.js(3565-3612)",
-            "src/assets/more/chatbox/chatboxTheme.js(8595-8642)"
+            "src/assets/more/chatbox/chatboxTheme.js(8730-8777)"
         ],
         "$id": 507
     },
@@ -632,7 +897,7 @@
             "src/assets/more/chatbox/chatboxDialogues.js(3879-3888)",
             "src/assets/more/chatbox/chatboxDialogues.js(6814-6823)",
             "src/assets/more/chatbox/chatboxDialogues.js(8559-8568)",
-            "src/assets/more/chatbox/chatboxTheme.js(8909-8918)"
+            "src/assets/more/chatbox/chatboxTheme.js(9044-9053)"
         ],
         "$id": 508
     },
@@ -643,7 +908,7 @@
             "src/assets/more/chatbox/chatboxDialogues.js(3961-3970)",
             "src/assets/more/chatbox/chatboxDialogues.js(6896-6905)",
             "src/assets/more/chatbox/chatboxDialogues.js(8641-8650)",
-            "src/assets/more/chatbox/chatboxTheme.js(8991-9000)"
+            "src/assets/more/chatbox/chatboxTheme.js(9126-9135)"
         ],
         "$id": 509
     },
@@ -658,7 +923,7 @@
         "en-US": "Event parameters",
         "$files": [
             "src/assets/more/chatbox/chatboxDialogues.js(1884-1892)",
-            "src/assets/more/chatbox/chatboxTheme.js(1330-1338)"
+            "src/assets/more/chatbox/chatboxTheme.js(1465-1473)"
         ],
         "$id": 511
     },
@@ -765,7 +1030,7 @@
         "en-US": "loop playback",
         "$files": [
             "src/assets/more/chatbox/chatboxDialogues.js(4784-4792)",
-            "src/assets/more/chatbox/chatboxTheme.js(16823-16831)"
+            "src/assets/more/chatbox/chatboxTheme.js(17227-17235)"
         ],
         "$id": 526
     },
@@ -801,7 +1066,7 @@
         "en-US": "Play sound effects",
         "$files": [
             "src/assets/more/chatbox/chatboxDialogues.js(7601-7609)",
-            "src/assets/more/chatbox/enumTypes.js(1557-1565)"
+            "src/assets/more/chatbox/enumTypes.js(1643-1651)"
         ],
         "$id": 531
     },
@@ -809,7 +1074,7 @@
         "en-US": "execute command",
         "$files": [
             "src/assets/more/chatbox/chatboxDialogues.js(7699-7707)",
-            "src/assets/more/chatbox/enumTypes.js(1485-1493)"
+            "src/assets/more/chatbox/enumTypes.js(1548-1556)"
         ],
         "$id": 532
     },
@@ -949,600 +1214,621 @@
     "触发时机": {
         "en-US": "Trigger timing",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(990-998)"
+            "src/assets/more/chatbox/chatboxTheme.js(1014-1022)"
         ],
         "$id": 552
+    },
+    "事件触发条件": {
+        "en-US": "Event trigger condition",
+        "$files": [
+            "src/assets/more/chatbox/chatboxTheme.js(1194-1204)"
+        ],
+        "$id": 1270
     },
     "事件类型": {
         "en-US": "Event Type",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(1165-1173)"
+            "src/assets/more/chatbox/chatboxTheme.js(1300-1308)"
         ],
         "$id": 553
     },
     "附件类型": {
         "en-US": "Attachment type",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2037-2045)"
+            "src/assets/more/chatbox/chatboxTheme.js(2172-2180)"
         ],
         "$id": 554
     },
     "图片路径": {
         "en-US": "image path",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2221-2229)",
-            "src/assets/more/chatbox/chatboxTheme.js(12807-12815)"
+            "src/assets/more/chatbox/chatboxTheme.js(2356-2364)",
+            "src/assets/more/chatbox/chatboxTheme.js(12769-12777)"
         ],
         "$id": 555
     },
     "文本内容": {
         "en-US": "text content",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2469-2477)"
+            "src/assets/more/chatbox/chatboxTheme.js(2604-2612)"
         ],
         "$id": 556
     },
     "X 坐标 (%)": {
         "en-US": "X coordinate (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2605-2617)",
-            "src/assets/more/chatbox/chatboxTheme.js(5096-5108)"
+            "src/assets/more/chatbox/chatboxTheme.js(2740-2752)",
+            "src/assets/more/chatbox/chatboxTheme.js(5231-5243)"
         ],
         "$id": 557
     },
     "Y 坐标 (%)": {
         "en-US": "Y coordinate (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2695-2707)",
-            "src/assets/more/chatbox/chatboxTheme.js(5267-5279)"
+            "src/assets/more/chatbox/chatboxTheme.js(2830-2842)",
+            "src/assets/more/chatbox/chatboxTheme.js(5402-5414)"
         ],
         "$id": 558
     },
     "高度": {
         "en-US": "height",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2796-2802)"
+            "src/assets/more/chatbox/chatboxTheme.js(2931-2937)"
         ],
         "$id": 559
     },
     "宽度": {
         "en-US": "width",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(2983-2989)"
+            "src/assets/more/chatbox/chatboxTheme.js(3118-3124)"
         ],
         "$id": 560
     },
     "行宽": {
         "en-US": "Row width",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(3167-3173)"
+            "src/assets/more/chatbox/chatboxTheme.js(3302-3308)"
         ],
         "$id": 561
     },
     "文本对齐": {
         "en-US": "align text",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(3322-3330)"
+            "src/assets/more/chatbox/chatboxTheme.js(3457-3465)"
         ],
         "$id": 562
     },
     "自动换行": {
         "en-US": "word wrap",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(3519-3527)"
+            "src/assets/more/chatbox/chatboxTheme.js(3654-3662)"
         ],
         "$id": 563
     },
     "文本颜色": {
         "en-US": "text color",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(3670-3678)"
+            "src/assets/more/chatbox/chatboxTheme.js(3805-3813)"
         ],
         "$id": 564
     },
     "持续时间 (帧)": {
         "en-US": "Duration (frames)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(4813-4825)"
+            "src/assets/more/chatbox/chatboxTheme.js(4948-4960)"
         ],
         "$id": 565
     },
     "动画持续的帧数 (默认60帧=1秒)": {
         "en-US": "The number of frames the animation lasts (default 60 frames=1 second)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(4840-4862)"
+            "src/assets/more/chatbox/chatboxTheme.js(4975-4997)"
         ],
         "$id": 566
     },
     "缓动函数": {
         "en-US": "Buffering function",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(4959-4967)"
+            "src/assets/more/chatbox/chatboxTheme.js(5094-5102)"
         ],
         "$id": 567
     },
     "绝对定位：直接移动到屏幕宽度的百分比位置": {
         "en-US": "Absolute positioning: Move directly to the percentage position of the screen width",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5123-5147)"
+            "src/assets/more/chatbox/chatboxTheme.js(5258-5282)"
         ],
         "$id": 568
     },
     "绝对定位：直接移动到屏幕高度的百分比位置": {
         "en-US": "Absolute positioning: Move directly to the percentage position of the screen height",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5294-5318)"
+            "src/assets/more/chatbox/chatboxTheme.js(5429-5453)"
         ],
         "$id": 569
     },
     "X 偏移 (%)": {
         "en-US": "X offset (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5444-5456)"
+            "src/assets/more/chatbox/chatboxTheme.js(5579-5591)"
         ],
         "$id": 570
     },
     "相对偏移：基于当前位置，再叠加屏幕宽度的百分比位移": {
         "en-US": "Relative offset: Based on the current position, the percentage displacement of the screen width is superimposed",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5471-5500)"
+            "src/assets/more/chatbox/chatboxTheme.js(5606-5635)"
         ],
         "$id": 571
     },
     "Y 偏移 (%)": {
         "en-US": "Y offset (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5626-5638)"
+            "src/assets/more/chatbox/chatboxTheme.js(5761-5773)"
         ],
         "$id": 572
     },
     "相对偏移：基于当前位置，再叠加屏幕高度的百分比位移": {
         "en-US": "Relative offset: a percentage displacement based on the current position and overlaid with the screen height",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5653-5682)"
+            "src/assets/more/chatbox/chatboxTheme.js(5788-5817)"
         ],
         "$id": 573
     },
     "缩放": {
         "en-US": "zoom",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5806-5812)",
-            "src/assets/more/chatbox/chatboxTheme.js(7991-7997)"
+            "src/assets/more/chatbox/chatboxTheme.js(5941-5947)",
+            "src/assets/more/chatbox/chatboxTheme.js(8126-8132)"
         ],
         "$id": 574
     },
     "旋转": {
         "en-US": "rotate",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(5936-5942)",
-            "src/assets/more/chatbox/chatboxTheme.js(8122-8128)"
+            "src/assets/more/chatbox/chatboxTheme.js(6071-6077)",
+            "src/assets/more/chatbox/chatboxTheme.js(8257-8263)"
         ],
         "$id": 575
     },
     "透明度": {
         "en-US": "transparency",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(6066-6073)",
-            "src/assets/more/chatbox/chatboxTheme.js(8259-8266)"
+            "src/assets/more/chatbox/chatboxTheme.js(6201-6208)",
+            "src/assets/more/chatbox/chatboxTheme.js(8394-8401)"
         ],
         "$id": 576
     },
     "亮度": {
         "en-US": "brightness",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(6203-6209)",
-            "src/assets/more/chatbox/chatboxTheme.js(8397-8403)"
+            "src/assets/more/chatbox/chatboxTheme.js(6338-6344)",
+            "src/assets/more/chatbox/chatboxTheme.js(8532-8538)"
         ],
         "$id": 577
     },
     "切换材质": {
         "en-US": "Switch materials",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(6336-6344)"
+            "src/assets/more/chatbox/chatboxTheme.js(6471-6479)"
         ],
         "$id": 578
     },
     "默认隐藏": {
         "en-US": "default hidden",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(6940-6948)"
+            "src/assets/more/chatbox/chatboxTheme.js(7075-7083)"
         ],
         "$id": 579
     },
     "X坐标 (%)": {
         "en-US": "X coordinate (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7025-7036)"
+            "src/assets/more/chatbox/chatboxTheme.js(7160-7171)"
         ],
         "$id": 580
     },
     "Y坐标 (%)": {
         "en-US": "Y coordinate (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7157-7168)"
+            "src/assets/more/chatbox/chatboxTheme.js(7292-7303)"
         ],
         "$id": 581
     },
     "层级 (Z)": {
         "en-US": "Level (Z)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7299-7309)"
+            "src/assets/more/chatbox/chatboxTheme.js(7434-7444)"
         ],
         "$id": 582
     },
     "宽度 (%)": {
         "en-US": "Width (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7432-7442)"
+            "src/assets/more/chatbox/chatboxTheme.js(7567-7577)"
         ],
         "$id": 583
     },
     "高度 (%)": {
         "en-US": "Height (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7565-7575)"
+            "src/assets/more/chatbox/chatboxTheme.js(7700-7710)"
         ],
         "$id": 584
     },
     "水平对齐": {
         "en-US": "horizontal alignment",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7698-7706)"
+            "src/assets/more/chatbox/chatboxTheme.js(7833-7841)"
         ],
         "$id": 585
     },
     "垂直对齐": {
         "en-US": "vertical alignment",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(7845-7853)"
+            "src/assets/more/chatbox/chatboxTheme.js(7980-7988)"
         ],
         "$id": 586
     },
     "启用提示": {
         "en-US": "Enable prompt",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(10894-10902)"
+            "src/assets/more/chatbox/chatboxTheme.js(10806-10814)"
         ],
         "$id": 587
     },
     "鼠标图标宽 (px)": {
         "en-US": "Mouse icon width (px)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(10995-11009)"
+            "src/assets/more/chatbox/chatboxTheme.js(10907-10921)"
         ],
         "$id": 588
     },
     "鼠标图标高 (px)": {
         "en-US": "Mouse icon height (px)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(11119-11133)"
+            "src/assets/more/chatbox/chatboxTheme.js(11031-11045)"
         ],
         "$id": 589
     },
     "右键图标": {
         "en-US": "Right click icon",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(11242-11250)"
+            "src/assets/more/chatbox/chatboxTheme.js(11154-11162)"
         ],
         "$id": 590
     },
     "滚轮图标": {
         "en-US": "Wheel icon",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(11442-11450)"
+            "src/assets/more/chatbox/chatboxTheme.js(11354-11362)"
         ],
         "$id": 591
     },
     "类型": {
         "en-US": "type",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(12367-12373)"
+            "src/assets/more/chatbox/chatboxTheme.js(12329-12335)"
         ],
         "$id": 592
     },
     "鼠标悬浮时图片": {
         "en-US": "Picture when hovering the mouse",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(13068-13079)"
+            "src/assets/more/chatbox/chatboxTheme.js(13030-13041)"
         ],
         "$id": 593
+    },
+    "是否上锁": {
+        "en-US": "Is locked",
+        "$files": [
+            "src/assets/more/chatbox/chatboxTheme.js(13282-13290)"
+        ],
+        "$id": 1271
+    },
+    "上锁时的贴图": {
+        "en-US": "Texture when locked",
+        "$files": [
+            "src/assets/more/chatbox/chatboxTheme.js(13473-13483)"
+        ],
+        "$id": 1272
     },
     "物品 ID": {
         "en-US": "Item ID",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(13335-13344)"
+            "src/assets/more/chatbox/chatboxTheme.js(13739-13748)"
         ],
         "$id": 594
     },
     "鼠标悬浮时物品": {
         "en-US": "When hovering the mouse, items are suspended",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(13588-13599)"
+            "src/assets/more/chatbox/chatboxTheme.js(13992-14003)"
         ],
         "$id": 595
     },
     "数量": {
         "en-US": "quantity",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(13803-13809)"
+            "src/assets/more/chatbox/chatboxTheme.js(14207-14213)"
         ],
         "$id": 596
     },
     "自定义物品模型数据": {
         "en-US": "Customize item model data",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(13993-14006)"
+            "src/assets/more/chatbox/chatboxTheme.js(14397-14410)"
         ],
         "$id": 597
     },
     "玩家 ID": {
         "en-US": "Player ID",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(14257-14266)"
+            "src/assets/more/chatbox/chatboxTheme.js(14661-14670)"
         ],
         "$id": 598
     },
     "鼠标悬浮时玩家ID": {
         "en-US": "Player ID when hovering the mouse",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(14458-14471)"
+            "src/assets/more/chatbox/chatboxTheme.js(14862-14875)"
         ],
         "$id": 599
     },
     "渲染的实体": {
         "en-US": "Rendered Entity",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(14664-14673)"
+            "src/assets/more/chatbox/chatboxTheme.js(15068-15077)"
         ],
         "$id": 1169
     },
     "宽度（px）": {
         "en-US": "Width (px)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(14919-14929)"
+            "src/assets/more/chatbox/chatboxTheme.js(15323-15333)"
         ],
         "$id": 1170
     },
     "不填会正常展示实体渲染的大小，这里填了会限制渲染的区域": {
         "en-US": "Leave empty to display entity at normal size. Filling this limits the rendering area",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(14944-14975)",
-            "src/assets/more/chatbox/chatboxTheme.js(15180-15211)"
+            "src/assets/more/chatbox/chatboxTheme.js(15348-15379)",
+            "src/assets/more/chatbox/chatboxTheme.js(15584-15615)"
         ],
         "$id": 1171
     },
     "高度（px）": {
         "en-US": "Height (px)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(15155-15165)"
+            "src/assets/more/chatbox/chatboxTheme.js(15559-15569)"
         ],
         "$id": 1172
     },
     "垂直偏移量": {
         "en-US": "Vertical Offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(15356-15365)"
+            "src/assets/more/chatbox/chatboxTheme.js(15760-15769)"
         ],
         "$id": 1173
     },
     "你只想渲染玩家的上半身，可以把这个值设置成合适的正数（向下移）": {
         "en-US": "To render only the player's upper body, set this to an appropriate positive value (moves down)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(15418-15453)"
+            "src/assets/more/chatbox/chatboxTheme.js(15822-15857)"
         ],
         "$id": 1174
     },
     "实体看向窗口的位置选项": {
         "en-US": "Entity look-at position options",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(15560-15575)"
+            "src/assets/more/chatbox/chatboxTheme.js(15964-15979)"
         ],
         "$id": 1175
     },
     "实体看向窗口的X位置（%）": {
         "en-US": "Entity look-at X position (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(15763-15780)"
+            "src/assets/more/chatbox/chatboxTheme.js(16167-16184)"
         ],
         "$id": 1176
     },
     "实体看向窗口的Y位置（%）": {
         "en-US": "Entity look-at Y position (%)",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16029-16046)"
+            "src/assets/more/chatbox/chatboxTheme.js(16433-16450)"
         ],
         "$id": 1177
     },
     "预设动画": {
         "en-US": "Preset animation",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16297-16305)"
+            "src/assets/more/chatbox/chatboxTheme.js(16701-16709)"
         ],
         "$id": 600
     },
     "只能获取当前主题文件的预设动画补全，但是你可以使用其它主题文件的预设动画": {
         "en-US": "Only the preset animation completion of the current theme file can be obtained, but you can use preset animations from other theme files",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16358-16398)"
+            "src/assets/more/chatbox/chatboxTheme.js(16762-16802)"
         ],
         "$id": 601
     },
     "自定义动画": {
         "en-US": "Custom Animation",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16580-16589)"
+            "src/assets/more/chatbox/chatboxTheme.js(16984-16993)"
         ],
         "$id": 602
     },
     "{time}帧": {
         "en-US": "{time} frames",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16710-16721)",
-            "src/assets/more/chatbox/chatboxTheme.js(22156-22167)"
+            "src/assets/more/chatbox/chatboxTheme.js(17114-17125)",
+            "src/assets/more/chatbox/chatboxTheme.js(22560-22571)"
         ],
         "$id": 603
     },
     "渲染附件": {
         "en-US": "Rendering attachments",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(16969-16977)",
-            "src/assets/more/chatbox/chatboxTheme.js(17071-17079)"
+            "src/assets/more/chatbox/chatboxTheme.js(17373-17381)",
+            "src/assets/more/chatbox/chatboxTheme.js(17475-17483)"
         ],
         "$id": 604
     },
     "功能类型": {
         "en-US": "functional type",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(17727-17735)"
+            "src/assets/more/chatbox/chatboxTheme.js(18131-18139)"
         ],
         "$id": 605
     },
     "贴图": {
         "en-US": "sticker",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(17890-17896)"
+            "src/assets/more/chatbox/chatboxTheme.js(18294-18300)"
         ],
         "$id": 606
     },
     "鼠标悬浮时或功能激活时的贴图": {
         "en-US": "Texture when hovering the mouse or when the function is activated",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(18067-18085)"
+            "src/assets/more/chatbox/chatboxTheme.js(18471-18489)"
         ],
         "$id": 607
     },
     "预览内容": {
         "en-US": "Preview contents ",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(18871-18879)",
-            "src/assets/more/chatbox/chatboxTheme.js(20570-20578)"
+            "src/assets/more/chatbox/chatboxTheme.js(19275-19283)",
+            "src/assets/more/chatbox/chatboxTheme.js(20974-20982)"
         ],
         "$id": 608
     },
     "仅用于预览内容，不保存": {
         "en-US": "Only used for previewing content, not saved",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(18930-18945)"
+            "src/assets/more/chatbox/chatboxTheme.js(19334-19349)"
         ],
         "$id": 609
     },
     "选项贴图": {
         "en-US": "Option mapping",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(19004-19012)"
+            "src/assets/more/chatbox/chatboxTheme.js(19408-19416)"
         ],
         "$id": 610
     },
     "文字对齐": {
         "en-US": "Text alignment",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(19172-19180)",
-            "src/assets/more/chatbox/chatboxTheme.js(20987-20995)"
+            "src/assets/more/chatbox/chatboxTheme.js(19576-19584)",
+            "src/assets/more/chatbox/chatboxTheme.js(21391-21399)"
         ],
         "$id": 611
     },
     "锁定图标": {
         "en-US": "Lock icon",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(19320-19328)"
+            "src/assets/more/chatbox/chatboxTheme.js(19724-19732)"
         ],
         "$id": 612
     },
     "文字 X 偏移": {
         "en-US": "Text X offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(19490-19501)"
+            "src/assets/more/chatbox/chatboxTheme.js(19894-19905)"
         ],
         "$id": 613
     },
     "文字 Y 偏移": {
         "en-US": "Text Y offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(19601-19612)"
+            "src/assets/more/chatbox/chatboxTheme.js(20005-20016)"
         ],
         "$id": 614
     },
     "预览名字": {
         "en-US": "Preview Name",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(20440-20448)"
+            "src/assets/more/chatbox/chatboxTheme.js(20844-20852)"
         ],
         "$id": 615
     },
     "仅用于预览名字位置，不保存": {
         "en-US": "Only used for previewing name location, not saved",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(20494-20511)"
+            "src/assets/more/chatbox/chatboxTheme.js(20898-20915)"
         ],
         "$id": 616
     },
     "仅用于预览内容位置和换行，不保存": {
         "en-US": "Only used for previewing content positions and line breaks, not saved",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(20624-20644)"
+            "src/assets/more/chatbox/chatboxTheme.js(21028-21048)"
         ],
         "$id": 617
     },
     "对话框贴图": {
         "en-US": "Dialogue box texture",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(20706-20715)"
+            "src/assets/more/chatbox/chatboxTheme.js(21110-21119)"
         ],
         "$id": 618
     },
     "换行宽度": {
         "en-US": "Line width",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(20878-20886)"
+            "src/assets/more/chatbox/chatboxTheme.js(21282-21290)"
         ],
         "$id": 619
     },
     "名字 X偏移": {
         "en-US": "Name X offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(21132-21142)"
+            "src/assets/more/chatbox/chatboxTheme.js(21536-21546)"
         ],
         "$id": 620
     },
     "名字 Y偏移": {
         "en-US": "Name Y offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(21239-21249)"
+            "src/assets/more/chatbox/chatboxTheme.js(21643-21653)"
         ],
         "$id": 621
     },
     "内容 X偏移": {
         "en-US": "Content X offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(21346-21356)"
+            "src/assets/more/chatbox/chatboxTheme.js(21750-21760)"
         ],
         "$id": 622
     },
     "内容 Y偏移": {
         "en-US": "Content Y offset",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(21453-21463)"
+            "src/assets/more/chatbox/chatboxTheme.js(21857-21867)"
         ],
         "$id": 623
     },
     "关键帧列表": {
         "en-US": "Keyframe List",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(22026-22035)"
+            "src/assets/more/chatbox/chatboxTheme.js(22430-22439)"
         ],
         "$id": 624
     },
     "背景颜色": {
         "en-US": "background color",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(23009-23017)"
+            "src/assets/more/chatbox/chatboxTheme.js(23413-23421)"
         ],
         "$id": 625
     },
     "全局动画库": {
         "en-US": "Global Animation Library",
         "$files": [
-            "src/assets/more/chatbox/chatboxTheme.js(23120-23129)"
+            "src/assets/more/chatbox/chatboxTheme.js(23524-23533)"
         ],
         "$id": 626
     },
@@ -1671,275 +1957,173 @@
         ],
         "$id": 640
     },
+    "组件tick事件": {
+        "en-US": "Component tick event",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1230-1242)"
+        ],
+        "$id": 1273
+    },
+    "组件加载事件（只要进入对话就会触发一次）": {
+        "en-US": "Component load event (triggers once when entering dialogue)",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1256-1280)"
+        ],
+        "$id": 1274
+    },
     "立绘被点击时": {
         "en-US": "When the portrait is clicked",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1294-1304)"
+            "src/assets/more/chatbox/enumTypes.js(1357-1367)"
         ],
         "$id": 641
     },
     "鼠标悬停在立绘上时": {
         "en-US": "When hovering over the vertical drawing with the mouse",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1325-1338)"
+            "src/assets/more/chatbox/enumTypes.js(1388-1401)"
         ],
         "$id": 642
     },
     "鼠标离开立绘时": {
         "en-US": "When the mouse leaves the portrait",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1358-1369)"
+            "src/assets/more/chatbox/enumTypes.js(1421-1432)"
         ],
         "$id": 643
+    },
+    "执行mvel代码": {
+        "en-US": "Execute MVEL code",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1567-1579)"
+        ],
+        "$id": 1275
     },
     "强制跳转对话": {
         "en-US": "Force jump dialogue",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1504-1514)"
+            "src/assets/more/chatbox/enumTypes.js(1590-1600)"
         ],
         "$id": 644
     },
     "到下一句对话": {
         "en-US": "Moving on to the next conversation",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1530-1540)"
+            "src/assets/more/chatbox/enumTypes.js(1616-1626)"
         ],
         "$id": 645
     },
     "播放语音": {
         "en-US": "play voice",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1582-1590)"
+            "src/assets/more/chatbox/enumTypes.js(1668-1676)"
         ],
         "$id": 646
     },
     "停止特定音效": {
         "en-US": "Stop specific sound effects",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1607-1617)"
+            "src/assets/more/chatbox/enumTypes.js(1693-1703)"
         ],
         "$id": 647
     },
     "隐藏特定组件": {
         "en-US": "Hide specific components",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1628-1638)"
+            "src/assets/more/chatbox/enumTypes.js(1714-1724)"
         ],
         "$id": 648
     },
     "显示特定组件": {
         "en-US": "Display specific components",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1649-1659)"
+            "src/assets/more/chatbox/enumTypes.js(1735-1745)"
         ],
         "$id": 649
     },
     "替换自身为特定组件": {
         "en-US": "Replace oneself with a specific component",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1673-1686)"
+            "src/assets/more/chatbox/enumTypes.js(1759-1772)"
         ],
         "$id": 650
+    },
+    "锁定特定组件": {
+        "en-US": "Lock specific component",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1783-1793)"
+        ],
+        "$id": 1276
+    },
+    "解锁特定组件": {
+        "en-US": "Unlock specific component",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1806-1816)"
+        ],
+        "$id": 1277
+    },
+    "取消组件的锁定和隐藏状态": {
+        "en-US": "Reset component lock and hidden state",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(1833-1849)"
+        ],
+        "$id": 1278
     },
     "设置是否自动播放": {
         "en-US": "Set whether to play automatically",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1705-1717)"
+            "src/assets/more/chatbox/enumTypes.js(1868-1880)"
         ],
         "$id": 651
     },
     "缩放立绘": {
         "en-US": "Zoom portrait",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1729-1737)"
+            "src/assets/more/chatbox/enumTypes.js(1892-1900)"
         ],
         "$id": 652
     },
     "播放一个动画": {
         "en-US": "Play an animation",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1758-1768)"
+            "src/assets/more/chatbox/enumTypes.js(1921-1931)"
         ],
         "$id": 653
     },
     "重新播放该立绘拥有的动画": {
         "en-US": "Replay the animation owned by the standing painting",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1792-1808)"
+            "src/assets/more/chatbox/enumTypes.js(1955-1971)"
         ],
         "$id": 654
     },
     "打开泰拉生物NPC商店": {
         "en-US": "Open the Terra Biological NPC Store",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(1832-1847)"
+            "src/assets/more/chatbox/enumTypes.js(1995-2010)"
         ],
         "$id": 655
     },
     "FADE_IN (淡入)": {
         "en-US": "FADE_IN (fade in)",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(3414-3430)"
+            "src/assets/more/chatbox/enumTypes.js(3577-3593)"
         ],
         "$id": 656
     },
     "SLIDE_IN_FROM_BOTTOM (底部滑入)": {
         "en-US": "SLIDE-IN_SROM_SOTTOM (bottom slide in)",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(3464-3495)"
+            "src/assets/more/chatbox/enumTypes.js(3627-3658)"
         ],
         "$id": 657
     },
     "BOUNCE (弹跳)": {
         "en-US": "BOUNCE (Bounce)",
         "$files": [
-            "src/assets/more/chatbox/enumTypes.js(3542-3557)"
+            "src/assets/more/chatbox/enumTypes.js(3705-3720)"
         ],
         "$id": 658
-    },
-    "我们的 Minecraft 模组": {
-        "en-US": "Our Minecraft mods",
-        "$files": [
-            "src/views/main/MainPage.vue(323-343)"
-        ],
-        "$id": 499
-    },
-    "了解更多": {
-        "en-US": "Learn more",
-        "$files": [
-            "src/views/main/MainPage.vue(878-886)"
-        ],
-        "$id": 500
-    },
-    "当前语言没有文档哦，请使用其它语言": {
-        "en-US": "There are no documents available in the current language. Please use another language",
-        "$files": [
-            "src/views/wiki/ModWiki.vue(2583-2604)",
-            "src/views/wiki/ModWiki.vue(3773-3794)"
-        ],
-        "$id": 501
-    },
-    "获取途径": {
-        "en-US": "access method",
-        "$files": [
-            "src/views/wiki/ModWiki.vue(5591-5599)"
-        ],
-        "$id": 502
-    },
-    "文档": {
-        "en-US": "document",
-        "$files": [
-            "src/views/wiki/ModWiki.vue(7369-7375)"
-        ],
-        "$id": 503
-    },
-    "不支持的组件类型": {
-        "en-US": "Unsupported component types",
-        "$files": [
-            "src/components/form/array/AnyTypeArray.vue(6974-6986)"
-        ],
-        "$id": 659
-    },
-    "编辑对象 #{}": {
-        "en-US": "Edit Object#{}",
-        "$files": [
-            "src/components/form/array/AnyTypeArray.vue(7218-7230)"
-        ],
-        "$id": 660
-    },
-    "component.delete": {
-        "en-US": "Delete",
-        "$files": [
-            "src/components/form/array/BaseArrayInspector.vue(3573-3593)"
-        ],
-        "$id": 661
-    },
-    "空": {
-        "en-US": "empty",
-        "$files": [
-            "src/components/form/array/BaseArrayInspector.vue(3921-3926)"
-        ],
-        "$id": 662
-    },
-    "编辑 {}": {
-        "en-US": "Edit{}",
-        "$files": [
-            "src/components/form/array/ObjectArray.vue(2765-2774)"
-        ],
-        "$id": 663
-    },
-    "请输入文本...": {
-        "en-US": "Please enter text ..",
-        "$files": [
-            "src/components/form/array/StringArray.vue(580-592)"
-        ],
-        "$id": 664
-    },
-    "新建项": {
-        "en-US": "New Item",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(2155-2162)",
-            "src/components/form/map/MapInspector.vue(4039-4046)"
-        ],
-        "$id": 672
-    },
-    "请输入唯一的标识符 (ID)": {
-        "en-US": "Please enter a unique identifier (ID)",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(2182-2200)"
-        ],
-        "$id": 673
-    },
-    "该 ID 已存在，请使用其他 ID": {
-        "en-US": "This ID already exists, please use a different ID",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(2367-2388)"
-        ],
-        "$id": 674
-    },
-    "删除": {
-        "en-US": "delete",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(2643-2649)",
-            "src/components/form/map/MapInspector.vue(6071-6077)",
-            "src/views/more/chatbox/component/FileExplorer.vue(1824-1830)"
-        ],
-        "$id": 675
-    },
-    "确定要删除 {} 吗？": {
-        "en-US": "Are you sure you want to delete {}?",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(2665-2680)"
-        ],
-        "$id": 676
-    },
-    "重命名 ID": {
-        "en-US": "Rename ID",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(3113-3123)"
-        ],
-        "$id": 677
-    },
-    "ID 已存在": {
-        "en-US": "ID already exists",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(3299-3309)"
-        ],
-        "$id": 678
-    },
-    "重命名 Key": {
-        "en-US": "Rename Key",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(5812-5823)"
-        ],
-        "$id": 679
-    },
-    "暂无键值对": {
-        "en-US": "There are currently no key value pairs available",
-        "$files": [
-            "src/components/form/map/MapInspector.vue(6423-6432)"
-        ],
-        "$id": 680
     },
     "已复制": {
         "en-US": "Copied",
@@ -2011,115 +2195,144 @@
         ],
         "$id": 683
     },
+    "未保存的更改": {
+        "en-US": "Unsaved Changes",
+        "$files": [
+            "src/views/more/chatbox/component/FileExplorer.vue(834-844)"
+        ],
+        "$id": 1279
+    },
+    "当前文件有未保存的更改，是否保存？": {
+        "en-US": "Current file has unsaved changes. Save before switching?",
+        "$files": [
+            "src/views/more/chatbox/component/FileExplorer.vue(864-885)"
+        ],
+        "$id": 1280
+    },
+    "保存": {
+        "en-US": "save",
+        "$files": [
+            "src/views/more/chatbox/component/FileExplorer.vue(910-916)",
+            "src/views/more/chatbox/component/MenuBar.vue(4361-4367)"
+        ],
+        "$id": 729
+    },
+    "不保存": {
+        "en-US": "Don't Save",
+        "$files": [
+            "src/views/more/chatbox/component/FileExplorer.vue(941-948)"
+        ],
+        "$id": 1281
+    },
     "新建文件夹": {
         "en-US": "New Folder",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1281-1290)"
+            "src/views/more/chatbox/component/FileExplorer.vue(1790-1799)"
         ],
         "$id": 1181
     },
     "请输入文件夹名称": {
         "en-US": "Please enter folder name",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1310-1322)"
+            "src/views/more/chatbox/component/FileExplorer.vue(1819-1831)"
         ],
         "$id": 1182
     },
     "新建 JSON 文件": {
         "en-US": "New JSON File",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1514-1528)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2023-2037)"
         ],
         "$id": 1183
     },
     "请输入文件名 (可不带 .json)": {
         "en-US": "Please enter filename (.json extension optional)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1548-1570)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2057-2079)"
         ],
         "$id": 1184
     },
     "确定删除文件夹 \"{}\" 吗？(将递归删除其内容)": {
         "en-US": "Are you sure you want to delete folder \"{}\"? (Contents will be recursively deleted)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1868-1897)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2377-2406)"
         ],
         "$id": 1185
     },
     "确定删除文件 \"{}\" 吗？": {
         "en-US": "Are you sure you want to delete file \"{}\"?",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(1918-1936)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2427-2445)"
         ],
         "$id": 1186
     },
     "数据包(DATA)": {
         "en-US": "Data packet (DATA)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(2294-2307)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2803-2816)"
         ],
         "$id": 684
     },
     "打开本地 data 文件夹": {
         "en-US": "Open local data folder",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(2490-2507)"
+            "src/views/more/chatbox/component/FileExplorer.vue(2999-3016)"
         ],
         "$id": 1187
     },
     "新建文件夹 (在当前选中目录/文件所在目录)": {
         "en-US": "New Folder (in current selected directory/file's directory)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(2756-2782)"
+            "src/views/more/chatbox/component/FileExplorer.vue(3265-3291)"
         ],
         "$id": 1188
     },
     "新建 JSON 文件 (在当前选中目录/文件所在目录)": {
         "en-US": "New JSON File (in current selected directory/file's directory)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(3031-3062)"
+            "src/views/more/chatbox/component/FileExplorer.vue(3540-3571)"
         ],
         "$id": 1189
     },
     "删除当前选中项": {
         "en-US": "Delete currently selected item",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(3401-3412)"
+            "src/views/more/chatbox/component/FileExplorer.vue(3910-3921)"
         ],
         "$id": 1190
     },
     "未选择": {
         "en-US": "Not selected",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(3768-3775)"
+            "src/views/more/chatbox/component/FileExplorer.vue(4277-4284)"
         ],
         "$id": 1191
     },
     "复制路径": {
         "en-US": "Copy path",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(3968-3976)"
+            "src/views/more/chatbox/component/FileExplorer.vue(4477-4485)"
         ],
         "$id": 1192
     },
     "请点击右上角": {
         "en-US": "Please click on the top right corner",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(4432-4442)"
+            "src/views/more/chatbox/component/FileExplorer.vue(4941-4951)"
         ],
         "$id": 685
     },
     "打开本地": {
         "en-US": "Open local",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(4453-4461)"
+            "src/views/more/chatbox/component/FileExplorer.vue(4962-4970)"
         ],
         "$id": 686
     },
     "文件夹": {
         "en-US": "folder",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(4546-4553)",
+            "src/views/more/chatbox/component/FileExplorer.vue(5055-5062)",
             "src/views/more/chatbox/component/ResourcePanel.vue(2472-2479)"
         ],
         "$id": 687
@@ -2127,7 +2340,7 @@
     "(支持 Ctrl+S 直接保存)": {
         "en-US": "(Supports {}+S to save directly)",
         "$files": [
-            "src/views/more/chatbox/component/FileExplorer.vue(4623-4643)"
+            "src/views/more/chatbox/component/FileExplorer.vue(5132-5152)"
         ],
         "$id": 688
     },
@@ -2414,13 +2627,6 @@
             "src/views/more/chatbox/component/MenuBar.vue(4018-4028)"
         ],
         "$id": 728
-    },
-    "保存": {
-        "en-US": "save",
-        "$files": [
-            "src/views/more/chatbox/component/MenuBar.vue(4361-4367)"
-        ],
-        "$id": 729
     },
     "管理翻译键...": {
         "en-US": "Manage translation keys ..",

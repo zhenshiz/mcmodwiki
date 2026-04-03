@@ -32,6 +32,7 @@ export class BaseRenderEvent extends AutoClean {
   constructor() {
     super()
     this.trigger = renderEventTrigger().start
+    this.condition = ''
     this.type = ''
     this.value = ''
   }
@@ -43,6 +44,10 @@ export class BaseRenderEvent extends AutoClean {
       props: {
         options: renderEventTrigger().values()
       }
+    })
+    BaseRenderEvent.defineField('condition', {
+      label: t('事件触发条件'),
+      type: EditorTypes.INPUT,
     })
     BaseRenderEvent.defineField('type', {
       label: t('事件类型'),
@@ -375,9 +380,6 @@ export class Component extends AutoClean {
       finalY = rawY + screenH - rawH
     }
 
-    const baseOpacity = this.opacity / 100
-    const editorHiddenFactor = this.hidden ? 0.35 : 1
-
     return {
       position: 'absolute',
       left: `${finalX}px`,
@@ -386,12 +388,10 @@ export class Component extends AutoClean {
       height: `${rawH}px`,
       transform: `rotate(${this.angle}deg) scale(${this.scale})`,
       transformOrigin: 'center center',
-      opacity: baseOpacity * editorHiddenFactor,
+      opacity: this.opacity / 100,
       filter: `brightness(${this.brightness}%)`,
       zIndex: this.renderOrder + 1000,
-      // NOTE: `hidden` 是游戏内的“默认隐藏”。编辑器不执行渲染事件，若直接 display:none 会导致无法编辑。
-      // 这里选择在编辑器中“半透明显示”，并把最终是否显示交给 `_hidden`（层级面板的眼睛按钮）控制。
-      display: 'block'
+      display: this.hidden ? 'none' : 'block'
     }
   }
 }
@@ -447,6 +447,8 @@ export class Portrait extends Component {
     this.type = portraitType.TEXTURE
     this.texture = null
     this.hoverTexture = null
+    this.isLock = null
+    this.lockTexture = null
     this.itemCount = 1
     this.customItemData = []
     this.animation = null
@@ -463,7 +465,7 @@ export class Portrait extends Component {
     this.stareAtX = 0
     this.stareAtY = 0
 
-    this._hidden = false
+    this._hidden = true
   }
 
   static {
@@ -491,6 +493,19 @@ export class Portrait extends Component {
     Portrait.defineField('texture_hoverTexture', {
       modelKey: 'hoverTexture',
       label: t('鼠标悬浮时图片'),
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.TEXTURE },
+      showIf: showOnlyIn(portraitType.TEXTURE)
+    })
+    Portrait.defineField('texture_isLock', {
+      modelKey: 'isLock',
+      label: t('是否上锁'),
+      type: EditorTypes.SWITCH,
+      showIf: showOnlyIn(portraitType.TEXTURE)
+    })
+    Portrait.defineField('texture_lockTexture', {
+      modelKey: 'lockTexture',
+      label: t('上锁时的贴图'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TEXTURE },
       showIf: showOnlyIn(portraitType.TEXTURE)

@@ -21,11 +21,29 @@ const handleToggle = (node) => {
   store.selectTreeNode(node)
 }
 
-const handleSelectNode = (node) => {
+const handleSelectNode = async (node) => {
   // 只有文件才触发读取，文件夹只触发 toggle
   if (!node.isFolder) {
-    store.selectTreeNode(node)
-    store.loadFile(node)
+    if (store.currentFile && store.checkDirty()) {
+      dialog.warning({
+        title: t('未保存的更改'),
+        content: t('当前文件有未保存的更改，是否保存？'),
+        positiveText: t('保存'),
+        negativeText: t('不保存'),
+        onPositiveClick: async () => {
+          await store.saveProject()
+          store.selectTreeNode(node)
+          store.loadFile(node)
+        },
+        onNegativeClick: () => {
+          store.selectTreeNode(node)
+          store.loadFile(node)
+        }
+      })
+    } else {
+      store.selectTreeNode(node)
+      store.loadFile(node)
+    }
   }
 }
 

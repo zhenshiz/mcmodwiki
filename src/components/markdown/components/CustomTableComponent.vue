@@ -1,8 +1,11 @@
 <template>
   <node-view-wrapper
+    ref="wrapperRef"
     class="my-4 relative custom-table-node"
+    :class="{ 'selectable-readonly': !editor.isEditable }"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
+    @dragstart="!editor.isEditable && $event.preventDefault()"
   >
     <div
       v-if="editor.isEditable"
@@ -21,7 +24,11 @@
       <span class="ml-2 opacity-70 tabular-nums">{{ rowCount }}×{{ colCount }}</span>
     </div>
 
-    <table class="w-full border-collapse" :style="node.attrs.style || null">
+    <table
+      class="w-full border-collapse"
+      :style="node.attrs.style || null"
+      @mousedown="!editor.isEditable && $event.stopPropagation()"
+    >
       <tbody>
         <tr v-for="(row, rowIndex) in localData" :key="`r-${rowIndex}`">
           <template v-for="(_, colIndex) in colCount" :key="`c-${rowIndex}-${colIndex}`">
@@ -63,7 +70,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { usePageStore } from '@/stores/index.js'
 
@@ -72,9 +79,17 @@ const props = defineProps(nodeViewProps)
 const hovered = ref(false)
 const cellFocused = ref(false)
 const dirty = ref(false)
+const wrapperRef = ref(null)
 
 const isDark = computed(() => usePageStore().isDark)
 const showToolbar = computed(() => hovered.value || props.selected || cellFocused.value)
+
+// 只读模式下移除 draggable，允许表格内文字选择
+onMounted(() => {
+  if (!props.editor.isEditable && wrapperRef.value) {
+    wrapperRef.value.$el?.removeAttribute('draggable')
+  }
+})
 
 const toolbarClass = computed(() => {
   if (isDark.value) return 'border-slate-700 bg-[#0d1117] text-slate-200'
@@ -215,5 +230,11 @@ const toggleHeader = () => {
 .cell-read {
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.selectable-readonly {
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 </style>

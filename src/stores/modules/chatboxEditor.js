@@ -14,7 +14,7 @@ import {
 } from '@/views/more/chatbox/component/tree/builtinResources.js'
 import { useMessage } from '@/components/register/useMessage.js'
 import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDialogues'
-import { i18nScope } from '@/languages'
+import { i18nScope, t } from '@/languages'
 
 const message = useMessage()
 
@@ -37,6 +37,27 @@ export const useChatBoxEditorStore = defineStore(
     const textureSuggestions = ref([])
     const isProcessingResources = ref(false)
     const previewAnimationKey = ref(null)
+    const _savedSnapshot = ref(null)
+
+    // 序列化当前内容为字符串，用于脏检测
+    const _serializeCurrentContent = () => {
+      if (viewMode.value === 'theme' && currentModel.value) {
+        return themeService.stringifyTheme(currentModel.value)
+      } else if (viewMode.value === 'dialogue') {
+        if (currentModel.value) {
+          return dialogueService.stringifyDialogue(currentModel.value)
+        }
+        return currentDialogue.value || null
+      }
+      return null
+    }
+
+    // 检查当前文件是否有未保存的修改
+    const checkDirty = () => {
+      if (!currentFile.value) return false
+      const current = _serializeCurrentContent()
+      return current !== null && current !== _savedSnapshot.value
+    }
 
     // 文件系统钩子
     const fs = useFileSystem()
@@ -202,7 +223,7 @@ export const useChatBoxEditorStore = defineStore(
             clearSelection()
           } catch (e) {
             console.warn('解析主题文件失败', e)
-            message.error('主题解析失败，已切换至文本模式')
+            message.error(t('主题解析失败，已切换至文本模式'))
             currentDialogue.value = textContent
             currentFile.value = fileNode
             viewMode.value = 'dialogue'
@@ -219,7 +240,7 @@ export const useChatBoxEditorStore = defineStore(
             clearSelection()
           } catch (e) {
             console.warn('解析对话文件失败', e)
-            message.error('对话解析失败，已切换至文本模式')
+            message.error(t('对话解析失败，已切换至文本模式'))
             currentDialogue.value = textContent
             currentFile.value = fileNode
             viewMode.value = 'dialogue'
@@ -233,15 +254,17 @@ export const useChatBoxEditorStore = defineStore(
         } else {
           console.warn('不支持的文件类型')
         }
+
+        _savedSnapshot.value = _serializeCurrentContent()
       } catch (err) {
         console.error(err)
-        message.error(`加载失败: ${err.message}`)
+        message.error(t('加载失败: {}', err.message))
       }
     }
 
     const saveProject = async () => {
       if (!currentFile.value) {
-        message.warning('没有打开的文件')
+        message.warning(t('没有打开的文件'))
         return
       }
 
@@ -262,11 +285,12 @@ export const useChatBoxEditorStore = defineStore(
 
         if (contentToSave) {
           await fs.saveFile(currentFile.value.handle, contentToSave)
-          message.success('保存成功')
+          _savedSnapshot.value = contentToSave
+          message.success(t('保存成功'))
         }
       } catch (err) {
         console.error('保存失败', err)
-        message.error('保存失败')
+        message.error(t('保存失败'))
       }
     }
 
@@ -297,13 +321,13 @@ export const useChatBoxEditorStore = defineStore(
 
     const createFolder = async ({ baseNode, name }) => {
       if (!rootHandle.value) {
-        message.warning('请先打开 data 文件夹')
+        message.warning(t('请先打开 data 文件夹'))
         return
       }
       const dirName = (name || '').trim()
       if (!dirName) return
       if (dirName.includes('/') || dirName.includes('\\')) {
-        message.error('文件夹名不能包含斜杠')
+        message.error(t('文件夹名不能包含斜杠'))
         return
       }
 
@@ -311,23 +335,23 @@ export const useChatBoxEditorStore = defineStore(
         const targetDir = getTargetDirFromNode(baseNode || selectedTreeNode.value)
         await fs.createDirectory(targetDir, dirName)
         await refreshFileTree()
-        message.success(`已创建文件夹: ${dirName}`)
+        message.success(t('已创建文件夹: {}', dirName))
       } catch (err) {
         console.error('创建文件夹失败', err)
-        message.error(`创建失败: ${err.message || err}`)
+        message.error(t('创建失败: {}', err.message || err))
       }
     }
 
     const createJsonFile = async ({ baseNode, name, openAfterCreate = true }) => {
       if (!rootHandle.value) {
-        message.warning('请先打开 data 文件夹')
+        message.warning(t('请先打开 data 文件夹'))
         return
       }
 
       let fileName = (name || '').trim()
       if (!fileName) return
       if (fileName.includes('/') || fileName.includes('\\')) {
-        message.error('文件名不能包含斜杠')
+        message.error(t('文件名不能包含斜杠'))
         return
       }
       if (!fileName.toLowerCase().endsWith('.json')) fileName += '.json'
@@ -338,7 +362,7 @@ export const useChatBoxEditorStore = defineStore(
         await fs.createFile(targetDir, fileName, '{\n}\n')
         const targetPath = getTargetPathForChild(targetNode, fileName)
         await refreshFileTree()
-        message.success(`已创建文件: ${fileName}`)
+        message.success(t('已创建文件: {}', fileName))
 
         if (openAfterCreate) {
           const newNode = findNodeByPath(fileTree.value, targetPath)
@@ -349,7 +373,7 @@ export const useChatBoxEditorStore = defineStore(
         }
       } catch (err) {
         console.error('创建文件失败', err)
-        message.error(`创建失败: ${err.message || err}`)
+        message.error(t('创建失败: {}', err.message || err))
       }
     }
 
@@ -357,7 +381,7 @@ export const useChatBoxEditorStore = defineStore(
       const target = node || selectedTreeNode.value
       if (!rootHandle.value || !target) return
       if (!target.parentHandle) {
-        message.error('无法删除根目录')
+        message.error(t('无法删除根目录'))
         return
       }
 
@@ -378,10 +402,10 @@ export const useChatBoxEditorStore = defineStore(
 
         await refreshFileTree()
         await refreshGlobalIndex()
-        message.success(`已删除: ${target.name}`)
+        message.success(t('已删除: {}', target.name))
       } catch (err) {
         console.error('删除失败', err)
-        message.error(`删除失败: ${err.message || err}`)
+        message.error(t('删除失败: {}', err.message || err))
       }
     }
 
@@ -424,10 +448,10 @@ export const useChatBoxEditorStore = defineStore(
         )
         textureMap.value = map
         textureSuggestions.value = suggestions
-        message.success(`资源包加载完成: ${map.size} 个文件`)
+        message.success(t('资源包加载完成: {} 个文件', map.size))
       } catch (err) {
         console.error('资源导入失败', err)
-        message.error('资源导入失败')
+        message.error(t('资源导入失败'))
       } finally {
         isProcessingResources.value = false
       }
@@ -477,6 +501,7 @@ export const useChatBoxEditorStore = defineStore(
       globalAnimations,
       globalPortraits,
       rootHandle,
+      checkDirty,
 
       allTextureOptions,
 

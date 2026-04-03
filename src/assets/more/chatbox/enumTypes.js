@@ -51,7 +51,9 @@ export const DEFAULT_BTN_TEXTURES = {
 export const renderEventTrigger = (type = '') => {
   const events = {
     start: t('组件渲染开始时'),
-    end: t('组件渲染结束时')
+    end: t('组件渲染结束时'),
+    tick: t('组件tick事件'),
+    check: t('组件加载事件（只要进入对话就会触发一次）')
   }
 
   if (type === 'portrait') {
@@ -67,6 +69,7 @@ export const renderEventTrigger = (type = '') => {
 
 export const eventType = formatUtil.createEnum({
   command: t('执行指令'),
+  mvel: t('执行mvel代码'),
   jump: t('强制跳转对话'),
   goto_next: t('到下一句对话'),
   play_sound: t('播放音效'),
@@ -75,6 +78,9 @@ export const eventType = formatUtil.createEnum({
   hide: t('隐藏特定组件'),
   show: t('显示特定组件'),
   replace: t('替换自身为特定组件'),
+  lock: t('锁定特定组件'),
+  unlock: t('解锁特定组件'),
+  set_normal: t('取消组件的锁定和隐藏状态'),
   set_autoplay: t('设置是否自动播放'),
   scale: t('缩放立绘'),
   play_animation: t('播放一个动画'),

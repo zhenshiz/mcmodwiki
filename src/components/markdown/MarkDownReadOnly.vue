@@ -256,6 +256,8 @@ onBeforeUnmount(() => {
 
     ul, ol {
       margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      list-style-position: inside;
     }
 
     ul ul, ul ol, ol ul, ol ol {
@@ -531,11 +533,31 @@ onBeforeUnmount(() => {
       color: #333 !important;
       border-radius: 4px;
       padding: 0 4px;
+      text-decoration-color: #333 !important;
       transition: all 0.3s ease;
+
+      s, del, u {
+        text-decoration-color: #333 !important;
+      }
 
       &:hover {
         background-color: transparent !important;
         color: inherit !important;
+        text-decoration-color: currentColor !important;
+
+        s, del, u {
+          text-decoration-color: currentColor !important;
+        }
+      }
+    }
+
+    s:has(> span[data-type="hidden-text"]),
+    del:has(> span[data-type="hidden-text"]),
+    u:has(> span[data-type="hidden-text"]) {
+      text-decoration-color: #333 !important;
+
+      &:hover {
+        text-decoration-color: currentColor !important;
       }
     }
 
