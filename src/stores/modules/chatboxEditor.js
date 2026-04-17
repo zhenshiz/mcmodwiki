@@ -18,6 +18,7 @@ import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDi
 import { i18nScope, t } from '@/languages'
 
 const message = useMessage()
+const DIALOGUE_FRAME_SECTION_KEYS = new Set(['basic', 'dialogBox', 'option', 'portrait', 'video'])
 
 export const useChatBoxEditorStore = defineStore(
   'chatBoxEditor',
@@ -29,6 +30,8 @@ export const useChatBoxEditorStore = defineStore(
     const viewMode = ref('empty')
     const currentModel = ref(null)
     const currentDialogue = ref('')
+    let activeDialogueGroupKey = ref(null)
+    const dialogueGroupOrder = ref([])
 
     const selectedComponent = ref(null)
     const selectedComponentKey = ref(null)
@@ -204,6 +207,8 @@ export const useChatBoxEditorStore = defineStore(
         selectedTreeNode.value = null
         currentModel.value = null
         currentDialogue.value = ''
+        activeDialogueGroupKey.value = null
+        dialogueGroupOrder.value = []
         viewMode.value = 'empty'
         clearSelection()
       }
@@ -213,6 +218,8 @@ export const useChatBoxEditorStore = defineStore(
       if (!fileNode.handle) return
 
       try {
+        activeDialogueGroupKey.value = null
+        dialogueGroupOrder.value = []
         const textContent = await fs.readFile(fileNode.handle)
         const path = fileNode.path.toLowerCase()
         const name = fileNode.name.toLowerCase()
@@ -394,6 +401,8 @@ export const useChatBoxEditorStore = defineStore(
           currentFile.value = null
           currentModel.value = null
           currentDialogue.value = ''
+          activeDialogueGroupKey.value = null
+          dialogueGroupOrder.value = []
           viewMode.value = 'empty'
           clearSelection()
         }
@@ -414,11 +423,15 @@ export const useChatBoxEditorStore = defineStore(
     const currentFrame = ref(null)
     const isShowGlobal = ref(true)
     const hasDialogueFrameClipboard = computed(() => dialogueFrameClipboard.value !== null)
+    const lastDialogueFrameSectionKey = ref('basic')
 
-    const selectDialoguesComponent = (component, clazz, key) => {
+    const selectDialoguesComponent = (component, clazz, key, ownerFrame = null) => {
       if (component instanceof DialogueFrame) {
         currentFrame.value = component
+      } else if (ownerFrame instanceof DialogueFrame) {
+        currentFrame.value = ownerFrame
       }
+      if (DIALOGUE_FRAME_SECTION_KEYS.has(key)) lastDialogueFrameSectionKey.value = key
       if (component instanceof ChatBoxDialogues) {
         isShowGlobal.value = true
       } else {
@@ -450,6 +463,80 @@ export const useChatBoxEditorStore = defineStore(
     const getDialogueFrameFromClipboard = () => {
       if (!dialogueFrameClipboard.value) return null
       return _.cloneDeep(dialogueFrameClipboard.value)
+    }
+
+    const syncDialogueGroupOrder = (dialogues) => {
+      const targetDialogues = dialogues || currentModel.value?.dialogues || {}
+      const nextOrder = dialogueGroupOrder.value.filter((key) => targetDialogues[key])
+      Object.keys(targetDialogues).forEach((key) => {
+        if (!nextOrder.includes(key)) {
+          nextOrder.push(key)
+        }
+      })
+      dialogueGroupOrder.value = nextOrder
+    }
+
+    const addDialogueGroupKey = (key) => {
+      if (!key || dialogueGroupOrder.value.includes(key)) return
+      dialogueGroupOrder.value = [...dialogueGroupOrder.value, key]
+    }
+
+    const reorderDialogueGroupKeys = (keys) => {
+      const dialogues = currentModel.value?.dialogues || {}
+      const orderedKeys = (keys || []).filter((key, index, array) => {
+        return !!dialogues[key] && array.indexOf(key) === index
+      })
+      const missingKeys = Object.keys(dialogues).filter((key) => !orderedKeys.includes(key))
+      dialogueGroupOrder.value = [...orderedKeys, ...missingKeys]
+    }
+
+    const renameDialogueGroup = (oldKey, newKey) => {
+      const dialogues = currentModel.value?.dialogues
+      const trimmedKey = (newKey || '').trim()
+      if (!dialogues || !oldKey || !dialogues[oldKey]) {
+        return { ok: false, reason: 'missing' }
+      }
+      if (!trimmedKey) {
+        return { ok: false, reason: 'empty' }
+      }
+      if (trimmedKey !== oldKey && dialogues[trimmedKey]) {
+        return { ok: false, reason: 'duplicate' }
+      }
+      if (trimmedKey === oldKey) {
+        return { ok: true, changed: false, key: oldKey }
+      }
+
+      const newMap = {}
+      Object.entries(dialogues).forEach(([key, frames]) => {
+        newMap[key === oldKey ? trimmedKey : key] = frames
+      })
+      currentModel.value.dialogues = newMap
+
+      const groupIndex = dialogueGroupOrder.value.indexOf(oldKey)
+      if (groupIndex !== -1) {
+        const nextOrder = [...dialogueGroupOrder.value]
+        nextOrder[groupIndex] = trimmedKey
+        dialogueGroupOrder.value = nextOrder
+      } else {
+        syncDialogueGroupOrder(newMap)
+      }
+
+      if (activeDialogueGroupKey.value === oldKey) {
+        activeDialogueGroupKey.value = trimmedKey
+      }
+
+      return { ok: true, changed: true, key: trimmedKey }
+    }
+
+    const deleteDialogueGroup = (key) => {
+      const dialogues = currentModel.value?.dialogues
+      if (!dialogues?.[key]) return false
+      delete dialogues[key]
+      dialogueGroupOrder.value = dialogueGroupOrder.value.filter((item) => item !== key)
+      if (activeDialogueGroupKey.value === key) {
+        activeDialogueGroupKey.value = null
+      }
+      return true
     }
 
     const importAssets = async () => {
@@ -501,6 +588,8 @@ export const useChatBoxEditorStore = defineStore(
       selectedTreeNode,
       currentModel,
       currentDialogue,
+      activeDialogueGroupKey,
+      dialogueGroupOrder,
       viewMode,
       selectedComponent,
       selectedComponentKey,
@@ -515,6 +604,7 @@ export const useChatBoxEditorStore = defineStore(
       currentFrame,
       isShowGlobal,
       hasDialogueFrameClipboard,
+      lastDialogueFrameSectionKey,
       globalAnimations,
       globalPortraits,
       rootHandle,
@@ -545,7 +635,12 @@ export const useChatBoxEditorStore = defineStore(
       getTranslatableLabel,
       refreshGlobalIndex,
       copyDialogueFrameToClipboard,
-      getDialogueFrameFromClipboard
+      getDialogueFrameFromClipboard,
+      syncDialogueGroupOrder,
+      addDialogueGroupKey,
+      reorderDialogueGroupKeys,
+      renameDialogueGroup,
+      deleteDialogueGroup
     }
   },
   {

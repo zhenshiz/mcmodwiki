@@ -133,9 +133,15 @@ const playAnimation = (e, key) => {
 
 const currentFrame = computed(() => store.currentFrame)
 const isShowGlobal = computed(() => store.isShowGlobal)
+const dialogueGroupList = computed(() => {
+  const dialogues = model.value?.dialogues || {}
+  return store.dialogueGroupOrder
+    .filter(key => dialogues[key])
+    .map(key => ({ key, frames: dialogues[key] }))
+})
 
-const selectDialoguesItem = (component, clazz, key) => {
-  store.selectDialoguesComponent(component, clazz, key)
+const selectDialoguesItem = (component, clazz, key, ownerFrame = null) => {
+  store.selectDialoguesComponent(component, clazz, key, ownerFrame)
 }
 
 const addDialogueGroup = (e) => {
@@ -150,6 +156,7 @@ const addDialogueGroup = (e) => {
         return
       }
       model.value.dialogues[key] = []
+      store.addDialogueGroupKey(key)
     }
   })
 }
@@ -160,13 +167,31 @@ const deleteDialogueGroup = (e, key) => {
     title: t('删除剧情片段'),
     content: t('确定要删除组 "{}" 及其所有内容吗？', key),
     onPositiveClick: () => {
-      delete model.value.dialogues[key]
+      store.deleteDialogueGroup(key)
+    }
+  })
+}
+
+const renameDialogueGroup = (e, oldKey) => {
+  e?.stopPropagation()
+  prompt.openInput({
+    title: t('重命名 Key'),
+    message: t('请输入唯一的组 ID (例如: chapter_1):'),
+    defaultValue: oldKey,
+    onPositiveClick: (newKey) => {
+      const result = store.renameDialogueGroup(oldKey, newKey)
+      if (!result.ok) {
+        if (result.reason === 'duplicate') {
+          message.error(t('该组名已存在'))
+        }
+      }
     }
   })
 }
 
 // 跳转到组 (切换到全局视图)
 const jumpToGroup = (key) => {
+  store.activeDialogueGroupKey = key
   selectDialoguesItem(model.value, ChatBoxDialogues, 'Global')
 }
 </script>
@@ -351,7 +376,7 @@ const jumpToGroup = (key) => {
         <div
           class="group px-3 py-2 text-xs cursor-pointer rounded border border-transparent flex items-center gap-2 hover:bg-slate-700 transition-colors"
           :class="store.selectedComponentKey === 'basic' || !store.selectedComponentKey ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
-          @click="selectDialoguesItem(currentFrame, DialogueFrame, 'basic')">
+          @click="selectDialoguesItem(currentFrame, DialogueFrame, 'basic', currentFrame)">
           <Icon icon="lucide:sliders" width="14" />
           <span>{{ t('基础配置') }}</span>
         </div>
@@ -359,7 +384,7 @@ const jumpToGroup = (key) => {
         <div
           class="group px-3 py-2 text-xs cursor-pointer rounded border border-transparent flex items-center gap-2 hover:bg-slate-700 transition-colors"
           :class="store.selectedComponentKey === 'dialogBox' ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
-          @click="selectDialoguesItem(currentFrame.dialogBox, DialogueDialogBox, 'dialogBox')">
+          @click="selectDialoguesItem(currentFrame.dialogBox, DialogueDialogBox, 'dialogBox', currentFrame)">
           <Icon icon="lucide:message-square" width="14" />
           <span>{{ t('对话框') }}</span>
         </div>
@@ -367,7 +392,7 @@ const jumpToGroup = (key) => {
         <div
           class="group px-3 py-2 text-xs cursor-pointer rounded border border-transparent flex items-center justify-between hover:bg-slate-700 transition-colors"
           :class="store.selectedComponentKey === 'option' ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
-          @click="selectDialoguesItem(currentFrame.options, DialogueOption, 'option')">
+          @click="selectDialoguesItem(currentFrame.options, DialogueOption, 'option', currentFrame)">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:list" width="14" />
             <span>{{ t('选项分支') }}</span>
@@ -378,7 +403,7 @@ const jumpToGroup = (key) => {
         <div
           class="group px-3 py-2 text-xs cursor-pointer rounded border border-transparent flex items-center justify-between hover:bg-slate-700 transition-colors"
           :class="store.selectedComponentKey === 'portrait' ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
-          @click="selectDialoguesItem(currentFrame.portrait, DialoguePortrait, 'portrait')">
+          @click="selectDialoguesItem(currentFrame.portrait, DialoguePortrait, 'portrait', currentFrame)">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:users" width="14" />
             <span>{{ t('立绘配置') }}</span>
@@ -389,7 +414,7 @@ const jumpToGroup = (key) => {
         <div
           class="group px-3 py-2 text-xs cursor-pointer rounded border border-transparent flex items-center justify-between hover:bg-slate-700 transition-colors"
           :class="store.selectedComponentKey === 'video' ? 'bg-[#007fd4] text-white' : 'text-slate-300'"
-          @click="selectDialoguesItem(currentFrame.video, DialogueVideo, 'video')">
+          @click="selectDialoguesItem(currentFrame.video, DialogueVideo, 'video', currentFrame)">
           <div class="flex items-center gap-2">
             <Icon icon="lucide:video" width="14" />
             <span>{{ t('视频配置') }}</span>
@@ -430,23 +455,26 @@ const jumpToGroup = (key) => {
         </div>
 
         <div class="pl-2 flex flex-col gap-0.5 mt-1">
-          <div v-for="(frames, key) in model.dialogues" :key="key"
+          <div v-for="group in dialogueGroupList" :key="group.key"
             class="group/item flex items-center justify-between px-2 py-1.5 text-xs text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors"
-            @click="jumpToGroup(key)">
+            @click="jumpToGroup(group.key)">
             <div class="flex items-center gap-2 truncate">
               <Icon icon="lucide:folder" width="12" />
-              <span class="font-mono truncate">{{ key }}</span>
+              <span class="font-mono truncate">{{ group.key }}</span>
             </div>
 
             <div class="flex items-center gap-2">
-              <span class="text-[10px] opacity-50 group-hover/item:hidden">{{ frames.length }}</span>
+              <span class="text-[10px] opacity-50 group-hover/item:hidden">{{ group.frames.length }}</span>
+              <Icon icon="lucide:pencil" width="12"
+                    class="text-slate-600 hover:text-blue-400 hidden group-hover/item:block cursor-pointer"
+                @click.stop="renameDialogueGroup($event, group.key)" />
               <Icon icon="lucide:trash-2" width="12"
                     class="text-slate-600 hover:text-red-400 hidden group-hover/item:block cursor-pointer"
-                @click.stop="deleteDialogueGroup($event, key)" />
+                @click.stop="deleteDialogueGroup($event, group.key)" />
             </div>
           </div>
 
-          <div v-if="!model.dialogues || Object.keys(model.dialogues).length === 0"
+          <div v-if="dialogueGroupList.length === 0"
             class="text-[10px] text-slate-600 pl-2 italic">
             {{ t('暂无分组') }}
           </div>

@@ -1,10 +1,17 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useChatBoxEditorStore } from '@/stores'
 import { Icon } from '@iconify/vue'
 import { usePrompt } from '@/components/register/usePrompt.js'
 import { useMessage } from '@/components/register/useMessage.js'
-import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDialogues.js'
+import {
+  ChatBoxDialogues,
+  DialogueDialogBox,
+  DialogueFrame,
+  DialogueOption,
+  DialoguePortrait,
+  DialogueVideo
+} from '@/assets/more/chatbox/chatboxDialogues.js'
 import { useDialog } from '@/components/register/useDialog'
 import draggable from 'vuedraggable'
 import _ from 'lodash'
@@ -16,7 +23,12 @@ const message = useMessage()
 const dialog = useDialog()
 
 // 当前正在查看的组 Key
-const activeGroupKey = ref(null)
+const activeGroupKey = computed({
+  get: () => store.activeDialogueGroupKey,
+  set: (value) => {
+    store.activeDialogueGroupKey = value
+  }
+})
 
 // 模型数据的快捷访问
 const model = computed(() => store.currentModel)
@@ -40,19 +52,23 @@ const cloneFrameForInsert = (frame) => {
   return cloned
 }
 
+const FRAME_PART_SELECTOR_MAP = {
+  basic: (frame) => ({ component: frame, clazz: DialogueFrame }),
+  dialogBox: (frame) => ({ component: frame.dialogBox, clazz: DialogueDialogBox }),
+  option: (frame) => ({ component: frame.options, clazz: DialogueOption }),
+  portrait: (frame) => ({ component: frame.portrait, clazz: DialoguePortrait }),
+  video: (frame) => ({ component: frame.video, clazz: DialogueVideo })
+}
+
 // === 核心逻辑：组列表拖拽适配 ===
 const groupList = computed({
   get: () => {
-    if (!model.value || !model.value.dialogues) return []
-    return Object.entries(model.value.dialogues).map(([key, frames]) => ({ key, frames }))
+    return store.dialogueGroupOrder
+      .filter(key => dialoguesMap.value[key])
+      .map(key => ({ key, frames: dialoguesMap.value[key] }))
   },
   set: (newArr) => {
-    // 拖拽后，根据新数组顺序重建对象，利用 JS 对象保留插入顺序的特性
-    const newMap = {}
-    newArr.forEach(item => {
-      newMap[item.key] = item.frames
-    })
-    model.value.dialogues = newMap
+    store.reorderDialogueGroupKeys(newArr.map(item => item.key))
   }
 })
 
@@ -79,6 +95,7 @@ const handleAddGroup = () => {
         return
       }
       model.value.dialogues[val] = []
+      store.addDialogueGroupKey(val)
       activeGroupKey.value = val
     }
   })
@@ -89,9 +106,22 @@ const handleDeleteGroup = (key) => {
     title: t('删除剧情片段'),
     content: t('确定要删除剧情片段 "{}" 吗？此操作无法撤销。', key),
     onPositiveClick: () => {
-      delete model.value.dialogues[key]
-      if (activeGroupKey.value === key) {
-        activeGroupKey.value = null
+      store.deleteDialogueGroup(key)
+    }
+  })
+}
+
+const handleRenameGroup = (oldKey) => {
+  prompt.openInput({
+    title: t('重命名 Key'),
+    message: t('请输入唯一的组 ID (例如: chapter_1_start)'),
+    defaultValue: oldKey,
+    onPositiveClick: (newKey) => {
+      const result = store.renameDialogueGroup(oldKey, newKey)
+      if (!result.ok) {
+        if (result.reason === 'duplicate') {
+          message.error(t('该组名已存在'))
+        }
       }
     }
   })
@@ -140,13 +170,14 @@ const handleDeleteFrame = (index) => {
   store.clearSelection()
 }
 
-const selectFramePart = (frame, clazz, part) => {
-  store.selectDialoguesComponent(frame, clazz, part)
+const selectFramePart = (frame, part = 'basic') => {
+  const targetPart = FRAME_PART_SELECTOR_MAP[part] ? part : 'basic'
+  const { component, clazz } = FRAME_PART_SELECTOR_MAP[targetPart](frame)
+  store.selectDialoguesComponent(component, clazz, targetPart, frame)
 }
 
-// 点击整个卡片默认选中基础信息
 const selectFrame = (frame) => {
-  selectFramePart(frame, DialogueFrame, 'basic')
+  selectFramePart(frame, store.lastDialogueFrameSectionKey)
 }
 
 // 点击背景，选中全局
@@ -158,11 +189,26 @@ const selectGlobal = () => {
 watch(() => model.value, (newVal) => {
   if (newVal?.dialogues) {
     Object.values(newVal.dialogues).forEach(frames => frames.forEach(ensureFrameEditorId))
-  }
-  if (newVal && newVal.dialogues && Object.keys(newVal.dialogues).length > 0 && !activeGroupKey.value) {
-    activeGroupKey.value = Object.keys(newVal.dialogues)[0]
+    store.syncDialogueGroupOrder(newVal.dialogues)
+  } else {
+    store.syncDialogueGroupOrder({})
   }
 }, { immediate: true })
+
+watch(
+  () => Object.keys(dialoguesMap.value),
+  (groupKeys) => {
+    store.syncDialogueGroupOrder(dialoguesMap.value)
+    if (groupKeys.length === 0) {
+      activeGroupKey.value = null
+      return
+    }
+    if (!activeGroupKey.value || !dialoguesMap.value[activeGroupKey.value]) {
+      activeGroupKey.value = groupKeys[0]
+    }
+  },
+  { immediate: true }
+)
 
 const isSelected = (comp) => store.selectedComponent === comp
 
@@ -210,6 +256,11 @@ const isSelected = (comp) => store.selectedComponent === comp
 
               <div class="flex items-center gap-1">
                 <span class="text-[10px] opacity-50 ml-1">({{ group.frames.length }})</span>
+                <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-blue-400 transition"
+                        :title="t('重命名 Key')"
+                        @click.stop="handleRenameGroup(group.key)">
+                  <Icon icon="lucide:pencil" width="12" />
+                </button>
                 <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition"
                         @click.stop="handleDeleteGroup(group.key)">
                   <Icon icon="lucide:trash-2" width="12" />
