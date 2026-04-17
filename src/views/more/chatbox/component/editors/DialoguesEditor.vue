@@ -22,6 +22,24 @@ const activeGroupKey = ref(null)
 const model = computed(() => store.currentModel)
 const dialoguesMap = computed(() => model.value?.dialogues || {})
 
+const createFrameEditorId = () => {
+  return globalThis.crypto?.randomUUID?.()
+    || `dialogue-frame-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+const ensureFrameEditorId = (frame) => {
+  if (!frame._editorId) {
+    frame._editorId = createFrameEditorId()
+  }
+  return frame
+}
+
+const cloneFrameForInsert = (frame) => {
+  const cloned = _.cloneDeep(frame)
+  cloned._editorId = createFrameEditorId()
+  return cloned
+}
+
 // === 核心逻辑：组列表拖拽适配 ===
 const groupList = computed({
   get: () => {
@@ -41,7 +59,7 @@ const groupList = computed({
 const frameList = computed({
   get: () => {
     if (!activeGroupKey.value || !dialoguesMap.value[activeGroupKey.value]) return []
-    return dialoguesMap.value[activeGroupKey.value]
+    return dialoguesMap.value[activeGroupKey.value].map(ensureFrameEditorId)
   },
   set: (val) => {
     if (activeGroupKey.value && model.value.dialogues) {
@@ -86,23 +104,40 @@ const selectGroup = (key) => {
 
 const handleAddFrame = () => {
   if (!activeGroupKey.value) return
-  const newFrame = new DialogueFrame()
+  const newFrame = ensureFrameEditorId(new DialogueFrame())
   model.value.dialogues[activeGroupKey.value].push(newFrame)
 }
 
-const handleDuplicateFrame = (index) => {
+const handleCopyFrame = (index) => {
   const list = model.value.dialogues[activeGroupKey.value]
   const sourceFrame = list[index]
+  if (!sourceFrame) return
 
-  const newFrame = _.cloneDeep(sourceFrame)
-
-  list.splice(index + 1, 0, newFrame)
+  store.copyDialogueFrameToClipboard(sourceFrame)
   message.success(t('已复制对话'))
+}
+
+const handlePasteFrame = (index = null) => {
+  if (!activeGroupKey.value) return
+
+  const clipboardFrame = store.getDialogueFrameFromClipboard()
+  if (!clipboardFrame) {
+    message.warning(t('剪贴板中没有可粘贴的对话'))
+    return
+  }
+
+  const list = model.value.dialogues[activeGroupKey.value]
+  const insertIndex = typeof index === 'number' ? index + 1 : list.length
+  const frameToInsert = cloneFrameForInsert(clipboardFrame)
+
+  list.splice(insertIndex, 0, frameToInsert)
+  selectFrame(frameToInsert)
+  message.success(t('已粘贴对话'))
 }
 
 const handleDeleteFrame = (index) => {
   model.value.dialogues[activeGroupKey.value].splice(index, 1)
-  store.selectComponent(null)
+  store.clearSelection()
 }
 
 const selectFramePart = (frame, clazz, part) => {
@@ -121,6 +156,9 @@ const selectGlobal = () => {
 
 // 自动选中第一个组
 watch(() => model.value, (newVal) => {
+  if (newVal?.dialogues) {
+    Object.values(newVal.dialogues).forEach(frames => frames.forEach(ensureFrameEditorId))
+  }
   if (newVal && newVal.dialogues && Object.keys(newVal.dialogues).length > 0 && !activeGroupKey.value) {
     activeGroupKey.value = Object.keys(newVal.dialogues)[0]
   }
@@ -212,7 +250,7 @@ const isSelected = (comp) => store.selectedComponent === comp
         <template v-if="activeGroupKey && frameList.length > 0">
           <draggable
             v-model="frameList"
-            item-key="uuid"
+            item-key="_editorId"
             handle=".frame-drag-handle"
             animation="200"
             ghost-class="ghost"
@@ -252,8 +290,19 @@ const isSelected = (comp) => store.selectedComponent === comp
                   class="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     class="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded transition"
-                    @click.stop="handleDuplicateFrame(index)">
+                    :title="t('复制')"
+                    @click.stop="handleCopyFrame(index)">
                     <Icon icon="lucide:copy" width="14" />
+                  </button>
+                  <button
+                    class="p-1.5 rounded transition"
+                    :class="store.hasDialogueFrameClipboard
+                      ? 'text-slate-500 hover:text-white hover:bg-slate-700'
+                      : 'text-slate-700 cursor-not-allowed'"
+                    :title="t('粘贴')"
+                    :disabled="!store.hasDialogueFrameClipboard"
+                    @click.stop="handlePasteFrame(index)">
+                    <Icon icon="lucide:clipboard-paste" width="14" />
                   </button>
                   <button
                     class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded transition"
@@ -270,9 +319,17 @@ const isSelected = (comp) => store.selectedComponent === comp
              class="flex flex-col items-center justify-center h-64 text-slate-600 gap-3">
           <Icon icon="lucide:message-square-plus" width="32" class="opacity-50" />
           <div class="text-xs">{{ t('此片段暂无对话') }}</div>
-          <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">
-            {{ t('立即添加') }}
-          </button>
+          <div class="flex items-center gap-3">
+            <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">
+              {{ t('立即添加') }}
+            </button>
+            <button
+              v-if="store.hasDialogueFrameClipboard"
+              @click="handlePasteFrame()"
+              class="text-emerald-500 hover:underline text-xs">
+              {{ t('粘贴') }}
+            </button>
+          </div>
         </div>
 
         <div v-else class="flex flex-col items-center justify-center h-full text-slate-600 gap-2">

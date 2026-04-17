@@ -266,6 +266,8 @@ export class DialoguePortrait extends AutoClean {
 export class DialogueFrame extends AutoClean {
   constructor() {
     super()
+    this._editorId = globalThis.crypto?.randomUUID?.()
+      || `dialogue-frame-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
     this.dialogBox = new DialogueDialogBox()
     this.portrait = new DialoguePortrait() // List<JsonElement>
     this.options = new DialogueOptionList() // List<Option>

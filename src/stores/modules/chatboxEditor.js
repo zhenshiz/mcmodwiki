@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import _ from 'lodash'
 
 import {
   dialogueService,
@@ -38,6 +39,7 @@ export const useChatBoxEditorStore = defineStore(
     const isProcessingResources = ref(false)
     const previewAnimationKey = ref(null)
     const _savedSnapshot = ref(null)
+    const dialogueFrameClipboard = ref(null)
 
     // 序列化当前内容为字符串，用于脏检测
     const _serializeCurrentContent = () => {
@@ -411,6 +413,7 @@ export const useChatBoxEditorStore = defineStore(
 
     const currentFrame = ref(null)
     const isShowGlobal = ref(true)
+    const hasDialogueFrameClipboard = computed(() => dialogueFrameClipboard.value !== null)
 
     const selectDialoguesComponent = (component, clazz, key) => {
       if (component instanceof DialogueFrame) {
@@ -434,6 +437,19 @@ export const useChatBoxEditorStore = defineStore(
       selectedComponent.value = null
       selectedComponentClass.value = null
       selectedComponentKey.value = null
+      currentFrame.value = null
+      isShowGlobal.value = true
+    }
+
+    const copyDialogueFrameToClipboard = (frame) => {
+      if (!(frame instanceof DialogueFrame)) return false
+      dialogueFrameClipboard.value = _.cloneDeep(frame)
+      return true
+    }
+
+    const getDialogueFrameFromClipboard = () => {
+      if (!dialogueFrameClipboard.value) return null
+      return _.cloneDeep(dialogueFrameClipboard.value)
     }
 
     const importAssets = async () => {
@@ -498,6 +514,7 @@ export const useChatBoxEditorStore = defineStore(
       selectedComponentClass,
       currentFrame,
       isShowGlobal,
+      hasDialogueFrameClipboard,
       globalAnimations,
       globalPortraits,
       rootHandle,
@@ -526,7 +543,9 @@ export const useChatBoxEditorStore = defineStore(
       getTranslatableJSON,
       selectDialoguesComponent,
       getTranslatableLabel,
-      refreshGlobalIndex
+      refreshGlobalIndex,
+      copyDialogueFrameToClipboard,
+      getDialogueFrameFromClipboard
     }
   },
   {
