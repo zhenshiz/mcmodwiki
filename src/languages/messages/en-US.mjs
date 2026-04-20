@@ -410,5 +410,10 @@ export default  {
     "1278": "Reset component lock and hidden state",
     "1279": "Unsaved Changes",
     "1280": "Current file has unsaved changes. Save before switching?",
-    "1281": "Don't Save"
+    "1281": "Don't Save",
+    "1282": "Width Reference",
+    "1283": "Height Reference",
+    "1284": "Percentage of Window Width",
+    "1285": "Percentage of Window Height",
+    "1286": "Absolute Pixel Value"
 }

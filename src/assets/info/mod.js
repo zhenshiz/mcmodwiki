@@ -57,7 +57,7 @@ export const modList = () => {
         }
       ],
       moreUtil: () => [moreUtilList()[0]],
-      modVersion: '1.1.2'
+      modVersion: '1.1.3'
     },
     {
       lang: 'ViScriptShop',

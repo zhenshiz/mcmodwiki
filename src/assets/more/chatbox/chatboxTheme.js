@@ -8,7 +8,7 @@ import {
   easing,
   eventType,
   functionalButtonType,
-  portraitType,
+  portraitType, reference,
   renderEventTrigger,
   stareAtType,
   textAlign
@@ -264,7 +264,9 @@ export class Component extends AutoClean {
     super()
     this.x = 0
     this.y = 0
+    this.widthReference = reference.SCREEN_WIDTH
     this.width = 10
+    this.heightReference = reference.SCREEN_HEIGHT
     this.height = 10
     this.scale = 1
     this.alignX = alignXList.LEFT
@@ -298,10 +300,20 @@ export class Component extends AutoClean {
       type: EditorTypes.NUMBER_INPUT,
       props: { step: 1 }
     })
+    Component.defineField('widthReference',{
+      label: t('宽度参考'),
+      type: EditorTypes.SELECT,
+      props: { options: reference.values() }
+    })
     Component.defineField('width', {
       label: t('宽度 (%)'),
       type: EditorTypes.NUMBER_INPUT,
       props: { min: 0 }
+    })
+    Component.defineField('heightReference',{
+      label: t('高度参考'),
+      type: EditorTypes.SELECT,
+      props: { options: reference.values() }
     })
     Component.defineField('height', {
       label: t('高度 (%)'),

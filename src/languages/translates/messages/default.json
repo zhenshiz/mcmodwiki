@@ -2956,5 +2956,40 @@
             "src/views/more/chatbox/component/editors/ThemeEditor.vue(25966-25974)"
         ],
         "$id": 776
+    },
+    "宽度参考": {
+        "en-US": "Width Reference",
+        "$files": [
+            "src/assets/more/chatbox/chatboxTheme.js(8144-8156)"
+        ],
+        "$id": 1282
+    },
+    "高度参考": {
+        "en-US": "Height Reference",
+        "$files": [
+            "src/assets/more/chatbox/chatboxTheme.js(8442-8454)"
+        ],
+        "$id": 1283
+    },
+    "相对窗口宽度的百分比": {
+        "en-US": "Percentage of Window Width",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(535-565)"
+        ],
+        "$id": 1284
+    },
+    "相对窗口高度的百分比": {
+        "en-US": "Percentage of Window Height",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(588-618)"
+        ],
+        "$id": 1285
+    },
+    "绝对像素值": {
+        "en-US": "Absolute Pixel Value",
+        "$files": [
+            "src/assets/more/chatbox/enumTypes.js(634-649)"
+        ],
+        "$id": 1286
     }
 }

@@ -19,6 +19,12 @@ export const alignYList = formatUtil.createEnum({
   BOTTOM: t('下对齐')
 })
 
+export const reference = formatUtil.createEnum({
+  SCREEN_WIDTH: t('相对窗口宽度的百分比'),
+  SCREEN_HEIGHT:t('相对窗口高度的百分比'),
+  PIXEL: t('绝对像素值')
+})
+
 export const portraitType = formatUtil.createEnum({
   TEXTURE: t('图片'),
   PLAYER_HEAD: t('玩家头像'),

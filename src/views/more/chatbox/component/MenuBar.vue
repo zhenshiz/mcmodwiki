@@ -19,7 +19,7 @@ const store = useChatBoxEditorStore()
 const prompt = usePrompt()
 const message = useMessage()
 
-const chatBoxVersion = '1.1.2'
+const chatBoxVersion = '1.1.3'
 const saveShortcutLabel = `${shortcutUtil.getPrimaryModifierKeyLabel()}+S`
 
 // === 状态定义 ===
