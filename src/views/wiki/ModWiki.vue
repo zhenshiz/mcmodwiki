@@ -229,8 +229,8 @@ watch([language, () => route.params.name], () => loadModInfo())
       </div>
     </main>
 
-    <aside class="w-64 hidden xl:block border-l dark:border-slate-800 p-8 shrink-0">
-      <div class="sticky top-10">
+    <aside class="w-64 hidden xl:block border-l dark:border-slate-800 p-8 shrink-0 overflow-y-auto">
+      <div class="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide">
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
           {{ t('目录') }}
         </div>
@@ -263,5 +263,13 @@ watch([language, () => route.params.name], () => loadModInfo())
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(100, 100, 100, 0.2);
   border-radius: 10px;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 </style>
