@@ -45,7 +45,10 @@ const props = defineProps(nodeViewProps)
 const isDark = computed(() => usePageStore().isDark)
 
 const stepCount = computed(() => props.node.childCount)
-const currentStep = computed(() => props.node.attrs.currentStep || 0)
+const currentStep = computed(() => {
+  if (!props.editor.isEditable) return 0
+  return props.node.attrs.currentStep || 0
+})
 
 const selectStep = (index) => {
   props.updateAttributes({ currentStep: index })
