@@ -37,7 +37,7 @@
 
 <script setup>
 import { NodeViewContent, nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
 
@@ -45,13 +45,18 @@ const props = defineProps(nodeViewProps)
 const isDark = computed(() => usePageStore().isDark)
 
 const stepCount = computed(() => props.node.childCount)
+const readOnlyStep = ref(0)
 const currentStep = computed(() => {
-  if (!props.editor.isEditable) return 0
+  if (!props.editor.isEditable) return readOnlyStep.value
   return props.node.attrs.currentStep || 0
 })
 
 const selectStep = (index) => {
-  props.updateAttributes({ currentStep: index })
+  if (!props.editor.isEditable) {
+    readOnlyStep.value = index
+  } else {
+    props.updateAttributes({ currentStep: index })
+  }
 }
 
 // 核心修复：处理鼠标按下事件以强制聚焦

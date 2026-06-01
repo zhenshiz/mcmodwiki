@@ -1,5 +1,6 @@
 import ChatBox from '@/assets/textures/mod/cahtbox.png'
 import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
+import ViScriptRecipe from '@/assets/textures/mod/ViScriptRecipe.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -79,6 +80,27 @@ export const modList = () => {
       ],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.1.6'
+    },
+    {
+      lang: 'ViScriptRecipe',
+      icon: ViScriptRecipe,
+      description: t('可视化编辑配方'),
+      availableHere: [
+        {
+          icon: availableHere.MODRINTH,
+          href: 'https://modrinth.com/mod/viscriptrecipe'
+        },
+        {
+          icon: availableHere.GITHUB,
+          href: 'https://github.com/zhenshiz/ViScriptRecipe'
+        },
+        {
+          icon: availableHere.CURSE_FORGE,
+          href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptrecipe'
+        }
+      ],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.0 beta'
     }
   ]
 }

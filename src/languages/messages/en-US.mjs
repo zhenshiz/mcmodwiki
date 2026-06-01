@@ -415,5 +415,6 @@ export default  {
     "1283": "Height Reference",
     "1284": "Percentage of Window Width",
     "1285": "Percentage of Window Height",
-    "1286": "Absolute Pixel Value"
+    "1286": "Absolute Pixel Value",
+    "1287": "Visual Recipe Editor"
 }
