@@ -100,7 +100,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.0 beta'
+      modVersion: '1.0.2 beta'
     }
   ]
 }
