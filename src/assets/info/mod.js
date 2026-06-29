@@ -1,6 +1,7 @@
 import ChatBox from '@/assets/textures/mod/cahtbox.png'
 import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
 import ViScriptRecipe from '@/assets/textures/mod/ViScriptRecipe.png'
+import ViScriptQuests from '@/assets/textures/mod/ViScriptQuests.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -101,6 +102,27 @@ export const modList = () => {
       ],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.0.3 beta'
+    },
+    {
+      lang: 'ViScriptQuests',
+      icon: ViScriptQuests,
+      description: t('RPG式的任务系统'),
+      availableHere: [
+        // {
+        //   icon: availableHere.MODRINTH,
+        //   href: 'https://modrinth.com/mod/viscriptquests'
+        // },
+        {
+          icon: availableHere.GITHUB,
+          href: 'https://github.com/zhenshiz/ViScriptQuests'
+        },
+        {
+          icon: availableHere.CURSE_FORGE,
+          href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptquests'
+        }
+      ],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.0 beta'
     }
   ]
 }
