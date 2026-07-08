@@ -274,6 +274,8 @@ export class DialogueFrame extends AutoClean {
     this.video = new DialogueVideo() // Video
 
     this.sound = ''
+    this.bgm = ''
+    this.stayTick = 0
     this.command = null
     this.backgroundImage = null
 
@@ -286,6 +288,15 @@ export class DialogueFrame extends AutoClean {
     DialogueFrame.defineField('sound', {
       label: t('播放音效'),
       type: EditorTypes.INPUT
+    })
+    DialogueFrame.defineField('bgm', {
+      label: t('背景音乐'),
+      type: EditorTypes.INPUT
+    })
+    DialogueFrame.defineField('stayTick', {
+      label: t('强制玩家在该对话停留时长'),
+      type: EditorTypes.NUMBER_INPUT,
+      props: { min: 0 }
     })
     DialogueFrame.defineField('command', { label: t('执行指令'), type: EditorTypes.INPUT })
     DialogueFrame.defineField('backgroundImage', {

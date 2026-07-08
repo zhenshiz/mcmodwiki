@@ -417,5 +417,7 @@ export default  {
     "1285": "Percentage of Window Height",
     "1286": "Absolute Pixel Value",
     "1287": "Visual Recipe Editor",
-    "1288": "RPG-style Quest System"
+    "1288": "RPG-style Quest System",
+    "1289": "Background Music",
+    "1290": "Force the player to stay on this dialogue for the duration"
 }

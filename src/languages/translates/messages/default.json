@@ -2991,5 +2991,19 @@
             "src/assets/more/chatbox/enumTypes.js(634-649)"
         ],
         "$id": 1286
+    },
+    "背景音乐": {
+        "en-US": "Background Music",
+        "$files": [
+            "src/assets/more/chatbox/chatboxDialogues.js"
+        ],
+        "$id": 1289
+    },
+    "强制玩家在该对话停留时长": {
+        "en-US": "Force the player to stay on this dialogue for the duration",
+        "$files": [
+            "src/assets/more/chatbox/chatboxDialogues.js"
+        ],
+        "$id": 1290
     }
 }
