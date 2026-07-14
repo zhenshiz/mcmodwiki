@@ -221,8 +221,8 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="dark:border dark:border-dark-blue dark:rounded sticky top-0 w-full flex justify-between items-center h-full sm:h-[43px] z-10 bg-[#edfaff] dark:bg-[#051e2f] px-2">
-    <div class="flex flex-row flex-wrap">
+    class="dark:border dark:border-dark-blue dark:rounded sticky top-0 w-full flex items-start sm:items-center h-auto min-h-[43px] z-10 bg-[#edfaff] dark:bg-[#051e2f] px-2">
+    <div class="flex min-w-0 flex-1 flex-row flex-wrap">
       <ModeToggle :mode="mode" @update:mode="arg => emit('update:mode', arg)" />
 
       <template v-for="item in commandList" :key="item.lang">
@@ -260,7 +260,7 @@ onUnmounted(() => {
       </Popover>
     </div>
 
-    <div class="flex items-center">
+    <div class="flex shrink-0 items-center">
       <Popover>
         <template #trigger>
           <Icon @click="handleFullscreenToggle" class="icon dark:text-white"

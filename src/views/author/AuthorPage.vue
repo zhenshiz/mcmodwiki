@@ -20,20 +20,20 @@ const authorList = computed(() => [
 </script>
 
 <template>
-  <div class="size-full flex justify-start items-center flex-col dark:text-white">
-    <div class="mt-10 text-[30px] font-bold">
+  <div class="size-full flex justify-start items-center flex-col px-4 py-8 sm:px-6 sm:py-10 dark:text-white">
+    <div class="text-center text-2xl sm:text-[30px] font-bold">
       <Translate message="关于我们"></Translate>
     </div>
 
     <div
-      class="w-full grid grid-cols-1 sm:grid-cols-3 p-2 m-2">
+      class="mt-6 w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
       <div
-        class="center flex-col gap-5 border-2 rounded border-dashed border-text-gray hover:border-text-blue m-5 pt-5 pb-5"
-        v-for="item in authorList">
+        class="center min-w-0 flex-col gap-4 border-2 rounded border-dashed border-text-gray hover:border-text-blue px-4 py-5 text-center"
+        v-for="item in authorList" :key="item.lang">
         <Image :size="150" :src="item.icon" />
         <div class="title">{{ item.lang }}</div>
-        <div> {{ item.job }}</div>
-        <div> {{ item.description }}</div>
+        <div class="break-words"> {{ item.job }}</div>
+        <div class="break-words"> {{ item.description }}</div>
       </div>
     </div>
   </div>

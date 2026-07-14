@@ -134,7 +134,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-row">
+  <div class="flex min-w-0 flex-row">
     <aside class="w-[300px] hidden xl:block p-8 shrink-0">
       <div class="sticky top-10">
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
@@ -156,9 +156,9 @@ watch(
         </ul>
       </div>
     </aside>
-    <div class="flex justify-center">
+    <div class="flex min-w-0 flex-1 justify-center px-3 sm:px-5">
       <div
-        class="rounded bg-white dark:bg-dark-blue shadow mt-5 mb-5 min-w-full sm:min-w-[1290px] w-[65%] flex flex-col relative text-base"
+        class="rounded bg-white dark:bg-dark-blue shadow my-3 sm:my-5 w-full max-w-[1290px] min-w-0 flex flex-col relative text-base"
         :class="form.mode === 'code' ? 'h-[720px] overflow-hidden' : 'min-h-[720px]'">
         <MarkdownEditor ref="mdEditor" v-if="form.mode === 'preview'" @update:valueMarkdown="saveMarkdown"
           :value-markdown="form.content" :mode="form.mode" @update:mode="updateMode" class="dark:text-white" />
@@ -173,22 +173,22 @@ watch(
             @input="handleInputCodeMarkdown" @scroll="handleScroll" autofocus />
         </div>
 
-        <div class="flex flex-row items-center justify-between mt-5 mb-5">
-          <div class="ml-2 center flex-row gap-3 h-full ">
+        <div class="flex flex-col gap-3 px-3 my-5 lg:flex-row lg:items-center lg:justify-between">
+          <div class="center min-w-0 flex-row gap-3 h-full lg:max-w-sm">
             <Input v-model:modelValue="form.filename" :placeholder="t('请输入文件名')"
                    defaultModel="search"
               @update:modelValue="newValue => editTopicStore.setTopicInfo({ filename: newValue })" />
           </div>
-          <div class="flex items-center justify-end">
-            <Button class="w-48 h-10 text-lg mr-2 center" @click="() => visible = true"
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:flex lg:items-center lg:justify-end">
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="() => visible = true"
               :color="isDark ? '#66cffc' : '#0071d5'" :background="isDark ? '#000' : '#fff'" is-toggle-color>
               {{ t('功能展示') }}
             </Button>
-            <Button class="w-48 h-10 text-lg mr-2 center" @click="downloadMd" :color="isDark ? '#66cffc' : '#0071d5'"
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="downloadMd" :color="isDark ? '#66cffc' : '#0071d5'"
               :background="isDark ? '#000' : '#fff'" is-toggle-color>
               {{ t('生成Markdown文件') }}
             </Button>
-            <Button class="w-48 h-10 text-lg mr-2 center" @click="importMd" :color="isDark ? '#66cffc' : '#0071d5'"
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="importMd" :color="isDark ? '#66cffc' : '#0071d5'"
               :background="isDark ? '#000' : '#fff'" is-toggle-color>
               {{ t('导入Markdown文件') }}
             </Button>

@@ -53,10 +53,10 @@
 
       <div
         v-show="!node.attrs.isClosed"
-        class="relative overflow-hidden transition-colors"
+        class="relative overflow-x-auto transition-colors"
         :class="isDark ? 'bg-[#0d1117]' : 'bg-slate-50/50'"
       >
-        <code class="p-3 block min-w-full">
+        <code class="p-3 block min-w-full whitespace-pre">
           <node-view-content />
         </code>
       </div>

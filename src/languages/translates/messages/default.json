@@ -3005,5 +3005,89 @@
             "src/assets/more/chatbox/chatboxDialogues.js"
         ],
         "$id": 1290
+    },
+    "关闭菜单": {
+        "en-US": "Close menu",
+        "$files": [
+            "src/views/LayoutIndex.vue"
+        ],
+        "$id": 1291
+    },
+    "打开菜单": {
+        "en-US": "Open menu",
+        "$files": [
+            "src/views/LayoutIndex.vue"
+        ],
+        "$id": 1292
+    },
+    "搜索": {
+        "en-US": "Search",
+        "$files": [
+            "src/views/LayoutIndex.vue"
+        ],
+        "$id": 1293
+    },
+    "切换主题": {
+        "en-US": "Toggle theme",
+        "$files": [
+            "src/views/LayoutIndex.vue"
+        ],
+        "$id": 1294
+    },
+    "打开文档目录": {
+        "en-US": "Open document navigation",
+        "$files": [
+            "src/views/wiki/ModWiki.vue"
+        ],
+        "$id": 1295
+    },
+    "请使用电脑打开 ChatBox 编辑器": {
+        "en-US": "Please open the ChatBox Editor on a computer",
+        "$files": [
+            "src/views/more/chatbox/ChatBoxEntry.vue"
+        ],
+        "$id": 1296
+    },
+    "该编辑器依赖多面板、拖拽与精细指针操作，窄屏设备无法提供可靠的编辑体验。模组文档仍可在手机上正常浏览。": {
+        "en-US": "This editor relies on multiple panels, drag-and-drop, and precise pointer input, so it cannot provide a reliable editing experience on a narrow screen. Mod documentation remains available on mobile devices.",
+        "$files": [
+            "src/views/more/chatbox/ChatBoxEntry.vue"
+        ],
+        "$id": 1297
+    },
+    "返回首页": {
+        "en-US": "Return to homepage",
+        "$files": [
+            "src/views/more/chatbox/ChatBoxEntry.vue"
+        ],
+        "$id": 1298
+    },
+    "剪贴板中没有可粘贴的对话": {
+        "en-US": "There is no dialogue to paste from the clipboard",
+        "$files": [
+            "src/views/more/chatbox/component/editors/DialoguesEditor.vue"
+        ],
+        "$id": 1299
+    },
+    "已粘贴对话": {
+        "en-US": "Dialogue pasted",
+        "$files": [
+            "src/views/more/chatbox/component/editors/DialoguesEditor.vue"
+        ],
+        "$id": 1300
+    },
+    "复制": {
+        "en-US": "Copy",
+        "$files": [
+            "src/views/more/chatbox/component/editors/DialoguesEditor.vue"
+        ],
+        "$id": 1301
+    },
+    "粘贴": {
+        "en-US": "Paste",
+        "$files": [
+            "src/views/more/chatbox/component/editors/DialoguesEditor.vue"
+        ],
+        "$id": 1302
     }
 }

@@ -144,4 +144,9 @@ onMounted(renderChart)
 .rotate-90 {
   transform: rotate(90deg);
 }
+
+:deep(svg) {
+  max-width: 100%;
+  height: auto;
+}
 </style>

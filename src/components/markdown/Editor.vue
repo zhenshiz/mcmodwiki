@@ -110,7 +110,9 @@ const editor = useEditor({
       indent_size: 2,
       wrap_line_length: 80,
       preserve_newlines: true,
-      unformatted: ['code', 'pre', 'em', 'strong', 'span']
+      unformatted: ['code', 'pre', 'em', 'strong', 'span'],
+      // 单元格文本由 CustomTable 自己管理，格式化器不能向其中注入换行和缩进
+      content_unformatted: ['pre', 'textarea', 'td', 'th']
     })
     lastEmittedHtml.value = formattedHtml
     emit('update:valueMarkdown', formattedHtml)
@@ -671,6 +673,42 @@ aside {
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  :deep(.tiptap) {
+    width: calc(100% - 2rem);
+    margin: 1.5rem auto;
+    min-height: 360px;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    blockquote,
+    pre {
+      padding: 0.75rem;
+    }
+
+    img,
+    iframe {
+      max-width: 100%;
+      height: auto;
+    }
+
+    div[data-youtube-video] iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
   }
 }
 </style>

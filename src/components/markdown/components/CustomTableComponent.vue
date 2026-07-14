@@ -237,4 +237,14 @@ const toggleHeader = () => {
   -webkit-user-select: text;
   cursor: text;
 }
+
+.custom-table-node {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.custom-table-node table {
+  min-width: 100%;
+}
 </style>

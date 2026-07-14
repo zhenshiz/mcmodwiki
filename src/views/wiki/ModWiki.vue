@@ -27,6 +27,7 @@ const pageInfo = ref({
 })
 const currentFileName = ref('')
 const mdRenderer = ref(null)
+const mobileNavVisible = ref(false)
 
 // 扫描 public/md 下所有的 md 文件
 const allMdModules = import.meta.glob('/public/md/**/*.md')
@@ -88,6 +89,7 @@ const loadMarkdown = async (mod, lang, fileName) => {
 }
 
 const selectFile = async (fileName) => {
+  mobileNavVisible.value = false
   currentFileName.value = fileName
   const mod = modList().find(item => item.lang === route.params.name)
   if (!mod) return
@@ -163,9 +165,16 @@ watch([language, () => route.params.name], () => loadModInfo())
 </script>
 
 <template>
-  <div class="flex h-screen w-full bg-white dark:bg-dark-blue overflow-hidden">
+  <div class="flex h-[calc(100dvh-4rem)] w-full bg-white dark:bg-dark-blue overflow-hidden">
+    <div
+      v-if="mobileNavVisible"
+      class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/45 lg:hidden"
+      @click="mobileNavVisible = false"
+    />
+
     <aside
-      class="w-72 border-r dark:border-slate-800 flex flex-col shrink-0 bg-gray-50/30 dark:bg-transparent">
+      class="fixed left-0 top-16 bottom-0 z-50 w-72 max-w-[85vw] border-r bg-white dark:border-slate-800 flex flex-col shrink-0 dark:bg-dark-blue transition-transform duration-200 lg:static lg:z-auto lg:max-w-none lg:translate-x-0 lg:bg-gray-50/30 lg:dark:bg-transparent"
+      :class="mobileNavVisible ? 'translate-x-0' : '-translate-x-full'">
       <div class="p-6 h-full flex flex-col">
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-xl font-bold dark:text-white truncate" :title="pageInfo.name">
@@ -222,8 +231,21 @@ watch([language, () => route.params.name], () => loadModInfo())
     </aside>
 
     <main
-      class="flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
-      <div class="mx-auto px-12 min-h-full">
+      class="min-w-0 flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
+      <div class="sticky top-0 z-20 flex h-12 items-center gap-3 border-b bg-white/95 px-4 backdrop-blur dark:border-slate-800 dark:bg-dark-blue/95 lg:hidden">
+        <button
+          type="button"
+          class="flex size-9 shrink-0 items-center justify-center rounded-lg text-blue-500 hover:bg-blue-500/10"
+          :aria-label="t('打开文档目录')"
+          @click="mobileNavVisible = true"
+        >
+          <Icon icon="lucide:panel-left-open" width="22" height="22" />
+        </button>
+        <div class="min-w-0 flex-1 truncate font-bold dark:text-white">{{ pageInfo.name }}</div>
+        <div class="max-w-[40%] truncate text-xs text-gray-400">{{ currentFileName.replace(/\.md$/i, '') }}</div>
+      </div>
+
+      <div class="mx-auto min-h-full px-4 sm:px-8 lg:px-12">
         <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer"
                           :content="pageInfo.markdown" />
       </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeUnmount, onMounted } from 'vue'
 import { useChatBoxEditorStore, usePageStore } from '@/stores'
 import MenuBar from './component/MenuBar.vue'
 import FileExplorer from './component/FileExplorer.vue'

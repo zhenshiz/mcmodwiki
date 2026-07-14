@@ -574,4 +574,58 @@ onBeforeUnmount(() => {
 
   }
 }
+
+@media (max-width: 640px) {
+  .read-only-container {
+    :deep(.tiptap) {
+      width: 100%;
+      margin: 1.5rem auto;
+      min-height: 0;
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      h2 {
+        font-size: 1.45rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      blockquote,
+      pre {
+        padding: 0.75rem;
+      }
+
+      ul,
+      ol {
+        padding-left: 1rem;
+      }
+
+      ul ul,
+      ul ol,
+      ol ul,
+      ol ol {
+        margin-left: 0.5rem;
+      }
+
+      img,
+      iframe {
+        max-width: 100%;
+        height: auto;
+      }
+
+      div[data-youtube-video] iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+    }
+  }
+}
 </style>

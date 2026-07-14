@@ -419,5 +419,17 @@ export default  {
     "1287": "Visual Recipe Editor",
     "1288": "RPG-style Quest System",
     "1289": "Background Music",
-    "1290": "Force the player to stay on this dialogue for the duration"
+    "1290": "Force the player to stay on this dialogue for the duration",
+    "1291": "Close menu",
+    "1292": "Open menu",
+    "1293": "Search",
+    "1294": "Toggle theme",
+    "1295": "Open document navigation",
+    "1296": "Please open the ChatBox Editor on a computer",
+    "1297": "This editor relies on multiple panels, drag-and-drop, and precise pointer input, so it cannot provide a reliable editing experience on a narrow screen. Mod documentation remains available on mobile devices.",
+    "1298": "Return to homepage",
+    "1299": "There is no dialogue to paste from the clipboard",
+    "1300": "Dialogue pasted",
+    "1301": "Copy",
+    "1302": "Paste"
 }

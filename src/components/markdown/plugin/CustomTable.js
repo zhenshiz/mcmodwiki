@@ -30,7 +30,11 @@ const extractCellText = (cell) => {
   if (!cell) return ''
   // innerText 能更好地保留 <br> / 块元素的换行
   const text = typeof cell.innerText === 'string' ? cell.innerText : cell.textContent
-  return String(text ?? '').replace(/\r\n/g, '\n').trimEnd()
+  return String(text ?? '')
+    .replace(/\r\n?/g, '\n')
+    // 清除 HTML 格式化器在单元格换行后加入的缩进，避免被 pre-wrap 显示为正文
+    .replace(/\n[\t ]+/g, ' ')
+    .trim()
 }
 
 const tableDomToMatrix = (tableEl) => {

@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/chatbox/visual',
-    component: () => import('@/views/more/chatbox/ChatBoxVisual.vue')
+    component: () => import('@/views/more/chatbox/ChatBoxEntry.vue')
   },
   {
     path: '/:pathMatch(.*)*',
