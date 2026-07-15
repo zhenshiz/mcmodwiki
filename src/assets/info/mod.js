@@ -101,7 +101,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.6 beta'
+      modVersion: '1.0.7 beta'
     },
     {
       lang: 'ViScriptQuests',
