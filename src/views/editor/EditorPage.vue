@@ -136,7 +136,9 @@ watch(
 <template>
   <div class="flex min-w-0 flex-row">
     <aside class="w-[300px] hidden xl:block p-8 shrink-0">
-      <div class="sticky top-10">
+      <div
+        class="editor-toc-scroll sticky top-10 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain pr-3 scrollbar-thin scrollbar-thumb-gray-400/50 scrollbar-track-transparent"
+      >
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
           {{ t('目录') }}
         </div>
