@@ -108,10 +108,10 @@ export const modList = () => {
       icon: ViScriptQuests,
       description: t('RPG式的任务系统'),
       availableHere: [
-        // {
-        //   icon: availableHere.MODRINTH,
-        //   href: 'https://modrinth.com/mod/viscriptquests'
-        // },
+        {
+          icon: availableHere.MODRINTH,
+          href: 'https://modrinth.com/mod/viscriptquests'
+        },
         {
           icon: availableHere.GITHUB,
           href: 'https://github.com/zhenshiz/ViScriptQuests'
