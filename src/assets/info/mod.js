@@ -2,6 +2,7 @@ import ChatBox from '@/assets/textures/mod/cahtbox.png'
 import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
 import ViScriptRecipe from '@/assets/textures/mod/ViScriptRecipe.png'
 import ViScriptQuests from '@/assets/textures/mod/ViScriptQuests.png'
+import ViScriptTeam from '@/assets/textures/mod/ViScriptTeam.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -119,6 +120,27 @@ export const modList = () => {
         {
           icon: availableHere.CURSE_FORGE,
           href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptquests'
+        }
+      ],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.2 beta'
+    },
+    {
+      lang: 'ViScriptTeam',
+      icon: ViScriptTeam,
+      description: t('阵营关系与可视化组队系统'),
+      availableHere: [
+        {
+          icon: availableHere.MODRINTH,
+          href: 'https://modrinth.com/mod/viscriptteam'
+        },
+        {
+          icon: availableHere.GITHUB,
+          href: 'https://github.com/zhenshiz/ViScriptTeam'
+        },
+        {
+          icon: availableHere.CURSE_FORGE,
+          href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptteam'
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
