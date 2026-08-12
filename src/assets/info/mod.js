@@ -145,6 +145,27 @@ export const modList = () => {
       ],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.0.2 beta'
+    },
+    {
+      lang: 'SmartPhone',
+      // icon: ViScriptTeam,
+      description: t('智能手机'),
+      availableHere: [
+        // {
+        //   icon: availableHere.MODRINTH,
+        //   href: 'https://modrinth.com/mod/viscriptteam'
+        // },
+        // {
+        //   icon: availableHere.GITHUB,
+        //   href: 'https://github.com/zhenshiz/ViScriptTeam'
+        // },
+        // {
+        //   icon: availableHere.CURSE_FORGE,
+        //   href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptteam'
+        // }
+      ],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.1'
     }
   ]
 }
