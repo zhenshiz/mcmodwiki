@@ -20,7 +20,7 @@
       <li>
         <p>
           <strong>Target entity</strong>(Optional): Specify the target entity of the dialogue, separated by spaces, used to reference the attributes of the target entity in dialogue text or commands (<strong>See details for details</strong><a
-            href="?file=&quot;10-扩展功能.占位符.md&quot;"><strong>Placeholders</strong></a>) or interact.
+            href="?file=&quot;10-Features.Placeholders.md&quot;"><strong>Placeholders</strong></a>) or interact.
         </p>
       </li>
     </ul>
@@ -158,7 +158,7 @@
   </li>
   <li>
     <p><code>renderEvents</code>: Component rendering event,<strong>See details for details</strong><a
-        href="?file=&quot;13-扩展功能.组件渲染事件.md&quot;">Component rendering event</a>。</p>
+        href="?file=&quot;13-Features.Component-Render-Events.md&quot;">Component rendering event</a>。</p>
   </li>
 </ul>
 <div type="info" data-type="admonition" data-admo-type="info">
@@ -273,7 +273,7 @@
   </li>
   <li>
     <p><code>attachment</code>(Optional): Used to add some extra rendering to the character painting, forming a whole.<strong>See details for details</strong><a
-        href="?file=&quot;11-扩展功能.渲染附件.md&quot;">Rendering components</a>。</p>
+        href="?file=&quot;11-Features.Rendering-Attachments.md&quot;">Rendering components</a>。</p>
   </li>
   <li>
     <p><code>itemCount</code>(Optional, default value is 1): Number of items, only correct<code>item</code>Type portraits are effective.</p>
@@ -289,12 +289,12 @@
   <li>
     <p>
       <code>animation</code>(Optional): Preset animations, which directly retrieve and apply the corresponding animations from preset animations in the theme file. The mod comes with three built-in animations that can be used directly:<code>FADE_IN</code>gradually taking effect,<code>SLIDE_IN_FROM_BOTTOM</code>Slide in from the bottom,<code>BOUNCE</code>Bounce. You can also preset new animations in the theme file yourself,<strong>See details for details</strong><a
-        href="?file=&quot;12-扩展功能.动画.md&quot;">Animation</a>。</p>
+        href="?file=&quot;12-Features.Animation.md&quot;">Animation</a>。</p>
   </li>
   <li>
     <p>
       <code>customAnimation</code>(Optional): Custom animation uses keyframe animation configuration.<strong>See details for details</strong><a
-        href="?file=&quot;12-扩展功能.动画.md&quot;">Animation</a>。</p>
+        href="?file=&quot;12-Features.Animation.md&quot;">Animation</a>。</p>
   </li>
   <li>
     <p><code>loop</code>(Optional, default value.)<code>false</code>): Whether to loop the animation.</p>
@@ -692,7 +692,7 @@
 <ul>
   <li>
     <p><code>renderEvents</code>: With components<a
-        href="?file=&quot;13-扩展功能.组件渲染事件.md&quot;">Rendering events</a>The wording is the same, but it only triggers when entering the dialogue (i.e., only).<code>on_start</code>Timing events are valid).
+        href="?file=&quot;13-Features.Component-Render-Events.md&quot;">Rendering events</a>The wording is the same, but it only triggers when entering the dialogue (i.e., only).<code>on_start</code>Timing events are valid).
     </p>
   </li>
   <li>
@@ -790,7 +790,7 @@
   <li>
     <p>
       <code>unlockCommand</code>(Optional): Used to determine whether the option contains instructions or mvel with special status. The instructions must be based on<code>execute</code>The beginning is what works. If the command passes the test, the option is in a normal selectable state; otherwise, the option will be locked (<code>isLock</code>Yes<code>true</code>) or hide (<code>isLock</code>Yes<code>false</code>or undefined); For details on how to write mvel, refer to the reference<a
-        href="?file=&quot;14-扩展功能.MVEL.md&quot;">MVEL</a>。</p>
+        href="?file=&quot;14-Features.MVEL.md&quot;">MVEL</a>。</p>
   </li>
 </ul>
 <div type="important" data-type="admonition" data-admo-type="important">
@@ -810,7 +810,7 @@
   <li>
     <p>
       <code>click</code>(Optional): Events triggered by clicking the button, with 2 parameters inside<code>type</code>And<code>value</code>。 If you want to use it, basically<code>type</code>All were filled<code>command</code>，<code>value</code>This is the instruction to be executed, supporting multi-segment instructions, using<code>;</code>Separated, command permission is at level 2. More<code>type</code><strong>See details for details</strong><a
-        href="?file=&quot;13-扩展功能.组件渲染事件.md&quot;"><strong>Component rendering event</strong></a>。
+        href="?file=&quot;13-Features.Component-Render-Events.md&quot;"><strong>Component rendering event</strong></a>。
     </p>
   </li>
   <li>

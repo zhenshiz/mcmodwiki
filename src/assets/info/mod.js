@@ -3,6 +3,7 @@ import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
 import ViScriptRecipe from '@/assets/textures/mod/ViScriptRecipe.png'
 import ViScriptQuests from '@/assets/textures/mod/ViScriptQuests.png'
 import ViScriptTeam from '@/assets/textures/mod/ViScriptTeam.png'
+import SmartPhone from '@/assets/textures/mod/SmartPhone.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -148,24 +149,24 @@ export const modList = () => {
     },
     {
       lang: 'SmartPhone',
-      // icon: ViScriptTeam,
-      description: t('智能手机'),
+      icon: SmartPhone,
+      description: t('一款智能手机模组'),
       availableHere: [
         // {
         //   icon: availableHere.MODRINTH,
         //   href: 'https://modrinth.com/mod/viscriptteam'
         // },
-        // {
-        //   icon: availableHere.GITHUB,
-        //   href: 'https://github.com/zhenshiz/ViScriptTeam'
-        // },
-        // {
-        //   icon: availableHere.CURSE_FORGE,
-        //   href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptteam'
-        // }
+        {
+          icon: availableHere.GITHUB,
+          href: 'https://github.com/zhenshiz/SmartPhone'
+        },
+        {
+          icon: availableHere.CURSE_FORGE,
+          href: 'https://www.curseforge.com/minecraft/mc-mods/smart-phone'
+        }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.1'
+      modVersion: '1.0.1 beta'
     }
   ]
 }
