@@ -33,7 +33,7 @@ class QuestBook {
         + Current player quest list
     }
 
-class classification {
+class Classification {
         + Category name (e.g., main story, side quest, faction, daily game)
     }
 
@@ -66,7 +66,7 @@ class QuestBook {
         + Current player quest list
     }
 
-class classification {
+class Classification {
         + Category name (e.g., main story, side quest, faction, daily game)
     }
 

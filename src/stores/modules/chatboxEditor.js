@@ -83,11 +83,6 @@ export const useChatBoxEditorStore = defineStore(
       globalPortraits.value = portraits
     }
 
-    const refreshFileTree = async () => {
-      if (!rootHandle.value) return
-      fileTree.value = await fs.scanDirectory(rootHandle.value)
-    }
-
     const selectTreeNode = (node) => {
       selectedTreeNode.value = node
     }
@@ -314,11 +309,57 @@ export const useChatBoxEditorStore = defineStore(
       return null
     }
 
+    const collectFolderOpenStates = (nodes, states = new Map()) => {
+      for (const node of nodes || []) {
+        if (!node.isFolder) continue
+        states.set(node.path, node.isOpen)
+        collectFolderOpenStates(node.children, states)
+      }
+      return states
+    }
+
+    const restoreFolderOpenStates = (nodes, states, expandedPath = '') => {
+      for (const node of nodes || []) {
+        if (!node.isFolder) continue
+
+        const isExpandedPath =
+          expandedPath &&
+          (node.path === expandedPath || expandedPath.startsWith(`${node.path}/`))
+        const previousState = states.get(node.path)
+
+        // 新出现的目录保持收起；新建位置及其父级目录按需展开。
+        node.isOpen =
+          previousState === undefined ? !!isExpandedPath : previousState || !!isExpandedPath
+        restoreFolderOpenStates(node.children, states, expandedPath)
+      }
+    }
+
+    const refreshFileTree = async ({ expandedPath = '' } = {}) => {
+      if (!rootHandle.value) return
+
+      const openStates = collectFolderOpenStates(fileTree.value)
+      const selectedPath = selectedTreeNode.value?.path
+      const nextTree = await fs.scanDirectory(rootHandle.value)
+      restoreFolderOpenStates(nextTree, openStates, expandedPath)
+      fileTree.value = nextTree
+
+      // 刷新会重建节点对象，重新绑定当前选中项，避免选中状态指向旧树。
+      selectedTreeNode.value = selectedPath ? findNodeByPath(nextTree, selectedPath) : null
+    }
+
     const getTargetDirFromNode = (node) => {
       if (!rootHandle.value) return null
       if (!node) return rootHandle.value
       if (node.isFolder) return node.handle
       return node.parentHandle || rootHandle.value
+    }
+
+    const getTargetDirPathFromNode = (node) => {
+      if (!node) return ''
+      if (node.isFolder) return node.path
+      const path = node.path || ''
+      const separatorIndex = path.lastIndexOf('/')
+      return separatorIndex === -1 ? '' : path.slice(0, separatorIndex)
     }
 
     const getTargetPathForChild = (baseNode, childName) => {
@@ -341,9 +382,11 @@ export const useChatBoxEditorStore = defineStore(
       }
 
       try {
-        const targetDir = getTargetDirFromNode(baseNode || selectedTreeNode.value)
+        const targetNode = baseNode || selectedTreeNode.value
+        const targetDir = getTargetDirFromNode(targetNode)
+        const targetDirPath = getTargetDirPathFromNode(targetNode)
         await fs.createDirectory(targetDir, dirName)
-        await refreshFileTree()
+        await refreshFileTree({ expandedPath: targetDirPath })
         message.success(t('已创建文件夹: {}', dirName))
       } catch (err) {
         console.error('创建文件夹失败', err)
@@ -368,9 +411,10 @@ export const useChatBoxEditorStore = defineStore(
       try {
         const targetNode = baseNode || selectedTreeNode.value
         const targetDir = getTargetDirFromNode(targetNode)
+        const targetDirPath = getTargetDirPathFromNode(targetNode)
         await fs.createFile(targetDir, fileName, '{\n}\n')
         const targetPath = getTargetPathForChild(targetNode, fileName)
-        await refreshFileTree()
+        await refreshFileTree({ expandedPath: targetDirPath })
         message.success(t('已创建文件: {}', fileName))
 
         if (openAfterCreate) {
