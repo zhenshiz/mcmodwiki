@@ -190,9 +190,28 @@ export const useChatBoxEditorStore = defineStore(
 
     // === 动作 (Actions) ===
 
+    const hasRequiredChatBoxFolders = (nodes) => {
+      const folderNames = new Set(
+        (nodes || [])
+          .filter((node) => node.isFolder)
+          .map((node) => node.name.toLowerCase()),
+      )
+
+      if (folderNames.has('dialogues') && folderNames.has('theme')) return true
+
+      return (nodes || []).some(
+        (node) => node.isFolder && hasRequiredChatBoxFolders(node.children),
+      )
+    }
+
     const openProject = async () => {
       const result = await fs.openDirectory()
       if (result) {
+        if (!hasRequiredChatBoxFolders(result.tree)) {
+          message.error(t('导入失败：请选择同时包含 dialogues 和 theme 文件夹的目录'))
+          return
+        }
+
         fileTree.value = result.tree
 
         rootHandle.value = result.handle

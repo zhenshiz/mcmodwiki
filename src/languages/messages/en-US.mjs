@@ -431,5 +431,6 @@ export default  {
     "1299": "There is no dialogue to paste from the clipboard",
     "1300": "Dialogue pasted",
     "1301": "Copy",
-    "1302": "Paste"
+    "1302": "Paste",
+    "1303": "Import failed: select a folder that contains both the dialogues and theme folders"
 }

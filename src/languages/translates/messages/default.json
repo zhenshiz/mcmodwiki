@@ -3089,5 +3089,12 @@
             "src/views/more/chatbox/component/editors/DialoguesEditor.vue"
         ],
         "$id": 1302
+    },
+    "导入失败：请选择同时包含 dialogues 和 theme 文件夹的目录": {
+        "en-US": "Import failed: select a folder that contains both the dialogues and theme folders",
+        "$files": [
+            "src/stores/modules/chatboxEditor.js"
+        ],
+        "$id": 1303
     }
 }
