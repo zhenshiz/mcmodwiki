@@ -82,7 +82,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.2.0'
+      modVersion: '1.2.2'
     },
     {
       lang: 'ViScriptRecipe',
