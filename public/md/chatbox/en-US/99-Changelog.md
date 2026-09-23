@@ -1,12 +1,48 @@
 <h1 id="update-log" data-toc-id="update-log">Update log</h1>
+<h2 id="1" data-toc-id="1">1.1.5</h2>
+<ul>
+  <li>
+    <p>The<code>chatbox</code>command adds a new<code>group</code>subcommand for creating dialogue groups, whose members automatically sync the dialogue progress of the group leader</p>
+  </li>
+  <li>
+    <p>The<code>chatbox</code>command adds a new<code>playVideo</code>subcommand for playing videos</p>
+  </li>
+  <li>
+    <p><code>chatbox command nextDialogue</code> adds an optional numeric parameter for force-jumping dialogues, which can be a negative number</p>
+  </li>
+  <li>
+    <p>Videos:</p>
+    <ul>
+      <li>
+        <p>Compatible with<a href="https://modrinth.com/mod/watermedia" target="_blank"
+            rel="noopener noreferrer nofollow"><u>WATERMeDIA</u></a>
+          version 3.0.0.23, while keeping compatibility with the old version (2.1.25) (the mod for 26.1 only supports 3.0.0.23)</p>
+      </li>
+      <li>
+        <p>New field<code>removeOnEnd</code>(defaults to<code>true</code>)</p>
+      </li>
+      <li>
+        <p>
+          New field<code>removeOnNext</code>(defaults to<code>true</code>) (see the <strong>Video</strong> section of the main documentation for details)
+        </p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>If the dialogue theme has no fast-forward key configured, fast-forwarding dialogues is also not allowed in rendering-layer mode</p>
+  </li>
+  <li>
+    <p>New config option<code>disableMouseScroll</code>(defaults to<code>false</code>)</p>
+  </li>
+</ul>
 <h2 id="114" data-toc-id="114">1.1.4</h2>
 <ul>
   <li>
     <p>Optimized rendering of the history record interface</p>
   </li>
   <li>
-    <p>Optimized MVEL parsing, see details<a
-        href="?file=&quot;14-Features.MVEL.md&quot;">Extended features - MVEL documentation</a>, now it can be written in the dialogue text<code>&lt;&lt;MVEL代码&gt;&gt;</code>Used as a more powerful placeholder (requires code execution with a return value)
+    <p>
+      Optimized MVEL parsing, see the Extended features - MVEL documentation for details. Now it can be written in the dialogue text<code>&lt;&lt;MVEL code&gt;&gt;</code>Used as a more powerful placeholder (requires code execution with a return value)
     </p>
   </li>
   <li>

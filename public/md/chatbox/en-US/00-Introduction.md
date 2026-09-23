@@ -60,6 +60,54 @@
       Test the execution of a piece of mvel code. The last parameter is set to true to mean execution on the server side, false means it runs on the client. The return value of the execution code is sent to the player. If an error occurs, the log will show error messages (to avoid polluting the log, other places where mvel functionality is used will not output errors).
     </p>
   </li>
+  <li>
+    <p><code>/chatbox group</code> Dialogue group settings. Its only effect is that members automatically sync the dialogue progress of the group leader</p>
+    <ul>
+      <li>
+        <p><code>add &lt;组长：一个玩家&gt; &lt;成员：多个玩家&gt;</code> Create a new group or append members to an existing group
+        </p>
+      </li>
+      <li>
+        <p><code>remove &lt;一个玩家&gt;</code> If the player is the group leader, the whole group is removed; otherwise the player is removed from the group</p>
+      </li>
+      <li>
+        <p><code>setLeader &lt;一个玩家&gt;</code> Directly set the player as the leader of their group</p>
+      </li>
+      <li>
+        <p><code>clear</code> Remove all group information (since groups for this feature are not expected to last long, a one-click clear is convenient)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>
+      <code>/chatbox playVideo &quot;视频地址&quot; &lt;能否控制视频进度&gt; &lt;循环播放&gt; &lt;参数：json文本&gt;</code>
+      Play a video. By default the video progress cannot be controlled, it does not loop, Esc is always allowed to exit, and it exits automatically after the video finishes playing</p>
+    <div type="important" data-type="admonition" data-admo-type="important">
+      <div data-type="admonition-title">IMPORTANT</div>
+      <div data-type="admonition-content">
+        <p>This feature requires the<a href="https://modrinth.com/mod/watermedia" target="_blank"
+            rel="noopener noreferrer nofollow">WATERMeDIA</a>mod to be installed in order to work!<s>The development environment uses version 2.1.25, </s><strong><s>Do not use Watermedia version 3.x!</s></strong>
+        </p>
+        <p>
+          After mod version 1.1.5, <strong>both</strong>watermedia 2.1.25 and 3.0.0.23 are compatible, and you can install either version as needed.<strong>MC 26.1 and above only support version 3.0.0.23!</strong>
+        </p>
+      </div>
+    </div>
+    <ul>
+      <li>
+        <p>
+          <strong>Video URL</strong>: Required, <strong>note that it must be wrapped in double quotes</strong>. You can directly fill in the url of an online video (provided watermedia supports it, e.g.<code>&quot;https://www.bilibili.com/video/BV1vs411W7iK&quot;</code>. In particular, for Bilibili videos you can directly fill in<code>BV1vs411W7iK</code>), or the path of a local file. It can be an absolute path (e.g.<code>&quot;D:/games/MC/.minecraft/versions/1.21.1/resourcepacks/video.mp4&quot;</code>), or a relative path starting from the current game version root directory (the path above can be written as<code>&quot;resourcepacks/video.mp4&quot;</code>); using a relative path is recommended.<strong>Note in particular that if the watermedia version is 2.x, the full path must not contain Chinese characters!</strong>
+        </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p>
+          The json text parameter is written basically the same as the dialogue text json; the only special part is an extra<code>title</code>parameter, and <strong>here in the command you must pay strict attention to the format yourself</strong>. See the later introduction for the full list of parameters. Only one example is given here, and you can test the effect yourself:<code>/chatbox playVideo &quot;BV1vs411W7iK&quot; true true {&quot;title&quot;:&quot;天ノ弱&quot;, &quot;x&quot;:&quot;25&quot;, &quot;y&quot;:&quot;25&quot;, &quot;width&quot;:&quot;50&quot;, &quot;height&quot;:&quot;50&quot;}</code>
+        </p>
+      </li>
+    </ul>
+  </li>
 </ul>
 <h2 id="packet-path" data-toc-id="packet-path">Packet path</h2>
 <p>ChatBox will automatically load the JSON file corresponding to the path in the dialog box.</p>
@@ -824,12 +872,15 @@
     <p>This feature requires installation<a href="https://modrinth.com/mod/watermedia" target="_blank"
         rel="noopener noreferrer nofollow">WATERMeDIA</a>Only the mod can take effect! The development environment uses version 2.1.25,<strong>Do not use Watermedia version 3.x!</strong>
     </p>
+    <p>
+      After mod version 1.1.5, <strong>both</strong>watermedia 2.1.25 and 3.0.0.23 are compatible, and you can install either version as needed.<strong>MC 26.1 and above only support version 3.0.0.23!</strong>
+    </p>
   </div>
 </div>
 <ul>
   <li>
     <p>
-      <code>path</code>(Optional): The path to play the video can be absolute, or it can be from the root directory of the current game version (<code>saves、resourcepacks</code>The relative path starting with the folder where it is located, it is recommended to use the relative path,<strong>Also, the full path of the game installation directory cannot contain Chinese characters!</strong>
+      <code>path</code>(Required): You can directly fill in the url of an online video (provided watermedia supports it, e.g.<code>&quot;https://www.bilibili.com/video/BV1vs411W7iK&quot;</code>. In particular, for Bilibili videos you can directly fill in<code>&quot;BV1vs411W7iK&quot;</code>), or the path of a local file. It can be an absolute path (e.g.<code>&quot;D:/games/MC/.minecraft/versions/1.21.1/resourcepacks/video.mp4&quot;</code>), or a relative path starting from the current game version root directory (the path above can be written as<code>&quot;resourcepacks/video.mp4&quot;</code>); using a relative path is recommended.<strong>Note in particular that if the watermedia version is 2.x, the full path must not contain Chinese characters!</strong>
     </p>
   </li>
   <li>
@@ -853,6 +904,28 @@
   </li>
   <li>
     <p>
+      <code>removeOnEnd</code>(Optional, default.<code>true</code>): Whether to remove the video immediately after it finishes playing. If set to<code>false</code>, the video pauses when it finishes.
+    </p>
+  </li>
+  <li>
+    <p>
+      <code>removeOnNext</code>(Optional, default.<code>true</code>): Whether to remove the video after entering the next dialogue. If set to<code>false</code>, <strong>the video is only replaced when a new video is played</strong>! If you need the video to be removed at a certain dialogue line, you must manually use<code>renderEvents</code>in the previous dialogue line to set this field to<code>true</code>. It is written as follows:
+    </p>
+  </li>
+</ul><pre isclosed="false"><code>      {...},
+      {
+        &quot;renderEvents&quot;: [
+          {&quot;type&quot;: &quot;mvel&quot;, &quot;value&quot;: &quot;chatboxScreen.video.removeOnNext = true;&quot;}
+        ],
+        &quot;dialogBox&quot;: {...}
+      },
+      {
+        &quot;comment&quot;: &quot;The video will be removed normally after entering this dialogue line&quot;,
+        ...
+      }</code></pre>
+<ul>
+  <li>
+    <p>
       <code>x</code>(Optional, default is 0),<code>y</code>(Optional, default is 0),<code>width</code>(Optional, default 100)<code>height</code>(Optional, default 100)<code>alignX</code>(Optional, default left alignment)<code>alignY</code>(Optional, aligned by default): The effect matches the parameters of the component, which will not be repeated here.
     </p>
   </li>
@@ -871,6 +944,9 @@
   </li>
   <li>
     <p>Image portrait width scaling ratio</p>
+  </li>
+  <li>
+    <p>Disable mouse scroll wheel actions on the dialog screen</p>
   </li>
   <li>
     <p>Whether to block the Terra creature NPC dialogue system (requires installing the Terra creature mod)</p>
