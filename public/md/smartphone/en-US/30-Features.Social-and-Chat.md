@@ -10,6 +10,15 @@
   </div>
 </div>
 
+<h2 id="preset-conversations" data-toc-id="preset-conversations">Preset conversations</h2>
+<p>Administrators can edit a specific phone's preset conversations with <code>/smart_phone editor player name, UUID, or character name</code>. On the Chat page, click "Conversation +" in the bottom-right corner to create a preset channel, or "+ Friend" to create a preset friend. The friend's player ID may be fictional and does not require the player to exist on the server; the left phone's Channels and Friends pages show them respectively. After clicking a conversation, the right side shows its name and friend ID; clicking a message shows only that message's edit fields. "Message + / −" adds or deletes the current message, and "Conversation −" deletes the current conversation.</p>
+<p>Messages support text, images, or a mix of both. With a message selected, click "Choose image from album" and pick an existing photo on the left phone; you can also replace or remove the image. External PNG/JPEG images imported into the album can be selected too, and their thumbnail data is written into the phone profile on save, so they do not depend on the original photo file.</p>
+<p>A message shows its sender's avatar beside it: received messages appear on the left and messages sent by the phone on the right. Online players show their current skin; offline or fictional player IDs use a stable default avatar and never incorrectly borrow the current viewer's avatar.</p>
+<p>With a preset message selected, you can enter a valid Java player username in "Avatar player ID", for example <code>Notch</code>, to use that account's skin avatar; the player does not need to be online. The field accepts up to 16 letters, digits, or underscores, and leaving it empty restores the sender's original avatar. The avatar source is independent of the sender's name: the name can stay "Zhang San" while the phone's ownership and message left/right placement are unchanged. The setting applies only to the selected message and syncs with the preset chat profile on save. The first load requires the client to be online to query the skin service; while loading or on failure, the original avatar is kept and the interface is never blocked.</p>
+<p>The preset friend list uses the avatar setting from the friend's most recent message; replies sent later by the phone owner do not overwrite the friend's avatar. After changing an avatar, returning to the list shows the update, and entering a conversation still shows each message's own avatar.</p>
+<p>After clicking "Save and apply", players can keep sending text or images in this phone's preset conversations. Sent content is appended and saved to the profile of the phone's bound owner, existing records are preserved, and no automatic reply is triggered. The sender name follows the phone component's owner; character phones show the character name. Public channels and friend direct messages do not add preset automatic replies. A conversation summary shows its most recent non-empty message; a newly created empty record does not make an existing channel show "No messages".</p>
+<p>For the full editor operations and saving, see <a href="?file=&quot;45-Admin.Phone-Data-Editor.md&quot;#creating-preset-chats">Creating preset chats</a>.</p>
+
 <h2 id="friends-management" data-toc-id="friends-management">Friends management</h2>
 <div currentstep="0" data-type="steps">
   <div data-type="step-item">
@@ -38,7 +47,7 @@
   <div data-type="step-item">
     <div data-type="admonition-title">Prepare a photo</div>
     <div data-type="admonition-content">
-      <p>Take a photo with the Camera first, or import a PNG/JPEG image into the Album. For how to import, see <a href="?file=20-Features.Camera-and-Album.md">Importing external images</a>.</p>
+      <p>Take a photo with the Camera first, or import a PNG/JPEG image into the Album. For how to import, see <a href="?file=&quot;20-Features.Camera-and-Album.md&quot;#importing-external-images">Importing external images</a>.</p>
     </div>
   </div>
   <div data-type="step-item">
@@ -50,7 +59,7 @@
   <div data-type="step-item">
     <div data-type="admonition-title">Wait for sync</div>
     <div data-type="admonition-content">
-      <p>The client generates a 160x90 PNG thumbnail and sends it to the server. The public channel is synchronized to online players; direct messages are synchronized only to the two participants.</p>
+      <p>The client generates a 160×90 PNG thumbnail and sends it to the server. The public channel is synchronized to online players; direct messages are synchronized only to the two participants.</p>
     </div>
   </div>
 </div>

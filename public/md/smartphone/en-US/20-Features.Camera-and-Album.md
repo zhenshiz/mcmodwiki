@@ -1,31 +1,31 @@
 <h1 id="camera-and-album" data-toc-id="camera-and-album">Camera and Album</h1>
-<p>The Camera takes photos from the current player's perspective, and the Album browses, deletes, and imports photos. Photos in the Album can also be sent as chat room image messages; see <a href="?file=30-Features.Social-and-Chat.md">Sending image messages</a>.</p>
+<p>The Camera takes photos from the current player's perspective, and the Album browses, doodle-edits, deletes, and imports photos. Photos in the Album can also be sent as chat room image messages; see <a href="?file=&quot;30-Features.Social-and-Chat.md&quot;#sending-image-messages">Sending image messages</a>.</p>
 
 <h2 id="taking-photos" data-toc-id="taking-photos">Taking photos</h2>
 <div currentstep="0" data-type="steps">
   <div data-type="step-item">
     <div data-type="admonition-title">Open the camera</div>
     <div data-type="admonition-content">
-      <p>Open Camera from the phone home screen or from the Album. The camera enters first-person viewfinder mode.</p>
+      <p>Open Camera from the phone home screen or from the Album. The camera enters a first-person landscape viewfinder mode: the phone keeps its body proportions, zooms up to your eyes, and is held by both hands at the lower ends. The viewfinder is HUD rendering, so you can still move and turn normally, and two hint bars at the top and bottom show the controls.</p>
     </div>
   </div>
   <div data-type="step-item">
     <div data-type="admonition-title">Adjust zoom</div>
     <div data-type="admonition-content">
-      <p>Use the mouse wheel to adjust zoom, or use the minus and plus buttons in the camera UI.</p>
+      <p>Use the mouse wheel for digital zoom between 1×, 1.5×, 2×, and 3×; the top hint bar shows the current factor. Zoom enlarges only the scene inside the phone screen — the world view outside the phone, the phone body, and both hands stay unchanged, and the game's FOV setting is not modified.</p>
     </div>
   </div>
   <div data-type="step-item">
     <div data-type="admonition-title">Capture or open the album</div>
     <div data-type="admonition-content">
-      <p>Right-click or press C to take a photo; press G or use the middle mouse button to open the Album. Press Esc to exit viewfinder mode and return to the phone.</p>
+      <p>Right-click or press C to take a photo; press G or use the middle mouse button to open the Album. Press Esc to close the camera app and return directly to the same phone's unlocked home screen, without opening the pause menu.</p>
     </div>
   </div>
 </div>
-<p>On a successful capture, a save notification appears and the photo is added to the current player's local album.</p>
+<p>On a successful capture, a save notification appears and the photo is added to the current player's local album. The photo saves the viewfinder image at the current zoom factor and does not include the phone frame, your hands, or the control hints; after leaving the camera or opening the Album, the first-person or third-person view settings from before you entered are restored.</p>
 
 <h2 id="album-management" data-toc-id="album-management">Album management</h2>
-<p>The Album sorts photos by most recently modified first. Tap a thumbnail to open the detail page, which shows the file name and save time; the detail page provides Camera and Delete buttons.</p>
+<p>The Album sorts photos by most recently modified first. Tap a thumbnail to open the detail page, which shows the file name and save time; the detail page provides Edit, Camera, and Delete buttons.</p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
   <div data-type="admonition-title">Deletion cannot be undone</div>
   <div data-type="admonition-content">
@@ -33,8 +33,13 @@
   </div>
 </div>
 
+<h2 id="photo-doodles" data-toc-id="photo-doodles">Photo doodles</h2>
+<p>Click Edit on a photo's detail page to enter the large canvas. The photo is shown at its original ratio; pick one of the seven colors — red, yellow, green, cyan, blue, white, black — and a thin, medium, or thick brush, then hold the left mouse button and drag to draw. Blank space outside the canvas is not written into the photo.</p>
+<p>Click Undo or press Ctrl+Z to revert the entire previous stroke. Click "Save a copy" to generate a new doodled PNG at the photo's original pixel size, with <code>_edited</code> appended to the file name; a sequence number is added automatically on name conflicts, and the original photo is kept. After a successful save you return to the new photo's detail page, and the copy can also be sent from the Chat Room later.</p>
+<p>Click Cancel or press Esc to discard unsaved strokes from this session and return to the album. If saving fails, the draft is kept so you can try saving again.</p>
+
 <h2 id="importing-external-images" data-toc-id="importing-external-images">Importing external images</h2>
-<p>The Import button at the top of the Album opens the system file picker, so you can import external images that did not come from the phone camera, such as PNG or JPEG files saved from another album app.</p>
+<p>The Import button at the top of the Album opens the system file picker, so you can import external images that did not come from the phone camera, such as PNG or JPEG files saved by the player in an album app.</p>
 <div currentstep="0" data-type="steps">
   <div data-type="step-item">
     <div data-type="admonition-title">Open the import window</div>

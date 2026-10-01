@@ -5,18 +5,20 @@
 <div type="important" data-type="admonition" data-admo-type="important">
   <div data-type="admonition-title">Version and dependencies</div>
   <div data-type="admonition-content">
-    <p>The project currently targets Minecraft 1.21.1 with NeoForge 21.1.216; the mod metadata requires NeoForge 21 or higher.</p>
-    <p>Simple Voice Chat API is declared as a required dependency, with a version range of 2.6.0 or higher. Only voice calls require an active voice chat connection; see <a href="?file=40-Features.Voice-Call.md">Voice Call</a> for details.</p>
+    <p>The current project version is SmartPhone 1.0.3, targeting Minecraft 1.21.1 with NeoForge 21.1.248; the mod metadata requires NeoForge 21 or higher.</p>
+    <p>Simple Voice Chat API is declared as a required dependency, with a version range of 2.6.0 or higher. Only voice calls require an active voice chat connection; see <a href="?file=&quot;40-Features.Voice-Call.md&quot;">Voice Call</a> for details.</p>
   </div>
 </div>
 
 <h2 id="table-of-contents" data-toc-id="table-of-contents">Table of contents</h2>
 <ul>
-  <li><p><a href="?file=10-Usage.Phone-and-Apps.md">Phone and Apps</a>: opening, unlocking, home screen, app store, and in-phone settings.</p></li>
-  <li><p><a href="?file=20-Features.Camera-and-Album.md">Camera and Album</a>: taking photos, managing photos, and importing PNG/JPEG from external files.</p></li>
-  <li><p><a href="?file=30-Features.Social-and-Chat.md">Social and Chat</a>: public channels, friend requests, direct messages, and image messages.</p></li>
-  <li><p><a href="?file=40-Features.Voice-Call.md">Voice Call</a>: starting, answering, and ending two-person calls through Simple Voice Chat.</p></li>
-  <li><p><a href="?file=50-Admin.Config-and-Commands.md">Configuration and Commands</a>: server administrator configuration, disabling apps, and management commands.</p></li>
+  <li><p><a href="?file=&quot;10-Usage.Phone-and-Apps.md&quot;">Phone and Apps</a>: opening, unlocking, home screen, App Store, and in-phone settings.</p></li>
+  <li><p><a href="?file=&quot;15-Usage.Mini-Games.md&quot;">Mini-Games</a>: controls, Piano Tiles rules, and Minesweeper rules.</p></li>
+  <li><p><a href="?file=&quot;20-Features.Camera-and-Album.md&quot;">Camera and Album</a>: taking photos, managing photos, and importing PNG/JPEG from external files.</p></li>
+  <li><p><a href="?file=&quot;30-Features.Social-and-Chat.md&quot;">Social and Chat</a>: public channels, friend requests, direct messages, and image messages.</p></li>
+  <li><p><a href="?file=&quot;40-Features.Voice-Call.md&quot;">Voice Call</a>: starting, answering, and ending two-person calls through Simple Voice Chat.</p></li>
+  <li><p><a href="?file=&quot;45-Admin.Phone-Data-Editor.md&quot;">Phone Data Editor</a>: preview and preset phone profiles for specific players or virtual characters.</p></li>
+  <li><p><a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>: server administrator configuration, disabling apps, and management commands.</p></li>
 </ul>
 
 <h2 id="obtaining-and-opening-the-phone" data-toc-id="obtaining-and-opening-the-phone">Obtaining and opening the phone</h2>
@@ -29,15 +31,15 @@
     </div>
   </div>
   <div data-type="step-item">
-    <div data-type="admonition-title">Use it in hand</div>
+    <div data-type="admonition-title">Hold it in your main hand</div>
     <div data-type="admonition-content">
-      <p>Hold the phone and use the item. The server opens the phone UI for that player; the first opening creates default phone data and the default built-in apps.</p>
+      <p>With the default configuration, switching the phone to your main hand immediately plays the raise animation: the right hand grips the phone from the lower right while the standby lock screen is shown. The first opening creates the default phone data and the default built-in apps.</p>
     </div>
   </div>
   <div data-type="step-item">
     <div data-type="admonition-title">Unlock and enter the home screen</div>
     <div data-type="admonition-content">
-      <p>Swipe up on the lock screen as prompted to unlock, then tap a home screen icon to use an app.</p>
+      <p>After the animation, swipe up on the lock screen with the mouse to enter the home screen, then tap an icon to use an app. When the auto-raise configuration is disabled, using the phone item still opens the lock screen; swipe up as prompted to unlock.</p>
     </div>
   </div>
 </div>
@@ -85,10 +87,11 @@
 
 <h2 id="downloadable-apps" data-toc-id="downloadable-apps">Downloadable apps</h2>
 <p>The App Store lists installable apps that are not disabled by the server configuration. The currently registered mini-games are Snake, 2048, Flappy Bird, Minesweeper, and Piano Tiles.</p>
-<p>System apps cannot be uninstalled through the App Store; downloadable apps can be installed or uninstalled in the App Store. Administrators can also hide specific apps through configuration; see <a href="?file=50-Admin.Config-and-Commands.md">Configuration and Commands</a>.</p>
+<p>For each game's start method, controls, and failure conditions, see <a href="?file=&quot;15-Usage.Mini-Games.md&quot;">Mini-Games</a>.</p>
+<p>System apps cannot be uninstalled through the App Store; downloadable apps can be installed or uninstalled in the App Store. Administrators can also hide specific apps through configuration; see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>.</p>
 
 <h2 id="data-persistence" data-toc-id="data-persistence">Data persistence</h2>
-<p>Phone profiles are saved per player into the Overworld SavedData on the server, including installed apps, app layout, wallpaper, time source, notepad, official messages, and other phone information. Chat room messages and friend relationships are also saved in the server Overworld data.</p>
+<p>Phone profiles are saved per owner into the Overworld SavedData on the server; the owner can be a real player or a registered virtual character. A profile includes installed apps, app layout, wallpaper, time source, notepad, official messages, and other phone information. Chat rooms and friend relationships are also saved in the server Overworld data.</p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
   <div data-type="admonition-title">Back up before resetting</div>
   <div data-type="admonition-content">
