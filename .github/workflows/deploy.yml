@@ -1,4 +1,4 @@
-name: Deploy to 1Panel
+name: Build static website for 1Panel
 
 on:
   push:
@@ -9,13 +9,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: mcmod-wiki-production
+  group: mcmod-wiki-static-publish
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    # Configure the server and secrets, then set the repository variable to true.
-    if: vars.DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/master'
+  build:
+    if: github.repository == 'zhenshiz/mcmodwiki' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     defaults:
@@ -38,74 +37,72 @@ jobs:
 
       - name: Install and build
         run: |
+          set -euo pipefail
           pnpm install --frozen-lockfile
           pnpm build
           test -s dist/index.html
+          test -d dist/assets
+          test -d dist/md
+          test -z "$(find dist -type l -print -quit)"
 
-      - name: Configure SSH
+      - uses: actions/upload-artifact@v7
+        with:
+          name: static-website
+          path: dist/
+          if-no-files-found: error
+          retention-days: 3
+
+  publish:
+    needs: build
+    if: github.repository == 'zhenshiz/mcmodwiki' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # This job copies files and commits them; it never installs or runs site code.
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: master
+          fetch-depth: 1
+          persist-credentials: true
+
+      - uses: actions/download-artifact@v7
+        with:
+          name: static-website
+          path: ${{ runner.temp }}/static-website
+
+      - name: Publish built files to deploy-static
         env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          BUILT_DIR: ${{ runner.temp }}/static-website
+          SOURCE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          : "${DEPLOY_SSH_KEY:?Missing DEPLOY_SSH_KEY}"
-          : "${DEPLOY_KNOWN_HOSTS:?Missing DEPLOY_KNOWN_HOSTS}"
-          [[ "$DEPLOY_HOST" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]]
-          [[ "$DEPLOY_PORT" =~ ^[0-9]+$ ]]
-          (( 10#$DEPLOY_PORT >= 1 && 10#$DEPLOY_PORT <= 65535 ))
-          [[ "$DEPLOY_USER" =~ ^[a-z_][a-zA-Z0-9_-]*$ ]]
-          # This workflow targets the site's default index directory in 1Panel.
-          [[ "$DEPLOY_PATH" =~ ^/[a-zA-Z0-9_./-]+/www/sites/[a-zA-Z0-9_-]+/index$ ]]
-          [[ "$DEPLOY_PATH" != *'/../'* && "$DEPLOY_PATH" != *'/./'* ]]
-          install -d -m 700 ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/mcmod_deploy
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/mcmod_deploy ~/.ssh/known_hosts
-          cat > ~/.ssh/config <<EOF
-          Host mcmod-production
-            HostName $DEPLOY_HOST
-            Port $DEPLOY_PORT
-            User $DEPLOY_USER
-            IdentityFile ~/.ssh/mcmod_deploy
-            IdentitiesOnly yes
-            BatchMode yes
-            StrictHostKeyChecking yes
-            ConnectTimeout 15
-          EOF
-          chmod 600 ~/.ssh/config
-          ssh mcmod-production "test -d '$DEPLOY_PATH' && test -w '$DEPLOY_PATH' && command -v rsync >/dev/null"
-
-      - name: Upload assets and publish index
-        env:
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          set -euo pipefail
-          rsync -rpz --delay-updates --chmod=D755,F644 \
-            --exclude='/index.html' \
-            dist/ "mcmod-production:$DEPLOY_PATH/"
-          staged_index="$DEPLOY_PATH/.index-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.html"
-          scp dist/index.html "mcmod-production:$staged_index"
-          ssh mcmod-production "chmod 644 '$staged_index' && mv -f '$staged_index' '$DEPLOY_PATH/index.html'"
-
-      - name: Verify HTTPS and page routes on the new server
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        run: |
-          set -euo pipefail
-          curl --fail --silent --show-error --max-time 30 \
-            --resolve "doc.mafuyu.moe:443:$DEPLOY_HOST" \
-            https://doc.mafuyu.moe/ -o /tmp/deployed-index.html
-          cmp dist/index.html /tmp/deployed-index.html
-          curl --fail --silent --show-error --max-time 30 \
-            --resolve "doc.mafuyu.moe:443:$DEPLOY_HOST" \
-            https://doc.mafuyu.moe/editor -o /tmp/deployed-editor.html
-          cmp dist/index.html /tmp/deployed-editor.html
-          asset_path="$(node --input-type=module -e 'import fs from "node:fs"; const match = fs.readFileSync("dist/index.html", "utf8").match(/\bsrc="(\/assets\/[^" ]+\.js)"/); if (!match) process.exit(1); process.stdout.write(match[1]);')"
-          curl --fail --silent --show-error --max-time 30 \
-            --resolve "doc.mafuyu.moe:443:$DEPLOY_HOST" \
-            "https://doc.mafuyu.moe$asset_path" -o /tmp/deployed-asset.js
-          cmp "dist$asset_path" /tmp/deployed-asset.js
+          test -s "$BUILT_DIR/index.html"
+          test -d "$BUILT_DIR/assets"
+          test -d "$BUILT_DIR/md"
+          test -z "$(find "$BUILT_DIR" -type l -print -quit)"
+          # Stop if a new top-level output needs an explicit deployment decision.
+          test -z "$(find "$BUILT_DIR" -mindepth 1 -maxdepth 1 \
+            ! -name index.html ! -name assets ! -name md ! -name favicon.ico -print -quit)"
+          remote_ref="$(git ls-remote --heads origin refs/heads/deploy-static)"
+          if [[ -n "$remote_ref" ]]; then
+            git fetch --no-tags origin refs/heads/deploy-static:refs/remotes/origin/deploy-static
+            git switch --create deploy-static origin/deploy-static
+          else
+            git switch --orphan deploy-static
+          fi
+          git rm -r -f --ignore-unmatch .
+          cp -a "$BUILT_DIR/." .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          if git diff --cached --quiet; then
+            echo "Built files are unchanged; keeping the current publication."
+            exit 0
+          fi
+          git commit -m "Publish static website from $SOURCE_SHA"
+          git push origin HEAD:refs/heads/deploy-static
