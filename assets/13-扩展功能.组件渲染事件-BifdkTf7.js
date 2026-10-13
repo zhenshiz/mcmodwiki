@@ -1,0 +1,1 @@
+const B="/assets/13-%E6%89%A9%E5%B1%95%E5%8A%9F%E8%83%BD.%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93%E4%BA%8B%E4%BB%B6-Bp_xH5Py.md";export{B as default};

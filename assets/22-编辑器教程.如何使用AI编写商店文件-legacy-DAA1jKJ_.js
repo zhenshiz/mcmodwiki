@@ -1,0 +1,1 @@
+System.register([],function(E,B){"use strict";return{execute:function(){E("default","/assets/22-%E7%BC%96%E8%BE%91%E5%99%A8%E6%95%99%E7%A8%8B.%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8AI%E7%BC%96%E5%86%99%E5%95%86%E5%BA%97%E6%96%87%E4%BB%B6-DDEWX0z-.md")}}});
