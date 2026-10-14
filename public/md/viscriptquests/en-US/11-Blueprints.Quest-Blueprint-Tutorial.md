@@ -1,5 +1,5 @@
 <h1 id="quest-blueprint-operation-tutorial" data-toc-id="quest-blueprint-operation-tutorial">Quest blueprint operation tutorial</h1>
-<p>This article introduces the project files, root diagrams and sub-quest diagrams, node connections, dynamic values, variables, sequential goals, shortcuts, as well as the export and distribution workflow of quests in the ViScriptQuests quest editor.</p>
+<p>This article introduces the project files, root diagram and small-quest subgraphs, node connections, dynamic values, the player item count expression, variables, sequential goals, shortcuts, as well as the export and distribution workflow of quests in the ViScriptQuests quest editor.</p>
 <h2 id="core-concept" data-toc-id="core-concept">Core concept</h2>
 <p>The quest editor saves two types of files:</p>
 <table data-type="custom-table" data-with-header-row="true">
@@ -149,7 +149,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 <h2 id="write-the-quest" data-toc-id="write-the-quest">Write the quest</h2>
 <h3 id="open-the-editor" data-toc-id="open-the-editor">Open the editor</h3>
 <p>
-  With OP permission, players can use commands<code>viscript_quests editor [任务id]</code>Open the editor. The quest ID is optional. If your server's specified path has available project files, there will be a completion option to help you choose which project to open. You can include a subdirectory without needing a suffix.
+  Players with server permission level 4 can open the editor with <code>/viscript_quests editor [project id]</code>. The project ID is optional; when specified, it is read from the <code>.questproj</code> project files already on the server, and the command provides completion. The project ID may contain subdirectories and does not need the file extension.
 </p>
 <h3 id="understand-the-editors-infrastructure" data-toc-id="understand-the-editors-infrastructure">Understand the editor's infrastructure</h3>
 <p>Editors are mainly divided into:</p>
@@ -208,12 +208,12 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   <tr>
     <td>Root map</td>
     <td>Arrange the workflow for major quests.</td>
-    <td>Quest start, small quests, quest end, conditional branching, merge nodes, as well as auxiliary logic, math, variables, scoreboards, and debug nodes.</td>
+    <td>Quest start, small quests, quest end, conditional branching, merge nodes, as well as auxiliary logic, math, player, variable, scoreboard, and debug nodes.</td>
   </tr>
   <tr>
     <td>Small quest sub-map</td>
     <td>Write down the goals, rewards, and actions after completing each small quest.</td>
-    <td>Small quest starting points, quest objectives, quest rewards, conditional branches, as well as auxiliary logic, math, variables, scoreboards, and debugging nodes.</td>
+    <td>Small quest starting points, quest objectives, quest rewards, conditional branches, as well as auxiliary logic, math, player, variable, scoreboard, and debugging nodes.</td>
   </tr>
   </tbody>
 </table>
@@ -432,10 +432,13 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 <p>Quantity and time are no longer just hardcoded values in the form on the right. The following parameters are the node input ports. You can directly fill in constants, or connect to scoreboards, variables, or mathematical output inputs:</p>
 <ul>
   <li><p>The quantity of items to obtain, the number of entities killed, entity death, and block destruction required.</p></li>
+  <li><p>The currency amount required by the currency objective; this node is only available when ViScriptShop is installed.</p></li>
   <li><p>The countdown lasts for seconds.</p></li>
   <li><p>Item reward quantity, experience bonus, and currency reward.</p></li>
 </ul>
 <p>The "Item" component of the Obtain Item node is only used to select item identity and component data; the actual required quantity is based on the input port for "Item Quantity."</p>
+<p>"Get player item count" is a numeric expression node in the player category, usable in both the root diagram and small-quest subgraphs. After choosing the item and component matching rules, it counts at runtime how many matching items the current quest player owns and outputs the integer from the "Item count" port. You can wire that port into a numerical comparison and feed the comparison result into a conditional branch, or connect it to mathematical operations and other numeric inputs. It only reads the count and never consumes items.</p>
+<p>Like the obtain item objective, the currency objective supports auto or manual submission. With "Deduct currency on submission" enabled, the actual whole-number currency paid in is deducted, and manual mode allows submitting in batches; when disabled, only the balance is checked. The fractional part of the player's wallet is preserved. For node parameters and ports, see <a href="?file=&quot;12-Blueprints.Blueprint-Nodes.md&quot;#currency-objective">currency objective</a> and <a href="?file=&quot;12-Blueprints.Blueprint-Nodes.md&quot;#get-player-item-count">get player item count</a>.</p>
 <p>All regular objectives have a "Show in Objective Bar" switch. When turned off, the target will still be detected and completed, but it will not appear in the quest book objective bar or tracking HUD. Target icons and prompt text forms related to display will also be hidden. All actual rewards have a "Show in rewards bar" switch; even when closed, rewards are still issued normally, but the reward icon and floating text form remain hidden. Dynamic switching only rebuilds the current form, does not duplicate component additions, and does not lose hidden values that have been filled.</p>
 
 <h4 id="sequential-goals-and-target-status" data-toc-id="sequential-goals-and-target-status">Sequential goals and target status</h4>
@@ -650,7 +653,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 </p>
 <h3 id="save-the-quest" data-toc-id="save-the-quest">Save the quest</h3>
 <p>
-  In the menu at the top left, you can save the current project's content to local or upload it to the server. If you open the project file in the editor, you can save it directly to the local file. If you open the server project file via a command, you need to upload it to the server after editing to overwrite the original file. Note that this file upload is file-level synchronization. If you want row-level synchronization, it's recommended to use Git.
+  In the top-left menu, you can save the current project locally or upload it to the server. After opening a local project file in the editor, you can save it directly to local storage; after opening a server project file via command, you must re-upload the project file once editing is done to overwrite the server's <code>.questproj</code>. For the updated quests to run on the server, you also need to compile and upload the <code>.quest</code>. Both project file and runtime file uploads require server permission level 4; uploading overwrites at the file level, so use Git for versioning when collaborating.
 </p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
   <div data-type="admonition-title">The current Beta does not retain compatibility with the old format</div>
@@ -660,7 +663,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 </div>
 <h2 id="create-categories" data-toc-id="create-categories">Create categories</h2>
 <p>
-  Before using the runtime quest file, you need to create or organize quest categories. Usage <code>viscript_quests category config</code> Open the category configuration page, where you can edit category IDs, display names, icons, default label backgrounds, select label backgrounds, and the major quest IDs contained in the category. You can also adjust the category order by dragging. If the label background is not customized, use the blue default and select the mapping of this mod.
+  To make quests easier for players to find, you can create or organize quest categories before granting them; uncategorized quests remain visible in the quest book's "All" view. Players with server permission level 2 can use <code>/viscript_quests category config</code> to open the category configuration page, where you can edit the category ID, display name, icon, default tab background, selected tab background, and the major quest IDs contained in the category, as well as adjust the category order by dragging. When tab backgrounds are not customized, this mod's blue default and selected textures are used.
 </p>
 <div type="info" data-type="admonition" data-admo-type="info">
   <div data-type="admonition-title">Did you know?</div>
@@ -672,6 +675,6 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 </div>
 <h2 id="issue-quests" data-toc-id="issue-quests">Issue quests</h2>
 <p>
-  Once the categories are created, they can be used <code>viscript_quests grant &lt;玩家&gt; &lt;任务id&gt;</code> Assign quests, use <code>viscript_quests book</code> Open the quest book. Administrators can also use it <code>revoke</code> Cancel the quest,<code>complete</code> Forcing the completion of major quests,<code>submit</code> Submit the small quests currently tracking the player, as well as their usage <code>trigger &lt;玩家&gt; &lt;trigger_id&gt;</code> Complete the custom matching trigger target. When a custom objective is successfully triggered, no chat prompts are sent to the player or the executor; The failure prompt is only kept when there is no matching target.
+  Administrators with server permission level 2 can grant quests with <code>/viscript_quests grant &lt;player&gt; &lt;quest id&gt; [autoTrack]</code>; when <code>autoTrack</code> is omitted or <code>true</code>, the quest is tracked automatically, and when it is <code>false</code>, the player's current tracking choice is preserved. Use <code>/viscript_quests book</code> to open the quest book for yourself. Administrators can also use <code>revoke</code> to revoke a quest, <code>complete</code> to force-complete a major quest, <code>submit &lt;player&gt; &lt;quest id&gt; &lt;step id&gt;</code> to submit the current objectives of the specified step, and <code>trigger &lt;player&gt; &lt;trigger_id&gt;</code> to complete matching custom trigger objectives. Successfully triggering a custom objective sends no chat message to the player or the command executor; the failure message is only kept when there is no matching objective.
 </p>
 <p>When a small or large quest is completed, the HUD will display a prompt that includes icons, titles, and a "Completed" indicator by default. Players can disable "Show Quest Completion Prompt" in the client configuration; the default value is  <code>true</code>。 The actual pixel size of this HUD does not change with the zoom of the Minecraft GUI.</p>

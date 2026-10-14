@@ -62,9 +62,15 @@
       <td>√</td>
       <td>Commonly used for conditions, values, debugging, and actions; Root Diagram usually serves process branches.</td>
     </tr>
+    <tr>
+      <td>Player data</td>
+      <td>√</td>
+      <td>√</td>
+      <td>Reads the current quest player's item count as a runtime numeric expression.</td>
+    </tr>
   </tbody>
 </table>
-<p>After roughly understanding the types of nodes in this mod blueprint, let's officially introduce the detailed node information. The following content is organized according to the node registration information currently in the source code, containing a total of 30 custom blueprint nodes: 6 for process control, 11 for quest goals, 6 for quest rewards, 1 for logic, 1 for mathematics, 2 for scoreboards, 1 for variables, and 2 for debugging.</p>
+<p>After roughly understanding the types of nodes in this mod blueprint, let's officially introduce the detailed node information. The following content is organized according to the node registration information currently in the source code, containing a total of 32 custom blueprint nodes: 6 for process control, 12 for quest objectives, 6 for quest rewards, 1 for logic, 1 for mathematics, 1 for player data, 2 for scoreboards, 1 for variables, and 2 for debugging. The currency objective and currency reward only appear in the node library when ViScriptShop is installed.</p>
 <h2 id="node-description" data-toc-id="node-description">Node Description</h2>
 
 <h2 id="process-control" data-toc-id="process-control">Process control</h2>
@@ -312,6 +318,44 @@
 </table>
 <h4 id="item-acquisition-behavior-instructions" data-toc-id="item-acquisition-behavior-instructions">Item acquisition behavior instructions</h4>
 <p>After compilation, an item target is generated. The item component only determines which items to match; the quantity comes only from the "Item Quantity" input port; Whether deductions, commit patterns, and component matching rules affect runtime detection and commit logic.</p>
+
+<h3 id="currency-objective" data-toc-id="currency-objective">Currency objective</h3>
+<p>The currency objective requires players to own or submit a specified whole-number amount of ViScriptShop currency. The node only appears in the node library when ViScriptShop is installed.</p>
+<h4 id="currency-objective-node-overview" data-toc-id="currency-objective-node-overview">Currency objective node overview</h4>
+<ul>
+  <li><p>Category: Quest Objective &gt; Currency objective</p></li>
+  <li><p>Grouping: task</p></li>
+  <li><p>Registration ID:<code>viscript_quests:currency_task</code></p></li>
+  <li><p>Applicable map: Small quest submap</p></li>
+  <li><p>Dependency mod: ViScriptShop</p></li>
+</ul>
+<h4 id="currency-objective-node-parameters" data-toc-id="currency-objective-node-parameters">Currency objective node parameters</h4>
+<h5 id="currency-objective-options" data-toc-id="currency-objective-options">Currency objective options</h5>
+<table data-type="custom-table" data-with-header-row="true">
+  <tbody>
+    <tr><th>Parameters</th><th>Type</th><th>Default values</th><th>Explanation</th></tr>
+    <tr><td>Deduct currency on submission</td><td>TypeHandles.BOOL</td><td>true</td><td>When enabled, auto and manual submissions deduct the currency; when disabled, only the balance is checked.</td></tr>
+    <tr><td>Submission mode</td><td>QuestBlueprintTypes.SUBMIT_MODE</td><td>AUTO</td><td>AUTO detects and submits automatically, while MANUAL requires the player to submit manually.</td></tr>
+  </tbody>
+</table>
+<p>Objective type, show in objective bar, objective icon, and objective hint text use the general objective options listed at the start of this section.</p>
+<h5 id="currency-objective-input" data-toc-id="currency-objective-input">Currency objective input</h5>
+<table data-type="custom-table" data-with-header-row="true">
+  <tbody>
+    <tr><th>Port</th><th>Type</th><th>Default values</th><th>Explanation</th></tr>
+    <tr><td>Entrance</td><td>TypeHandles.EXECUTION_FLOW</td><td>None</td><td>Receive the target link.</td></tr>
+    <tr><td>Currency</td><td>TypeHandles.INT</td><td>1</td><td>The whole-number amount to own or submit; dynamic value expressions can be connected, and values below 1 after parsing are treated as 1.</td></tr>
+  </tbody>
+</table>
+<h5 id="currency-objective-output" data-toc-id="currency-objective-output">Currency objective output</h5>
+<table data-type="custom-table" data-with-header-row="true">
+  <tbody>
+    <tr><th>Port</th><th>Type</th><th>Explanation</th></tr>
+    <tr><td>Next</td><td>TypeHandles.EXECUTION_FLOW</td><td>A chain of actions that continue after the goal is completed.</td></tr>
+  </tbody>
+</table>
+<h4 id="currency-objective-behavior-description" data-toc-id="currency-objective-behavior-description">Currency objective behavior description</h4>
+<p>When deduction is enabled, auto submission attempts to deduct the full requirement at once; manual submission allows paying in batches and accumulates the actual deductions. When deduction is disabled, only the balance is checked. Quest progress counts whole currency only, and the fractional part of the player's wallet is preserved.</p>
 
 <h3 id="arrival-location" data-toc-id="arrival-location">Arrival location</h3>
 <p>Arrival location targets support three types of objectives: specific coordinates, biomes, and structures, and can generate mod HUD tags or Xaero's Minimap waypoints.</p>
@@ -998,6 +1042,38 @@
 </table>
 <h4 id="mathematical-operations-behavioral-description" data-toc-id="mathematical-operations-behavioral-description">Mathematical Operations Behavioral Description</h4>
 <p>Addition, subtraction, multiplication, and division form expressions in the order of input. Restricted ranges are compiled into clamp expressions, and random numbers are compiled into random expressions. The input count is limited to 2 to 64 to avoid generating an overly large list of node ports.</p>
+
+<h2 id="player-data" data-toc-id="player-data">Player data</h2>
+
+<h3 id="get-player-item-count" data-toc-id="get-player-item-count">Get player item count</h3>
+<p>Get player item count reads at runtime the total number of matching items owned by the current quest player, for use as a numeric expression; the node only reads the count and never consumes items.</p>
+<h4 id="get-player-item-count-node-overview" data-toc-id="get-player-item-count-node-overview">Get player item count node overview</h4>
+<ul>
+  <li><p>Category: Player &gt; Get player item count</p></li>
+  <li><p>Grouping: player</p></li>
+  <li><p>Registration ID:<code>viscript_quests:get_player_item_count</code></p></li>
+  <li><p>Applicable graphs: root map, sub-map of small quests</p></li>
+</ul>
+<h4 id="get-player-item-count-node-parameters" data-toc-id="get-player-item-count-node-parameters">Get player item count node parameters</h4>
+<h5 id="get-player-item-count-options" data-toc-id="get-player-item-count-options">Get player item count options</h5>
+<table data-type="custom-table" data-with-header-row="true">
+  <tbody>
+    <tr><th>Parameters</th><th>Type</th><th>Default values</th><th>Explanation</th></tr>
+    <tr><td>Items</td><td>TypeHandles.ITEM_STACK</td><td>Empty items</td><td>The item identity and components that determine what gets counted; the stack size is not treated as a required amount.</td></tr>
+    <tr><td>Item matching rules</td><td>QuestBlueprintTypes.ITEM_MATCH_RULE</td><td>ALL_COMPONENTS</td><td>Compare all components, only compare the specified components, or exclude the specified components from comparison.</td></tr>
+  </tbody>
+</table>
+<h5 id="get-player-item-count-input" data-toc-id="get-player-item-count-input">Get player item count input</h5>
+<p>None</p>
+<h5 id="get-player-item-count-output" data-toc-id="get-player-item-count-output">Get player item count output</h5>
+<table data-type="custom-table" data-with-header-row="true">
+  <tbody>
+    <tr><th>Port</th><th>Type</th><th>Explanation</th></tr>
+    <tr><td>Item count</td><td>TypeHandles.INT</td><td>The number of matching items owned by the current quest player; can be connected to numerical comparison, mathematical operations, or other numeric inputs.</td></tr>
+  </tbody>
+</table>
+<h4 id="get-player-item-count-behavior-description" data-toc-id="get-player-item-count-behavior-description">Get player item count behavior description</h4>
+<p>This node compiles into a player item count expression that recounts for the current player whenever the flow or an objective is evaluated; the result is 0 when no player is available or the selected item is empty. Unlike the "Obtain items" objective, it does not create a quest objective by itself; connect its "Item count" port to other nodes to use it.</p>
 
 <h2 id="scoreboard" data-toc-id="scoreboard">Scoreboard</h2>
 
