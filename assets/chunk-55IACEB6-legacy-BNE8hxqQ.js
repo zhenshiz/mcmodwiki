@@ -1,1 +1,0 @@
-System.register(["./MarkDownReadOnly-legacy-BCJ5Sdlb.js"],function(e,t){"use strict";var n,r;return{setters:[e=>{n=e._,r=e.d}],execute:function(){e("g",n((e,t)=>{let n;return"sandbox"===t&&(n=r("#i"+e)),r("sandbox"===t?n.nodes()[0].contentDocument.body:"body").select(`[id="${e}"]`)},"getDiagramElement"))}}});

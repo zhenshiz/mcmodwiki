@@ -1,1 +1,0 @@
-System.register(["./index-legacy-TeYJn6dY.js"],function(e,s){"use strict";var t,i;return{setters:[e=>{t=e.i,i=e.j}],execute:function(){e("u",t("page",()=>({isDark:i(!1)}),{persist:{pick:["isDark"]}}))}}});
