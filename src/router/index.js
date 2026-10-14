@@ -24,6 +24,10 @@ const routes = [
 // 只在开发环境下添加测试路由
 if (import.meta.env.DEV) {
   routes[0].children.push({
+    path: '/ui-preview',
+    component: () => import('@/views/UiPreview.vue')
+  })
+  routes[0].children.push({
     path: '/test',
     name: 'test',
     component: () => import('@/views/Test.vue')

@@ -380,10 +380,10 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
 
 <template>
   <div v-if="store.viewMode === 'theme' && model" :key="store.currentFile?.path || 'theme-view'"
-       class="relative border border-slate-700 shadow-2xl origin-top-left" :style="canvasStyle"
+       class="relative border border-ui-line shadow-2xl origin-top-left" :style="canvasStyle"
        @mousedown.stop="store.selectComponent(null)">
 
-    <div class="absolute -top-8 left-0 text-white/40 text-xs pointer-events-none whitespace-nowrap font-mono">
+    <div class="absolute -top-8 left-0 text-ui-muted text-xs pointer-events-none whitespace-nowrap font-mono">
       {{ baseDimensions.width }} x {{ baseDimensions.height }}
     </div>
 
@@ -399,7 +399,7 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
           <div class="w-full h-full flex items-center justify-center overflow-hidden relative"
                :class="{
                     'border border-purple-500/30 text-purple-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.TEXTURE),
-                    'border border-blue-500/30 text-blue-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD),
+                    'border border-ui-link/30 text-ui-link': formatUtil.equalsIgnoreCase(portrait.type, portraitType.PLAYER_HEAD),
                     'border border-yellow-500/30 text-yellow-300': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM),
                     'border border-green-500/30 text-green-300 bg-green-500/10': formatUtil.equalsIgnoreCase(portrait.type, portraitType.ENTITY)
                 }">
@@ -479,10 +479,10 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
              draggable="false" />
 
         <div v-else
-             class="w-full h-full border-2 border-dashed border-blue-500/30 flex items-center justify-center">
+             class="w-full h-full border-2 border-dashed border-ui-link/30 flex items-center justify-center">
           <div class="text-center p-1 pointer-events-none">
-            <span class="text-blue-300 text-xs font-bold">{{ t('对话框') }}</span><br>
-            <span class="opacity-50 text-[10px] text-blue-200">{{ t('请在右侧设置贴图') }}</span>
+            <span class="text-ui-link text-xs font-bold">{{ t('对话框') }}</span><br>
+            <span class="opacity-50 text-[10px] text-ui-link">{{ t('请在右侧设置贴图') }}</span>
           </div>
         </div>
 

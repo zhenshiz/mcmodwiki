@@ -2,7 +2,7 @@
 import { useEditTopicStore } from '@/stores/index.js'
 
 const props = defineProps({
-  mode: String
+  mode: String,
 })
 
 const editTopicStore = useEditTopicStore()
@@ -11,25 +11,31 @@ const mode = computed(() => props.mode ?? editTopicStore.mode)
 
 const emit = defineEmits(['update:mode'])
 const updateMode = (value) => {
-  if (props.mode){
-    emit('update:mode',value)
+  if (props.mode) {
+    emit('update:mode', value)
   }
 }
 </script>
 
 <template>
-  <div class="flex flex-row pl-2 pr-2 h-[43px] text-[16px] pt-[10px] dark:text-white">
-    <div class="flex flex-col cursor-pointer" @click="updateMode('preview')">
-      <div :class="{'text-text-blue':mode === 'preview'}">
-        {{ t('预览') }}
-      </div>
-      <div v-show="mode === 'preview'" class="border-b-2 border-text-blue mt-[1px]" />
-    </div>
-    <div class="flex flex-col cursor-pointer ml-5" @click="updateMode('code')">
-      <div :class="{'text-text-blue':mode === 'code'}">
-        {{ t('代码') }}
-      </div>
-      <div v-show="mode === 'code'" class="border-b-2 border-text-blue mt-[1px]" />
-    </div>
+  <div
+    class="flex items-stretch gap-1 px-2 h-[43px] text-sm text-ui-muted"
+    role="group"
+    :aria-label="t('编辑')"
+  >
+    <button
+      v-for="item in [
+        { value: 'preview', label: t('预览') },
+        { value: 'code', label: t('代码') },
+      ]"
+      :key="item.value"
+      type="button"
+      class="px-4 border-b-2 border-transparent hover:bg-ui-inset font-semibold"
+      :class="{ '!border-ui-link text-ui-link bg-ui-secondary/10': mode === item.value }"
+      :aria-pressed="mode === item.value"
+      @click="updateMode(item.value)"
+    >
+      {{ item.label }}
+    </button>
   </div>
 </template>

@@ -111,20 +111,22 @@ const handleClear = (e) => {
     :offset="4"
     class="w-full"
     v-model:isOpen="isOpen"
+    match-trigger-width
+    :disabled="disabled"
   >
     <template #trigger>
       <div
         class="
           relative flex items-center justify-between
-          px-3 py-2 rounded border transition-colors
-          bg-white border-gray-200
-          dark:bg-[#051e2f] dark:border-dark-blue
+          px-3 py-2 rounded-none border transition-colors
+          bg-white border-ui-line
+          dark:bg-ui-surface dark:border-ui-line
           group
         "
         :class="{
           'opacity-60 cursor-not-allowed': disabled,
-          'border-blue-500 ring-1 ring-blue-500/20': isOpen,
-          'hover:border-blue-400 dark:hover:border-blue-500': !disabled && !isOpen
+          'border-ui-link ring-1 ring-blue-500/20': isOpen,
+          'hover:border-ui-link dark:hover:border-ui-link': !disabled && !isOpen
         }"
         :style="{ width: width }"
       >
@@ -143,7 +145,7 @@ const handleClear = (e) => {
             :disabled="disabled"
             class="
               w-full bg-transparent border-none outline-none p-0
-              text-gray-700 dark:text-gray-200 placeholder-gray-400
+              text-ui-text dark:text-ui-text placeholder-gray-400
               text-sm
             "
             @input="handleInput"
@@ -155,7 +157,7 @@ const handleClear = (e) => {
             v-if="clearable && query && !disabled"
             icon="lucide:x"
             class="
-              w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300
+              w-4 h-4 text-ui-muted hover:text-ui-muted dark:hover:text-ui-text
               cursor-pointer transition-colors hidden group-hover:block
             "
             @click="handleClear"
@@ -164,7 +166,7 @@ const handleClear = (e) => {
           <Icon
             icon="lucide:chevron-down"
             class="
-              w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0
+              w-4 h-4 text-ui-muted transition-transform duration-200 flex-shrink-0
             "
             :class="{
               'rotate-180': isOpen,
@@ -184,12 +186,12 @@ const handleClear = (e) => {
           v-for="item in filteredOptions"
           :key="item.value"
           class="
-            flex items-center gap-2 px-2 py-2 rounded cursor-pointer transition-colors text-sm
-            hover:bg-blue-50 dark:hover:bg-slate-700
+            flex items-center gap-2 px-2 py-2 rounded-none cursor-pointer transition-colors text-sm
+            hover:bg-ui-secondary dark:hover:bg-ui-inset
           "
           :class="{
-            'text-blue-500 font-medium bg-blue-50 dark:bg-slate-800': modelValue === item.value,
-            'text-gray-700 dark:text-gray-200': modelValue !== item.value
+            'text-ui-link font-medium bg-ui-secondary dark:bg-ui-inset': modelValue === item.value,
+            'text-ui-text dark:text-ui-text': modelValue !== item.value
           }"
           @click="handleSelect(item)"
         >
@@ -203,21 +205,21 @@ const handleClear = (e) => {
           <span class="flex-1 truncate" v-html="item.label"></span>
 
           <span v-if="item.value !== item.label"
-                class="text-xs text-gray-400 truncate max-w-[100px]">
+                class="text-xs text-ui-muted truncate max-w-[100px]">
             {{ item.value }}
           </span>
 
           <Icon
             v-if="modelValue === item.value"
             icon="lucide:check"
-            class="w-4 h-4 text-blue-500"
+            class="w-4 h-4 text-ui-link"
           />
         </div>
       </template>
 
-      <div v-else class="text-center text-gray-400 py-2 text-xs">
+      <div v-else class="text-center text-ui-muted py-2 text-xs">
         <span class="block mb-1">{{ t('无匹配预设') }}</span>
-        <span class="text-blue-400">{{ t('使用: {}', query) }}</span>
+        <span class="text-ui-link">{{ t('使用: {}', query) }}</span>
       </div>
     </div>
   </Popover>

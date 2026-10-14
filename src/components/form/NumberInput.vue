@@ -159,31 +159,31 @@ watch(() => props.modelValue, (val) => {
 </script>
 
 <template>
-  <div 
+  <div
     class="
-      inline-flex rounded border transition-colors box-border
-      bg-white border-gray-200 
-      dark:bg-[#051e2f] dark:border-dark-blue
+      inline-flex rounded-none border transition-colors box-border
+      bg-white border-ui-line
+      dark:bg-ui-surface dark:border-ui-line
       group overflow-hidden
     "
     :class="{
       'opacity-60 cursor-not-allowed': disabled,
-      'hover:border-blue-400 dark:hover:border-blue-500': !disabled,
-      'focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500/20': !disabled
+      'hover:border-ui-link dark:hover:border-ui-link': !disabled,
+      'focus-within:border-ui-link focus-within:ring-1 focus-within:ring-blue-500/20': !disabled
     }"
     :style="{ width: width }"
   >
     <button
       v-if="controls"
       class="
-        flex items-center justify-center w-8 bg-gray-50 dark:bg-[#0a2e45]
-        border-r border-gray-200 dark:border-dark-blue
-        text-gray-500 dark:text-gray-400 cursor-pointer
-        hover:text-blue-500 dark:hover:text-blue-400
-        active:bg-gray-200 dark:active:bg-[#0f3d5c]
+        flex items-center justify-center w-8 bg-ui-surface dark:bg-ui-inset
+        border-r border-ui-line dark:border-ui-line
+        text-ui-muted dark:text-ui-muted cursor-pointer
+        hover:text-ui-link dark:hover:text-ui-link
+        active:bg-ui-inset dark:active:bg-ui-inset
         transition-colors
       "
-      :class="{ 'cursor-not-allowed text-gray-300 dark:text-gray-600': disabled || modelValue <= min }"
+      :class="{ 'cursor-not-allowed text-ui-text dark:text-ui-muted': disabled || modelValue <= min }"
       @mousedown.prevent="handleMouseDown(decrease)"
       @mouseup="clearTimer"
       @mouseleave="clearTimer"
@@ -200,7 +200,7 @@ watch(() => props.modelValue, (val) => {
         :placeholder="placeholder"
         class="
           w-full h-[32px] px-2 text-center bg-transparent border-none outline-none
-          text-gray-700 dark:text-gray-200 text-sm font-medium
+          text-ui-text dark:text-ui-text text-sm font-medium
           placeholder-gray-400
         "
         @input="handleInput"
@@ -213,14 +213,14 @@ watch(() => props.modelValue, (val) => {
     <button
       v-if="controls"
       class="
-        flex items-center justify-center w-8 bg-gray-50 dark:bg-[#0a2e45]
-        border-l border-gray-200 dark:border-dark-blue
-        text-gray-500 dark:text-gray-400 cursor-pointer
-        hover:text-blue-500 dark:hover:text-blue-400
-        active:bg-gray-200 dark:active:bg-[#0f3d5c]
+        flex items-center justify-center w-8 bg-ui-surface dark:bg-ui-inset
+        border-l border-ui-line dark:border-ui-line
+        text-ui-muted dark:text-ui-muted cursor-pointer
+        hover:text-ui-link dark:hover:text-ui-link
+        active:bg-ui-inset dark:active:bg-ui-inset
         transition-colors
       "
-      :class="{ 'cursor-not-allowed text-gray-300 dark:text-gray-600': disabled || modelValue >= max }"
+      :class="{ 'cursor-not-allowed text-ui-text dark:text-ui-muted': disabled || modelValue >= max }"
       @mousedown.prevent="handleMouseDown(increase)"
       @mouseup="clearTimer"
       @mouseleave="clearTimer"

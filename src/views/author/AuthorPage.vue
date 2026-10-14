@@ -20,7 +20,7 @@ const authorList = computed(() => [
 </script>
 
 <template>
-  <div class="size-full flex justify-start items-center flex-col px-4 py-8 sm:px-6 sm:py-10 dark:text-white">
+  <div class="size-full flex justify-start items-center flex-col px-4 py-8 sm:px-6 sm:py-10 dark:text-ui-text">
     <div class="text-center text-2xl sm:text-[30px] font-bold">
       <Translate message="关于我们"></Translate>
     </div>
@@ -28,7 +28,7 @@ const authorList = computed(() => [
     <div
       class="mt-6 w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
       <div
-        class="center min-w-0 flex-col gap-4 border-2 rounded border-dashed border-text-gray hover:border-text-blue px-4 py-5 text-center"
+        class="mc-panel center min-w-0 flex-col gap-4 px-6 py-8 text-center"
         v-for="item in authorList" :key="item.lang">
         <Image :size="150" :src="item.icon" />
         <div class="title">{{ item.lang }}</div>

@@ -46,23 +46,23 @@ const handleClick = () => {
 <template>
   <div>
     <div
-      class="flex items-center py-1 cursor-pointer select-none hover:bg-[#2a2d2e] transition-colors text-sm border-l-2 border-transparent"
-      :class="{ 'bg-[#37373d] border-blue-500': selectedPath === node.path }"
+      class="flex items-center py-1 cursor-pointer select-none hover:bg-ui-inset transition-colors text-sm border-l-2 border-transparent"
+      :class="{ 'bg-ui-inset border-ui-link': selectedPath === node.path }"
       :style="indentStyle"
       @click="handleClick"
     >
       <Icon
         v-if="node.isFolder"
         icon="lucide:chevron-right"
-        class="w-3 h-3 mr-1 text-gray-500 transition-transform duration-200 shrink-0"
+        class="w-3 h-3 mr-1 text-ui-muted transition-transform duration-200 shrink-0"
         :class="{ 'rotate-90': node.isOpen }"
       />
       <div v-else class="w-4 h-4 shrink-0"></div>
 
       <Icon :icon="iconName" class="w-4 h-4 mr-2 shrink-0" :class="iconColor" />
 
-      <span class="truncate text-gray-300" :title="node.path"
-            :class="{ 'text-white font-medium': selectedPath === node.path }">
+      <span class="truncate text-ui-text" :title="node.path"
+            :class="{ 'text-ui-text font-medium': selectedPath === node.path }">
         {{ node.name }}
       </span>
     </div>

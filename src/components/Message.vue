@@ -29,7 +29,7 @@ const messageClass = computed(
 
 <template>
   <div class="fixed top-[100px] mx-auto my-0 left-0 right-0 w-full flex z-[9999]">
-    <div class="rounded mx-auto my-0 py-[1vh] px-[10vw] bg-white dark:bg-dark-blue center flex-row"
+    <div class="mc-panel max-w-[calc(100vw-32px)] mx-auto my-0 py-3 px-6 center flex-row"
          :class="messageClass">
       <Icon
         class="mr-[17px] font-[30px] icon"

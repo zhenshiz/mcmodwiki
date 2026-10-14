@@ -215,15 +215,15 @@ const isSelected = (comp) => store.selectedComponent === comp
 </script>
 
 <template>
-  <div class="flex w-full h-full bg-[#1e1e1e] text-slate-300 overflow-hidden"
+  <div class="flex w-full h-full bg-ui-bg text-ui-text overflow-hidden"
        @click.self="selectGlobal" @mousedown.stop
        @wheel.stop>
 
-    <div class="w-64 flex flex-col border-r border-slate-700 bg-[#001529] shrink-0">
+    <div class="w-64 flex flex-col border-r border-ui-line bg-ui-bg shrink-0">
       <div
-        class="h-10 flex items-center justify-between px-3 border-b border-slate-700 bg-[#002033]">
-        <span class="text-xs font-bold text-slate-400 uppercase">{{ t('剧情片段(组)') }}</span>
-        <button class="p-1 hover:bg-blue-600 rounded text-slate-400 hover:text-white transition"
+        class="h-10 flex items-center justify-between px-3 border-b border-ui-line bg-ui-surface">
+        <span class="text-xs font-bold text-ui-muted uppercase">{{ t('剧情片段(组)') }}</span>
+        <button class="p-1 hover:bg-ui-secondary rounded-none text-ui-muted hover:text-ui-text transition"
                 @click.stop="handleAddGroup">
           <Icon icon="lucide:plus" width="14" />
         </button>
@@ -240,8 +240,8 @@ const isSelected = (comp) => store.selectedComponent === comp
         >
           <template #item="{ element: group }">
             <div
-              class="group flex items-center justify-between px-3 py-2 rounded cursor-pointer text-xs transition-colors border border-transparent"
-              :class="activeGroupKey === group.key ? 'bg-blue-600/20 border-blue-500 text-blue-100' : 'hover:bg-slate-700/50'"
+              class="group flex items-center justify-between px-3 py-2 rounded-none cursor-pointer text-xs transition-colors border border-transparent"
+              :class="activeGroupKey === group.key ? 'bg-ui-secondary/20 border-ui-link text-ui-link' : 'hover:bg-ui-inset/50'"
               @click.stop="selectGroup(group.key)"
             >
               <div class="flex items-center gap-2 overflow-hidden flex-1">
@@ -250,13 +250,13 @@ const isSelected = (comp) => store.selectedComponent === comp
                       width="12" />
 
                 <Icon icon="lucide:folder" class="shrink-0 opacity-70"
-                      :class="activeGroupKey === group.key ? 'text-blue-400' : ''" />
+                      :class="activeGroupKey === group.key ? 'text-ui-link' : ''" />
                 <span class="truncate font-mono">{{ group.key }}</span>
               </div>
 
               <div class="flex items-center gap-1">
                 <span class="text-[10px] opacity-50 ml-1">({{ group.frames.length }})</span>
-                <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-blue-400 transition"
+                <button class="opacity-0 group-hover:opacity-100 p-1 hover:text-ui-link transition"
                         :title="t('重命名 Key')"
                         @click.stop="handleRenameGroup(group.key)">
                   <Icon icon="lucide:pencil" width="12" />
@@ -271,25 +271,25 @@ const isSelected = (comp) => store.selectedComponent === comp
         </draggable>
 
         <div v-if="!model || Object.keys(model.dialogues).length === 0"
-             class="text-center py-8 text-slate-600 text-xs">
+             class="text-center py-8 text-ui-muted text-xs">
           {{ t('暂无剧情片段') }}<br>{{ t('点击右上角 + 添加') }}
         </div>
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col min-w-0 bg-[#000d1a]" @click.self="selectGlobal">
+    <div class="flex-1 flex flex-col min-w-0 bg-ui-bg" @click.self="selectGlobal">
       <div
-        class="h-10 flex items-center justify-between px-4 border-b border-slate-700 bg-[#001529]/50"
+        class="h-10 flex items-center justify-between px-4 border-b border-ui-line bg-ui-bg/50"
         @click.self="selectGlobal">
         <div class="flex items-center gap-2">
-          <Icon icon="lucide:message-square-quote" class="text-slate-500" />
-          <span class="text-sm font-bold text-slate-200">
+          <Icon icon="lucide:message-square-quote" class="text-ui-muted" />
+          <span class="text-sm font-bold text-ui-text">
             {{ activeGroupKey || t('未选择组') }}
           </span>
         </div>
 
         <button v-if="activeGroupKey"
-                class="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs transition shadow-sm"
+                class="flex items-center gap-1 bg-ui-secondary hover:bg-ui-secondary/80 text-ui-on-accent px-3 py-1 rounded-none text-xs transition shadow-sm"
                 @click.stop="handleAddFrame">
           <Icon icon="lucide:plus" width="12" />
           <span>{{ t('添加对话') }}</span>
@@ -309,29 +309,29 @@ const isSelected = (comp) => store.selectedComponent === comp
           >
             <template #item="{ element: frame, index }">
               <div
-                class="relative flex gap-3 p-3 rounded-lg border transition-all cursor-pointer group"
-                :class="isSelected(frame) ? 'bg-[#1e1e1e] border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-[#151515] border-slate-700 hover:border-slate-600'"
+                class="relative flex gap-3 p-3 rounded-none border transition-all cursor-pointer group"
+                :class="isSelected(frame) ? 'bg-ui-bg border-ui-link shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-ui-inset border-ui-line hover:border-ui-line'"
                 @click.stop="selectFrame(frame)"
               >
                 <div class="flex flex-col items-center gap-1 w-6 shrink-0 pt-1">
-                  <span class="text-[10px] font-mono text-slate-500 select-none">#{{ index + 1
+                  <span class="text-[10px] font-mono text-ui-muted select-none">#{{ index + 1
                     }}</span>
                   <div
-                    class="frame-drag-handle p-1 text-slate-600 hover:text-slate-300 cursor-move">
+                    class="frame-drag-handle p-1 text-ui-muted hover:text-ui-text cursor-move">
                     <Icon icon="lucide:grip-horizontal" width="16" />
                   </div>
                 </div>
 
                 <div class="flex-1 min-w-0 flex flex-col gap-2">
                   <div
-                    class="p-2 rounded bg-[#252525] border border-slate-700 hover:border-blue-500/50 hover:bg-[#2a2a2a] transition-colors group/box">
+                    class="p-2 rounded-none bg-ui-inset border border-ui-line hover:border-ui-link/50 hover:bg-ui-inset transition-colors group/box">
                     <div class="flex items-center gap-2 mb-1">
-                      <span class="text-[10px] font-bold text-blue-400">
+                      <span class="text-[10px] font-bold text-ui-link">
                         {{ store.getTranslatableLabel(frame.dialogBox?.name) || t('未知角色') }}
                       </span>
                     </div>
                     <div
-                      class="text-xs text-slate-300 font-mono line-clamp-2 leading-relaxed select-none">
+                      class="text-xs text-ui-text font-mono line-clamp-2 leading-relaxed select-none">
                       {{ store.getTranslatableLabel(frame.dialogBox?.text) || t('( 空对话内容 )') }}
                     </div>
                   </div>
@@ -340,23 +340,23 @@ const isSelected = (comp) => store.selectedComponent === comp
                 <div
                   class="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
-                    class="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded transition"
+                    class="p-1.5 text-ui-muted hover:text-ui-text hover:bg-ui-inset rounded-none transition"
                     :title="t('复制')"
                     @click.stop="handleCopyFrame(index)">
                     <Icon icon="lucide:copy" width="14" />
                   </button>
                   <button
-                    class="p-1.5 rounded transition"
+                    class="p-1.5 rounded-none transition"
                     :class="store.hasDialogueFrameClipboard
-                      ? 'text-slate-500 hover:text-white hover:bg-slate-700'
-                      : 'text-slate-700 cursor-not-allowed'"
+                      ? 'text-ui-muted hover:text-ui-text hover:bg-ui-inset'
+                      : 'text-ui-text cursor-not-allowed'"
                     :title="t('粘贴')"
                     :disabled="!store.hasDialogueFrameClipboard"
                     @click.stop="handlePasteFrame(index)">
                     <Icon icon="lucide:clipboard-paste" width="14" />
                   </button>
                   <button
-                    class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded transition"
+                    class="p-1.5 text-ui-muted hover:text-red-400 hover:bg-red-400/10 rounded-none transition"
                     @click.stop="handleDeleteFrame(index)">
                     <Icon icon="lucide:trash-2" width="14" />
                   </button>
@@ -367,11 +367,11 @@ const isSelected = (comp) => store.selectedComponent === comp
         </template>
 
         <div v-else-if="activeGroupKey"
-             class="flex flex-col items-center justify-center h-64 text-slate-600 gap-3">
+             class="flex flex-col items-center justify-center h-64 text-ui-muted gap-3">
           <Icon icon="lucide:message-square-plus" width="32" class="opacity-50" />
           <div class="text-xs">{{ t('此片段暂无对话') }}</div>
           <div class="flex items-center gap-3">
-            <button @click="handleAddFrame" class="text-blue-500 hover:underline text-xs">
+            <button @click="handleAddFrame" class="text-ui-link hover:underline text-xs">
               {{ t('立即添加') }}
             </button>
             <button
@@ -383,7 +383,7 @@ const isSelected = (comp) => store.selectedComponent === comp
           </div>
         </div>
 
-        <div v-else class="flex flex-col items-center justify-center h-full text-slate-600 gap-2">
+        <div v-else class="flex flex-col items-center justify-center h-full text-ui-muted gap-2">
           <Icon icon="lucide:arrow-left" width="24" class="animate-pulse" />
           <span class="text-xs">{{ t('请先在左侧选择或新建一个剧情片段') }}</span>
         </div>
@@ -404,12 +404,12 @@ const isSelected = (comp) => store.selectedComponent === comp
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgb(var(--ui-line));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: rgb(var(--ui-border));
 }
 
 /* 拖拽时的幽灵样式 */

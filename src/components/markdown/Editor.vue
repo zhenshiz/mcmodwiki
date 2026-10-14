@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { defineAsyncComponent, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 //插件
 import StarterKit from '@tiptap/starter-kit'
@@ -12,9 +12,8 @@ import Youtube from '@tiptap/extension-youtube'
 import { BiliBili } from '@/components/markdown/plugin/Bilibili.js'
 import { Mermaid } from '@/components/markdown/plugin/Mermaid.js'
 import { EnhancedCodeBlock } from '@/components/markdown/plugin/EnhancedCodeBlock.js'
-import { Mathematics } from '@tiptap/extension-mathematics'
+import { BlockMath, InlineMath } from '@tiptap/extension-mathematics'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import BubbleMenuExtension from '@tiptap/extension-bubble-menu'
 import { HiddenText } from '@/components/markdown/plugin/HiddenText.js'
 import {
   Admonition,
@@ -36,6 +35,19 @@ import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table
 import { TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
+
+const LatexEditor = defineAsyncComponent(() => import('@/components/markdown/components/LatexEditor.vue'))
+const latexDialog = ref(null)
+const openLatex = (node = null, pos = null) => {
+  if (!editor.value) return
+  const { from, to } = editor.value.state.selection
+  latexDialog.value = {
+    latex: node?.attrs.latex ?? '',
+    displayMode: node ? node.type.name === 'blockMath' : true,
+    pos,
+    selection: { from, to }
+  }
+}
 
 // 存储提取的标题
 const headings = ref([])
@@ -76,7 +88,8 @@ const editor = useEditor({
     TaskItem.configure({
       nested: true
     }),
-    Mathematics,
+    InlineMath.configure({ onClick: (node, pos) => openLatex(node, pos), katexOptions: { trust: false } }),
+    BlockMath.configure({ onClick: (node, pos) => openLatex(node, pos), katexOptions: { displayMode: true, trust: false } }),
     Youtube,
     BiliBili,
     Mermaid,
@@ -86,7 +99,6 @@ const editor = useEditor({
     AdmonitionContent,
     Steps,
     StepItem,
-    BubbleMenuExtension,
     TextAlign.configure({
       types: ['heading', 'paragraph']
     }),
@@ -163,13 +175,20 @@ watch(
 
 const shouldShowMenu = ({ editor, state }) => {
   const { selection } = state
-  const { empty } = selection
-
-  // 如果选区不为空，或者当前光标在链接上，则显示
-  return !empty || editor.isActive('link')
+  // Only text formatting belongs here; atom selections (tables/formulas) have their own controls.
+  return editor.isEditable && selection instanceof TextSelection &&
+    ((!selection.empty && !!state.doc.textBetween(selection.from, selection.to).trim()) || editor.isActive('link'))
 }
 
 const editorContainer = ref(null)
+const menuContainer = () => document.fullscreenElement || document.body
+const bubbleOptions = {
+  strategy: 'fixed',
+  placement: 'top',
+  offset: 10,
+  flip: { padding: 12 },
+  shift: { padding: 12 },
+}
 
 const handleFullscreen = () => {
   if (!document.fullscreenElement) {
@@ -210,32 +229,37 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="editorContainer" class="bg-white dark:bg-dark-blue">
+  <div ref="editorContainer" class="markdown-editor bg-ui-surface">
     <MarkDownMenu
       v-if="isShowMenu"
       :editor="editor"
+      @create-latex="openLatex()"
       @toggle-fullscreen="handleFullscreen"
       :mode="mode"
       @update:mode="arg=>emit('update:mode',arg)"
-      class="sticky top-0 z-30 border-b dark:border-slate-800 shadow-sm"
+      class="sticky top-0 z-30 border-b dark:border-ui-line shadow-sm"
     />
     <BubbleMenu
       v-if="editor"
       :editor="editor"
-      :tippy-options="{ duration: 100 }"
+      :append-to="menuContainer"
+      :options="bubbleOptions"
       :should-show="shouldShowMenu"
+      class="editor-bubble-menu"
     >
       <LinkUpdatePopup :editor="editor" />
     </BubbleMenu>
-    <EditorContent class="dark:text-white" :editor="editor" />
+    <EditorContent class="dark:text-ui-text" :editor="editor" />
+    <LatexEditor v-if="latexDialog" :editor="editor" :initial="latexDialog" @close="latexDialog = null" />
   </div>
 </template>
 
 <style scoped lang="scss">
 :deep(.tiptap) {
   outline: none;
-  width: 90%;
-  margin: 50px auto;
+  width: calc(100% - 48px);
+  max-width: none;
+  margin: 28px 24px;
   min-height: 500px;
 
   &:focus {
@@ -399,7 +423,7 @@ defineExpose({
           height: 18px;
           background-color: var(--trans-blue-0);
           border: 1.5px solid var(--trans-blue-2);
-          border-radius: 4px;
+          border-radius: 0;
           display: grid;
           place-content: center;
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -455,7 +479,7 @@ defineExpose({
     margin: 17px 0;
     padding: 17px;
     border-left: 5px solid var(--blue-5) !important;
-    border-radius: 10px;
+    border-radius: 0;
     background-color: var(--trans-blue-0) !important;
     line-height: 2rem;
 
@@ -476,7 +500,7 @@ defineExpose({
       margin: 0 4px;
       background-color: var(--trans-blue-1);
       padding: 2px 4px;
-      border-radius: 8px;
+      border-radius: 0;
     }
   }
 
@@ -601,7 +625,7 @@ defineExpose({
     margin: 2rem auto;
     width: 100%;
     max-width: 800px;
-    border-radius: 12px;
+    border-radius: 0;
     overflow: hidden;
     transition: all 0.3s ease;
     border: 1px solid var(--trans-blue-1);
@@ -625,7 +649,7 @@ defineExpose({
   span[data-type="hidden-text"] {
     background-color: #333 !important;
     color: #333 !important;
-    border-radius: 4px;
+    border-radius: 0;
     padding: 0 4px;
     text-decoration-color: #333 !important;
     transition: all 0.3s ease;

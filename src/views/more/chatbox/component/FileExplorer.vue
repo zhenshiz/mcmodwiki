@@ -102,35 +102,35 @@ const deleteSelected = () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full bg-[#002033]">
+  <div class="flex flex-col h-full bg-ui-surface">
     <div
-      class="px-3 py-2 text-xs font-bold uppercase tracking-wider bg-[#001529] text-slate-400 flex justify-between items-center border-b border-slate-700">
+      class="px-3 py-2 text-xs font-bold uppercase tracking-wider bg-ui-bg text-ui-muted flex justify-between items-center border-b border-ui-line">
       <span>{{ t('数据包(DATA)') }}</span>
 
       <div class="flex items-center gap-2">
         <button
-          class="cursor-pointer hover:text-white flex items-center gap-1 transition-colors"
+          class="cursor-pointer hover:text-ui-text flex items-center gap-1 transition-colors"
           :title="t('打开本地 data 文件夹')"
           @click="handleOpenFolder"
         >
           <Icon icon="lucide:folder-open" width="14" />
         </button>
         <button
-          class="cursor-pointer hover:text-white flex items-center gap-1 transition-colors"
+          class="cursor-pointer hover:text-ui-text flex items-center gap-1 transition-colors"
           :title="t('新建文件夹 (在当前选中目录/文件所在目录)')"
           @click="createFolderHere"
         >
           <Icon icon="lucide:folder-plus" width="14" />
         </button>
         <button
-          class="cursor-pointer hover:text-white flex items-center gap-1 transition-colors"
+          class="cursor-pointer hover:text-ui-text flex items-center gap-1 transition-colors"
           :title="t('新建 JSON 文件 (在当前选中目录/文件所在目录)')"
           @click="createJsonHere"
         >
           <Icon icon="lucide:file-plus" width="14" />
         </button>
         <button
-          class="cursor-pointer hover:text-white flex items-center gap-1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          class="cursor-pointer hover:text-ui-text flex items-center gap-1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           :disabled="!store.selectedTreeNode"
           :title="t('删除当前选中项')"
           @click="deleteSelected"
@@ -141,10 +141,10 @@ const deleteSelected = () => {
     </div>
 
     <div
-      class="px-3 py-1 text-[10px] font-mono bg-[#001529] text-slate-500 flex items-center justify-between border-b border-slate-700">
+      class="px-3 py-1 text-[10px] font-mono bg-ui-bg text-ui-muted flex items-center justify-between border-b border-ui-line">
       <span class="truncate" :title="selectedPath">{{ selectedPath || t('未选择') }}</span>
       <button
-        class="ml-2 shrink-0 hover:text-slate-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        class="ml-2 shrink-0 hover:text-ui-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="!selectedPath"
         :title="t('复制路径')"
         @click="copySelectedPath"
@@ -156,11 +156,11 @@ const deleteSelected = () => {
     <div class="flex-1 overflow-y-auto custom-scrollbar relative">
 
       <div v-if="store.fileTree.length === 0"
-           class="flex flex-col items-center justify-center h-full text-slate-500 gap-2 p-4 text-center">
+           class="flex flex-col items-center justify-center h-full text-ui-muted gap-2 p-4 text-center">
         <Icon icon="lucide:hard-drive" width="48" class="opacity-20" />
         <span class="text-xs">
           {{ t('请点击右上角') }}<br>{{ t('打开本地') }} <code
-          class="bg-slate-800 px-1 rounded text-slate-300">data</code> {{ t('文件夹') }}<br>
+          class="bg-ui-inset px-1 rounded-none text-ui-text">data</code> {{ t('文件夹') }}<br>
           <span class="text-[10px] opacity-60 mt-2 block">{{ t('(支持 Ctrl+S 直接保存)', modKey) }}</span>
         </span>
       </div>
@@ -187,7 +187,7 @@ const deleteSelected = () => {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #1e293b;
+  background-color: rgb(var(--ui-line));
   border-radius: 3px;
 }
 

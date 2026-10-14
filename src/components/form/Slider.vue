@@ -57,20 +57,20 @@ const updateValue = (clientX) => {
   const rect = sliderRef.value.getBoundingClientRect()
   const x = clientX - rect.left
   let percent = x / rect.width
-  
+
   // 限制在 0-1 之间
   percent = Math.max(0, Math.min(1, percent))
 
   // 计算原始数值
   let rawValue = props.min + percent * (props.max - props.min)
-  
+
   // 处理步长 (step)
   const steps = Math.round((rawValue - props.min) / props.step)
   let newValue = props.min + steps * props.step
-  
+
   // 再次确保不越界 (因为 float 计算可能有误差)
   newValue = Math.max(props.min, Math.min(props.max, newValue))
-  
+
   // 保留合适的小数位 (避免 0.300000004 这种情况)
   const stepPrecision = (props.step.toString().split('.')[1] || '').length
   newValue = parseFloat(newValue.toFixed(stepPrecision))
@@ -125,41 +125,41 @@ const onWheel = (e) => {
   if (props.disabled || !isHovering.value) return
   // 阻止页面滚动
   e.preventDefault()
-  
+
   const delta = e.deltaY < 0 ? props.step : -props.step
   let newValue = props.modelValue + delta
   newValue = Math.max(props.min, Math.min(props.max, newValue))
-  
+
   // 精度处理
   const stepPrecision = (props.step.toString().split('.')[1] || '').length
   newValue = parseFloat(newValue.toFixed(stepPrecision))
-  
+
   emit('update:modelValue', newValue)
 }
 
 </script>
 
 <template>
-  <div 
+  <div
     class="relative w-full h-6 flex items-center select-none touch-none"
     :class="{ 'opacity-60 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }"
     @mouseenter="isHovering = true"
     @mouseleave="!isDragging && (isHovering = false)"
     @wheel="onWheel"
   >
-    <div 
+    <div
       ref="sliderRef"
-      class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-slate-700 relative"
+      class="w-full h-1.5 rounded-none bg-ui-inset dark:bg-ui-inset relative"
       @click="onRunwayClick"
     >
-      <div 
-        class="h-full bg-blue-500 rounded-full absolute top-0 left-0"
+      <div
+        class="h-full bg-ui-secondary rounded-none absolute top-0 left-0"
         :style="{ width: `${percentage}%` }"
       ></div>
 
-      <div 
+      <div
         class="
-          absolute top-1/2 -translate-x-1/2 -translate-y-1/2 
+          absolute top-1/2 -translate-x-1/2 -translate-y-1/2
           w-4 h-4 z-10
           flex items-center justify-center
         "
@@ -174,23 +174,23 @@ const onWheel = (e) => {
           leave-from-class="opacity-100 translate-y-0 scale-100"
           leave-to-class="opacity-0 translate-y-1 scale-90"
         >
-          <div 
+          <div
             v-if="showTooltip && (isHovering || isDragging)"
             class="
-              absolute -top-9 px-2 py-1 
-              bg-dark-blue text-white text-xs rounded shadow-md 
+              absolute -top-9 px-2 py-1
+              bg-dark-blue text-ui-text text-xs rounded-none shadow-md
               whitespace-nowrap pointer-events-none
-              border border-slate-700
+              border border-ui-line
             "
           >
             {{ displayTooltip }}
-            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-dark-blue rotate-45 border-r border-b border-slate-700"></div>
+            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-dark-blue rotate-45 border-r border-b border-ui-line"></div>
           </div>
         </Transition>
 
-        <div 
+        <div
           class="
-            w-4 h-4 rounded-full bg-white shadow-sm border-2 border-blue-500 
+            w-4 h-4 rounded-none bg-white shadow-sm border-2 border-ui-link
             transition-transform duration-200
             hover:scale-125
           "

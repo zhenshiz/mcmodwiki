@@ -1,23 +1,37 @@
 body {
-  --font-color-0: #777777;
-  --font-color-1: #666666;
-  --font-color-2: #4d4d4d;
-  --font-color-3: #242424;
+  color-scheme: light;
+  --ui-bg: 246 247 239;
+  --ui-surface: 255 255 252;
+  --ui-inset: 235 240 230;
+  --ui-text: 28 37 29;
+  --ui-muted: 92 105 93;
+  --ui-border: 38 50 39;
+  --ui-line: 207 217 201;
+  --ui-shadow: 28 37 29;
+  --ui-primary: 220 246 99;
+  --ui-secondary: 120 214 224;
+  --ui-on-accent: 24 37 27;
+  --ui-link: 23 104 113;
+  --ui-danger: 177 45 54;
+  --ui-danger-bg: 255 238 236;
+  --ui-warning: 126 85 12;
+  --ui-warning-bg: 255 246 215;
+  --ui-info-bg: 229 246 247;
 
-  --white: #ffffff;
-
-  --blue-0: #eaf8ff;
-  --blue-5: #0969da;
-
-  --red-0: #ffebe9;
-
-  --trans-white-2: #ffffffd9;
-  --trans-white-5: #ffffffb4;
-
-  --trans-blue-0: #ddf4ff77;
-  --trans-blue-1: #b6e3ff77;
-  --trans-blue-2: #80ccff77;
-
-  --trans-pink-0: #ffeff777;
-  --trans-pink-1: #ffd3eb77;
+  /* Compatibility aliases keep existing document and inspector styles in sync. */
+  --font-color-0: rgb(var(--ui-muted));
+  --font-color-1: rgb(var(--ui-muted));
+  --font-color-2: rgb(var(--ui-text));
+  --font-color-3: rgb(var(--ui-text));
+  --white: rgb(var(--ui-surface));
+  --blue-0: rgb(var(--ui-inset));
+  --blue-5: rgb(var(--ui-link));
+  --red-0: rgb(var(--ui-danger-bg));
+  --trans-white-2: rgb(var(--ui-surface) / 0.95);
+  --trans-white-5: rgb(var(--ui-inset) / 0.8);
+  --trans-blue-0: rgb(var(--ui-secondary) / 0.12);
+  --trans-blue-1: rgb(var(--ui-secondary) / 0.22);
+  --trans-blue-2: rgb(var(--ui-secondary) / 0.35);
+  --trans-pink-0: rgb(var(--ui-danger) / 0.08);
+  --trans-pink-1: rgb(var(--ui-danger) / 0.16);
 }

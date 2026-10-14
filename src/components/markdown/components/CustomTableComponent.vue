@@ -3,69 +3,117 @@
     ref="wrapperRef"
     class="my-4 relative custom-table-node"
     :class="{ 'selectable-readonly': !editor.isEditable }"
-    @mouseenter="hovered = true"
-    @mouseleave="hovered = false"
     @dragstart="!editor.isEditable && $event.preventDefault()"
   >
     <div
       v-if="editor.isEditable"
-      class="absolute -top-3 right-0 flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] select-none transition-opacity"
+      class="table-toolbar flex flex-wrap items-center justify-end gap-1 px-2 py-1 mb-1 border text-xs select-none"
       :class="toolbarClass"
-      :style="{ opacity: showToolbar ? 1 : 0 }"
+      contenteditable="false"
+      role="toolbar"
+      :aria-label="t('编辑表格')"
     >
-      <button class="tool-btn" type="button" @mousedown.prevent @click.stop="toggleHeader">
+      <button
+        class="tool-btn"
+        type="button"
+        :title="t('切换表头')"
+        :aria-label="t('切换表头')"
+        :aria-pressed="!!node.attrs.withHeaderRow"
+        @mousedown.prevent
+        @click.stop="toggleHeader"
+      >
         {{ node.attrs.withHeaderRow ? 'TH' : 'TD' }}
       </button>
       <span class="mx-1 opacity-60">|</span>
-      <button class="tool-btn" type="button" @mousedown.prevent @click.stop="addRow">+R</button>
-      <button class="tool-btn" type="button" @mousedown.prevent @click.stop="removeRow">-R</button>
-      <button class="tool-btn" type="button" @mousedown.prevent @click.stop="addCol">+C</button>
-      <button class="tool-btn" type="button" @mousedown.prevent @click.stop="removeCol">-C</button>
+      <button
+        class="tool-btn"
+        type="button"
+        :title="t('添加行')"
+        :aria-label="t('添加行')"
+        @mousedown.prevent
+        @click.stop="addRow"
+      >
+        +R
+      </button>
+      <button
+        class="tool-btn"
+        type="button"
+        :title="t('删除行')"
+        :aria-label="t('删除行')"
+        :disabled="rowCount <= 1"
+        @mousedown.prevent
+        @click.stop="removeRow"
+      >
+        -R
+      </button>
+      <button
+        class="tool-btn"
+        type="button"
+        :title="t('添加列')"
+        :aria-label="t('添加列')"
+        @mousedown.prevent
+        @click.stop="addCol"
+      >
+        +C
+      </button>
+      <button
+        class="tool-btn"
+        type="button"
+        :title="t('删除列')"
+        :aria-label="t('删除列')"
+        :disabled="colCount <= 1"
+        @mousedown.prevent
+        @click.stop="removeCol"
+      >
+        -C
+      </button>
       <span class="ml-2 opacity-70 tabular-nums">{{ rowCount }}×{{ colCount }}</span>
     </div>
 
-    <table
-      class="w-full border-collapse"
-      :style="node.attrs.style || null"
-      @mousedown="!editor.isEditable && $event.stopPropagation()"
-    >
-      <tbody>
-        <tr v-for="(row, rowIndex) in localData" :key="`r-${rowIndex}`">
-          <template v-for="(_, colIndex) in colCount" :key="`c-${rowIndex}-${colIndex}`">
-            <th v-if="node.attrs.withHeaderRow && rowIndex === 0">
-              <template v-if="editor.isEditable">
-                <textarea
-                  class="cell-input"
-                  :value="cellValue(rowIndex, colIndex)"
-                  rows="1"
-                  @focus="onCellFocus"
-                  @input="onCellInput($event, rowIndex, colIndex)"
-                  @blur="commitIfDirty"
-                />
-              </template>
-              <template v-else>
-                <div class="cell-read">{{ cellValue(rowIndex, colIndex) }}</div>
-              </template>
-            </th>
-            <td v-else>
-              <template v-if="editor.isEditable">
-                <textarea
-                  class="cell-input"
-                  :value="cellValue(rowIndex, colIndex)"
-                  rows="1"
-                  @focus="onCellFocus"
-                  @input="onCellInput($event, rowIndex, colIndex)"
-                  @blur="commitIfDirty"
-                />
-              </template>
-              <template v-else>
-                <div class="cell-read">{{ cellValue(rowIndex, colIndex) }}</div>
-              </template>
-            </td>
-          </template>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-scroll">
+      <table
+        class="w-full border-collapse"
+        :style="node.attrs.style || null"
+        @mousedown="!editor.isEditable && $event.stopPropagation()"
+      >
+        <tbody>
+          <tr v-for="(row, rowIndex) in localData" :key="`r-${rowIndex}`">
+            <template v-for="(_, colIndex) in colCount" :key="`c-${rowIndex}-${colIndex}`">
+              <th v-if="node.attrs.withHeaderRow && rowIndex === 0">
+                <template v-if="editor.isEditable">
+                  <textarea
+                    class="cell-input"
+                    :value="cellValue(rowIndex, colIndex)"
+                    rows="1"
+                    @focus="onCellFocus"
+                    @input="onCellInput($event, rowIndex, colIndex)"
+                    @blur="commitIfDirty"
+                  />
+                </template>
+                <template v-else>
+                  <div class="cell-read">{{ cellValue(rowIndex, colIndex) }}</div>
+                </template>
+              </th>
+              <td v-else>
+                <template v-if="editor.isEditable">
+                  <textarea
+                    class="cell-input"
+                    :value="cellValue(rowIndex, colIndex)"
+                    rows="1"
+                    @focus="onCellFocus"
+                    @input="onCellInput($event, rowIndex, colIndex)"
+                    @blur="commitIfDirty"
+                  />
+                </template>
+                <template v-else>
+                  <div class="cell-read">{{ cellValue(rowIndex, colIndex) }}</div>
+                </template>
+              </td>
+            </template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </node-view-wrapper>
 </template>
 
@@ -73,16 +121,14 @@
 import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { usePageStore } from '@/stores/index.js'
+import { t } from '@/languages'
 
 const props = defineProps(nodeViewProps)
 
-const hovered = ref(false)
-const cellFocused = ref(false)
 const dirty = ref(false)
 const wrapperRef = ref(null)
 
 const isDark = computed(() => usePageStore().isDark)
-const showToolbar = computed(() => hovered.value || props.selected || cellFocused.value)
 
 // 只读模式下移除 draggable，允许表格内文字选择
 onMounted(() => {
@@ -92,8 +138,8 @@ onMounted(() => {
 })
 
 const toolbarClass = computed(() => {
-  if (isDark.value) return 'border-slate-700 bg-[#0d1117] text-slate-200'
-  return 'border-blue-100 bg-white text-slate-700 shadow-sm'
+  if (isDark.value) return 'border-ui-line bg-ui-bg text-ui-text'
+  return 'border-ui-link bg-white text-ui-text shadow-sm'
 })
 
 const cloneMatrix = (matrix) => {
@@ -119,7 +165,7 @@ watch(
   (next) => {
     if (!dirty.value) localData.value = normalizeMatrix(next)
   },
-  { deep: true }
+  { deep: true },
 )
 
 const rowCount = computed(() => localData.value.length || 1)
@@ -140,7 +186,6 @@ const autosize = (el) => {
 }
 
 const onCellFocus = (event) => {
-  cellFocused.value = true
   nextTick(() => autosize(event.target))
 }
 
@@ -156,7 +201,6 @@ const onCellInput = (event, rowIndex, colIndex) => {
 }
 
 const commitIfDirty = () => {
-  cellFocused.value = false
   if (!dirty.value) return
   props.updateAttributes({ data: normalizeMatrix(localData.value) })
   dirty.value = false
@@ -201,10 +245,18 @@ const toggleHeader = () => {
 
 <style scoped>
 .tool-btn {
-  padding: 2px 6px;
-  border-radius: 6px;
+  padding: 5px 7px;
+  border-radius: 0;
   border: 1px solid transparent;
   line-height: 1.1;
+}
+.tool-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.tool-btn:focus-visible {
+  outline: 2px solid rgb(var(--ui-link));
+  outline-offset: 1px;
 }
 
 .tool-btn:hover {
@@ -241,6 +293,9 @@ const toggleHeader = () => {
 .custom-table-node {
   display: block;
   max-width: 100%;
+}
+
+.table-scroll {
   overflow-x: auto;
 }
 

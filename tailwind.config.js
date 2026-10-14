@@ -1,30 +1,36 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}'
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'selector',
   theme: {
     extend: {
       colors: {
-        'dark-blue': '#032742',
-        'light-blue': '#e4f9ff',
-        'black-blue':'#001f2e',
-        'hover-light-blue': '#b2e2fb',
-        'hover-dark-blue': '#0b3761',
-        'hover-light-pink': '#ffebf5',
-        'hover-dark-pink': '#5c4660',
-        'light-line-between':'#cbccca',
-        'dark-line-between':'#3a5569',
-        'text-blue':'#00c0f5',
-        'text-pink':'#f35fab',
-        'text-gray': '#999'
-      }
+        'ui-bg': 'rgb(var(--ui-bg) / <alpha-value>)',
+        'ui-surface': 'rgb(var(--ui-surface) / <alpha-value>)',
+        'ui-inset': 'rgb(var(--ui-inset) / <alpha-value>)',
+        'ui-text': 'rgb(var(--ui-text) / <alpha-value>)',
+        'ui-muted': 'rgb(var(--ui-muted) / <alpha-value>)',
+        'ui-border': 'rgb(var(--ui-border) / <alpha-value>)',
+        'ui-line': 'rgb(var(--ui-line) / <alpha-value>)',
+        'ui-primary': 'rgb(var(--ui-primary) / <alpha-value>)',
+        'ui-secondary': 'rgb(var(--ui-secondary) / <alpha-value>)',
+        'ui-on-accent': 'rgb(var(--ui-on-accent) / <alpha-value>)',
+        'ui-link': 'rgb(var(--ui-link) / <alpha-value>)',
+        'ui-danger': 'rgb(var(--ui-danger) / <alpha-value>)',
+        'dark-blue': 'rgb(var(--ui-surface) / <alpha-value>)',
+        'light-blue': 'rgb(var(--ui-inset) / <alpha-value>)',
+        'black-blue': 'rgb(var(--ui-bg) / <alpha-value>)',
+        'hover-light-blue': 'rgb(var(--ui-secondary) / <alpha-value>)',
+        'hover-dark-blue': 'rgb(var(--ui-inset) / <alpha-value>)',
+        'hover-light-pink': 'rgb(var(--ui-inset) / <alpha-value>)',
+        'hover-dark-pink': 'rgb(var(--ui-inset) / <alpha-value>)',
+        'light-line-between': 'rgb(var(--ui-line) / <alpha-value>)',
+        'dark-line-between': 'rgb(var(--ui-line) / <alpha-value>)',
+        'text-blue': 'rgb(var(--ui-link) / <alpha-value>)',
+        'text-pink': 'rgb(var(--ui-danger) / <alpha-value>)',
+        'text-gray': 'rgb(var(--ui-muted) / <alpha-value>)',
+      },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar')
-  ]
+  plugins: [require('tailwind-scrollbar')],
 }
-

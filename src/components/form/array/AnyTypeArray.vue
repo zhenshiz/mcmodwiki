@@ -176,19 +176,19 @@ const renderObjectLabel = (item, index) => {
       @update:modelValue="emit('update:modelValue', $event)"
     >
       <template #item="{ item, index, update }">
-        <div class="flex flex-col w-full gap-1.5 p-1.5 bg-gray-50/50 dark:bg-white/5 rounded border border-gray-100 dark:border-slate-700/50">
+        <div class="flex flex-col w-full gap-1.5 p-1.5 bg-ui-surface/50 dark:bg-white/5 rounded-none border border-ui-line dark:border-ui-line/50">
 
           <div class="flex items-center justify-between">
-            <div class="flex bg-gray-200 dark:bg-slate-800 rounded p-0.5 gap-0.5">
+            <div class="flex bg-ui-inset dark:bg-ui-inset rounded-none p-0.5 gap-0.5">
               <button
                 v-for="opt in typeOptions"
                 :key="opt.value"
                 @click="switchItemType(index, opt)"
-                class="p-1 rounded transition-all"
+                class="p-1 rounded-none transition-all"
                 :class="[
                   detectType(item) === opt.value
-                    ? 'bg-white dark:bg-blue-600 text-blue-500 dark:text-white shadow-sm'
-                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+                    ? 'bg-white dark:bg-ui-secondary text-ui-link dark:text-ui-text shadow-sm'
+                    : 'text-ui-muted dark:text-ui-muted hover:text-ui-muted dark:hover:text-ui-text'
                 ]"
                 :title="opt.label"
               >
@@ -196,7 +196,7 @@ const renderObjectLabel = (item, index) => {
               </button>
             </div>
 
-            <span class="text-[10px] text-gray-400 font-mono opacity-50 pr-1">
+            <span class="text-[10px] text-ui-muted font-mono opacity-50 pr-1">
               {{ detectType(item) }}
             </span>
           </div>
@@ -205,17 +205,17 @@ const renderObjectLabel = (item, index) => {
 
             <div
               v-if="detectType(item) === 'object'"
-              class="flex-1 flex items-center justify-between px-2 py-1.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700 cursor-pointer hover:border-blue-500 dark:hover:border-blue-500 transition-colors group"
+              class="flex-1 flex items-center justify-between px-2 py-1.5 bg-white dark:bg-ui-surface rounded-none border border-ui-line dark:border-ui-line cursor-pointer hover:border-ui-link dark:hover:border-ui-link transition-colors group"
               @click="openEditObject(item, index)"
             >
               <div class="flex items-center gap-2 truncate">
                 <Icon icon="lucide:braces" width="12" class="text-purple-500 shrink-0" />
-                <span class="text-xs text-gray-600 dark:text-gray-300 truncate font-medium">
+                <span class="text-xs text-ui-muted dark:text-ui-text truncate font-medium">
                   {{ renderObjectLabel(item, index) }}
                 </span>
               </div>
               <Icon icon="lucide:edit-2" width="10"
-                    class="text-gray-400 group-hover:text-blue-500 shrink-0" />
+                    class="text-ui-muted group-hover:text-ui-link shrink-0" />
             </div>
 
             <component

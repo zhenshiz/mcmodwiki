@@ -1,24 +1,35 @@
 <script setup>
+defineOptions({ name: 'McPopover', inheritAttrs: false })
 import { computed, ref } from 'vue'
-import { arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue'
+import {
+  arrow,
+  autoUpdate,
+  flip,
+  offset as floatingOffset,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps({
+  disabled: Boolean,
+  matchTriggerWidth: Boolean,
   trigger: {
     type: String,
-    default: 'hover'
+    default: 'hover',
   },
   placement: {
     type: String,
-    default: 'bottom'
+    default: 'bottom',
   },
   offset: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 })
 
-const isOpen = ref(false)
+const isOpen = defineModel('isOpen', { type: Boolean, default: false })
 const referenceRef = ref(null)
 const floatingRef = ref(null)
 const arrowRef = ref(null)
@@ -26,29 +37,34 @@ const arrowRef = ref(null)
 const {
   floatingStyles,
   placement: finalPlacement,
-  middlewareData
+  middlewareData,
 } = useFloating(referenceRef, floatingRef, {
   placement: props.placement,
   strategy: 'fixed',
   whileElementsMounted: autoUpdate,
   middleware: [
-    offset(props.offset),
+    floatingOffset(props.offset),
     flip(),
     shift({ padding: 5 }),
-    arrow({ element: arrowRef })
-  ]
+    arrow({ element: arrowRef }),
+    size({
+      apply({ rects, elements }) {
+        if (props.matchTriggerWidth) elements.floating.style.width = `${rects.reference.width}px`
+      },
+    }),
+  ],
 })
 
 const toggle = () => {
-  if (props.trigger === 'click') isOpen.value = !isOpen.value
+  if (!props.disabled && props.trigger === 'click') isOpen.value = !isOpen.value
 }
 
 const show = () => {
-  if (props.trigger === 'hover') isOpen.value = true
+  if (!props.disabled && props.trigger === 'hover') isOpen.value = true
 }
 
 const hide = () => {
-  if (props.trigger === 'hover') isOpen.value = false
+  if (!props.disabled && props.trigger === 'hover') isOpen.value = false
 }
 
 onClickOutside(referenceRef, (event) => {
@@ -63,13 +79,13 @@ const arrowStyle = computed(() => {
     top: 'bottom',
     right: 'left',
     bottom: 'top',
-    left: 'right'
+    left: 'right',
   }[finalPlacement.value.split('-')[0]]
 
   return {
     left: x != null ? `${x}px` : '',
     top: y != null ? `${y}px` : '',
-    [staticSide]: '-4px'
+    [staticSide]: '-4px',
   }
 })
 </script>
@@ -77,10 +93,12 @@ const arrowStyle = computed(() => {
 <template>
   <div
     ref="referenceRef"
+    v-bind="$attrs"
     class="inline-block"
     @click="toggle"
     @mouseenter="show"
     @mouseleave="hide"
+    @keydown.esc="isOpen = false"
   >
     <slot name="trigger" />
   </div>
@@ -90,6 +108,7 @@ const arrowStyle = computed(() => {
       v-if="isOpen"
       ref="floatingRef"
       class="fixed z-[9999] focus:outline-none"
+      @keydown.esc.stop="isOpen = false"
       :style="floatingStyles"
     >
       <Transition
@@ -102,7 +121,8 @@ const arrowStyle = computed(() => {
         leave-to-class="opacity-0 translate-y-1"
       >
         <div
-          class="min-w-max rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 shadow-xl dark:bg-dark-blue dark:border-gray-700 dark:text-gray-200"
+          class="mc-panel px-3 py-2 text-sm"
+          :class="matchTriggerWidth ? 'w-full min-w-0' : 'min-w-max'"
           @mouseenter="show"
           @mouseleave="hide"
         >
@@ -110,9 +130,9 @@ const arrowStyle = computed(() => {
 
           <div
             ref="arrowRef"
-            class="absolute h-2 w-2 rotate-45 bg-white border border-gray-200 dark:bg-dark-blue dark:border-gray-700"
+            class="absolute h-2 w-2 rotate-45 bg-ui-surface border border-ui-border"
             :style="arrowStyle"
-            style="border-bottom: 0; border-right: 0;"
+            style="border-bottom: 0; border-right: 0"
           ></div>
         </div>
       </Transition>

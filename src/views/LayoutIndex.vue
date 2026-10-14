@@ -2,7 +2,7 @@
 import Dropdown from '@/components/Dropdown.vue'
 import { usePageStore } from '@/stores/index.js'
 import { Icon } from '@iconify/vue'
-import { useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import Modal from '@/components/Modal.vue'
 import { modList, moreUtilList } from '@/assets/info/mod.js'
 import { i18nScope } from '@/languages'
@@ -10,11 +10,10 @@ import { useVoerkaI18n } from '@voerkai18n/vue'
 import { webUtil } from '@/utils/webUtil.js'
 import { useEventListener } from '@vueuse/core'
 import { languageList, webHref } from '@/assets/info/web.js'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const { languages } = useVoerkaI18n(i18nScope)
 
-const router = useRouter()
 const pageStore = usePageStore()
 const isDark = computed(() => pageStore.isDark)
 const searchVisible = ref(false)
@@ -22,9 +21,11 @@ const mobileMenuVisible = ref(false)
 let themeTransitioning = false
 
 const search = ref('')
-const searchList = ref([])
+const searchList = ref(modList())
 const change = () => {
-  searchList.value = modList().filter(item => item.lang.toLowerCase().includes(search.value.toLowerCase()))
+  searchList.value = modList().filter((item) =>
+    item.lang.toLowerCase().includes(search.value.toLowerCase()),
+  )
 }
 
 const applyTheme = (dark) => {
@@ -56,14 +57,14 @@ const toggleTheme = async () => {
       {
         clipPath: [
           `circle(0px at ${originX}px ${originY}px)`,
-          `circle(${radius}px at ${originX}px ${originY}px)`
-        ]
+          `circle(${radius}px at ${originX}px ${originY}px)`,
+        ],
       },
       {
         duration: 650,
         easing: 'cubic-bezier(0.76, 0, 0.24, 1)',
-        pseudoElement: '::view-transition-new(root)'
-      }
+        pseudoElement: '::view-transition-new(root)',
+      },
     )
 
     await animation.finished
@@ -74,22 +75,14 @@ const toggleTheme = async () => {
   }
 }
 
-const gotoModWiki = item => {
-  searchVisible.value = false
-  router.push(`/wiki/${item.lang}`)
-}
-
 const closeMobileMenu = () => {
   mobileMenuVisible.value = false
 }
 
 const openSearch = () => {
   closeMobileMenu()
+  change()
   searchVisible.value = true
-}
-
-const openWeb = (url) => {
-  window.open(url)
 }
 
 // 进度条逻辑保持不变
@@ -101,9 +94,8 @@ const lastScrollTop = ref(0)
 const handleScroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop
   const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
-  scrollProgress.value = scrollHeight > 0
-    ? Math.min(100, Math.max(0, scrollTop / scrollHeight * 100))
-    : 0
+  scrollProgress.value =
+    scrollHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100)) : 0
   isUp.value = scrollProgress.value <= lastScrollTop.value
   lastScrollTop.value = scrollProgress.value <= 0 ? 0 : scrollProgress.value
 
@@ -125,249 +117,380 @@ const scrollTo = () => {
   }
 }
 
-const keydownToSearch = event => {
+const keydownToSearch = (event) => {
   const os = webUtil.getOperatingSystem()
-  if ((os === 'Mac' && event.metaKey && event.key === 'k') ||
-    (os !== 'Mac' && event.ctrlKey && event.key === 'k')) {
+  if (
+    (os === 'Mac' && event.metaKey && event.key === 'k') ||
+    (os !== 'Mac' && event.ctrlKey && event.key === 'k')
+  ) {
     event.preventDefault()
-    searchVisible.value = true
+    openSearch()
   }
 }
 
 useEventListener('keydown', keydownToSearch)
 useEventListener('scroll', handleScroll)
-
-onMounted(() => {
-  if (isDark.value) document.body.classList.add('dark')
-})
 </script>
 
 <template>
-  <div class="w-full">
-    <div class="relative top-0 h-16 w-full flex justify-center shadow z-20 dark:bg-dark-blue">
-      <div class="flex flex-row justify-between w-full max-w-screen-2xl size-full px-4 sm:px-6">
-        <div class="z-10 flex flex-row items-center">
-          <div class="text-xl font-bold dark:text-white">MCModWiki</div>
-        </div>
-
-        <div class="hidden z-10 lg:flex flex-row items-center">
-
-          <Dropdown>
-            <template #trigger>
-              <Icon class="cursor-pointer dark:text-white" icon="heroicons:magnifying-glass-solid" width="30"
-                height="30" @click="openSearch" />
-            </template>
-            <div class="text-[#3487d5] text-center text-sm p-3">
-              {{ t('按下 {} + k 以搜索', webUtil.getOperatingSystem() === 'Mac' ? 'Cmd' : 'Ctrl') }}
-            </div>
-          </Dropdown>
-
-          <Link class="ml-5 m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/`">
-            {{ t('首页') }}
-          </Link>
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/author`">
-            {{ t('关于我们') }}
-          </Link>
-          <Link class="m-2 text-lg text-text-blue whitespace-nowrap" hoverLineType="toFlanks" :href="`/editor`">
-            {{ t('编辑') }}
-          </Link>
-
-          <Dropdown v-if="modList().length">
-            <template #trigger>
-              <div class="cursor-pointer m-2 text-lg text-text-blue whitespace-nowrap">
-                {{ t('模组') }}
-              </div>
-            </template>
-            <div class="flex flex-col py-2">
-              <Link v-for="(item, index) in modList()" class="m-2 text-lg text-text-blue"
-                    :href="`/wiki/${item.lang}`" hoverLineType="toFlanks" :key="index">
-                {{ t(item.lang) }}
-              </Link>
-            </div>
-          </Dropdown>
-
-          <Dropdown v-if="moreUtilList().length">
-            <template #trigger>
-              <div class="cursor-pointer text-lg text-text-blue m-2 whitespace-nowrap">
-                {{ t('更多') }}
-              </div>
-            </template>
-            <div class="flex flex-col py-2">
-              <Link v-for="(item, index) in moreUtilList()" class="m-2 text-lg text-text-blue"
-                    :href="item.router"
-                hoverLineType="toFlanks" :key="index">
-                {{ t(item.lang) }}
-              </Link>
-            </div>
-          </Dropdown>
-
-          <div class="center h-[30px] p-2 border-l border-r border-l-light-line-between border-r-light-line-between dark:border-l-dark-line-between dark:border-r-dark-line-between">
-
-            <Dropdown>
-              <template #trigger>
-                <Icon width="35" height="35" icon="flowbite:language-outline" class="cursor-pointer dark:text-white" />
-              </template>
-              <div class="flex flex-col dark:bg-dark-blue">
-                <div @click="() => i18nScope.change(lang.name)"
-                  class="flex flex-row items-center justify-center px-4 py-2 cursor-pointer dark:text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
-                  v-for="(lang, index) in languages" :key="index">
-                  {{ languageList[lang.name] }}
-                </div>
-                <div class="flex flex-row items-center justify-center px-4 py-2 border-t dark:border-gray-600 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
-                  @click="openWeb(webHref.translatable)">
-                  <div class="text-xs text-center">
-                    {{ t('找不到您的语言？') }}<br>
-                    {{ t('点击这里协助翻译') }}
-                  </div>
-                  <Icon class="ml-2" width="20" height="20" icon="quill:link-out" />
-                </div>
-              </div>
-            </Dropdown>
-
-            <Icon width="35" height="35" :color="isDark ? '#66cffc' : '#ff454f'"
-              :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`" class="cursor-pointer ml-3" @click="toggleTheme" />
-          </div>
-
-          <div class="size-full flex items-center ml-2 mr-5">
-            <Icon @click="openWeb(webHref.github)" :color="isDark ? '#fff' : '#000'" width="35" height="35"
-              icon="mdi:github" class="cursor-pointer" />
-          </div>
-        </div>
-
-        <button
-          type="button"
-          class="z-10 flex lg:hidden items-center justify-center size-11 self-center rounded-lg text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-700"
-          :aria-expanded="mobileMenuVisible"
-          aria-controls="mobile-navigation"
-          :aria-label="mobileMenuVisible ? t('关闭菜单') : t('打开菜单')"
-          @click="mobileMenuVisible = !mobileMenuVisible"
+  <div class="site-layout">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <RouterLink to="/" class="site-brand" aria-label="MCModWiki 首页"
+          ><span class="brand-mark" aria-hidden="true"><i /><i /><i /></span
+          ><span
+            >MCModWiki<span class="brand-subtitle">MODS & DOCUMENTATION</span></span
+          ></RouterLink
         >
-          <span aria-hidden="true" class="text-3xl leading-none">
-            {{ mobileMenuVisible ? '×' : '☰' }}
-          </span>
-        </button>
-      </div>
-
-      <div
-        v-if="mobileMenuVisible"
-        class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/40 lg:hidden"
-        @click.self="closeMobileMenu"
-      >
-        <nav
-          id="mobile-navigation"
-          class="absolute inset-x-3 top-3 max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-xl border border-gray-200 bg-white p-3 shadow-xl dark:border-slate-700 dark:bg-dark-blue"
-        >
+        <nav class="desktop-nav" :aria-label="t('主导航')">
+          <RouterLink to="/" class="nav-link" exact-active-class="nav-link--active">{{
+            t('首页')
+          }}</RouterLink>
+          <Dropdown trigger="click" placement="bottom-start" :offset="8"
+            ><template #trigger
+              ><button type="button" class="nav-link">
+                {{ t('模组') }}<Icon icon="lucide:chevron-down" width="13" /></button
+            ></template>
+            <div class="min-w-[200px] p-1">
+              <RouterLink
+                v-for="item in modList()"
+                :key="item.lang"
+                :to="`/wiki/${item.lang}`"
+                class="mc-menu-item"
+                ><img :src="item.icon" alt="" class="size-5 object-contain" />{{
+                  item.lang
+                }}</RouterLink
+              >
+            </div></Dropdown
+          >
+          <RouterLink to="/editor" class="nav-link" active-class="nav-link--active">{{
+            t('文档编辑器')
+          }}</RouterLink>
+          <RouterLink to="/author" class="nav-link" active-class="nav-link--active">{{
+            t('关于我们')
+          }}</RouterLink>
+          <RouterLink to="/chatbox/visual" class="nav-link"
+            >{{ t('ChatBox 编辑器') }}<Icon icon="lucide:arrow-up-right" width="13"
+          /></RouterLink>
+        </nav>
+        <div class="header-actions">
           <button
             type="button"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
+            class="header-search"
+            :aria-label="t('搜索模组')"
             @click="openSearch"
           >
-            <Icon icon="heroicons:magnifying-glass-solid" width="22" height="22" />
-            {{ t('搜索') }}
+            <Icon icon="lucide:search" width="16" /><span>{{ t('搜索模组...') }}</span
+            ><kbd>{{ webUtil.getOperatingSystem() === 'Mac' ? '⌘' : 'Ctrl' }} K</kbd>
           </button>
-
-          <div class="my-2 h-px bg-gray-200 dark:bg-slate-700" />
-
-          <div class="grid grid-cols-2 gap-1">
-            <Link class="justify-start rounded-lg px-3 py-3 text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
-              href="/" @callback="closeMobileMenu">
-              {{ t('首页') }}
-            </Link>
-            <Link class="justify-start rounded-lg px-3 py-3 text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
-              href="/author" @callback="closeMobileMenu">
-              {{ t('关于我们') }}
-            </Link>
-            <Link class="justify-start rounded-lg px-3 py-3 text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
-              href="/editor" @callback="closeMobileMenu">
-              {{ t('编辑') }}
-            </Link>
-          </div>
-
-          <template v-if="modList().length">
-            <div class="px-3 pb-1 pt-4 text-xs font-bold uppercase tracking-wider text-gray-400">
-              {{ t('模组') }}
-            </div>
-            <Link v-for="item in modList()" :key="item.lang"
-              class="justify-start rounded-lg px-3 py-2.5 text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
-              :href="`/wiki/${item.lang}`" @callback="closeMobileMenu">
-              {{ t(item.lang) }}
-            </Link>
-          </template>
-
-          <template v-if="moreUtilList().length">
-            <div class="px-3 pb-1 pt-4 text-xs font-bold uppercase tracking-wider text-gray-400">
-              {{ t('更多') }}
-            </div>
-            <Link v-for="item in moreUtilList()" :key="item.router"
-              class="justify-start rounded-lg px-3 py-2.5 text-text-blue hover:bg-gray-100 dark:hover:bg-slate-700"
-              :href="item.router" @callback="closeMobileMenu">
-              {{ t(item.lang) }}
-            </Link>
-          </template>
-
-          <div class="my-2 h-px bg-gray-200 dark:bg-slate-700" />
-
-          <div class="flex flex-wrap items-center gap-2 px-1">
-            <button v-for="lang in languages" :key="lang.name" type="button"
-              class="rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-slate-700"
-              @click="i18nScope.change(lang.name); closeMobileMenu()">
-              {{ languageList[lang.name] }}
-            </button>
-            <button type="button" class="ml-auto rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-slate-700"
-              :aria-label="t('切换主题')" @click="toggleTheme">
-              <Icon width="24" height="24" :color="isDark ? '#66cffc' : '#ff454f'"
-                :icon="`line-md:${isDark ? 'moon' : 'sunny'}-loop`" />
-            </button>
-            <button type="button" class="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-slate-700"
-              aria-label="GitHub" @click="openWeb(webHref.github)">
-              <Icon :color="isDark ? '#fff' : '#000'" width="24" height="24" icon="mdi:github" />
-            </button>
-          </div>
-        </nav>
-      </div>
-    </div>
-
-    <div class="dark:bg-black-blue min-h-[calc(100vh-64px)]">
-      <router-view></router-view>
-    </div>
-
-    <div v-show="scrollVisible"
-      class="fixed bottom-4 right-4 h-12 w-12 sm:bottom-5 sm:right-5 sm:w-[220px] rounded-full bg-white dark:bg-dark-blue center flex-row shadow z-50">
-      <div class="hidden sm:block w-[100px] h-2 rounded-full" :style="{ backgroundColor: isDark ? '#3f3f45' : '#999' }">
-        <div class="h-full rounded-full"
-          :style="{ width: scrollProgress + 'px', backgroundColor: isDark ? '#0094f2' : '#0079ea' }" />
-      </div>
-      <div class="hidden sm:block ml-2 mr-2 text-text-blue w-[40px] text-right">{{ Math.floor(scrollProgress) }}%</div>
-      <Icon :style="{ backgroundColor: isDark ? '#042235' : '#cce4fa' }" :color="isDark ? '#368cc5' : '#3483ce'" width="35"
-        height="35" :icon="isUp ? 'lucide:move-up' : 'lucide:move-down'" class="rounded-full p-2 cursor-pointer"
-        @click="scrollTo" />
-    </div>
-  </div>
-
-  <Modal v-model:show="searchVisible">
-    <template #default>
-      <div class="flex flex-col size-full">
-        <Input v-model="search" @change="change" :placeholder="t('输入内容以自动搜索')"
-          default-model="search" is-debounce>
-        <template #header>
-          <div class="w-[25px] h-[25px] center dark:text-white">
-            <Icon icon="material-symbols:search-rounded" width="30" height="30" />
-          </div>
-        </template>
-        </Input>
-        <div class="p-2 theme-cursor-blue flex flex-col dark:text-white mt-2 border border-text-blue"
-          v-for="(item, index) in searchList" @click="gotoModWiki(item)" :key="index">
-          <div class="flex flex-row size-full min-w-0">
-            #&nbsp;
-            <div class="flex flex-row justify-between size-full min-w-0 gap-3">
-              <div class="shrink-0">{{ item.lang }}</div>
-              <div class="ellipsis min-w-0 sm:w-[300px] text-end">
-                {{ t(item.description) }}
-              </div>
-            </div>
-          </div>
+          <Dropdown trigger="click" placement="bottom-end" :offset="8"
+            ><template #trigger
+              ><button
+                type="button"
+                class="mc-icon-button language-button"
+                :aria-label="t('切换语言')"
+              >
+                <Icon icon="lucide:languages" width="19" /></button
+            ></template>
+            <div class="min-w-[150px] p-1">
+              <button
+                v-for="lang in languages"
+                :key="lang.name"
+                type="button"
+                class="mc-menu-item"
+                @click="i18nScope.change(lang.name)"
+              >
+                {{ languageList[lang.name] }}</button
+              ><a
+                v-if="webHref.translatable"
+                :href="webHref.translatable"
+                class="mc-menu-item"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ t('协助翻译') }}</a
+              >
+            </div></Dropdown
+          >
+          <button
+            type="button"
+            class="mc-icon-button theme-toggle"
+            :aria-label="isDark ? t('切换到亮色主题') : t('切换到暗色主题')"
+            :aria-pressed="isDark"
+            @click="toggleTheme"
+          >
+            <Icon :icon="isDark ? 'lucide:moon' : 'lucide:sun'" width="19" />
+          </button>
+          <a
+            :href="webHref.github"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mc-icon-button github-button"
+            aria-label="GitHub"
+            ><Icon icon="lucide:github" width="19"
+          /></a>
+          <button
+            type="button"
+            class="mc-icon-button mobile-menu-toggle"
+            :aria-expanded="mobileMenuVisible"
+            aria-controls="mobile-navigation"
+            :aria-label="mobileMenuVisible ? t('关闭菜单') : t('打开菜单')"
+            @click="mobileMenuVisible = !mobileMenuVisible"
+          >
+            <Icon :icon="mobileMenuVisible ? 'lucide:x' : 'lucide:menu'" width="21" />
+          </button>
         </div>
       </div>
-    </template>
-  </Modal>
+    </header>
+    <div
+      v-if="mobileMenuVisible"
+      class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/40 lg:hidden"
+      @click.self="closeMobileMenu"
+    >
+      <nav
+        id="mobile-navigation"
+        class="mc-panel absolute inset-x-4 top-3 max-h-[calc(100dvh-6rem)] overflow-y-auto p-2"
+      >
+        <RouterLink to="/" class="mc-menu-item" @click="closeMobileMenu">{{ t('首页') }}</RouterLink
+        ><RouterLink to="/editor" class="mc-menu-item" @click="closeMobileMenu">{{
+          t('文档编辑器')
+        }}</RouterLink
+        ><RouterLink to="/author" class="mc-menu-item" @click="closeMobileMenu">{{
+          t('关于我们')
+        }}</RouterLink>
+        <div class="mc-label px-3 pt-5 pb-2">{{ t('模组') }}</div>
+        <RouterLink
+          v-for="item in modList()"
+          :key="item.lang"
+          :to="`/wiki/${item.lang}`"
+          class="mc-menu-item"
+          @click="closeMobileMenu"
+          ><img :src="item.icon" alt="" class="size-5 object-contain" />{{ item.lang }}</RouterLink
+        >
+        <div class="border-t border-ui-line mt-2 pt-2">
+          <RouterLink
+            v-for="item in moreUtilList()"
+            :key="item.router"
+            :to="item.router"
+            class="mc-menu-item"
+            @click="closeMobileMenu"
+            >{{ item.lang }}<Icon icon="lucide:arrow-up-right" width="16"
+          /></RouterLink>
+        </div>
+      </nav>
+    </div>
+    <div class="min-h-[calc(100vh-64px)]"><router-view /></div>
+    <button
+      v-show="scrollVisible"
+      type="button"
+      class="reading-progress"
+      :aria-label="isUp ? t('回到顶部') : t('前往底部')"
+      @click="scrollTo"
+    >
+      <span class="hidden sm:inline">{{ Math.floor(scrollProgress) }}%</span
+      ><Icon :icon="isUp ? 'lucide:arrow-up' : 'lucide:arrow-down'" width="18" />
+    </button>
+    <Modal v-model:show="searchVisible" :title="t('搜索模组')"
+      ><div class="flex flex-col gap-3">
+        <Input v-model="search" :placeholder="t('输入模组名称...')" @change="change"
+          ><template #header><Icon icon="lucide:search" width="18" /></template></Input
+        ><RouterLink
+          v-for="item in searchList"
+          :key="item.lang"
+          :to="`/wiki/${item.lang}`"
+          class="mc-menu-item border border-ui-line"
+          @click="searchVisible = false"
+          ><img :src="item.icon" alt="" class="size-9 object-contain" />
+          <div class="min-w-0">
+            <div class="font-bold">{{ item.lang }}</div>
+            <div class="text-xs text-ui-muted mt-1">{{ item.description }}</div>
+          </div>
+          <Icon icon="lucide:arrow-up-right" width="18" class="ml-auto shrink-0"
+        /></RouterLink>
+        <p v-if="!searchList.length" class="py-5 text-center text-sm text-ui-muted">
+          {{ t('没有找到匹配的模组') }}
+        </p>
+        <div class="mc-label text-right">ESC {{ t('关闭') }}</div>
+      </div></Modal
+    >
+  </div>
 </template>
+
+<style scoped>
+.site-header {
+  position: relative;
+  height: 64px;
+  z-index: 30;
+  background: rgb(var(--ui-surface));
+  border-bottom: 2px solid rgb(var(--ui-border));
+}
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1400px;
+  height: 100%;
+  padding: 0 32px;
+  margin: auto;
+}
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  flex-shrink: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+}
+.brand-subtitle {
+  display: block;
+  font: 7px monospace;
+  letter-spacing: 0.08em;
+  color: rgb(var(--ui-muted));
+  margin-top: 5px;
+}
+.brand-mark {
+  position: relative;
+  display: block;
+  width: 29px;
+  height: 29px;
+  border: 2px solid rgb(var(--ui-border));
+  background: rgb(var(--ui-primary));
+  box-shadow: 2px 2px 0 rgb(var(--ui-shadow));
+}
+.brand-mark i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: rgb(var(--ui-on-accent));
+  top: 6px;
+  left: 4px;
+}
+.brand-mark i:nth-child(2) {
+  left: 16px;
+}
+.brand-mark i:nth-child(3) {
+  top: 15px;
+  left: 9px;
+  width: 7px;
+  height: 7px;
+}
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+  margin-left: auto;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+  padding: 20px 0;
+  position: relative;
+}
+.nav-link:hover {
+  color: rgb(var(--ui-link));
+}
+.nav-link--active::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgb(var(--ui-link));
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgb(var(--ui-inset));
+  padding: 9px 10px;
+  color: rgb(var(--ui-muted));
+  margin-right: 8px;
+  font-size: 11px;
+  border: 1px solid rgb(var(--ui-line));
+}
+.header-search kbd {
+  padding: 1px 4px;
+  margin-left: 14px;
+  border: 1px solid rgb(var(--ui-line));
+  background: rgb(var(--ui-surface));
+  font: 9px monospace;
+}
+.header-search:hover {
+  border-color: rgb(var(--ui-border));
+}
+.mobile-menu-toggle {
+  display: none;
+}
+.reading-progress {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgb(var(--ui-surface));
+  border: 2px solid rgb(var(--ui-border));
+  box-shadow: 3px 3px 0 rgb(var(--ui-shadow));
+  color: rgb(var(--ui-text));
+  font: 12px monospace;
+  z-index: 30;
+}
+@media (max-width: 1279px) {
+  .desktop-nav {
+    gap: 16px;
+  }
+  .header-search > span,
+  .header-search kbd {
+    display: none;
+  }
+  .header-search {
+    background: transparent;
+    border-color: transparent;
+    padding: 10px;
+    margin: 0;
+  }
+}
+@media (max-width: 1023px) {
+  .desktop-nav {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+  .site-header-inner {
+    padding: 0 20px;
+    gap: 10px;
+  }
+  .github-button {
+    display: none;
+  }
+}
+@media (max-width: 359px) {
+  .brand-subtitle {
+    display: none;
+  }
+  .site-brand {
+    font-size: 15px;
+    gap: 8px;
+  }
+  .language-button {
+    display: none;
+  }
+  .site-header-inner {
+    padding: 0 12px;
+  }
+}
+</style>

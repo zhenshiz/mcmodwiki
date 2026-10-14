@@ -50,7 +50,7 @@ const selectEmoji = (emoji) => {
       </span>
   </div>
 
-  <div class="center w-full text-xl dark:text-white">
+  <div class="center w-full text-xl dark:text-ui-text">
       <span
         class="pl-1 pr-1 pt-2 pb-2 shadow mr-2 hover:text-text-blue button-theme-cursor-blue"
         @click="prevPage">
@@ -58,7 +58,7 @@ const selectEmoji = (emoji) => {
       </span>
 
     <span
-      class="pl-1 pr-1 pt-2 pb-2 rounded-xl shadow hover:text-text-blue button-theme-cursor-blue"
+      class="pl-1 pr-1 pt-2 pb-2 rounded-none shadow hover:text-text-blue button-theme-cursor-blue"
       @click="nextPage">
         <Icon icon="lucide:chevron-right" />
       </span>

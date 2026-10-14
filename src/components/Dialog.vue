@@ -4,10 +4,15 @@ import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
 import Modal from '@/components/Modal.vue'
 import Button from '@/components/Button.vue'
+import { t } from '@/languages'
 
 const props = defineProps({
   title: String,
   content: String,
+  teleportTo: {
+    type: [String, Object],
+    default: () => document.fullscreenElement || 'body'
+  },
   positiveText: {
     type: String,
     default: t('确定')
@@ -80,7 +85,7 @@ const handleEscClick = () => {
 </script>
 
 <template>
-  <Modal v-model:show="show" :width="'400px'" :mask-closable="maskClosable" :close-on-esc="escClosable"
+  <Modal v-model:show="show" :width="'400px'" :teleport-to="teleportTo" :mask-closable="maskClosable" :close-on-esc="escClosable"
     @close="handleMaskClick" @after-leave="$emit('close')">
     <template #header>
       <div class="flex items-center gap-3">

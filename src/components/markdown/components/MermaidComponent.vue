@@ -1,58 +1,60 @@
 <script setup>
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
-import { computed, onMounted, ref, watch } from 'vue'
-import mermaid from 'mermaid'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { usePageStore } from '@/stores/index.js'
-import { t, Translate } from '@/languages'
+import { t } from '@/languages'
 import { useDialog } from '@/components/register/useDialog.js'
+import MermaidTemplatePicker from '@/components/markdown/components/MermaidTemplatePicker.vue'
+import { renderMermaid } from '@/components/markdown/mermaidRenderer.js'
 
 const props = defineProps(nodeViewProps)
 const localCode = ref(props.node.attrs.code)
-const previewContainer = ref(null)
+const previewSvg = ref('')
 const error = ref('')
 const isOpen = ref(true)
+const templatesVisible = ref(false)
 const isDark = computed(() => usePageStore().isDark)
-
-const initMermaid = () => {
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: isDark.value ? 'dark' : 'default',
-    themeVariables: {
-      primaryColor: '#80ccff',
-      mainBkg: isDark.value ? '#1e293b' : '#f8fafc',
-      lineColor: '#80ccff',
-      fontSize: '14px',
-    }
-  })
-}
 
 const showSourceArea = computed(() => {
   return props.editor.isEditable && !props.node.attrs.hideCode
 })
 
+let renderVersion = 0
 const renderChart = async () => {
-  if (!localCode.value) return
+  const version = ++renderVersion
+  error.value = ''
+  if (!localCode.value.trim()) {
+    previewSvg.value = ''
+    return
+  }
   try {
-    error.value = ''
-    initMermaid()
-    const id = `mmd-${Math.random().toString(36).substring(2, 7)}`
-    const { svg } = await mermaid.render(id, localCode.value)
-    if (previewContainer.value) {
-      previewContainer.value.innerHTML = svg
-    }
+    const svg = await renderMermaid(localCode.value, isDark.value)
+    if (version === renderVersion) previewSvg.value = svg
   } catch (e) {
-    error.value = e.message || 'Syntax Error'
+    if (version === renderVersion) error.value = e.message || 'Syntax Error'
   }
 }
 
 // 监听主题变化，实时重绘图表
-watch(isDark, () => {
-  renderChart()
+watch(isDark, renderChart)
+watch(
+  () => props.node.attrs.code,
+  (code) => {
+    localCode.value = code
+  },
+)
+watch(localCode, renderChart, { immediate: true })
+onBeforeUnmount(() => {
+  renderVersion++
 })
 
 const handleUpdate = () => {
   props.updateAttributes({ code: localCode.value })
-  renderChart()
+}
+const applyTemplate = (code) => {
+  localCode.value = code
+  isOpen.value = true
+  props.updateAttributes({ code, hideCode: false })
 }
 
 const confirmPermanentHide = () => {
@@ -62,87 +64,144 @@ const confirmPermanentHide = () => {
     content: t('永久关闭后，该图表的源码编辑区将不再显示，确定吗？'),
     onPositiveClick: () => {
       props.updateAttributes({ hideCode: true })
-    }
+    },
   })
 }
-
-onMounted(renderChart)
 </script>
 
 <template>
   <node-view-wrapper
-    class="my-4 overflow-hidden border rounded-lg transition-all"
+    class="mermaid-node my-4 overflow-hidden border rounded-none transition-all"
     :class="[
       isDark
-        ? 'border-slate-700 bg-[#0d1117] hover:border-blue-500/50'
-        : 'border-blue-100 bg-white hover:border-blue-400 shadow-sm'
+        ? 'border-ui-line bg-ui-bg hover:border-ui-link/50'
+        : 'border-ui-link bg-white hover:border-ui-link shadow-sm',
     ]"
   >
     <div
       class="flex justify-center p-6 min-h-[100px] relative transition-colors"
-      :class="isDark ? 'bg-slate-900/50' : 'bg-slate-50'"
-      ref="previewContainer"
+      :class="isDark ? 'bg-ui-surface/50' : 'bg-ui-surface'"
+      contenteditable="false"
     >
-      <div v-if="error"
-           class="absolute inset-0 flex items-center justify-center backdrop-blur-sm text-sm p-4 text-center font-mono"
-           :class="isDark ? 'bg-red-900/20 text-red-400' : 'bg-red-50/80 text-red-600'">
+      <div v-html="previewSvg" class="mermaid-preview w-full"></div>
+      <div
+        v-if="error"
+        role="alert"
+        class="absolute inset-0 flex items-center justify-center backdrop-blur-sm text-sm p-4 text-center font-mono"
+        :class="isDark ? 'bg-red-900/20 text-red-400' : 'bg-red-50/80 text-red-600'"
+      >
         ⚠️ {{ error }}
       </div>
     </div>
 
-    <div v-if="showSourceArea" class="border-t" :class="isDark ? 'border-slate-700' : 'border-blue-100'">
+    <div
+      v-if="showSourceArea"
+      class="border-t"
+      :class="isDark ? 'border-ui-line' : 'border-ui-link'"
+    >
       <div
-        class="flex items-center justify-between px-3 py-2 select-none transition-colors"
-        :class="isDark ? 'bg-slate-800/80' : 'bg-blue-50/50'"
+        class="flex flex-wrap gap-2 items-center justify-between px-3 py-2 select-none transition-colors"
+        :class="isDark ? 'bg-ui-inset/80' : 'bg-ui-secondary/50'"
       >
-        <div class="flex items-center gap-2 cursor-pointer group" @click="isOpen = !isOpen">
+        <button
+          type="button"
+          class="flex items-center gap-2 cursor-pointer group"
+          :aria-expanded="isOpen"
+          @mousedown.prevent
+          @click="isOpen = !isOpen"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="w-4 h-4 transition-transform duration-200"
             :class="[
               isOpen ? 'rotate-90' : '',
-              isDark ? 'text-slate-400 group-hover:text-blue-400' : 'text-blue-400 group-hover:text-blue-600'
+              isDark
+                ? 'text-ui-muted group-hover:text-ui-link'
+                : 'text-ui-link group-hover:text-ui-link',
             ]"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
             <path d="m9 18 6-6-6-6" />
           </svg>
           <div
             class="text-[10px] uppercase tracking-wider font-bold transition-colors"
-            :class="isDark ? 'text-slate-400 group-hover:text-blue-400' : 'text-blue-400 group-hover:text-blue-600'"
+            :class="
+              isDark
+                ? 'text-ui-muted group-hover:text-ui-link'
+                : 'text-ui-link group-hover:text-ui-link'
+            "
           >
-            {{ t('Mermaid 源码')}}
+            {{ t('Mermaid 源码') }}
           </div>
-        </div>
-
-        <button
-          @click="confirmPermanentHide"
-          class="text-[9px] px-2 py-0.5 rounded border transition-all"
-          :class="isDark
-            ? 'border-slate-600 text-slate-500 hover:border-red-500/50 hover:text-red-400 bg-slate-900'
-            : 'border-blue-200 text-blue-400 hover:border-red-300 hover:text-red-500 bg-white'"
-        >
-          {{ t('永久关闭') }}
         </button>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            @mousedown.prevent
+            @click="templatesVisible = true"
+            class="mermaid-action bg-ui-surface border-ui-link text-ui-link hover:bg-ui-inset"
+          >
+            {{ t('图表模板') }}
+          </button>
+          <button
+            type="button"
+            @mousedown.prevent
+            @click="confirmPermanentHide"
+            class="mermaid-action transition-all"
+            :class="
+              isDark
+                ? 'border-ui-line text-ui-muted hover:border-red-500/50 hover:text-red-400 bg-ui-surface'
+                : 'border-ui-link text-ui-link hover:border-red-300 hover:text-red-500 bg-white'
+            "
+          >
+            {{ t('永久关闭') }}
+          </button>
+        </div>
       </div>
 
-      <div v-show="isOpen" class="overflow-hidden transition-colors" :class="isDark ? 'bg-[#0d1117]' : 'bg-white'">
+      <div
+        v-show="isOpen"
+        class="overflow-hidden transition-colors"
+        :class="isDark ? 'bg-ui-bg' : 'bg-white'"
+      >
         <textarea
           v-model="localCode"
+          :aria-label="t('Mermaid 源码')"
           @input="handleUpdate"
           spellcheck="false"
           class="w-full h-40 p-4 font-mono text-sm resize-y outline-none border-none leading-relaxed bg-transparent focus:ring-0"
-          :class="isDark ? 'text-blue-400' : 'text-slate-700'"
+          :class="isDark ? 'text-ui-link' : 'text-ui-text'"
           placeholder="Enter mermaid code..."
         ></textarea>
       </div>
     </div>
+    <MermaidTemplatePicker
+      v-if="templatesVisible"
+      @apply="applyTemplate"
+      @close="templatesVisible = false"
+    />
   </node-view-wrapper>
 </template>
 
 <style scoped>
 .rotate-90 {
   transform: rotate(90deg);
+}
+.mermaid-action {
+  border-width: 1px;
+  padding: 5px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.mermaid-preview :deep(svg) {
+  margin: auto;
+  display: block;
 }
 
 :deep(svg) {

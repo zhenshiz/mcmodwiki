@@ -1833,7 +1833,7 @@
         "$id": 626
     },
     "左对齐": {
-        "en-US": "left-align",
+        "en-US": "Align left",
         "$files": [
             "src/assets/more/chatbox/enumTypes.js(149-156)",
             "src/assets/more/chatbox/enumTypes.js(258-265)"
@@ -1850,7 +1850,7 @@
         "$id": 628
     },
     "右对齐": {
-        "en-US": "right-align",
+        "en-US": "Align right",
         "$files": [
             "src/assets/more/chatbox/enumTypes.js(187-194)",
             "src/assets/more/chatbox/enumTypes.js(296-303)"
@@ -3096,5 +3096,521 @@
             "src/stores/modules/chatboxEditor.js"
         ],
         "$id": 1303
+    },
+    "模组的每一种可能，": {
+        "en-US": "Every mod, every possibility.",
+        "$id": 1304
+    },
+    "从这里开始。": {
+        "en-US": "Your journey starts here.",
+        "$id": 1305
+    },
+    "浏览模组文档，探索玩法与配置，使用可视化工具完成你的下一次创作。": {
+        "en-US": "Explore mod documentation, discover features and settings, and bring your next creation to life with visual tools.",
+        "$id": 1306
+    },
+    "浏览模组": {
+        "en-US": "Explore mods",
+        "$id": 1307
+    },
+    "打开 ChatBox 编辑器": {
+        "en-US": "Open ChatBox Editor",
+        "$id": 1308
+    },
+    "模组文档": {
+        "en-US": "Mod documentation",
+        "$id": 1309
+    },
+    "可视化工具": {
+        "en-US": "Visual tools",
+        "$id": 1310
+    },
+    "多语言支持": {
+        "en-US": "Multilingual guides",
+        "$id": 1311
+    },
+    "选择一个模组，开始探索。": {
+        "en-US": "Pick a mod. Start exploring.",
+        "$id": 1312
+    },
+    "阅读文档": {
+        "en-US": "Read the docs",
+        "$id": 1313
+    },
+    "让你的故事，在方块世界里发生。": {
+        "en-US": "Bring your stories to a world of blocks.",
+        "$id": 1314
+    },
+    "使用 ChatBox 可视化编辑器，配置对话、主题与界面。": {
+        "en-US": "Create dialogues, themes and interfaces with the ChatBox visual editor.",
+        "$id": 1315
+    },
+    "开始创作": {
+        "en-US": "Start creating",
+        "$id": 1316
+    },
+    "为每一次探索，留下一份指南。": {
+        "en-US": "A guide for every adventure.",
+        "$id": 1317
+    },
+    "主导航": {
+        "en-US": "Main navigation",
+        "$id": 1318
+    },
+    "文档编辑器": {
+        "en-US": "Doc editor",
+        "$id": 1319
+    },
+    "ChatBox 编辑器": {
+        "en-US": "ChatBox Editor",
+        "$id": 1320
+    },
+    "搜索模组": {
+        "en-US": "Search mods",
+        "$id": 1321
+    },
+    "搜索模组...": {
+        "en-US": "Search mods...",
+        "$id": 1322
+    },
+    "切换语言": {
+        "en-US": "Change language",
+        "$id": 1323
+    },
+    "协助翻译": {
+        "en-US": "Help translate",
+        "$id": 1324
+    },
+    "切换到亮色主题": {
+        "en-US": "Switch to light theme",
+        "$id": 1325
+    },
+    "切换到暗色主题": {
+        "en-US": "Switch to dark theme",
+        "$id": 1326
+    },
+    "回到顶部": {
+        "en-US": "Back to top",
+        "$id": 1327
+    },
+    "前往底部": {
+        "en-US": "Go to bottom",
+        "$id": 1328
+    },
+    "输入模组名称...": {
+        "en-US": "Enter a mod name...",
+        "$id": 1329
+    },
+    "没有找到匹配的模组": {
+        "en-US": "No matching mods found",
+        "$id": 1330
+    },
+    "关闭": {
+        "en-US": "Close",
+        "$id": 1331
+    },
+    "创建 LaTeX 公式": {
+        "en-US": "Create LaTeX formula",
+        "$id": 1332
+    },
+    "编辑 LaTeX 公式": {
+        "en-US": "Edit LaTeX formula",
+        "$id": 1333
+    },
+    "编辑表格": {
+        "en-US": "Edit table",
+        "$id": 1334
+    },
+    "切换表头": {
+        "en-US": "Toggle header row",
+        "$id": 1335
+    },
+    "添加行": {
+        "en-US": "Add row",
+        "$id": 1336
+    },
+    "删除行": {
+        "en-US": "Remove row",
+        "$id": 1337
+    },
+    "添加列": {
+        "en-US": "Add column",
+        "$id": 1338
+    },
+    "删除列": {
+        "en-US": "Remove column",
+        "$id": 1339
+    },
+    "文本样式": {
+        "en-US": "Text formatting",
+        "$id": 1340
+    },
+    "移除链接": {
+        "en-US": "Remove link",
+        "$id": 1341
+    },
+    "加粗": {
+        "en-US": "Bold",
+        "$id": 1342
+    },
+    "斜体": {
+        "en-US": "Italic",
+        "$id": 1343
+    },
+    "删除线": {
+        "en-US": "Strikethrough",
+        "$id": 1344
+    },
+    "上标": {
+        "en-US": "Superscript",
+        "$id": 1345
+    },
+    "下标": {
+        "en-US": "Subscript",
+        "$id": 1346
+    },
+    "隐藏文本": {
+        "en-US": "Hidden text",
+        "$id": 1347
+    },
+    "居中对齐": {
+        "en-US": "Align center",
+        "$id": 1348
+    },
+    "分数与根式": {
+        "en-US": "Fractions & roots",
+        "$id": 1349
+    },
+    "分数": {
+        "en-US": "Fraction",
+        "$id": 1350
+    },
+    "平方": {
+        "en-US": "Square",
+        "$id": 1351
+    },
+    "平方根": {
+        "en-US": "Square root",
+        "$id": 1352
+    },
+    "n 次根": {
+        "en-US": "Nth root",
+        "$id": 1353
+    },
+    "括号": {
+        "en-US": "Parentheses",
+        "$id": 1354
+    },
+    "大型运算": {
+        "en-US": "Operators",
+        "$id": 1355
+    },
+    "求和": {
+        "en-US": "Sum",
+        "$id": 1356
+    },
+    "连乘": {
+        "en-US": "Product",
+        "$id": 1357
+    },
+    "积分": {
+        "en-US": "Integral",
+        "$id": 1358
+    },
+    "二重积分": {
+        "en-US": "Double integral",
+        "$id": 1359
+    },
+    "极限": {
+        "en-US": "Limit",
+        "$id": 1360
+    },
+    "导数": {
+        "en-US": "Derivative",
+        "$id": 1361
+    },
+    "常用符号": {
+        "en-US": "Symbols",
+        "$id": 1362
+    },
+    "正负号": {
+        "en-US": "Plus or minus",
+        "$id": 1363
+    },
+    "乘号": {
+        "en-US": "Multiplication",
+        "$id": 1364
+    },
+    "不等于": {
+        "en-US": "Not equal",
+        "$id": 1365
+    },
+    "小于等于": {
+        "en-US": "Less than or equal",
+        "$id": 1366
+    },
+    "大于等于": {
+        "en-US": "Greater than or equal",
+        "$id": 1367
+    },
+    "约等于": {
+        "en-US": "Approximately equal",
+        "$id": 1368
+    },
+    "无穷大": {
+        "en-US": "Infinity",
+        "$id": 1369
+    },
+    "属于": {
+        "en-US": "Element of",
+        "$id": 1370
+    },
+    "箭头": {
+        "en-US": "Arrow",
+        "$id": 1371
+    },
+    "希腊字母": {
+        "en-US": "Greek letters",
+        "$id": 1372
+    },
+    "矩阵与方程": {
+        "en-US": "Matrices & equations",
+        "$id": 1373
+    },
+    "圆括号矩阵": {
+        "en-US": "Parenthesized matrix",
+        "$id": 1374
+    },
+    "方括号矩阵": {
+        "en-US": "Bracketed matrix",
+        "$id": 1375
+    },
+    "行列式": {
+        "en-US": "Determinant",
+        "$id": 1376
+    },
+    "分段函数": {
+        "en-US": "Piecewise function",
+        "$id": 1377
+    },
+    "方程组": {
+        "en-US": "System of equations",
+        "$id": 1378
+    },
+    "对齐方程": {
+        "en-US": "Aligned equations",
+        "$id": 1379
+    },
+    "可视化公式输入": {
+        "en-US": "Visual formula input",
+        "$id": 1380
+    },
+    "选择模板，再点击公式中的内容直接修改。也可以切换到源码输入。": {
+        "en-US": "Choose a template and edit directly in the formula, or switch to LaTeX source.",
+        "$id": 1381
+    },
+    "公式类型": {
+        "en-US": "Formula type",
+        "$id": 1382
+    },
+    "行内公式": {
+        "en-US": "Inline formula",
+        "$id": 1383
+    },
+    "独立公式块": {
+        "en-US": "Block formula",
+        "$id": 1384
+    },
+    "公式模板": {
+        "en-US": "Formula templates",
+        "$id": 1385
+    },
+    "模板分类": {
+        "en-US": "Template categories",
+        "$id": 1386
+    },
+    "输入公式": {
+        "en-US": "Formula input",
+        "$id": 1387
+    },
+    "输入模式": {
+        "en-US": "Input mode",
+        "$id": 1388
+    },
+    "可视化": {
+        "en-US": "Visual",
+        "$id": 1389
+    },
+    "LaTeX 源码": {
+        "en-US": "LaTeX source",
+        "$id": 1390
+    },
+    "输入 LaTeX，例如：\\frac{a}{b}": {
+        "en-US": "Enter LaTeX, e.g. \\frac{a}{b}",
+        "$id": 1391
+    },
+    "模板插入到当前光标位置": {
+        "en-US": "Templates insert at the cursor",
+        "$id": 1392
+    },
+    "实时预览": {
+        "en-US": "Live preview",
+        "$id": 1393
+    },
+    "请修正公式后查看预览": {
+        "en-US": "Fix the formula to see a preview",
+        "$id": 1394
+    },
+    "在左侧输入或选择一个模板": {
+        "en-US": "Enter a formula or choose a template",
+        "$id": 1395
+    },
+    "公式语法有误": {
+        "en-US": "Invalid formula syntax",
+        "$id": 1396
+    },
+    "插入公式": {
+        "en-US": "Insert formula",
+        "$id": 1397
+    },
+    "流程图": {
+        "en-US": "Flowchart",
+        "$id": 1398
+    },
+    "时序图": {
+        "en-US": "Sequence diagram",
+        "$id": 1399
+    },
+    "类图": {
+        "en-US": "Class diagram",
+        "$id": 1400
+    },
+    "状态图": {
+        "en-US": "State diagram",
+        "$id": 1401
+    },
+    "实体关系图": {
+        "en-US": "Entity relationship diagram",
+        "$id": 1402
+    },
+    "用户旅程图": {
+        "en-US": "User journey",
+        "$id": 1403
+    },
+    "甘特图": {
+        "en-US": "Gantt chart",
+        "$id": 1404
+    },
+    "饼图": {
+        "en-US": "Pie chart",
+        "$id": 1405
+    },
+    "象限图": {
+        "en-US": "Quadrant chart",
+        "$id": 1406
+    },
+    "需求图": {
+        "en-US": "Requirement diagram",
+        "$id": 1407
+    },
+    "Git 分支图": {
+        "en-US": "Git branch diagram",
+        "$id": 1408
+    },
+    "C4 系统上下文图": {
+        "en-US": "C4 system context",
+        "$id": 1409
+    },
+    "C4 容器图": {
+        "en-US": "C4 container",
+        "$id": 1410
+    },
+    "C4 组件图": {
+        "en-US": "C4 component",
+        "$id": 1411
+    },
+    "C4 动态图": {
+        "en-US": "C4 dynamic",
+        "$id": 1412
+    },
+    "C4 部署图": {
+        "en-US": "C4 deployment",
+        "$id": 1413
+    },
+    "思维导图": {
+        "en-US": "Mind map",
+        "$id": 1414
+    },
+    "时间线": {
+        "en-US": "Timeline",
+        "$id": 1415
+    },
+    "桑基图": {
+        "en-US": "Sankey diagram",
+        "$id": 1416
+    },
+    "XY 图": {
+        "en-US": "XY chart",
+        "$id": 1417
+    },
+    "块图": {
+        "en-US": "Block diagram",
+        "$id": 1418
+    },
+    "数据包图": {
+        "en-US": "Packet diagram",
+        "$id": 1419
+    },
+    "看板": {
+        "en-US": "Kanban",
+        "$id": 1420
+    },
+    "架构图": {
+        "en-US": "Architecture diagram",
+        "$id": 1421
+    },
+    "雷达图": {
+        "en-US": "Radar chart",
+        "$id": 1422
+    },
+    "矩形树图": {
+        "en-US": "Treemap",
+        "$id": 1423
+    },
+    "图表模板": {
+        "en-US": "Diagram templates",
+        "$id": 1424
+    },
+    "Mermaid 图表模板": {
+        "en-US": "Mermaid diagram templates",
+        "$id": 1425
+    },
+    "选择图表类型，预览后使用模板，再修改源码中的名称、关系和数值。": {
+        "en-US": "Choose a diagram type, preview and apply its template, then edit the names, relationships and values in the source.",
+        "$id": 1426
+    },
+    "图表类型": {
+        "en-US": "Diagram types",
+        "$id": 1427
+    },
+    "图表预览": {
+        "en-US": "Diagram preview",
+        "$id": 1428
+    },
+    "正在绘制图表…": {
+        "en-US": "Rendering diagram…",
+        "$id": 1429
+    },
+    "模板源码": {
+        "en-US": "Template source",
+        "$id": 1430
+    },
+    "使用模板将替换当前图表的源码，可撤销。": {
+        "en-US": "Applying a template replaces the current diagram source. You can undo this change.",
+        "$id": 1431
+    },
+    "使用模板": {
+        "en-US": "Use template",
+        "$id": 1432
     }
 }

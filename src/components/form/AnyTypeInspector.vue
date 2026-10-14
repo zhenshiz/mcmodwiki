@@ -132,24 +132,24 @@ const handleTypeSwitch = (typeOpt) => {
 
 <template>
   <div
-    class="w-full border border-gray-200 dark:border-slate-700 rounded bg-white dark:bg-[#002941] mt-2 overflow-hidden shadow-sm">
+    class="w-full border border-ui-line dark:border-ui-line rounded-none bg-white dark:bg-ui-inset mt-2 overflow-hidden shadow-sm">
 
     <div
-      class="flex justify-between items-center px-3 py-1.5 bg-gray-50 dark:bg-[#002033] border-b border-gray-200 dark:border-slate-700">
-      <span class="text-xs font-bold text-gray-500 dark:text-gray-400 select-none">
+      class="flex justify-between items-center px-3 py-1.5 bg-ui-surface dark:bg-ui-surface border-b border-ui-line dark:border-ui-line">
+      <span class="text-xs font-bold text-ui-muted dark:text-ui-muted select-none">
         {{ label }}
       </span>
 
-      <div class="flex bg-gray-200 dark:bg-slate-800 rounded p-0.5 gap-0.5">
+      <div class="flex bg-ui-inset dark:bg-ui-inset rounded-none p-0.5 gap-0.5">
         <button
           v-for="opt in typeOptions"
           :key="opt.value"
           @click="handleTypeSwitch(opt)"
-          class="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] transition-all"
+          class="flex items-center gap-1 px-2 py-0.5 rounded-none text-[10px] transition-all"
           :class="[
             currentType === opt.value
-              ? 'bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm font-bold'
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-300/50 dark:hover:bg-white/5'
+              ? 'bg-white dark:bg-ui-secondary text-ui-link dark:text-ui-text shadow-sm font-bold'
+              : 'text-ui-muted dark:text-ui-muted hover:text-ui-text dark:hover:text-ui-text hover:bg-ui-inset/50 dark:hover:bg-white/5'
           ]"
           :title="opt.label"
         >
@@ -194,7 +194,7 @@ const handleTypeSwitch = (typeOpt) => {
           :width="50"
           v-bind="activeOption.props"
         />
-        <span class="ml-3 text-xs text-gray-400 font-mono">{{ modelValue }}</span>
+        <span class="ml-3 text-xs text-ui-muted font-mono">{{ modelValue }}</span>
       </div>
 
       <div v-else-if="currentType === 'object'">
@@ -208,7 +208,7 @@ const handleTypeSwitch = (typeOpt) => {
         </div>
       </div>
 
-      <div v-else class="text-xs text-gray-500 italic">
+      <div v-else class="text-xs text-ui-muted italic">
         {{ t('暂不支持编辑类型: {}', currentType) }}
       </div>
 

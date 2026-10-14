@@ -8,7 +8,7 @@ import Subscript from '@tiptap/extension-subscript'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
 import Youtube from '@tiptap/extension-youtube'
-import { Mathematics } from '@tiptap/extension-mathematics'
+import { BlockMath, InlineMath } from '@tiptap/extension-mathematics'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 
 import { BiliBili } from '@/components/markdown/plugin/Bilibili.js'
@@ -65,7 +65,8 @@ const editor = useEditor({
     Subscript,
     TaskList,
     TaskItem.configure({ nested: true }),
-    Mathematics,
+    InlineMath.configure({ katexOptions: { trust: false } }),
+    BlockMath.configure({ katexOptions: { displayMode: true, trust: false } }),
     Youtube.configure({ controls: true, nocookie: true }),
     BiliBili,
     Mermaid,
@@ -128,7 +129,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="read-only-container dark:text-white">
+  <div class="read-only-container text-ui-text">
     <EditorContent :editor="editor" />
   </div>
 </template>
@@ -140,8 +141,9 @@ onBeforeUnmount(() => {
 
   :deep(.tiptap) {
     outline: none;
-    width: 90%;
-    margin: 50px auto;
+    width: 100%;
+    max-width: 850px;
+    margin: 40px auto;
     min-height: 500px;
 
     &:focus {
@@ -305,7 +307,7 @@ onBeforeUnmount(() => {
             height: 18px;
             background-color: var(--trans-blue-0);
             border: 1.5px solid var(--trans-blue-2);
-            border-radius: 4px;
+            border-radius: 0;
             display: grid;
             place-content: center;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -361,7 +363,7 @@ onBeforeUnmount(() => {
       margin: 17px 0;
       padding: 17px;
       border-left: 5px solid var(--blue-5) !important;
-      border-radius: 10px;
+      border-radius: 0;
       background-color: var(--trans-blue-0) !important;
       line-height: 2rem;
 
@@ -382,7 +384,7 @@ onBeforeUnmount(() => {
         margin: 0 4px;
         background-color: var(--trans-blue-1);
         padding: 2px 4px;
-        border-radius: 8px;
+        border-radius: 0;
       }
     }
 
@@ -507,7 +509,7 @@ onBeforeUnmount(() => {
       margin: 2rem auto;
       width: 100%;
       max-width: 800px;
-      border-radius: 12px;
+      border-radius: 0;
       overflow: hidden;
       transition: all 0.3s ease;
       border: 1px solid var(--trans-blue-1);
@@ -531,7 +533,7 @@ onBeforeUnmount(() => {
     span[data-type="hidden-text"] {
       background-color: #333 !important;
       color: #333 !important;
-      border-radius: 4px;
+      border-radius: 0;
       padding: 0 4px;
       text-decoration-color: #333 !important;
       transition: all 0.3s ease;

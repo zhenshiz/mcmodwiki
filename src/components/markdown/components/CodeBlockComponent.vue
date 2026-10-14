@@ -1,19 +1,19 @@
 <template>
   <node-view-wrapper class="my-6 relative">
     <div
-      class="rounded-xl border transition-all duration-300 overflow-hidden"
-      :class="isDark ? 'border-slate-700 bg-[#0d1117]' : 'border-blue-100 bg-white'"
-      :style="isFocused ? 'border-color: var(--blue-5); box-shadow: 0 0 12px var(--trans-blue-1);' : ''"
+      class="border-2 border-ui-line transition-colors overflow-hidden"
+      :class="isDark ? 'bg-ui-bg' : 'bg-ui-inset'"
+      :style="isFocused ? 'border-color: var(--blue-5); box-shadow: 2px 2px 0 rgb(var(--ui-shadow));' : ''"
     >
       <div
         class="flex items-center justify-between px-4 py-2 border-b transition-colors select-none"
-        :class="isDark ? 'border-slate-700 bg-slate-800/40' : 'border-blue-50 bg-blue-50/50'"
+        :class="isDark ? 'border-ui-line bg-ui-inset/40' : 'border-ui-link bg-ui-secondary/50'"
       >
         <div class="flex items-center gap-3">
           <div class="flex gap-1.5 mr-2">
-            <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
+            <div class="w-2 h-2 bg-[#ff5f56]"></div>
+            <div class="w-2 h-2 bg-[#ffbd2e]"></div>
+            <div class="w-2 h-2 bg-[#27c93f]"></div>
           </div>
           <span
             class="text-[10px] font-black tracking-widest uppercase italic opacity-80"
@@ -26,8 +26,8 @@
         <div class="flex items-center gap-4">
           <button
             @click="copyCode"
-            class="flex items-center gap-1.5 text-[11px] px-2 py-0.5 rounded transition-all border border-transparent dark:hover:border-slate-600 dark:hover:bg-slate-700/50"
-            :class="isDark ? 'text-slate-400' : 'text-blue-500 hover:bg-blue-50'"
+            class="flex items-center gap-1.5 text-[11px] px-2 py-0.5 rounded-none transition-all border border-transparent dark:hover:border-ui-line dark:hover:bg-ui-inset/50"
+            :class="isDark ? 'text-ui-muted' : 'text-ui-link hover:bg-ui-secondary'"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24"
                  fill="none" stroke="currentColor" stroke-width="2">
@@ -39,7 +39,7 @@
 
           <button
             @click="toggleClose"
-            class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-slate-400"
+            class="p-1 rounded-none hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-ui-muted"
           >
             <svg class="w-3.5 h-3.5 transition-transform duration-200"
                  :class="{'rotate-180': node.attrs.isClosed}" fill="none" viewBox="0 0 24 24"
@@ -54,7 +54,7 @@
       <div
         v-show="!node.attrs.isClosed"
         class="relative overflow-x-auto transition-colors"
-        :class="isDark ? 'bg-[#0d1117]' : 'bg-slate-50/50'"
+        :class="isDark ? 'bg-ui-bg' : 'bg-ui-inset'"
       >
         <code class="p-3 block min-w-full whitespace-pre">
           <node-view-content />

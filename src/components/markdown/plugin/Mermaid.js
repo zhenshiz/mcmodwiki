@@ -10,8 +10,25 @@ export const Mermaid = Node.create({
 
   addAttributes() {
     return {
-      code: { default: 'graph TD\n  A --> B' },
-      hideCode: { default: false },
+      code: {
+        default: 'graph TD\n  A --> B',
+        parseHTML: (element) =>
+          element.getAttribute('data-code') ??
+          element.getAttribute('code') ??
+          (element.matches('pre.mermaid')
+            ? element.textContent
+            : element.querySelector('.mermaid')?.textContent
+          )?.trim(),
+        renderHTML: (attributes) => ({ 'data-code': attributes.code }),
+      },
+      hideCode: {
+        default: false,
+        parseHTML: (element) =>
+          ['true', '1'].includes(
+            element.getAttribute('data-hide-code') ?? element.getAttribute('hideCode'),
+          ),
+        renderHTML: (attributes) => ({ 'data-hide-code': String(attributes.hideCode === true) }),
+      },
     }
   },
 
@@ -21,17 +38,20 @@ export const Mermaid = Node.create({
       new InputRule({
         find: /^```mermaid\s$/,
         handler: ({ state, range, chain }) => {
-          const start = range.from;
-          const end = range.to;
+          const start = range.from
+          const end = range.to
 
           chain()
-            .insertContentAt({ from: start, to: end }, {
-              type: this.name,
-              attrs: {
-                code: 'graph TD\n  Start --> Stop'
+            .insertContentAt(
+              { from: start, to: end },
+              {
+                type: this.name,
+                attrs: {
+                  code: 'graph TD\n  Start --> Stop',
+                },
               },
-            })
-            .run();
+            )
+            .run()
         },
       }),
     ]
@@ -42,31 +62,34 @@ export const Mermaid = Node.create({
       'div',
       mergeAttributes(HTMLAttributes, {
         class: 'mermaid-render-container',
-        'data-type': 'mermaid'
+        'data-type': 'mermaid',
       }),
-      ['div', { class: 'mermaid' }, node.attrs.code]
+      ['div', { class: 'mermaid' }, node.attrs.code],
     ]
   },
 
   parseHTML() {
-    return [
-      { tag: 'div[data-type="mermaid"]' },
-      { tag: 'pre.mermaid' }
-    ]
+    return [{ tag: 'div[data-type="mermaid"]' }, { tag: 'pre.mermaid' }]
   },
 
   addNodeView() {
-    return VueNodeViewRenderer(MermaidComponent)
+    return VueNodeViewRenderer(MermaidComponent, {
+      stopEvent: ({ event }) =>
+        event.target instanceof Element &&
+        !!event.target.closest('button, textarea, input, select'),
+    })
   },
 
   addCommands() {
     return {
-      setMermaid: options => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: options,
-        })
-      },
+      setMermaid:
+        (options) =>
+        ({ commands }) => {
+          return commands.insertContent({
+            type: this.name,
+            attrs: options,
+          })
+        },
     }
   },
   ...createBlockMarkdownSpec({
@@ -80,19 +103,19 @@ export const Mermaid = Node.create({
     let rawCode = token.text || ''
 
     if (!rawCode && token.tokens) {
-      rawCode = token.tokens.map(t => t.text || t.raw || '').join('\n')
+      rawCode = token.tokens.map((t) => t.text || t.raw || '').join('\n')
     }
 
     return {
       type: 'mermaid',
       attrs: {
         hideCode,
-        code: rawCode.trim()
-      }
+        code: rawCode.trim(),
+      },
     }
   },
   renderMarkdown: (node) => {
     const { code, hideCode } = node.attrs
     return `:::mermaid {hideCode="${hideCode}"}\n${code}\n:::\n\n`
-  }
+  },
 })

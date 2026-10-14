@@ -84,17 +84,17 @@ const renderLabel = (item, index) => {
     >
       <template #item="{ item, index }">
         <div
-          class="flex flex-col w-full cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 -ml-2 px-2 py-1.5 rounded transition-colors group"
+          class="flex flex-col w-full cursor-pointer hover:bg-ui-surface dark:hover:bg-white/5 -ml-2 px-2 py-1.5 rounded-none transition-colors group"
           @click="openEdit(item, index)"
         >
           <div class="flex items-center gap-2">
             <Icon
               icon="lucide:edit-3"
               width="12"
-              class="text-[#00c0f5] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+              class="text-ui-link opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
             />
 
-            <span class="text-xs text-gray-700 dark:text-gray-300 font-medium truncate">
+            <span class="text-xs text-ui-text dark:text-ui-text font-medium truncate">
               {{ renderLabel(item, index) }}
             </span>
           </div>

@@ -30,3 +30,146 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+body {
+  margin: 0;
+  background: rgb(var(--ui-bg));
+  color: rgb(var(--ui-text));
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(var(--ui-primary));
+  color: rgb(var(--ui-on-accent));
+}
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid rgb(var(--ui-link));
+  outline-offset: 4px;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+.mc-panel {
+  border: 2px solid rgb(var(--ui-border));
+  background: rgb(var(--ui-surface));
+  color: rgb(var(--ui-text));
+  box-shadow: 5px 5px 0 rgb(var(--ui-shadow));
+}
+.mc-label {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--ui-muted));
+}
+.mc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid rgb(var(--ui-border));
+  background: rgb(var(--ui-inset));
+  color: rgb(var(--ui-text));
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.mc-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  color: rgb(var(--ui-text));
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+.mc-icon-button:hover {
+  background: rgb(var(--ui-inset));
+  border-color: rgb(var(--ui-border));
+}
+.mc-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 14px;
+  color: rgb(var(--ui-text));
+  border: 1px solid transparent;
+}
+.mc-menu-item:hover {
+  background: rgb(var(--ui-inset));
+  border-color: rgb(var(--ui-line));
+}
+.mc-menu-item[aria-current='page'] {
+  background: rgb(var(--ui-secondary));
+  color: rgb(var(--ui-on-accent));
+}
+.mc-pixel-image {
+  image-rendering: pixelated;
+}
+
+/* Shared document typography for the reader and rich-text editor. */
+:is(.read-only-container, .markdown-editor) .tiptap {
+  color: rgb(var(--ui-text));
+  font-size: 16px;
+  line-height: 1.85;
+}
+:is(.read-only-container, .markdown-editor) .tiptap p {
+  margin: 0.85em 0;
+}
+:is(.read-only-container, .markdown-editor) .tiptap :is(blockquote, pre, table, .video-container) {
+  border-radius: 0;
+  box-shadow: none;
+}
+:is(.read-only-container, .markdown-editor) .tiptap blockquote {
+  background: rgb(var(--ui-inset)) !important;
+  border-left: 4px solid rgb(var(--ui-link)) !important;
+}
+:is(.read-only-container, .markdown-editor) .tiptap table :is(th, td) {
+  border-color: rgb(var(--ui-line));
+  padding: 10px 12px;
+}
+:is(.read-only-container, .markdown-editor) .tiptap table th {
+  background: rgb(var(--ui-inset));
+}
+:is(.read-only-container, .markdown-editor) .tiptap p code {
+  border-radius: 0;
+}
+
+.editor-bubble-menu { z-index: 1000; }
+:is(.read-only-container, .markdown-editor) [data-type='block-math'] {
+  padding: 12px;
+  margin: 1em 0;
+  overflow-x: auto;
+  text-align: center;
+}
+.markdown-editor .tiptap-mathematics-render--editable { cursor: pointer; }
+.markdown-editor .tiptap-mathematics-render--editable:hover { background: rgb(var(--ui-inset)); }
+:is(.read-only-container, .markdown-editor) .katex-html { white-space: nowrap; word-break: normal; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.mc-tag--primary {
+  background: rgb(var(--ui-primary));
+  color: rgb(var(--ui-on-accent));
+}
+.mc-tag--secondary {
+  background: rgb(var(--ui-secondary));
+  color: rgb(var(--ui-on-accent));
+}

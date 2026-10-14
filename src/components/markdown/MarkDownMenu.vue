@@ -1,4 +1,5 @@
 <script setup>
+defineOptions({ inheritAttrs: false })
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
@@ -17,7 +18,7 @@ const props = defineProps({
   mode: String
 })
 
-const emit = defineEmits(['update:mode', 'toggle-fullscreen'])
+const emit = defineEmits(['update:mode', 'toggle-fullscreen', 'create-latex'])
 
 // --- 状态变量 ---
 const isShowInsertLink = ref(false)
@@ -176,9 +177,9 @@ const commandList = computed(() => [
     click: () => props.editor.chain().focus().toggleCodeBlock().run()
   },
   {
-    icon: 'lucide:code-xml',
-    lang: t('行内代码'),
-    click: () => props.editor.chain().focus().toggleCode().run()
+    icon: 'lucide:sigma',
+    lang: t('创建 LaTeX 公式'),
+    click: () => emit('create-latex')
   },
   {
     icon: 'lucide:list-todo',
@@ -221,18 +222,19 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="dark:border dark:border-dark-blue dark:rounded sticky top-0 w-full flex items-start sm:items-center h-auto min-h-[43px] z-10 bg-[#edfaff] dark:bg-[#051e2f] px-2">
+    v-bind="$attrs"
+    class="dark:border dark:border-dark-blue dark:rounded-none sticky top-0 w-full flex items-start sm:items-center h-auto min-h-[43px] z-10 bg-ui-inset dark:bg-ui-surface px-2">
     <div class="flex min-w-0 flex-1 flex-row flex-wrap">
       <ModeToggle :mode="mode" @update:mode="arg => emit('update:mode', arg)" />
 
       <template v-for="item in commandList" :key="item.lang">
         <Popover v-if="item.children">
           <template #trigger>
-            <Icon class="icon dark:text-white" :icon="item.icon" />
+            <Icon class="icon dark:text-ui-text" :icon="item.icon" />
           </template>
-          <div class="center flex-col dark:bg-dark-blue shadow-lg rounded bg-white">
+          <div class="center flex-col dark:bg-dark-blue shadow-lg rounded-none bg-white">
             <div v-for="sub in item.children" :key="sub.lang"
-              class="flex flex-row items-center justify-between w-full px-3 py-2 cursor-pointer transition-colors dark:text-white hover:bg-blue-50 dark:hover:bg-slate-700 rounded-md"
+              class="flex flex-row items-center justify-between w-full px-3 py-2 cursor-pointer transition-colors dark:text-ui-text hover:bg-ui-secondary dark:hover:bg-ui-inset rounded-none"
               @click="sub.click">
               <Icon :icon="sub.icon" width="20" height="20" class="mr-3" />
               <div class="text-sm whitespace-nowrap">{{ sub.lang }}</div>
@@ -242,9 +244,11 @@ onUnmounted(() => {
 
         <Popover v-else class="w-[40px] h-[40px]">
           <template #trigger>
-            <Icon @click="item.click" class="icon dark:text-white" :icon="item.icon" />
+            <button type="button" class="icon dark:text-ui-text" :title="item.lang" :aria-label="item.lang" :disabled="!editor" @mousedown.prevent @click="item.click">
+              <Icon :icon="item.icon" />
+            </button>
           </template>
-          <div class="dark:bg-dark-blue text-text-blue p-1 rounded">
+          <div class="dark:bg-dark-blue text-text-blue p-1 rounded-none">
             {{ item.lang }}
           </div>
         </Popover>
@@ -252,9 +256,9 @@ onUnmounted(() => {
 
       <Popover class="w-[40px] h-[40px]">
         <template #trigger>
-          <Icon class="icon dark:text-white" icon="lucide:smile-plus" />
+          <Icon class="icon dark:text-ui-text" icon="lucide:smile-plus" />
         </template>
-        <div class="size-full p-2 rounded dark:bg-dark-blue w-[200px]">
+        <div class="size-full p-2 rounded-none dark:bg-dark-blue w-[200px]">
           <MarkDownEmoji :editor="editor" />
         </div>
       </Popover>
@@ -263,10 +267,11 @@ onUnmounted(() => {
     <div class="flex shrink-0 items-center">
       <Popover>
         <template #trigger>
-          <Icon @click="handleFullscreenToggle" class="icon dark:text-white"
-            :icon="isFullscreen ? 'lucide:minimize' : 'lucide:maximize'" />
+          <button type="button" class="icon dark:text-ui-text" :aria-label="t(isFullscreen ? '退出全屏' : '全屏模式')" @mousedown.prevent @click="handleFullscreenToggle">
+            <Icon :icon="isFullscreen ? 'lucide:minimize' : 'lucide:maximize'" />
+          </button>
         </template>
-        <div class="dark:bg-dark-blue text-text-blue p-1 rounded">
+        <div class="dark:bg-dark-blue text-text-blue p-1 rounded-none">
           {{ t(isFullscreen ? t('退出全屏') : t('全屏模式')) }}
         </div>
       </Popover>
@@ -291,7 +296,7 @@ onUnmounted(() => {
   <Dialog v-if="isShowTable" :title="t('插入表格')" :positive-text="t('插入')" :negative-text="t('取消')"
     :on-positive-click="insertTable" :on-negative-click="() => isShowTable = false"
     :on-mask-click="() => isShowTable = false">
-    <div class="flex flex-row dark:text-white text-xl items-center py-2">
+    <div class="flex flex-row dark:text-ui-text text-xl items-center py-2">
       <Input class="mr-5" v-model="tableModal.row" default-model="search" :placeholder="t('请输入行')" />
       {{ t('行') }}
       <Input class="m-5" v-model="tableModal.col" default-model="search" :placeholder="t('请输入列')" />
@@ -319,7 +324,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 0;
   margin: 5px;
   font-size: 22px;
   background-color: transparent;

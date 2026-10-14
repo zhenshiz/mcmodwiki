@@ -33,7 +33,7 @@ const emit = defineEmits(['update:modelValue'])
 
         <span
           class="text-xs font-medium select-none transition-colors"
-          :class="item ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'"
+          :class="item ? 'text-ui-text dark:text-ui-text' : 'text-ui-muted dark:text-ui-muted'"
         >
           {{ item ? 'True' : 'False' }}
         </span>

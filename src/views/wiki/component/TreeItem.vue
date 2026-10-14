@@ -18,18 +18,20 @@ const handleClick = () => {
 
 <template>
   <div class="tree-item-container">
-    <div @click="handleClick"
-         class="flex items-center py-1.5 px-2 rounded-md cursor-pointer text-sm mb-0.5 transition-all"
-         :class="activeFile === item.fullPath ? 'bg-blue-500/10 text-blue-500' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800/60'">
+    <button type="button" @click="handleClick"
+         :aria-current="activeFile === item.fullPath ? 'page' : undefined"
+         :aria-expanded="item.children?.length ? isOpen : undefined"
+         class="w-full text-left border-l-2 border-transparent flex items-center py-2 px-2 rounded-none cursor-pointer text-sm mb-0.5 transition-all"
+         :class="activeFile === item.fullPath ? 'bg-ui-secondary/20 text-ui-text !border-ui-link font-semibold' : 'text-ui-muted dark:text-ui-text hover:bg-ui-surface dark:hover:bg-ui-inset/60'">
       <div class="w-4 h-4 flex items-center justify-center mr-1.5">
         <Icon v-if="item.children?.length"
               :icon="isOpen ? 'lucide:chevron-down' : 'lucide:chevron-right'" class="opacity-50" />
       </div>
       <span class="truncate">{{ item.label }}</span>
-    </div>
+    </button>
 
     <div v-if="isOpen && item.children?.length"
-         class="ml-3.5 pl-3 border-l border-gray-100 dark:border-slate-800">
+         class="ml-3.5 pl-3 border-l border-ui-line dark:border-ui-line">
       <TreeItem v-for="child in item.children" :key="child.label" :item="child"
                 :active-file="activeFile" @select="f => emit('select', f)" />
     </div>

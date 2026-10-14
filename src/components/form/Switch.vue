@@ -1,40 +1,50 @@
 <script setup>
-
+defineOptions({ name: 'McSwitch' })
+import { computed } from 'vue'
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true
-  },
-  width: {
-    type: Number,
-    default: 60
-  },
-  switchOnColor: {
-    type: String,
-    default: '#00c0f5'
-  },
-  switchOffColor: {
-    type: String,
-    default: '#999'
-  }
+  modelValue: { type: Boolean, required: true },
+  width: { type: Number, default: 52 },
+  disabled: Boolean,
+  switchOnColor: { type: String, default: 'rgb(var(--ui-primary))' },
+  switchOffColor: { type: String, default: 'rgb(var(--ui-inset))' },
 })
-
 const emit = defineEmits(['update:modelValue'])
-const knobWidth = computed(() => props.modelValue ? props.width - 28 : 2)
-
-const toggleSwitch = () => {
-  emit('update:modelValue', !props.modelValue)
-}
+const knobLeft = computed(() => (props.modelValue ? Math.max(0, props.width - 28) : 2))
 </script>
 
 <template>
-  <div
-    class="h-[30px] rounded-full relative cursor-pointer transition duration-300"
-    :style="{width: props.width + 'px',backgroundColor: props.modelValue ? props.switchOnColor:props.switchOffColor}"
-    @click="toggleSwitch"
+  <button
+    type="button"
+    role="switch"
+    :aria-checked="modelValue"
+    :disabled="disabled"
+    class="mc-switch"
+    :style="{ width: `${width}px`, background: modelValue ? switchOnColor : switchOffColor }"
+    @click="emit('update:modelValue', !modelValue)"
   >
-    <div
-      class="w-[26px] h-[26px] rounded-full absolute top-0.5 transition-all duration-300 bg-white"
-      :style="{'left': knobWidth + 'px'}" />
-  </div>
+    <span class="mc-switch-knob" :style="{ left: `${knobLeft}px` }" />
+  </button>
 </template>
+
+<style scoped>
+.mc-switch {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 30px;
+  border: 2px solid rgb(var(--ui-border));
+  cursor: pointer;
+}
+.mc-switch-knob {
+  position: absolute;
+  top: 2px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgb(var(--ui-border));
+  background: rgb(var(--ui-surface));
+  transition: left 120ms;
+}
+.mc-switch:disabled {
+  opacity: 0.45;
+}
+</style>

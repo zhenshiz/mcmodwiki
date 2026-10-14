@@ -1,134 +1,184 @@
 <script setup>
-import { computed, ref } from 'vue'
+defineOptions({ name: 'McSelect' })
+import { computed, nextTick, ref, useId } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
 
 const props = defineProps({
-    // 双向绑定的值
-    modelValue: {
-        type: [String, Number, Boolean, Object],
-        default: ''
-    },
-    // 选项列表
-    options: {
-        type: Array,
-        default: () => []
-    },
-    // 占位符
-    placeholder: {
-        type: String,
-        default: '请选择'
-    },
-    // 是否禁用
-    disabled: {
-        type: Boolean,
-        default: false
-    },
-    // 宽度
-    width: {
-        type: String,
-        default: '100%'
-    },
-    // 🔥 新增参数：是否忽略大小写，默认 true
-    ignoreCase: {
-        type: Boolean,
-        default: true
-    }
+  modelValue: { type: [String, Number, Boolean, Object], default: '' },
+  options: { type: Array, default: () => [] },
+  placeholder: { type: String, default: '请选择' },
+  disabled: Boolean,
+  width: { type: String, default: '100%' },
+  ignoreCase: { type: Boolean, default: true },
 })
-
 const emit = defineEmits(['update:modelValue', 'change'])
-
-// 控制 Popover 显示
 const isOpen = ref(false)
-
-const isValueMatch = (val1, val2) => {
-    if (val1 === val2) return true // 严格相等直接返回
-
-    if (!props.ignoreCase) return false
-
-    const str1 = String(val1 || '').toLowerCase()
-    const str2 = String(val2 || '').toLowerCase()
-
-    return str1 === str2
-}
-
-const selectedOption = computed(() => {
-    return props.options.find(opt => isValueMatch(opt.value, props.modelValue))
-})
-
-// 处理选择
+const triggerRef = ref(null)
+const listRef = ref(null)
+const activeIndex = ref(0)
+const listId = useId()
+const isValueMatch = (a, b) =>
+  a === b || (props.ignoreCase && String(a ?? '').toLowerCase() === String(b ?? '').toLowerCase())
+const selectedOption = computed(() =>
+  props.options.find((option) => isValueMatch(option.value, props.modelValue)),
+)
 const handleSelect = (option) => {
-    if (props.disabled) return
-    emit('update:modelValue', option.value)
-    emit('change', option.value)
+  if (props.disabled) return
+  emit('update:modelValue', option.value)
+  emit('change', option.value)
+  isOpen.value = false
+  triggerRef.value?.focus()
+}
+const focusOption = async (index) => {
+  if (props.disabled || !props.options.length) return
+  isOpen.value = true
+  activeIndex.value = (index + props.options.length) % props.options.length
+  await nextTick()
+  listRef.value?.querySelectorAll('[role="option"]')[activeIndex.value]?.focus()
+}
+const handleKeydown = (event) => {
+  const selectedIndex = Math.max(
+    0,
+    props.options.findIndex((option) => isValueMatch(option.value, props.modelValue)),
+  )
+  const current = isOpen.value ? activeIndex.value : selectedIndex
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault()
+    focusOption(current + (event.key === 'ArrowDown' ? 1 : -1))
+  } else if (event.key === 'Home' || event.key === 'End') {
+    event.preventDefault()
+    focusOption(event.key === 'Home' ? 0 : props.options.length - 1)
+  } else if (event.key === 'Escape') {
     isOpen.value = false
+    triggerRef.value?.focus()
+  } else if (event.key === 'Tab') {
+    isOpen.value = false
+  }
 }
 </script>
 
 <template>
-    <Popover placement="bottom-start" trigger="click" :offset="4" class="w-full" v-model:isOpen="isOpen">
-        <template #trigger>
-            <div class="
-          relative flex items-center justify-between
-          px-3 py-2 rounded border cursor-pointer select-none transition-colors
-          bg-white border-gray-200 text-gray-700
-          hover:border-blue-400
-          dark:bg-[#051e2f] dark:border-dark-blue dark:text-gray-200 dark:hover:border-blue-500
-        " :class="{
-            'opacity-60 cursor-not-allowed': disabled,
-            'border-blue-500 ring-1 ring-blue-500/20': isOpen
-        }" :style="{ width: width }">
-                <div class="flex items-center gap-2 overflow-hidden">
-                    <img v-if="selectedOption?.icon" :src="selectedOption.icon" class="w-5 h-5 object-contain"
-                        alt="icon" />
-
-                    <span class="truncate" :class="{ 'text-gray-400 dark:text-gray-500': !selectedOption }">
-                        {{ selectedOption ? selectedOption.label : placeholder }}
-                    </span>
-                </div>
-
-                <Icon icon="lucide:chevron-down"
-                    class="w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0"
-                    :class="{ 'rotate-180': isOpen }" />
-            </div>
-        </template>
-
-        <div class="max-h-[250px] overflow-y-auto custom-scrollbar -m-2 p-1 min-w-[120px]"
-            :style="{ width: width === '100%' ? 'auto' : width }">
-            <template v-if="options.length > 0">
-                <div v-for="item in options" :key="item.value" class="
-            flex items-center gap-2 px-2 py-2 rounded cursor-pointer transition-colors text-sm
-            hover:bg-blue-50 dark:hover:bg-slate-700
-          " :class="{
-            'text-blue-500 font-medium bg-blue-50 dark:bg-slate-800': isValueMatch(modelValue, item.value),
-            'text-gray-700 dark:text-gray-200': !isValueMatch(modelValue, item.value)
-        }" @click="handleSelect(item)">
-
-                    <img v-if="item.icon" :src="item.icon" class="w-5 h-5 object-contain" alt="icon" />
-
-                    <span class="flex-1 truncate">{{ item.label }}</span>
-
-                    <Icon v-if="isValueMatch(modelValue, item.value)" icon="lucide:check"
-                        class="w-4 h-4 text-blue-500" />
-                </div>
-            </template>
-
-          <div v-else class="text-center text-gray-400 py-3 text-sm">{{ t('暂无数据') }}</div>
-        </div>
-    </Popover>
+  <Popover
+    v-model:isOpen="isOpen"
+    match-trigger-width
+    placement="bottom-start"
+    trigger="click"
+    :offset="6"
+    :disabled="disabled"
+    class="w-full"
+  >
+    <template #trigger>
+      <button
+        ref="triggerRef"
+        type="button"
+        class="mc-select"
+        :class="{ 'mc-select--open': isOpen }"
+        :disabled="disabled"
+        :style="{ width }"
+        aria-haspopup="listbox"
+        :aria-expanded="isOpen"
+        :aria-controls="listId"
+        @keydown="handleKeydown"
+      >
+        <span class="flex items-center gap-2 min-w-0"
+          ><img
+            v-if="selectedOption?.icon"
+            :src="selectedOption.icon"
+            alt=""
+            class="size-5 object-contain"
+          /><span class="truncate" :class="{ 'text-ui-muted': !selectedOption }">{{
+            selectedOption ? selectedOption.label : placeholder
+          }}</span></span
+        >
+        <Icon
+          icon="lucide:chevron-down"
+          width="17"
+          class="shrink-0 transition-transform"
+          :class="{ 'rotate-180': isOpen }"
+        />
+      </button>
+    </template>
+    <div
+      :id="listId"
+      ref="listRef"
+      role="listbox"
+      :aria-label="placeholder"
+      class="mc-select-options"
+      :style="{ minWidth: width === '100%' ? '160px' : width }"
+      @keydown="handleKeydown"
+    >
+      <button
+        v-for="(item, index) in options"
+        :key="index"
+        type="button"
+        role="option"
+        :aria-selected="isValueMatch(modelValue, item.value)"
+        class="mc-select-option"
+        @focus="activeIndex = index"
+        @click="handleSelect(item)"
+      >
+        <img v-if="item.icon" :src="item.icon" alt="" class="size-5 object-contain" /><span
+          class="flex-1 text-left"
+          >{{ item.label }}</span
+        ><Icon v-if="isValueMatch(modelValue, item.value)" icon="lucide:check" width="17" />
+      </button>
+      <p v-if="!options.length" class="py-3 text-center text-sm text-ui-muted">
+        {{ t('暂无数据') }}
+      </p>
+    </div>
+  </Popover>
 </template>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+.mc-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 2px solid rgb(var(--ui-line));
+  background: rgb(var(--ui-surface));
+  color: rgb(var(--ui-text));
+  text-align: left;
+  font-size: 14px;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
+.mc-select:hover:not(:disabled),
+.mc-select--open {
+  border-color: rgb(var(--ui-border));
 }
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);
+.mc-select--open {
+  background: rgb(var(--ui-primary));
+  color: rgb(var(--ui-on-accent));
+}
+.mc-select:disabled {
+  opacity: 0.45;
+}
+.mc-select-options {
+  max-height: 250px;
+  overflow-y: auto;
+  margin: -4px -8px;
+  padding: 2px;
+}
+.mc-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  color: rgb(var(--ui-text));
+}
+.mc-select-option:hover,
+.mc-select-option:focus-visible {
+  background: rgb(var(--ui-inset));
+}
+.mc-select-option[aria-selected='true'] {
+  border-color: rgb(var(--ui-border));
+  background: rgb(var(--ui-secondary));
+  color: rgb(var(--ui-on-accent));
+  font-weight: 700;
 }
 </style>

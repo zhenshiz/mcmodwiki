@@ -142,15 +142,15 @@ const handleRename = (oldKey) => {
 
 <template>
   <div
-    class="w-full border border-gray-200 dark:border-slate-700 rounded bg-white dark:bg-[#002941] mt-2 overflow-hidden shadow-sm">
+    class="w-full border border-ui-line dark:border-ui-line rounded-none bg-white dark:bg-ui-inset mt-2 overflow-hidden shadow-sm">
 
     <div
-      class="flex justify-between items-center px-3 py-1.5 bg-gray-50 dark:bg-[#002033] border-b border-gray-200 dark:border-slate-700">
-      <span class="text-xs font-bold text-gray-500 dark:text-gray-400 select-none">
+      class="flex justify-between items-center px-3 py-1.5 bg-ui-surface dark:bg-ui-surface border-b border-ui-line dark:border-ui-line">
+      <span class="text-xs font-bold text-ui-muted dark:text-ui-muted select-none">
         {{ label }} <span class="text-[10px] opacity-60">(Map)</span>
       </span>
       <button
-        class="text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+        class="text-ui-muted hover:text-green-500 dark:hover:text-green-400 transition-colors"
         @click="handleAdd"
         :title="t('新建项')"
       >
@@ -169,35 +169,35 @@ const handleRename = (oldKey) => {
       >
         <template #item="{ element }">
           <div
-            class="group flex flex-col border-b border-gray-100 dark:border-slate-700/50 last:border-0 bg-white dark:bg-[#002941]">
+            class="group flex flex-col border-b border-ui-line dark:border-ui-line/50 last:border-0 bg-white dark:bg-ui-inset">
             <div
-              class="flex items-center p-2 gap-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+              class="flex items-center p-2 gap-2 hover:bg-ui-surface dark:hover:bg-white/5 transition-colors">
 
               <div
-                class="drag-handle mt-0.5 cursor-move text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 shrink-0">
+                class="drag-handle mt-0.5 cursor-move text-ui-muted hover:text-ui-muted dark:text-ui-muted dark:hover:text-ui-text shrink-0">
                 <Icon icon="lucide:grip-vertical" width="14" />
               </div>
 
               <div class="flex-1 flex items-center gap-2 cursor-pointer min-w-0"
                    @click="openEdit(element.key, element.value)">
                 <Icon icon="lucide:key" width="12" class="text-amber-500 shrink-0" />
-                <span class="text-xs font-bold text-gray-700 dark:text-gray-200 truncate"
+                <span class="text-xs font-bold text-ui-text dark:text-ui-text truncate"
                       :title="element.key">
                   {{ element.key }}
                 </span>
 
-                <span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate ml-1">
+                <span class="text-[10px] text-ui-muted dark:text-ui-muted font-mono truncate ml-1">
                   {{ renderLabel(element.value, element.key) }}
                 </span>
               </div>
 
               <div
                 class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button class="p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                <button class="p-1 text-ui-muted hover:text-ui-link transition-colors"
                         :title="t('重命名 Key')" @click.stop="handleRename(element.key)">
                   <Icon icon="lucide:pencil" width="12" />
                 </button>
-                <button class="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                <button class="p-1 text-ui-muted hover:text-red-500 transition-colors"
                         :title="t('删除')" @click.stop="handleRemove(element.key)">
                   <Icon icon="lucide:trash-2" width="12" />
                 </button>
@@ -208,7 +208,7 @@ const handleRename = (oldKey) => {
       </draggable>
 
       <div v-else
-           class="py-4 text-center text-xs text-gray-400 dark:text-gray-500 select-none">
+           class="py-4 text-center text-xs text-ui-muted dark:text-ui-muted select-none">
         {{ t('暂无键值对') }}
       </div>
     </div>

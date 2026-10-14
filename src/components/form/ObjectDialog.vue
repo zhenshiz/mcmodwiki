@@ -65,13 +65,13 @@ const handleClose = () => {
 
     <template #footer>
       <button
-        class="px-4 py-1.5 rounded text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10"
+        class="px-4 py-1.5 rounded-none text-sm text-ui-muted hover:bg-ui-surface dark:text-ui-text dark:hover:bg-white/10"
         @click="handleClose"
       >
         <Translate message="取消" />
       </button>
       <button
-        class="px-4 py-1.5 rounded text-sm font-medium text-white bg-[#00c0f5] hover:bg-[#00ace6]"
+        class="px-4 py-1.5 rounded-none text-sm font-medium text-white bg-ui-link hover:bg-ui-link/80"
         @click="handleConfirm"
       >
         <Translate message="保存修改" />

@@ -20,7 +20,7 @@ const props = defineProps({
   },
   lineColor: {
     type: String,
-    default: '#00c0f5'
+    default: 'rgb(var(--ui-link))'
   }
 })
 
@@ -33,10 +33,10 @@ const goto = () => {
 </script>
 
 <template>
-  <div class="center cursor-pointer relative before-line after-line"
-       :class="hoverLineType" @click="goto">
+  <a class="center cursor-pointer relative before-line after-line"
+       :href="href" :class="hoverLineType" @click.prevent="goto">
     <slot></slot>
-  </div>
+  </a>
 </template>
 
 <style scoped lang="scss">

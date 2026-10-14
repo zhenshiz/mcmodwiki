@@ -199,7 +199,7 @@ const handleUpdate = (field, val) => {
       </InspectorItem>
     </template>
 
-    <div v-if="sortedFields.length === 0" class="text-xs text-slate-500 p-2 text-center">
+    <div v-if="sortedFields.length === 0" class="text-xs text-ui-muted p-2 text-center">
       {{ t('无配置项') }}
     </div>
   </div>

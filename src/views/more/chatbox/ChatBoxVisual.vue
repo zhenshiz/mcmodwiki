@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeUnmount, onMounted } from 'vue'
-import { useChatBoxEditorStore, usePageStore } from '@/stores'
+import { useChatBoxEditorStore } from '@/stores'
 import MenuBar from './component/MenuBar.vue'
 import FileExplorer from './component/FileExplorer.vue'
 import ResourcePanel from './component/ResourcePanel.vue'
@@ -67,8 +67,6 @@ const startResize = (direction, e) => {
 }
 
 onMounted(() => {
-  usePageStore().isDark = true
-  document.body.classList.add('dark')
   window.addEventListener('keydown', handleGlobalKeydown)
 })
 
@@ -78,38 +76,38 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-screen bg-[#001529] text-slate-300 overflow-hidden font-sans select-none">
+  <div class="flex flex-col h-[100dvh] w-full bg-ui-bg text-ui-text overflow-hidden font-sans select-none">
 
-    <MenuBar class="h-[30px] shrink-0 border-b border-slate-700 bg-[#001529]" />
+    <MenuBar class="h-[30px] shrink-0 border-b border-ui-line bg-ui-bg" />
 
     <div class="flex flex-1 overflow-hidden">
 
       <div
         :style="{ width: leftWidth + 'px' }"
-        class="flex flex-col border-r border-slate-700 bg-[#002033] relative shrink-0"
+        class="flex flex-col border-r border-ui-line bg-ui-surface relative shrink-0"
       >
         <div class="flex-1 overflow-hidden flex flex-col">
           <FileExplorer />
         </div>
 
         <div
-          class="absolute top-0 right-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 transition-colors z-20 opacity-0 hover:opacity-100"
+          class="absolute top-0 right-0 bottom-0 w-1 cursor-col-resize hover:bg-ui-secondary transition-colors z-20 opacity-0 hover:opacity-100"
           @mousedown="startResize('left', $event)"
         ></div>
       </div>
 
-      <div class="flex-1 flex flex-col min-w-0 bg-[#001529]">
+      <div class="flex-1 flex flex-col min-w-0 bg-ui-bg">
 
-        <div class="flex-1 relative overflow-hidden bg-[#000d1a]">
+        <div class="flex-1 relative overflow-hidden bg-ui-bg">
           <Workspace />
         </div>
 
         <div
           :style="{ height: bottomHeight + 'px' }"
-          class="border-t border-slate-700 bg-[#002033] relative shrink-0"
+          class="border-t border-ui-line bg-ui-surface relative shrink-0"
         >
           <div
-            class="absolute top-[-3px] left-0 right-0 h-1.5 cursor-row-resize hover:bg-blue-500 transition-colors z-20 opacity-0 hover:opacity-100"
+            class="absolute top-[-3px] left-0 right-0 h-1.5 cursor-row-resize hover:bg-ui-secondary transition-colors z-20 opacity-0 hover:opacity-100"
             @mousedown="startResize('bottom', $event)"
           ></div>
 
@@ -119,26 +117,26 @@ onBeforeUnmount(() => {
 
       <div
         :style="{ width: rightWidth + 'px' }"
-        class="flex flex-col border-l border-slate-700 bg-[#002033] relative shrink-0"
+        class="flex flex-col border-l border-ui-line bg-ui-surface relative shrink-0"
       >
         <div
-          class="absolute top-0 left-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 transition-colors z-20 opacity-0 hover:opacity-100"
+          class="absolute top-0 left-0 bottom-0 w-1 cursor-col-resize hover:bg-ui-secondary transition-colors z-20 opacity-0 hover:opacity-100"
           @mousedown="startResize('right', $event)"
         ></div>
 
         <div
           :style="{ height: hierarchyHeight + 'px' }"
-          class="border-b border-slate-700 flex flex-col relative shrink-0"
+          class="border-b border-ui-line flex flex-col relative shrink-0"
         >
           <HierarchyPanel />
 
           <div
-            class="absolute bottom-[-2px] left-0 right-0 h-1 cursor-row-resize hover:bg-blue-500 transition-colors z-20 opacity-0 hover:opacity-100"
+            class="absolute bottom-[-2px] left-0 right-0 h-1 cursor-row-resize hover:bg-ui-secondary transition-colors z-20 opacity-0 hover:opacity-100"
             @mousedown="startResize('hierarchy', $event)"
           ></div>
         </div>
 
-        <div class="flex-1 flex flex-col overflow-hidden bg-[#002941]">
+        <div class="flex-1 flex flex-col overflow-hidden bg-ui-inset">
           <InspectorPanel />
         </div>
       </div>

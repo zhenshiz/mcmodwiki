@@ -87,19 +87,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="workspaceRef" class="w-full h-full relative overflow-hidden bg-[#1e1e1e] select-none"
+  <div ref="workspaceRef" class="w-full h-full relative overflow-hidden bg-ui-bg select-none"
        style="overscroll-behavior: none; touch-action: none;" @mousedown="handleMouseDown"
        @mousemove="handleMouseMove"
        @wheel="handleWheel">
 
     <div class="absolute inset-0 pointer-events-none opacity-20" :style="{
-      backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+      backgroundImage: 'radial-gradient(rgb(var(--ui-muted)) 1px, transparent 1px)',
       backgroundSize: `${20 * scale}px ${20 * scale}px`,
       backgroundPosition: `${translateX}px ${translateY}px`
     }"></div>
 
     <div v-if="store.viewMode === 'empty'"
-         class="absolute inset-0 flex flex-col items-center justify-center text-slate-600 gap-2 pointer-events-none">
+         class="absolute inset-0 flex flex-col items-center justify-center text-ui-muted gap-2 pointer-events-none">
       <div class="text-4xl opacity-20">⌘</div>
       <div>{{ t('请在左侧选择一个文件开始编辑') }}</div>
     </div>
@@ -117,25 +117,25 @@ onUnmounted(() => {
 
     <div
       v-if="store.viewMode === 'theme'"
-      class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#001529]/90 backdrop-blur border border-slate-700 rounded-full px-4 py-2 shadow-xl z-50 transition-opacity hover:opacity-100 opacity-80"
+      class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-ui-bg/90 backdrop-blur border border-ui-line rounded-none px-4 py-2 shadow-xl z-50 transition-opacity hover:opacity-100 opacity-80"
       @mousedown.stop>
       <div class="flex items-center gap-2 group">
-        <Icon icon="lucide:minus" class="cursor-pointer hover:text-white text-slate-400" width="14"
+        <Icon icon="lucide:minus" class="cursor-pointer hover:text-ui-text text-ui-muted" width="14"
               @click="scale = Math.max(0.1, scale - 0.1)" />
         <input type="range" v-model.number="scale" min="0.1" max="3.0" step="0.05"
-               class="w-24 h-1.5 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500" />
-        <Icon icon="lucide:plus" class="cursor-pointer hover:text-white text-slate-400" width="14"
+               class="w-24 h-1.5 bg-ui-inset rounded-none appearance-none cursor-pointer accent-blue-500" />
+        <Icon icon="lucide:plus" class="cursor-pointer hover:text-ui-text text-ui-muted" width="14"
               @click="scale = Math.min(3.0, scale + 0.1)" />
         <span
-          class="w-10 text-right cursor-pointer hover:text-blue-400 font-mono text-xs text-slate-300 select-none"
+          class="w-10 text-right cursor-pointer hover:text-ui-link font-mono text-xs text-ui-text select-none"
           @click="resetView">{{ Math.round(scale * 100) }}%</span>
       </div>
-      <div class="w-px h-4 bg-slate-600"></div>
+      <div class="w-px h-4 bg-ui-inset"></div>
       <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-500">{{ t('比例') }}</span>
+        <span class="text-xs text-ui-muted">{{ t('比例') }}</span>
         <select v-model="currentRatio"
-                class="bg-transparent text-xs text-slate-300 outline-none cursor-pointer hover:text-white border-b border-transparent hover:border-slate-500 transition-colors">
-          <option v-for="r in ratios" :key="r.value" :value="r.value" class="bg-[#002033]">
+                class="bg-transparent text-xs text-ui-text outline-none cursor-pointer hover:text-ui-text border-b border-transparent hover:border-ui-line transition-colors">
+          <option v-for="r in ratios" :key="r.value" :value="r.value" class="bg-ui-surface">
             {{ r.label }}
           </option>
         </select>
@@ -150,7 +150,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 12px;
   width: 12px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: rgb(var(--ui-link));
   cursor: pointer;
   margin-top: -3px;
 }
@@ -159,7 +159,7 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 6px;
   cursor: pointer;
-  background: #334155;
+  background: rgb(var(--ui-line));
   border-radius: 3px;
 }
 </style>

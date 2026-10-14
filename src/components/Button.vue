@@ -1,67 +1,93 @@
 <script setup>
+defineOptions({ name: 'McButton' })
 import { computed } from 'vue'
 
 const props = defineProps({
-  // 按钮主色调（文字颜色 / Hover时的背景色）
-  color: { type: String, default: '#208bff' },
-  // 按钮背景色（Hover时的文字颜色 / 非透明模式下的背景色）
-  background: { type: String, default: '#fff' },
-  // 是否背景透明（默认透明，Hover时才显示背景色）
+  variant: { type: String, default: 'outline' },
+  color: String,
+  background: String,
   themeTransparent: { type: Boolean, default: true },
-  // 圆角大小
-  roundedSize: { type: Number, default: 5 }
+  roundedSize: { type: Number, default: 0 },
+  type: { type: String, default: 'button' },
 })
 
 const buttonStyles = computed(() => {
-  // 1. 计算常态下的背景色
-  const normalBg = props.themeTransparent ? 'transparent' : props.background
-
-  return {
-    // --- 布局变量 ---
-    '--radius': `${props.roundedSize}px`,
-    '--btn-border': props.color,
-
-    // --- 常态颜色 (Normal) ---
-    '--btn-text': props.color,
-    '--btn-bg': normalBg,
-
-    // --- 悬停颜色 (Hover) - 默认反转逻辑 ---
-    // Hover 时，背景变成主色(color)，文字变成原本的背景色(background)
-    '--btn-hover-text': props.background,
-    '--btn-hover-bg': props.color
+  const styles = { borderRadius: `${props.roundedSize}px` }
+  // Preserve custom colors for existing callers while new buttons use semantic variants.
+  if (props.color) {
+    styles['--button-text'] = props.color
+    styles['--button-hover-bg'] = props.color
+    styles['--button-hover-text'] = props.background || 'rgb(var(--ui-surface))'
   }
+  if (!props.themeTransparent && props.background) styles['--button-bg'] = props.background
+  return styles
 })
 </script>
 
 <template>
-  <button
-    class="
-      /* 布局与排版 */
-      flex items-center justify-center
-      px-3 py-1.5 text-lg select-none
-      border
-
-      /* 动态圆角 */
-      rounded-[var(--radius)]
-
-      /* 常态颜色绑定 */
-      text-[var(--btn-text)]
-      bg-[var(--btn-bg)]
-      border-[var(--btn-border)]
-
-      /* 交互与动画 */
-      cursor-pointer
-      transition-colors duration-300 ease-in-out
-
-      /* Hover 状态：颜色反转 */
-      hover:text-[var(--btn-hover-text)]
-      hover:bg-[var(--btn-hover-bg)]
-
-      /* Active 状态：点击缩放反馈 */
-      active:scale-95
-    "
-    :style="buttonStyles"
-  >
-    <slot></slot>
+  <button :type="type" class="mc-button" :class="`mc-button--${variant}`" :style="buttonStyles">
+    <slot />
   </button>
 </template>
+
+<style scoped>
+.mc-button {
+  --button-bg: rgb(var(--ui-surface));
+  --button-text: rgb(var(--ui-text));
+  --button-hover-bg: rgb(var(--ui-inset));
+  --button-hover-text: rgb(var(--ui-text));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 2px solid rgb(var(--ui-border));
+  background: var(--button-bg);
+  color: var(--button-text);
+  box-shadow: 3px 3px 0 rgb(var(--ui-shadow));
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    color 120ms,
+    transform 120ms,
+    box-shadow 120ms;
+}
+.mc-button--primary {
+  --button-bg: rgb(var(--ui-primary));
+  --button-text: rgb(var(--ui-on-accent));
+  --button-hover-bg: rgb(var(--ui-primary) / 0.8);
+  --button-hover-text: rgb(var(--ui-on-accent));
+}
+.mc-button--secondary {
+  --button-bg: rgb(var(--ui-secondary));
+  --button-text: rgb(var(--ui-on-accent));
+  --button-hover-bg: rgb(var(--ui-secondary) / 0.8);
+  --button-hover-text: rgb(var(--ui-on-accent));
+}
+.mc-button--ghost {
+  --button-bg: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.mc-button--danger {
+  --button-bg: rgb(var(--ui-danger-bg));
+  --button-text: rgb(var(--ui-danger));
+  --button-hover-bg: rgb(var(--ui-danger-bg));
+}
+.mc-button:hover:not(:disabled) {
+  background: var(--button-hover-bg);
+  color: var(--button-hover-text);
+}
+.mc-button:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+.mc-button:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+</style>

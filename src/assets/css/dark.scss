@@ -1,23 +1,20 @@
 body.dark {
-  --font-color-0: #b3b3b3;
-  --font-color-1: #c5c5c5;
-  --font-color-2: #dddddd;
-  --font-color-3: #e0e0e0;
-
-  --white: #0f1720;
-
-  --blue-0: #00152e;
-  --blue-5: #80ccff;
-
-  --red-0: #52000c;
-
-  --trans-white-2: #0d2034d9;
-  --trans-white-5: #0f253d8e;
-
-  --trans-blue-0: #09132077;
-  --trans-blue-1: #3d608477;
-  --trans-blue-2: #0b397e77;
-
-  --trans-pink-0: #21131a77;
-  --trans-pink-1: #aa608477;
+  color-scheme: dark;
+  --ui-bg: 21 27 23;
+  --ui-surface: 33 43 36;
+  --ui-inset: 42 54 44;
+  --ui-text: 234 240 229;
+  --ui-muted: 173 187 169;
+  --ui-border: 112 132 105;
+  --ui-line: 65 81 65;
+  --ui-shadow: 8 13 9;
+  --ui-primary: 201 230 107;
+  --ui-secondary: 105 201 211;
+  --ui-on-accent: 24 37 27;
+  --ui-link: 129 218 224;
+  --ui-danger: 255 151 147;
+  --ui-danger-bg: 65 35 35;
+  --ui-warning: 239 203 120;
+  --ui-warning-bg: 56 47 29;
+  --ui-info-bg: 30 51 50;
 }

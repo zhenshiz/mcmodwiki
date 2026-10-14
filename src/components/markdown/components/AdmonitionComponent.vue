@@ -1,7 +1,7 @@
 <template>
   <node-view-wrapper class="admonition-wrapper my-5">
     <div
-      class="admonition-container rounded-lg border-l-4 shadow-sm transition-all duration-300"
+      class="admonition-container border border-ui-line border-l-4 transition-colors"
       :class="[theme.container, theme.textColor]"
     >
       <div class="admo-icon-fixed flex items-center px-4 py-2 pointer-events-none">
@@ -21,27 +21,19 @@ import { Icon } from '@iconify/vue'
 const props = defineProps(nodeViewProps)
 
 const themeMap = {
-  info: {
-    container: 'bg-cyan-50/50 border-cyan-500 dark:bg-cyan-950/30 dark:border-cyan-800',
-    textColor: 'text-cyan-800 dark:text-cyan-300',
-    icon: 'material-symbols:info-outline'
-  },
-  warning: {
-    container: 'bg-rose-50/50 border-rose-400 dark:bg-rose-950/30 dark:border-rose-900',
-    textColor: 'text-rose-900 dark:text-rose-300',
-    icon: 'material-symbols:warning-outline-rounded'
-  },
-  important: {
-    container: 'bg-amber-50/50 border-amber-400 dark:bg-amber-950/30 dark:border-amber-900',
-    textColor: 'text-amber-900 dark:text-amber-300',
-    icon: 'material-symbols:priority-high-rounded'
-  }
+  info: { container: 'admonition-info', textColor: 'text-ui-text', icon: 'lucide:info' },
+  warning: { container: 'admonition-warning', textColor: 'text-ui-text', icon: 'lucide:triangle-alert' },
+  important: { container: 'admonition-important', textColor: 'text-ui-text', icon: 'lucide:circle-alert' }
 }
 
 const theme = computed(() => themeMap[props.node.attrs.type] || themeMap.info)
 </script>
 
 <style lang="scss" scoped>
+.admonition-info { background: rgb(var(--ui-info-bg)); border-left-color: rgb(var(--ui-link)); }
+.admonition-warning { background: rgb(var(--ui-warning-bg)); border-left-color: rgb(var(--ui-warning)); }
+.admonition-important { background: rgb(var(--ui-danger-bg)); border-left-color: rgb(var(--ui-danger)); }
+
 .admonition-container {
   display: flex;
   flex-direction: column;

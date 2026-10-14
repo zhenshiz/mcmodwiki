@@ -1,5 +1,7 @@
 <script setup>
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+defineOptions({ name: 'McModal' })
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { t } from '@/languages'
 
 const props = defineProps({
   // 控制显示隐藏
@@ -13,10 +15,23 @@ const props = defineProps({
   // 按 ESC 是否关闭
   closeOnEsc: { type: Boolean, default: true },
   // 是否显示右上角关闭按钮
-  closable: { type: Boolean, default: true }
+  closable: { type: Boolean, default: true },
+  teleportTo: { type: [String, Object], default: 'body' },
 })
 
 const emit = defineEmits(['update:show', 'close', 'after-leave'])
+const panelRef = ref(null)
+let previousFocus = null
+const focusPanel = async () => {
+  previousFocus = document.activeElement
+  await nextTick()
+  const panel = panelRef.value
+  ;(
+    panel?.querySelector('input:not([disabled]), textarea, math-field') ||
+    panel?.querySelector('button:not([disabled])') ||
+    panel
+  )?.focus()
+}
 
 // --- 1. 样式计算 ---
 const containerStyle = computed(() => {
@@ -24,7 +39,7 @@ const containerStyle = computed(() => {
   return {
     width: w,
     // 移动端适配，两边留出一点空隙
-    maxWidth: 'calc(100vw - 32px)'
+    maxWidth: 'calc(100vw - 32px)',
   }
 })
 
@@ -45,20 +60,26 @@ const unlockScroll = () => {
 }
 
 // --- 3. 生命周期与监听 ---
-watch(() => props.show, (val) => {
-  if (val) {
-    lockScroll()
-    if (props.closeOnEsc) window.addEventListener('keydown', handleKeydown)
-  } else {
-    unlockScroll()
-    window.removeEventListener('keydown', handleKeydown)
-  }
-})
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      lockScroll()
+      focusPanel()
+      window.addEventListener('keydown', handleKeydown)
+    } else {
+      unlockScroll()
+      previousFocus?.focus()
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  },
+)
 
 onMounted(() => {
   if (props.show) {
     lockScroll()
-    if (props.closeOnEsc) window.addEventListener('keydown', handleKeydown)
+    focusPanel()
+    window.addEventListener('keydown', handleKeydown)
   }
 })
 
@@ -78,17 +99,36 @@ const handleMaskClick = () => {
 }
 
 const handleKeydown = (e) => {
-  if (e.key === 'Escape') doClose()
+  if (e.key === 'Escape' && props.closeOnEsc) doClose()
+  if (e.key !== 'Tab') return
+  const items = [
+    ...(panelRef.value?.querySelectorAll(
+      'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), math-field, [tabindex="0"]',
+    ) || []),
+  ].filter((element) => element.getClientRects().length)
+  const first = items[0]
+  const last = items[items.length - 1]
+  if (!first) {
+    e.preventDefault()
+    panelRef.value?.focus()
+    return
+  }
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :to="teleportTo">
     <div
       class="fixed inset-0 z-[2000] flex items-center justify-center pointer-events-none"
       :class="{ 'pointer-events-auto': show }"
     >
-
       <Transition
         enter-active-class="transition-opacity duration-300 ease-out"
         enter-from-class="opacity-0"
@@ -99,6 +139,8 @@ const handleKeydown = (e) => {
       >
         <div
           v-if="show"
+          ref="panelRef"
+          tabindex="-1"
           class="absolute inset-0 bg-black/45 backdrop-blur-[1px] pointer-events-auto"
           @click="handleMaskClick"
         ></div>
@@ -115,33 +157,29 @@ const handleKeydown = (e) => {
       >
         <div
           v-if="show"
-          class="
-            relative flex flex-col pointer-events-auto
-            bg-white dark:bg-[#002941]
-            text-[#333639] dark:text-gray-200
-            rounded-[3px] shadow-xl
-            dark:border dark:border-slate-700
-            max-h-[90vh]
-          "
+          ref="panelRef"
+          tabindex="-1"
+          class="relative flex flex-col pointer-events-auto mc-panel max-h-[90vh]"
           :style="containerStyle"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="title || undefined"
         >
           <div
             v-if="title || $slots.header"
-            class="px-6 pt-5 pb-2 text-[18px] font-medium flex justify-between items-start shrink-0"
+            class="px-6 py-4 border-b border-ui-line text-[18px] font-bold flex justify-between items-start shrink-0"
           >
             <slot name="header">{{ title }}</slot>
 
-            <div
+            <button
+              type="button"
+              :aria-label="t('关闭')"
               v-if="closable"
               @click="doClose"
-              class="
-                -mr-2 -mt-1 rounded transition-colors cursor-pointer
-                text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-white
-                focus:outline-none
-              "
+              class="mc-icon-button -mr-3 -my-2"
             >
-              x
-            </div>
+              ×
+            </button>
           </div>
 
           <div class="px-6 py-4 text-[14px] leading-[1.6] overflow-y-auto custom-scrollbar">
@@ -156,7 +194,6 @@ const handleKeydown = (e) => {
           </div>
         </div>
       </Transition>
-
     </div>
   </Teleport>
 </template>

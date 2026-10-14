@@ -165,7 +165,7 @@ watch([language, () => route.params.name], () => loadModInfo())
 </script>
 
 <template>
-  <div class="flex h-[calc(100dvh-4rem)] w-full bg-white dark:bg-dark-blue overflow-hidden">
+  <div class="flex h-[calc(100dvh-4rem)] w-full bg-ui-bg overflow-hidden">
     <div
       v-if="mobileNavVisible"
       class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/45 lg:hidden"
@@ -173,34 +173,34 @@ watch([language, () => route.params.name], () => loadModInfo())
     />
 
     <aside
-      class="fixed left-0 top-16 bottom-0 z-50 w-72 max-w-[85vw] border-r bg-white dark:border-slate-800 flex flex-col shrink-0 dark:bg-dark-blue transition-transform duration-200 lg:static lg:z-auto lg:max-w-none lg:translate-x-0 lg:bg-gray-50/30 lg:dark:bg-transparent"
+      class="fixed left-0 top-16 bottom-0 z-50 w-72 max-w-[85vw] border-r border-ui-line bg-ui-surface dark:border-ui-line flex flex-col shrink-0 dark:bg-dark-blue transition-transform duration-200 lg:static lg:z-auto lg:max-w-none lg:translate-x-0 lg:bg-ui-surface/30 lg:dark:bg-transparent"
       :class="mobileNavVisible ? 'translate-x-0' : '-translate-x-full'">
       <div class="p-6 h-full flex flex-col">
         <div class="flex items-center justify-between mb-6">
-          <h1 class="text-xl font-bold dark:text-white truncate" :title="pageInfo.name">
+          <h1 class="text-xl font-bold dark:text-ui-text truncate" :title="pageInfo.name">
             {{ pageInfo.name }}</h1>
           <span
-            class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-sm">
+            class="mc-tag font-mono">
                         {{ pageInfo.version }}
                     </span>
         </div>
 
         <div v-if="pageInfo.availableHere.length" class="mb-6">
-          <div class="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-wider px-2">
+          <div class="text-[10px] font-bold text-ui-muted mb-3 uppercase tracking-wider px-2">
             {{ t('获取途径') }}
           </div>
           <div class="space-y-2">
             <div v-for="(item, index) in pageInfo.availableHere" :key="index"
                  @click="openWeb(item.href)"
-                 class="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border border-transparent hover:border-blue-500/20 group">
+                 class="flex items-center justify-between p-2 rounded-none cursor-pointer transition-all hover:bg-ui-inset border border-transparent hover:border-ui-link/20 group">
               <div class="flex items-center gap-3">
                 <Icon :icon="item.icon.icon" width="20" height="20"
                       :color="isDark ? item.icon.darkColor : item.icon.lightColor" />
-                <span class="text-sm dark:text-gray-300 group-hover:text-blue-500">{{ item.icon.name
+                <span class="text-sm dark:text-ui-text group-hover:text-ui-link">{{ item.icon.name
                   }}</span>
               </div>
               <Icon icon="quill:link-out" width="16"
-                    class="text-gray-400 group-hover:text-blue-500" />
+                    class="text-ui-muted group-hover:text-ui-link" />
             </div>
           </div>
         </div>
@@ -209,17 +209,17 @@ watch([language, () => route.params.name], () => loadModInfo())
           <div class="space-y-2">
             <div v-for="(item, index) in pageInfo.moreUtil()" :key="index"
                  @click="router.push(item.router)"
-                 class="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-500/5 border-l-4 border-l-transparent hover:border-l-blue-500 bg-gray-100/50 dark:bg-slate-800/50">
-                            <span class="text-sm dark:text-gray-300 ml-2">{{ item.lang
+                 class="flex items-center p-2 rounded-none cursor-pointer transition-all hover:bg-ui-inset border-l-4 border-l-transparent hover:border-l-blue-500 bg-ui-surface/50 dark:bg-ui-inset/50">
+                            <span class="text-sm dark:text-ui-text ml-2">{{ item.lang
                               }}</span>
             </div>
           </div>
         </div>
 
-        <div class="h-px bg-gray-200 dark:bg-slate-800 mb-6" />
+        <div class="h-px bg-ui-inset dark:bg-ui-inset mb-6" />
 
         <nav class="flex-1 overflow-y-auto custom-scrollbar pr-2">
-          <div class="text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest px-2">
+          <div class="text-[10px] font-bold text-ui-muted mb-4 uppercase tracking-widest px-2">
             {{ t('文档') }}
           </div>
           <div class="tree-container">
@@ -231,32 +231,32 @@ watch([language, () => route.params.name], () => loadModInfo())
     </aside>
 
     <main
-      class="min-w-0 flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-slate-50/30 dark:bg-transparent">
-      <div class="sticky top-0 z-20 flex h-12 items-center gap-3 border-b bg-white/95 px-4 backdrop-blur dark:border-slate-800 dark:bg-dark-blue/95 lg:hidden">
+      class="min-w-0 flex-1 overflow-y-auto scroll-smooth custom-scrollbar bg-ui-bg">
+      <div class="sticky top-0 z-20 flex h-12 items-center gap-3 border-b bg-white/95 px-4 backdrop-blur dark:border-ui-line dark:bg-dark-blue/95 lg:hidden">
         <button
           type="button"
-          class="flex size-9 shrink-0 items-center justify-center rounded-lg text-blue-500 hover:bg-blue-500/10"
+          class="flex size-9 shrink-0 items-center justify-center rounded-none text-ui-link hover:bg-ui-secondary/10"
           :aria-label="t('打开文档目录')"
           @click="mobileNavVisible = true"
         >
           <Icon icon="lucide:panel-left-open" width="22" height="22" />
         </button>
-        <div class="min-w-0 flex-1 truncate font-bold dark:text-white">{{ pageInfo.name }}</div>
-        <div class="max-w-[40%] truncate text-xs text-gray-400">{{ currentFileName.replace(/\.md$/i, '') }}</div>
+        <div class="min-w-0 flex-1 truncate font-bold dark:text-ui-text">{{ pageInfo.name }}</div>
+        <div class="max-w-[40%] truncate text-xs text-ui-muted">{{ currentFileName.replace(/\.md$/i, '') }}</div>
       </div>
 
-      <div class="mx-auto min-h-full px-4 sm:px-8 lg:px-12">
+      <div class="mx-auto max-w-[980px] min-h-full px-5 sm:px-8 lg:px-12">
         <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer"
                           :content="pageInfo.markdown" />
       </div>
     </main>
 
-    <aside class="w-64 hidden xl:block border-l dark:border-slate-800 p-8 shrink-0 overflow-y-auto">
+    <aside class="w-56 hidden xl:block border-ui-line border-l dark:border-ui-line p-8 shrink-0 overflow-y-auto">
       <div class="sticky top-10 max-h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide">
-        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
+        <div class="text-[10px] font-bold text-ui-muted uppercase tracking-widest mb-6">
           {{ t('目录') }}
         </div>
-        <ul class="space-y-1 relative border-l dark:border-slate-800">
+        <ul class="space-y-1 relative border-l dark:border-ui-line">
           <li v-for="h in mdRenderer?.headings" :key="h.id"
               :style="{ paddingLeft: `${(h.level - 1) * 0.75}rem` }"
               class="transition-all duration-300"
@@ -266,8 +266,8 @@ watch([language, () => route.params.name], () => loadModInfo())
                         }">
             <a href="javascript:;" @click="mdRenderer.scrollToHeading(h.id)"
                class="block py-1.5 text-xs border-l-2 -ml-[2px] pl-4 transition-colors" :class="(h.isActive && !h.isScrolledOver)
-                                ? 'text-blue-500 border-blue-500 font-bold'
-                                : 'text-gray-500 border-transparent hover:text-gray-700 dark:hover:text-gray-300'">
+                                ? 'text-ui-link border-ui-link font-bold'
+                                : 'text-ui-muted border-transparent hover:text-ui-text dark:hover:text-ui-text'">
               {{ h.textContent }}
             </a>
           </li>

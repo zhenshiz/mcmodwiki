@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
-import { useEditTopicStore, usePageStore } from '@/stores/index.js'
+import { useEditTopicStore } from '@/stores/index.js'
 import { useMessage } from '@/components/register/useMessage.js'
 import { useDialog } from '@/components/register/useDialog.js'
 import MarkdownEditor from '@/components/markdown/Editor.vue'
@@ -16,7 +16,6 @@ const dialog = useDialog()
 const editTopicStore = useEditTopicStore()
 const form = computed(() => editTopicStore.getTopicInfo())
 const textarea = ref(null)
-const isDark = computed(() => usePageStore().isDark)
 
 const mdEditor = ref(null)
 const lastScrollTop = ref(0)
@@ -139,10 +138,10 @@ watch(
       <div
         class="editor-toc-scroll sticky top-10 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain pr-3 scrollbar-thin scrollbar-thumb-gray-400/50 scrollbar-track-transparent"
       >
-        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
+        <div class="text-[10px] font-bold text-ui-muted uppercase tracking-widest mb-6">
           {{ t('目录') }}
         </div>
-        <ul class="space-y-1 relative border-l dark:border-slate-800">
+        <ul class="space-y-1 relative border-l dark:border-ui-line">
           <li v-for="h in mdEditor?.headings" :key="h.id" :style="{ paddingLeft: `${(h.level - 1) * 0.75}rem` }"
             class="transition-all duration-300" :class="{
               'is-active': h.isActive && !h.isScrolledOver,
@@ -150,8 +149,8 @@ watch(
             }">
             <a href="javascript:" @click="mdEditor.scrollToHeading(h.id)"
               class="block py-1.5 text-xs border-l-2 -ml-[2px] pl-4 transition-colors" :class="(h.isActive && !h.isScrolledOver)
-                ? 'text-blue-500 border-blue-500 font-bold'
-                : 'text-gray-500 border-transparent hover:text-gray-700 dark:hover:text-gray-300'">
+                ? 'text-ui-link border-ui-link font-bold'
+                : 'text-ui-muted border-transparent hover:text-ui-text dark:hover:text-ui-text'">
               {{ h.textContent }}
             </a>
           </li>
@@ -160,17 +159,17 @@ watch(
     </aside>
     <div class="flex min-w-0 flex-1 justify-center px-3 sm:px-5">
       <div
-        class="rounded bg-white dark:bg-dark-blue shadow my-3 sm:my-5 w-full max-w-[1290px] min-w-0 flex flex-col relative text-base"
+        class="mc-panel bg-ui-surface my-3 sm:my-5 w-full max-w-[1290px] min-w-0 flex flex-col relative text-base"
         :class="form.mode === 'code' ? 'h-[720px] overflow-hidden' : 'min-h-[720px]'">
         <MarkdownEditor ref="mdEditor" v-if="form.mode === 'preview'" @update:valueMarkdown="saveMarkdown"
-          :value-markdown="form.content" :mode="form.mode" @update:mode="updateMode" class="dark:text-white" />
+          :value-markdown="form.content" :mode="form.mode" @update:mode="updateMode" class="dark:text-ui-text" />
         <div v-if="form.mode === 'code'" class="flex flex-col flex-1 w-full overflow-hidden">
           <div
-            class="sticky top-0 z-20 flex flex-wrap justify-start h-[43px] bg-[#edfaff] dark:bg-[#051e2f] border-b dark:border-slate-800">
+            class="sticky top-0 z-20 flex flex-wrap justify-start h-[43px] bg-ui-inset dark:bg-ui-surface border-b dark:border-ui-line">
             <ModeToggle :mode="form.mode" @update:mode="updateMode" />
           </div>
 
-          <textarea ref="textarea" class="p-5 w-full flex-1 bg-transparent focus:outline-none dark:text-white resize-none leading-relaxed font-mono
+          <textarea ref="textarea" class="p-5 w-full flex-1 bg-transparent focus:outline-none dark:text-ui-text resize-none leading-relaxed font-mono
                  scrollbar-thin scrollbar-thumb-gray-400/50 scrollbar-track-transparent" :value="form.content"
             @input="handleInputCodeMarkdown" @scroll="handleScroll" autofocus />
         </div>
@@ -182,16 +181,13 @@ watch(
               @update:modelValue="newValue => editTopicStore.setTopicInfo({ filename: newValue })" />
           </div>
           <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:flex lg:items-center lg:justify-end">
-            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="() => visible = true"
-              :color="isDark ? '#66cffc' : '#0071d5'" :background="isDark ? '#000' : '#fff'" is-toggle-color>
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="() => visible = true" is-toggle-color>
               {{ t('功能展示') }}
             </Button>
-            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="downloadMd" :color="isDark ? '#66cffc' : '#0071d5'"
-              :background="isDark ? '#000' : '#fff'" is-toggle-color>
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" variant="primary" @click="downloadMd" is-toggle-color>
               {{ t('生成Markdown文件') }}
             </Button>
-            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="importMd" :color="isDark ? '#66cffc' : '#0071d5'"
-              :background="isDark ? '#000' : '#fff'" is-toggle-color>
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="importMd" is-toggle-color>
               {{ t('导入Markdown文件') }}
             </Button>
           </div>

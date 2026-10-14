@@ -18,7 +18,7 @@ const emit = defineEmits(['reset'])
 
       <div
         v-if="isModified"
-        class="absolute -left-2 top-1/2 -translate-y-1/2 w-[3px] h-full bg-blue-500 rounded-r"
+        class="absolute -left-2 top-1/2 -translate-y-1/2 w-[3px] h-full bg-ui-secondary rounded-r"
       ></div>
 
       <Popover
@@ -34,7 +34,7 @@ const emit = defineEmits(['reset'])
               block text-xs font-medium truncate transition-colors cursor-help
               decoration-dashed underline underline-offset-4 decoration-slate-500/30
             "
-            :class="isModified ? 'text-blue-400 font-bold' : 'text-gray-400 dark:text-gray-400 group-hover:text-gray-300'"
+            :class="isModified ? 'text-ui-link font-bold' : 'text-ui-muted dark:text-ui-muted group-hover:text-ui-text'"
           >
             {{ label }}
           </span>
@@ -48,7 +48,7 @@ const emit = defineEmits(['reset'])
       <span
         v-else
         class="text-xs font-medium truncate transition-colors cursor-default"
-        :class="isModified ? 'text-blue-400 font-bold' : 'text-gray-400 dark:text-gray-400 group-hover:text-gray-300'"
+        :class="isModified ? 'text-ui-link font-bold' : 'text-ui-muted dark:text-ui-muted group-hover:text-ui-text'"
       >
         {{ label }}
       </span>
@@ -63,8 +63,8 @@ const emit = defineEmits(['reset'])
         @click="$emit('reset')"
         class="
           absolute -right-5 opacity-0 group-hover:opacity-100 transition-opacity
-          p-1 rounded hover:bg-gray-200 dark:hover:bg-slate-700
-          text-gray-400 hover:text-white z-10
+          p-1 rounded-none hover:bg-ui-inset dark:hover:bg-ui-inset
+          text-ui-muted hover:text-ui-text z-10
         "
       >
         <Icon icon="lucide:rotate-ccw" width="12" />

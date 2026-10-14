@@ -69,13 +69,13 @@ const hsvaToInt = (h, s, v, a) => {
   h = h / 360
   s = s / 100
   v = v / 100
-  
+
   let i = Math.floor(h * 6)
   let f = h * 6 - i
   let p = v * (1 - s)
   let q = v * (1 - f * s)
   let t = v * (1 - (1 - f) * s)
-  
+
   switch (i % 6) {
     case 0: r = v; g = t; b = p; break
     case 1: r = q; g = v; b = p; break
@@ -128,7 +128,7 @@ const updateFromHsva = () => {
   const intVal = hsvaToInt(hsva.value.h, hsva.value.s, hsva.value.v, hsva.value.a)
   intInput.value = intVal
   hexInput.value = intToHex(intVal)
-  
+
   emit('update:modelValue', intVal)
   emit('change', intVal)
 }
@@ -227,59 +227,60 @@ const hueColor = computed(() => hsvToRgbString(hsva.value.h, 100, 100))
 const currentColorOpaque = computed(() => hsvToRgbString(hsva.value.h, hsva.value.s, hsva.value.v))
 // 最终预览颜色 (带透明度)
 const finalColorStyle = computed(() => {
-  return { 
-    backgroundColor: currentColorOpaque.value, 
-    opacity: hsva.value.a 
+  return {
+    backgroundColor: currentColorOpaque.value,
+    opacity: hsva.value.a
   }
 })
 
-const svCursorStyle = computed(() => ({ 
-  left: `${hsva.value.s}%`, 
-  top: `${100 - hsva.value.v}%` 
+const svCursorStyle = computed(() => ({
+  left: `${hsva.value.s}%`,
+  top: `${100 - hsva.value.v}%`
 }))
-const hueCursorStyle = computed(() => ({ 
-  left: `${(hsva.value.h / 360) * 100}%` 
+const hueCursorStyle = computed(() => ({
+  left: `${(hsva.value.h / 360) * 100}%`
 }))
-const alphaCursorStyle = computed(() => ({ 
-  left: `${hsva.value.a * 100}%` 
+const alphaCursorStyle = computed(() => ({
+  left: `${hsva.value.a * 100}%`
 }))
 
 </script>
 
 <template>
-  <Popover 
-    placement="bottom-start" 
-    trigger="click" 
+  <Popover
+    placement="bottom-start"
+    trigger="click"
     :offset="4"
     class="w-full"
     v-model:isOpen="isOpen"
+    :disabled="disabled"
   >
     <template #trigger>
-      <div 
+      <div
         class="
           relative flex items-center justify-between
-          px-3 py-2 rounded border transition-colors cursor-pointer
-          bg-white border-gray-200 
-          dark:bg-[#051e2f] dark:border-dark-blue
+          px-3 py-2 rounded-none border transition-colors cursor-pointer
+          bg-white border-ui-line
+          dark:bg-ui-surface dark:border-ui-line
           group
         "
         :class="{
           'opacity-60 cursor-not-allowed': disabled,
-          'border-blue-500 ring-1 ring-blue-500/20': isOpen,
-          'hover:border-blue-400 dark:hover:border-blue-500': !disabled && !isOpen
+          'border-ui-link ring-1 ring-blue-500/20': isOpen,
+          'hover:border-ui-link dark:hover:border-ui-link': !disabled && !isOpen
         }"
         :style="{ width: width }"
       >
         <div class="flex items-center gap-2 overflow-hidden w-full">
-          <div class="w-5 h-5 rounded border border-gray-200 dark:border-gray-600 shadow-sm flex-shrink-0 relative overflow-hidden checkerboard">
+          <div class="w-5 h-5 rounded-none border border-ui-line dark:border-ui-line shadow-sm flex-shrink-0 relative overflow-hidden checkerboard">
             <div class="absolute inset-0" :style="finalColorStyle"></div>
           </div>
-          
+
           <div class="flex flex-col min-w-0 flex-1">
-            <span class="text-xs font-mono text-gray-700 dark:text-gray-200 truncate leading-none mb-0.5">
+            <span class="text-xs font-mono text-ui-text dark:text-ui-text truncate leading-none mb-0.5">
               {{ hexInput }}
             </span>
-            <span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate leading-none">
+            <span class="text-[10px] text-ui-muted dark:text-ui-muted font-mono truncate leading-none">
               {{ intInput }}
             </span>
           </div>
@@ -287,75 +288,75 @@ const alphaCursorStyle = computed(() => ({
       </div>
     </template>
 
-    <div class="p-3 w-[240px] select-none bg-white dark:bg-[#051e2f] text-gray-800 dark:text-gray-200">
-      
-      <div 
+    <div class="p-3 w-[240px] select-none bg-white dark:bg-ui-surface text-ui-text dark:text-ui-text">
+
+      <div
         ref="svRef"
-        class="w-full h-[120px] rounded cursor-crosshair relative overflow-hidden mb-3 border border-gray-200 dark:border-slate-700"
+        class="w-full h-[120px] rounded-none cursor-crosshair relative overflow-hidden mb-3 border border-ui-line dark:border-ui-line"
         :style="{ backgroundColor: hueColor }"
         @mousedown="onSvMouseDown"
       >
         <div class="absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-        <div 
-          class="absolute w-3 h-3 rounded-full border border-white shadow-sm -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        <div
+          class="absolute w-3 h-3 rounded-none border border-white shadow-sm -translate-x-1/2 -translate-y-1/2 pointer-events-none"
           :style="svCursorStyle"
         ></div>
       </div>
 
-      <div 
+      <div
         ref="hueRef"
-        class="w-full h-3 rounded-full cursor-pointer relative mb-3 rainbow-bg"
+        class="w-full h-3 rounded-none cursor-pointer relative mb-3 rainbow-bg"
         @mousedown="onHueMouseDown"
       >
-        <div 
-          class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow border border-gray-200 -translate-x-1/2"
+        <div
+          class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-none shadow border border-ui-line -translate-x-1/2"
           :style="hueCursorStyle"
         ></div>
       </div>
 
-      <div 
+      <div
         ref="alphaRef"
-        class="w-full h-3 rounded-full cursor-pointer relative mb-4 checkerboard overflow-hidden"
+        class="w-full h-3 rounded-none cursor-pointer relative mb-4 checkerboard overflow-hidden"
         @mousedown="onAlphaMouseDown"
       >
-        <div 
+        <div
           class="absolute inset-0"
           :style="{ background: `linear-gradient(to right, transparent, ${currentColorOpaque})` }"
         ></div>
-        <div 
-          class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow border border-gray-200 -translate-x-1/2"
+        <div
+          class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-none shadow border border-ui-line -translate-x-1/2"
           :style="alphaCursorStyle"
         ></div>
       </div>
 
       <div class="flex gap-2">
         <div class="flex-1 min-w-0">
-          <div class="text-[10px] text-gray-400 mb-1">HEX (ARGB)</div>
-          <input 
-            type="text" 
+          <div class="text-[10px] text-ui-muted mb-1">HEX (ARGB)</div>
+          <input
+            type="text"
             :value="hexInput"
             @input="handleHexInput"
             class="
-              w-full px-1 py-1 text-xs rounded border bg-gray-50 dark:bg-[#0a2e45] 
-              border-gray-200 dark:border-dark-blue 
-              text-gray-700 dark:text-gray-200
-              focus:outline-none focus:border-blue-500
+              w-full px-1 py-1 text-xs rounded-none border bg-ui-surface dark:bg-ui-inset
+              border-ui-line dark:border-ui-line
+              text-ui-text dark:text-ui-text
+              focus:outline-none focus:border-ui-link
               font-mono text-center
             "
           />
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[10px] text-gray-400 mb-1">INT (Java)</div>
-          <input 
-            type="text" 
+          <div class="text-[10px] text-ui-muted mb-1">INT (Java)</div>
+          <input
+            type="text"
             :value="intInput"
             @input="handleIntInput"
             class="
-              w-full px-1 py-1 text-xs rounded border bg-gray-50 dark:bg-[#0a2e45] 
-              border-gray-200 dark:border-dark-blue 
-              text-gray-700 dark:text-gray-200
-              focus:outline-none focus:border-blue-500
+              w-full px-1 py-1 text-xs rounded-none border bg-ui-surface dark:bg-ui-inset
+              border-ui-line dark:border-ui-line
+              text-ui-text dark:text-ui-text
+              focus:outline-none focus:border-ui-link
               font-mono text-center
             "
           />
@@ -368,18 +369,18 @@ const alphaCursorStyle = computed(() => ({
 
 <style scoped>
 .rainbow-bg {
-  background: linear-gradient(to right, 
-    #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, 
+  background: linear-gradient(to right,
+    #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%,
     #0000ff 67%, #ff00ff 83%, #ff0000 100%
   );
 }
 
 /* 棋盘格背景 (表示透明) */
 .checkerboard {
-  background-image: 
-    linear-gradient(45deg, #ccc 25%, transparent 25%), 
-    linear-gradient(-45deg, #ccc 25%, transparent 25%), 
-    linear-gradient(45deg, transparent 75%, #ccc 75%), 
+  background-image:
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
     linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 8px 8px;
   background-position: 0 0, 0 4px, 4px -4px, -4px 0px;

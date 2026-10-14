@@ -1,10 +1,12 @@
 <script setup>
+defineOptions({ name: 'McInput' })
 import _ from 'lodash'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
   modelValue: [String, Number],
   placeholder: String,
+  disabled: Boolean,
   type: {
     type: String,
     default: 'text',
@@ -18,7 +20,7 @@ const props = defineProps({
   },
   inputClass: {
     type: String,
-    default: ''
+    default: '',
   },
   isDebounce: {
     type: Boolean,
@@ -33,28 +35,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change', 'input'])
 const inputRef = ref()
 
-const variantClasses = computed(() => {
-  const base = 'transition-colors duration-300 ease-in-out'
-
-  const variants = {
-    // 默认：全边框，聚焦变色
-    outline: `border-2 rounded-md px-3 py-2 bg-transparent border-gray-200 dark:border-gray-700
-              focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500`,
-
-    // 下划线风格：底部边框
-    underline: `border-b-2 rounded-t-md px-1 py-2 bg-transparent border-gray-300 dark:border-gray-600 rounded-none
-                focus-within:border-blue-500`,
-
-    // 填充风格：灰色背景，无边框（或隐形边框）
-    filled: `border-2 border-transparent rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-800
-             focus-within:bg-white dark:focus-within:bg-black focus-within:border-blue-500`,
-
-    // 幽灵风格：无边框（适合嵌入在其他复杂组件中）
-    ghost: `bg-transparent px-0 py-0`
-  }
-
-  return `${base} ${variants[props.variant] || variants.outline}`
-})
+const variantClasses = computed(() => `mc-input mc-input--${props.variant}`)
 
 // --- 防抖逻辑 ---
 const handleInput = (event) => {
@@ -79,28 +60,58 @@ defineExpose({ getInput })
 </script>
 
 <template>
-  <div
-    class="w-full relative flex items-center group"
-    :class="[variantClasses]"
-  >
-    <div v-if="$slots.header"
-         class="mr-2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
+  <div class="w-full relative flex items-center group" :class="[variantClasses]">
+    <div
+      v-if="$slots.header"
+      class="mr-2 text-ui-muted group-focus-within:text-ui-link transition-colors"
+    >
       <slot name="header"></slot>
     </div>
 
     <input
       ref="inputRef"
-      class="w-full h-full bg-transparent border-none outline-none text-base
-             text-gray-900 dark:text-white placeholder-gray-400"
+      class="w-full h-full bg-transparent border-none outline-none text-base text-ui-text placeholder:text-ui-muted"
       :class="inputClass"
       :type="type"
+      :disabled="disabled"
       :placeholder="placeholder"
       :value="modelValue"
       @input="handleInput"
     />
 
-    <div v-if="$slots.footer" class="ml-2 text-gray-400">
+    <div v-if="$slots.footer" class="ml-2 text-ui-muted">
       <slot name="footer"></slot>
     </div>
   </div>
 </template>
+
+<style scoped>
+.mc-input {
+  padding: 9px 12px;
+  border: 2px solid rgb(var(--ui-line));
+  background: rgb(var(--ui-surface));
+  transition: border-color 120ms;
+}
+.mc-input:focus-within {
+  border-color: rgb(var(--ui-link));
+}
+.mc-input--underline {
+  border-width: 0 0 2px;
+  background: transparent;
+}
+.mc-input--filled {
+  background: rgb(var(--ui-inset));
+}
+.mc-input--ghost {
+  border-color: transparent;
+  background: transparent;
+  padding: 0;
+}
+.mc-input:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+input:focus-visible {
+  outline: none;
+}
+</style>

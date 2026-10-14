@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { useChatBoxEditorStore } from '@/stores'
+import { useChatBoxEditorStore, usePageStore } from '@/stores'
 import Dropdown from '@/components/Dropdown.vue'
 import { Icon } from '@iconify/vue'
 
@@ -16,6 +16,7 @@ import { t } from '@/languages/index.js'
 import { shortcutUtil } from '@/utils/shortcutUtil.js'
 
 const store = useChatBoxEditorStore()
+const pageStore = usePageStore()
 const prompt = usePrompt()
 const message = useMessage()
 
@@ -123,8 +124,8 @@ const handleSave = async () => {
 </script>
 
 <template>
-  <div class="flex items-center px-2 select-none text-xs font-medium text-slate-300">
-    <div class="mr-4 flex items-center gap-2 text-blue-400 font-bold">
+  <div class="flex items-center px-2 select-none text-xs font-medium text-ui-text">
+    <div class="mr-4 flex items-center gap-2 text-ui-link font-bold">
       <Icon icon="lucide:box" width="16" />
       <span>ChatBox</span>
     </div>
@@ -144,7 +145,7 @@ const handleSave = async () => {
             </div>
           </button>
 
-          <div class="border-t border-slate-700/50 my-1"></div>
+          <div class="border-t border-ui-line/50 my-1"></div>
 
           <button class="menu-action" @click="handleSave" :disabled="!store.currentFile">
             <div class="flex items-center gap-2">
@@ -175,8 +176,8 @@ const handleSave = async () => {
           <div class="menu-item">{{ t('帮助') }}</div>
         </template>
         <div class="p-2 w-[200px]">
-          <div class="text-xs text-slate-500 mb-2">{{ t('关于 ChatBox Editor') }}</div>
-          <div class="text-[10px] text-slate-400">
+          <div class="text-xs text-ui-muted mb-2">{{ t('关于 ChatBox Editor') }}</div>
+          <div class="text-[10px] text-ui-muted">
             {{ t('这是一个用于 Minecraft ChatBox Mod 的可视化配置编辑器。') }}
             <br>{{ t('编辑器对应模组版本v{}', chatBoxVersion) }}
           </div>
@@ -186,9 +187,11 @@ const handleSave = async () => {
     </div>
 
     <div class="flex-1"></div>
+    <a href="/" class="menu-item flex items-center gap-1.5"><Icon icon="lucide:arrow-left" width="13" />{{ t('返回首页') }}</a>
+    <button type="button" class="menu-item" :aria-label="pageStore.isDark ? t('切换到亮色主题') : t('切换到暗色主题')" @click="pageStore.isDark = !pageStore.isDark"><Icon :icon="pageStore.isDark ? 'lucide:moon' : 'lucide:sun'" width="15" /></button>
 
     <Modal v-model:show="translatableVisible" :title="t('翻译键')" width="60%">
-      <div class="flex flex-col gap-3 p-3 w-full text-slate-700 dark:text-slate-200">
+      <div class="flex flex-col gap-3 p-3 w-full text-ui-text dark:text-ui-text">
 
         <div class="flex flex-row gap-4 items-center">
           <Input v-model="translatableSearch"
@@ -212,7 +215,7 @@ const handleSave = async () => {
           </ShowJsonCopy>
 
           <div
-            class="flex items-center justify-center border-2 border-dashed border-gray-400 dark:border-gray-600 rounded cursor-pointer px-4 py-2 gap-2 hover:text-blue-400 hover:border-blue-400 transition-all text-slate-500"
+            class="flex items-center justify-center border-2 border-dashed border-ui-line dark:border-ui-line rounded-none cursor-pointer px-4 py-2 gap-2 hover:text-ui-link hover:border-ui-link transition-all text-ui-muted"
             :class="{ 'upload-drag': isDragOver }"
             @click="loadFiles"
             @dragover="onDragOver"
@@ -227,7 +230,7 @@ const handleSave = async () => {
         </div>
 
         <div
-          class="flex flex-col gap-3 border-t border-gray-200 dark:border-gray-700 pt-3"
+          class="flex flex-col gap-3 border-t border-ui-line dark:border-ui-line pt-3"
           style="max-height: calc(80vh - 200px); overflow-y: auto;"
           @wheel.stop
         >
@@ -236,16 +239,16 @@ const handleSave = async () => {
               !translatableSearch || r.key.includes(translatableSearch)
             )"
             :key="rowIndex"
-            class="border border-gray-200 dark:border-gray-700 rounded p-3 bg-gray-50 dark:bg-[#1e293b]"
+            class="border border-ui-line dark:border-ui-line rounded-none p-3 bg-ui-surface dark:bg-ui-inset"
           >
-            <div class="flex flex-row justify-between items-center mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex flex-row justify-between items-center mb-3 pb-2 border-b border-ui-line dark:border-ui-line">
               <div class="font-bold text-sm flex flex-row w-full items-center gap-2">
-                <span class="text-blue-500 whitespace-nowrap text-xs uppercase font-mono bg-blue-500/10 px-1.5 py-0.5 rounded">Key</span>
+                <span class="text-ui-link whitespace-nowrap text-xs uppercase font-mono bg-ui-secondary/10 px-1.5 py-0.5 rounded-none">Key</span>
                 <Input v-model="row.key" class="flex-1 font-mono text-sm"
                        :placeholder="t('输入翻译键名 (例如: item.sword.name)')" />
               </div>
               <button
-                class="ml-2 text-slate-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"
+                class="ml-2 text-ui-muted hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-none transition-colors"
                 @click="store.removeRow(rowIndex)">
                 <Icon icon="lucide:trash-2" width="16" />
               </button>
@@ -257,14 +260,14 @@ const handleSave = async () => {
                 :key="colIndex"
                 class="flex flex-row items-center gap-2"
               >
-                <div class="min-w-[60px] text-right font-mono text-xs text-slate-500">{{ langCode }}：</div>
+                <div class="min-w-[60px] text-right font-mono text-xs text-ui-muted">{{ langCode }}：</div>
                 <Input
                   v-model="row.value[colIndex]"
                   class="flex-1 text-xs"
                   :placeholder="t('输入 {} 对应的内容',langCode)"
                 />
                 <button
-                  class="text-slate-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"
+                  class="text-ui-muted hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-none transition-colors"
                   @click="store.removeColumn(colIndex)"
                 >
                   <Icon icon="lucide:x" width="14" />
@@ -273,7 +276,7 @@ const handleSave = async () => {
             </div>
           </div>
 
-          <div v-if="store.translatableKeyRows.length === 0" class="text-center text-slate-500 py-8 text-xs">
+          <div v-if="store.translatableKeyRows.length === 0" class="text-center text-ui-muted py-8 text-xs">
             {{ t('暂无翻译数据，请添加 Key 或导入文件') }}
           </div>
         </div>
@@ -289,14 +292,14 @@ const handleSave = async () => {
 
 <style scoped>
 .menu-item {
-  @apply px-3 py-1.5 hover:bg-slate-700 rounded cursor-pointer transition-colors;
+  @apply px-3 py-1.5 hover:bg-ui-inset rounded-none cursor-pointer transition-colors;
 }
 
 .menu-action {
-  @apply flex items-center justify-between px-4 py-1.5 text-left hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 dark:text-slate-200 w-full;
+  @apply flex items-center justify-between px-4 py-1.5 text-left hover:bg-ui-surface dark:hover:bg-ui-inset transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-ui-text dark:text-ui-text w-full;
 }
 
 .menu-action .shortcut {
-  @apply text-[10px] text-slate-400 ml-4;
+  @apply text-[10px] text-ui-muted ml-4;
 }
 </style>
