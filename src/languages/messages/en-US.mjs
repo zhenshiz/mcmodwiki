@@ -561,5 +561,6 @@ export default  {
     "1429": "Rendering diagram…",
     "1430": "Template source",
     "1431": "Applying a template replaces the current diagram source. You can undo this change.",
-    "1432": "Use template"
+    "1432": "Use template",
+    "1433": "ViScript common library: LDLib2 editor enhancements and usage guide"
 }

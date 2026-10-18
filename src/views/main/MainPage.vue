@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { Icon } from '@iconify/vue'
-import { modList } from '@/assets/info/mod.js'
+import { visibleModList } from '@/assets/info/mod.js'
 import Button from '@/components/Button.vue'
 import grass from '@/assets/textures/item/grass_block.png'
 import book from '@/assets/textures/item/book.png'
@@ -11,7 +11,7 @@ import emerald from '@/assets/textures/item/emerald.png'
 import diamond from '@/assets/textures/item/diamond.png'
 import sapling from '@/assets/textures/item/oak_sapling.png'
 
-const mods = computed(() => modList())
+const mods = computed(() => visibleModList())
 const materials = [grass, book, craftingTable, emerald, diamond, sapling]
 const accents = [
   '120 214 224',

@@ -3612,5 +3612,9 @@
     "使用模板": {
         "en-US": "Use template",
         "$id": 1432
+    },
+    "ViScript 通用模组：LDLib2 编辑器改造与使用指南": {
+        "en-US": "ViScript common library: LDLib2 editor enhancements and usage guide",
+        "$id": 1433
     }
 }

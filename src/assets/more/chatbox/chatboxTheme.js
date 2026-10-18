@@ -78,6 +78,42 @@ export class PortraitRenderEvent extends BaseRenderEvent {
   }
 }
 
+// 主题渲染事件不支持触发条件、指令或 MVEL。
+export class ThemeRenderEvent extends BaseRenderEvent {
+  constructor() {
+    super()
+    delete this.condition
+  }
+
+  static {
+    ThemeRenderEvent.excludeFields(['condition'])
+    ThemeRenderEvent.defineOverride('trigger', {})
+    ThemeRenderEvent.defineOverride('type', {
+      props: {
+        options: eventType.values().filter(
+          ({ value }) => value !== eventType.command && value !== eventType.mvel
+        )
+      }
+    })
+  }
+
+  toJSON() {
+    const result = super.toJSON()
+    delete result.condition
+    return result
+  }
+}
+
+export class ThemePortraitRenderEvent extends ThemeRenderEvent {
+  static {
+    ThemePortraitRenderEvent.defineOverride('trigger', {
+      props: {
+        options: renderEventTrigger('portrait').values()
+      }
+    })
+  }
+}
+
 // 渲染附件
 export class Attachment extends AutoClean {
   constructor() {
@@ -355,7 +391,7 @@ export class Component extends AutoClean {
       type: EditorTypes.OBJECT_ARR,
       tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
       props: {
-        itemConstructor: BaseRenderEvent,
+        itemConstructor: ThemeRenderEvent,
         itemLabel: t('渲染事件'),
         displayTemplate: (item) => {
           const triggerEnum = renderEventTrigger('portrait')
@@ -635,7 +671,7 @@ export class Portrait extends Component {
     // 覆盖渲染事件使用更加丰富的那版
     Portrait.defineOverride('renderEvents', {
       props: {
-        itemConstructor: PortraitRenderEvent
+        itemConstructor: ThemePortraitRenderEvent
       },
       showIf: hideIn(portraitType.ENTITY)
     })
@@ -678,7 +714,7 @@ export class FunctionButton extends Portrait {
 
     FunctionButton.defineOverride('renderEvents', {
       props: {
-        itemConstructor: BaseRenderEvent
+        itemConstructor: ThemeRenderEvent
       }
     })
 
@@ -752,7 +788,7 @@ export class Option extends Portrait {
 
     Option.defineOverride('renderEvents', {
       props: {
-        itemConstructor: BaseRenderEvent
+        itemConstructor: ThemeRenderEvent
       }
     })
   }
@@ -833,7 +869,7 @@ export class DialogBox extends Portrait {
 
     DialogBox.defineOverride('renderEvents', {
       props: {
-        itemConstructor: BaseRenderEvent
+        itemConstructor: ThemeRenderEvent
       }
     })
   }

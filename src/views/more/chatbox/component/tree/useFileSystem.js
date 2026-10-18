@@ -10,7 +10,9 @@ import {
   KeyPrompt,
   Option,
   Portrait,
-  PortraitRenderEvent
+  PortraitRenderEvent,
+  ThemeRenderEvent,
+  ThemePortraitRenderEvent
 } from '@/assets/more/chatbox/chatboxTheme.js'
 import {
   ChatBoxDialogues,
@@ -204,7 +206,7 @@ export const themeService = {
   /**
    * 辅助方法：实例化渲染事件列表
    * @param {Array} rawEvents JSON 中的原始事件数组
-   * @param {Class} EventClass 要实例化的类 (BaseRenderEvent 或 PortraitRenderEvent)
+   * @param {Class} EventClass 要实例化的主题渲染事件类
    */
   _hydrateRenderEvents(rawEvents, EventClass) {
     if (!Array.isArray(rawEvents)) return []
@@ -236,7 +238,7 @@ export const themeService = {
         Object.assign(model.dialogBox, jsonContent.dialogBox)
         model.dialogBox.renderEvents = this._hydrateRenderEvents(
           jsonContent.dialogBox.renderEvents,
-          BaseRenderEvent,
+          ThemeRenderEvent,
         )
       }
 
@@ -246,14 +248,18 @@ export const themeService = {
         Object.assign(model.option, jsonContent.option)
         model.option.renderEvents = this._hydrateRenderEvents(
           jsonContent.option.renderEvents,
-          BaseRenderEvent,
+          ThemeRenderEvent,
         )
       }
 
-      // --- KeyPrompt (通常没有渲染事件，但保持原样) ---
+      // --- KeyPrompt ---
       if (jsonContent.keyPrompt) {
         model.keyPrompt = new KeyPrompt()
         Object.assign(model.keyPrompt, jsonContent.keyPrompt)
+        model.keyPrompt.renderEvents = this._hydrateRenderEvents(
+          jsonContent.keyPrompt.renderEvents,
+          ThemeRenderEvent,
+        )
       }
 
       // --- FunctionalButton ---
@@ -261,7 +267,7 @@ export const themeService = {
         model.functionalButton = jsonContent.functionalButton.map((btnData) => {
           const btn = new FunctionButton()
           Object.assign(btn, btnData)
-          btn.renderEvents = this._hydrateRenderEvents(btnData.renderEvents, BaseRenderEvent)
+          btn.renderEvents = this._hydrateRenderEvents(btnData.renderEvents, ThemeRenderEvent)
           return btn
         })
       }
@@ -313,7 +319,7 @@ export const themeService = {
             })
           }
 
-          p.renderEvents = this._hydrateRenderEvents(val.renderEvents, PortraitRenderEvent)
+          p.renderEvents = this._hydrateRenderEvents(val.renderEvents, ThemePortraitRenderEvent)
 
           model.portrait[key] = p
         }
@@ -336,12 +342,12 @@ export const themeService = {
 
 export const dialogueService = {
   /**
-   * 辅助方法：实例化渲染事件列表 (复用 themeService 的逻辑或直接调用)
+   * 辅助方法：实例化对话或立绘的渲染事件列表
    */
-  _hydrateRenderEvents(rawEvents) {
+  _hydrateRenderEvents(rawEvents, EventClass = BaseRenderEvent) {
     if (!Array.isArray(rawEvents)) return []
     return rawEvents.map((evtData) => {
-      const evt = new BaseRenderEvent()
+      const evt = new EventClass()
       Object.assign(evt, evtData)
       return evt
     })
@@ -370,11 +376,13 @@ export const dialogueService = {
             if (frameData.dialogBox) {
               frame.dialogBox = new DialogueDialogBox()
               Object.assign(frame.dialogBox, frameData.dialogBox)
+              delete frame.dialogBox.renderEvents
             }
 
             if (frameData.video) {
               frame.video = new DialogueVideo()
               Object.assign(frame.video, frameData.video)
+              delete frame.video.renderEvents
             }
 
             if (Array.isArray(frameData.options)) {
@@ -382,6 +390,7 @@ export const dialogueService = {
               frame.options.options = frameData.options.map((opt) => {
                 const instance = new DialogueOption()
                 Object.assign(instance, opt)
+                delete instance.renderEvents
                 return instance
               })
             }
@@ -397,17 +406,16 @@ export const dialogueService = {
                   Object.assign(p, pData)
 
                   formatUtil.migrateLegacyProperties(p, pData, PORTRAIT_MIGRATION_MAP)
+                  if (Array.isArray(pData.renderEvents)) {
+                    p.renderEvents = this._hydrateRenderEvents(pData.renderEvents, PortraitRenderEvent)
+                  }
                   return p
                 }
               })
             }
 
             if (Array.isArray(frameData.renderEvents)) {
-              frame.renderEvents = frameData.renderEvents.map((evt) => {
-                const e = new BaseRenderEvent()
-                Object.assign(e, evt)
-                return e
-              })
+              frame.renderEvents = this._hydrateRenderEvents(frameData.renderEvents)
             }
 
             return frame

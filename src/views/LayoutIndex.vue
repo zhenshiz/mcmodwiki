@@ -4,7 +4,7 @@ import { usePageStore } from '@/stores/index.js'
 import { Icon } from '@iconify/vue'
 import { RouterLink } from 'vue-router'
 import Modal from '@/components/Modal.vue'
-import { modList, moreUtilList } from '@/assets/info/mod.js'
+import { visibleModList, moreUtilList } from '@/assets/info/mod.js'
 import { i18nScope } from '@/languages'
 import { useVoerkaI18n } from '@voerkai18n/vue'
 import { webUtil } from '@/utils/webUtil.js'
@@ -21,9 +21,9 @@ const mobileMenuVisible = ref(false)
 let themeTransitioning = false
 
 const search = ref('')
-const searchList = ref(modList())
+const searchList = ref(visibleModList())
 const change = () => {
-  searchList.value = modList().filter((item) =>
+  searchList.value = visibleModList().filter((item) =>
     item.lang.toLowerCase().includes(search.value.toLowerCase()),
   )
 }
@@ -153,7 +153,7 @@ useEventListener('scroll', handleScroll)
             ></template>
             <div class="min-w-[200px] p-1">
               <RouterLink
-                v-for="item in modList()"
+                v-for="item in visibleModList()"
                 :key="item.lang"
                 :to="`/wiki/${item.lang}`"
                 class="mc-menu-item"
@@ -259,7 +259,7 @@ useEventListener('scroll', handleScroll)
         }}</RouterLink>
         <div class="mc-label px-3 pt-5 pb-2">{{ t('模组') }}</div>
         <RouterLink
-          v-for="item in modList()"
+          v-for="item in visibleModList()"
           :key="item.lang"
           :to="`/wiki/${item.lang}`"
           class="mc-menu-item"

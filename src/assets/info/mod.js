@@ -3,6 +3,7 @@ import ViScriptShop from '@/assets/textures/mod/ViScriptShop.png'
 import ViScriptRecipe from '@/assets/textures/mod/ViScriptRecipe.png'
 import ViScriptQuests from '@/assets/textures/mod/ViScriptQuests.png'
 import ViScriptTeam from '@/assets/textures/mod/ViScriptTeam.png'
+import ViScriptLib from '@/assets/textures/mod/ViScriptLib.png'
 import SmartPhone from '@/assets/textures/mod/SmartPhone.png'
 import { t } from '@/languages/index.js'
 
@@ -167,6 +168,22 @@ export const modList = () => {
       ],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.0.3'
+    },
+    {
+      lang: 'ViScriptLib',
+      icon: ViScriptLib,
+      description: t('ViScript 通用模组：LDLib2 编辑器改造与使用指南'),
+      availableHere: [
+        {
+          icon: availableHere.GITHUB,
+          href: 'https://github.com/zhenshiz/ViScriptLib'
+        }
+      ],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.1.8.3'
     }
   ]
 }
+
+// 展示用列表：过滤掉明确隐藏的条目。
+export const visibleModList = () => modList().filter(item => !item.hidden)

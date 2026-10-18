@@ -15,7 +15,6 @@ export class DialogueDialogBox extends AutoClean {
     super()
     this.name = ''
     this.text = ''
-    this.renderEvents = []
   }
 
   static {
@@ -28,21 +27,6 @@ export class DialogueDialogBox extends AutoClean {
       label: t('对话内容'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
-    })
-    DialogueDialogBox.defineField('renderEvents', {
-      label: t('渲染事件'),
-      type: EditorTypes.OBJECT_ARR,
-      tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
-      props: {
-        itemConstructor: BaseRenderEvent,
-        itemLabel: t('渲染事件'),
-        displayTemplate: (item) => {
-          const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
-          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
-          return `${tLabel.value} -> ${eLabel.value}`
-        }
-      }
     })
   }
 }
@@ -109,7 +93,6 @@ export class DialogueOptionList extends AutoClean{
     super()
 
     this.options = []
-    this.renderEvents = []
   }
 
   static {
@@ -120,21 +103,6 @@ export class DialogueOptionList extends AutoClean{
         itemLabel: t('选项'),
         itemConstructor: DialogueOption,
         displayTemplate: (item)=> useChatBoxEditorStore().getTranslatableLabel(item.text)
-      }
-    })
-    DialogueOptionList.defineField('renderEvents', {
-      label: t('渲染事件'),
-      type: EditorTypes.OBJECT_ARR,
-      tips: t('本编辑器无法测试，请配置好到游戏内测试（你也不可能指望我这个编辑器给你执行mc指令吧）'),
-      props: {
-        itemConstructor: BaseRenderEvent,
-        itemLabel: t('渲染事件'),
-        displayTemplate: (item) => {
-          const triggerEnum = renderEventTrigger('portrait')
-          const tLabel = triggerEnum.getLabel(item.trigger) || item.trigger || t('未选择时机')
-          const eLabel = eventType.getLabel(item.type) || item.type || t('未选择类型')
-          return `${tLabel.value} -> ${eLabel.value}`
-        }
       }
     })
   }
@@ -159,9 +127,11 @@ export class DialogueVideo extends Component {
     this.canControl = true
     this.canSkip = true
     this.loop = false
+    delete this.renderEvents
   }
 
   static {
+    DialogueVideo.excludeFields(['renderEvents'])
     DialogueVideo.defineField('path', {
       label: t('视频路径'),
       type: EditorTypes.INPUT,
@@ -206,6 +176,9 @@ export class DialogueReplacePortrait extends Portrait {
   }
 
   static {
+    DialogueReplacePortrait.defineOverride('renderEvents', {
+      props: { itemConstructor: PortraitRenderEvent }
+    })
     DialogueReplacePortrait.defineField('id', {
       label: t('立绘 ID'),
       type: EditorTypes.AUTOCOMPLETE,
