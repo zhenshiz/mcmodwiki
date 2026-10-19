@@ -20,12 +20,9 @@ import AnyTypeInspector from '@/components/form/AnyTypeInspector.vue'
 import AnyTypeArray from '@/components/form/array/AnyTypeArray.vue'
 import { autoCompleteDataSources, builtinAnimations } from '@/assets/more/chatbox/enumTypes'
 import { useChatBoxEditorStore } from '@/stores'
-import { blockSuggestions, effectSuggestions, itemSuggestions } from '@/assets/textures/mcTextures'
-import { enchantmentSuggestions } from '@/assets/textures/enchantment'
-import { attributeSuggestions } from '@/assets/textures/attribute'
 import Inspector from '@/components/form/Inspector.vue'
 import ObjectDialog from '@/components/form/ObjectDialog.vue'
-import { entitySuggestions, livingEntitySuggestions } from '@/assets/textures/entity.js'
+import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
 
 const props = defineProps({
   model: { type: Object, default: null },
@@ -37,6 +34,7 @@ const props = defineProps({
 const emit = defineEmits(['init', 'update:modelValue'])
 
 const store = useChatBoxEditorStore()
+const bridge = useGameBridgeStore()
 
 // 组件映射表
 const COMPONENT_MAP = {
@@ -80,23 +78,16 @@ const allPortraitsOptions = computed(() => {
 })
 
 const dataSourceMap = computed(() => ({
-  [autoCompleteDataSources.TEXTURE]: store.allTextureOptions,
-  [autoCompleteDataSources.ITEM]: itemSuggestions,
-  [autoCompleteDataSources.BLOCK]: blockSuggestions,
-  [autoCompleteDataSources.EFFECT]: effectSuggestions,
-  [autoCompleteDataSources.ENCHANTMENT]: enchantmentSuggestions,
-  [autoCompleteDataSources.ATTRIBUTE]: attributeSuggestions,
   [autoCompleteDataSources.PRESET_ANIMATION]: allAnimationOptions.value,
   [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions,
   [autoCompleteDataSources.PORTRAIT]: allPortraitsOptions.value,
-  [autoCompleteDataSources.ENTITY]: entitySuggestions,
-  [autoCompleteDataSources.LIVING_ENTITY]: livingEntitySuggestions
+  [autoCompleteDataSources.TEXTURE]: store.allTextureOptions,
 }))
 
 const getDynamicOptions = (field) => {
   if (field.props?.dataSource) {
     const key = field.props.dataSource
-    return dataSourceMap.value[key] || []
+    return dataSourceMap.value[key] || bridge.options(key)
   }
   return undefined
 }

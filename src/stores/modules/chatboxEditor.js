@@ -1,20 +1,14 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { useGameBridgeStore } from './gameBridge.js'
+import { gameFileTree, gameFileRequest } from '@/views/more/chatbox/bridge/gameFiles.js'
+import { computed, nextTick, ref, watch } from 'vue'
 import _ from 'lodash'
 
-import {
-  dialogueService,
-  resourceService,
-  themeService,
-  useFileSystem
-} from '@/views/more/chatbox/component/tree/useFileSystem.js'
-
-import {
-  getBuiltinTextures,
-  resolveTexture
-} from '@/views/more/chatbox/component/tree/builtinResources.js'
+import { dialogueService, themeService } from '@/views/more/chatbox/component/tree/chatboxSerialization.js'
 import { useMessage } from '@/components/register/useMessage.js'
-import { ChatBoxDialogues, DialogueFrame } from '@/assets/more/chatbox/chatboxDialogues'
+import { useDialog } from '@/components/register/useDialog.js'
+import { ChatBoxDialogues, DialogueFrame, DialogueOption } from '@/assets/more/chatbox/chatboxDialogues'
+import { analyzeDialogue, connectionTarget, renameGroupReferences, reindexFrameReferences } from '@/views/more/chatbox/flow/dialogueFlow.js'
 import { i18nScope, t } from '@/languages'
 
 const message = useMessage()
@@ -23,23 +17,58 @@ const DIALOGUE_FRAME_SECTION_KEYS = new Set(['basic', 'dialogBox', 'option', 'po
 export const useChatBoxEditorStore = defineStore(
   'chatBoxEditor',
   () => {
+    const bridge = useGameBridgeStore()
+
     // === 状态 (State) ===
-    const fileTree = ref([])
     const currentFile = ref(null)
+    const gameFiles = computed(() => gameFileTree(bridge.files, bridge.serverSession))
     const selectedTreeNode = ref(null)
     const viewMode = ref('empty')
     const currentModel = ref(null)
     const currentDialogue = ref('')
     let activeDialogueGroupKey = ref(null)
     const dialogueGroupOrder = ref([])
+    const dialogueEditorView = ref('graph')
+    const dialogueGraphGroupKey = ref(null)
+    const dialogueDiagnosticsOpen = ref(false)
+    const dialogueGraphFocus = ref(null)
+    const dialogueGraphLayouts = ref({})
+    const dialogueDebugFollow = ref(true)
+    const dialogueDebugPending = ref(false)
+    const dialogueDebugIssue = ref('')
+    let debugTimer, debugSending = false, debugLastSent = ''
+    const debuggingCurrentFile = computed(() => bridge.debugActive && bridge.debugFileId === currentFile.value?.resourceId && viewMode.value === 'dialogue')
+    const dialogueTheme = ref(null)
+    const dialogueThemeState = ref('')
+    let dialogueThemeLoad = Promise.resolve()
+    const flowOptions = () => ({ fileId: currentFile.value?.resourceId, theme: dialogueTheme.value, themeState: dialogueThemeState.value })
+    const dialogueAnalysis = computed(() => viewMode.value === 'dialogue' && currentModel.value
+      ? analyzeDialogue(currentModel.value, flowOptions()) : { transitions: [], diagnostics: [] })
+
+    watch(() => [viewMode.value, currentModel.value?.theme, currentFile.value, bridge.serverSession, bridge.connected], (_, __, onCleanup) => {
+      let cancelled = false
+      onCleanup(() => { cancelled = true })
+      dialogueTheme.value = null
+      dialogueThemeState.value = ''
+      dialogueThemeLoad = Promise.resolve()
+      if (viewMode.value !== 'dialogue' || !currentModel.value?.theme) return
+      dialogueThemeState.value = 'loading'
+      dialogueThemeLoad = (async () => { try {
+        const id = currentModel.value.theme
+        const result = await bridge.request('files.read', { kind: 'theme', resourceId: id.includes(':') ? id : `minecraft:${id}`, serverSession: bridge.serverSession })
+        if (!cancelled) {
+          dialogueTheme.value = JSON.parse(result.content)
+          dialogueThemeState.value = 'ready'
+        }
+      } catch {
+        if (!cancelled) dialogueThemeState.value = 'unavailable'
+      } })()
+    })
 
     const selectedComponent = ref(null)
     const selectedComponentKey = ref(null)
     const selectedComponentClass = ref(null)
 
-    const textureMap = ref(new Map())
-    const textureSuggestions = ref([])
-    const isProcessingResources = ref(false)
     const previewAnimationKey = ref(null)
     const _savedSnapshot = ref(null)
     const dialogueFrameClipboard = ref(null)
@@ -64,24 +93,12 @@ export const useChatBoxEditorStore = defineStore(
       return current !== null && current !== _savedSnapshot.value
     }
 
-    // 文件系统钩子
-    const fs = useFileSystem()
-
     // === 翻译键管理 ===
     const translatableKeyColumns = ref(['en_us', 'zh_cn'])
     const translatableKeyRows = ref([])
 
-    const globalAnimations = ref([])
-    const globalPortraits = ref([])
-    const rootHandle = ref(null)
-
-    // 刷新全局动画的方法
-    const refreshGlobalIndex = async () => {
-      if (!rootHandle.value) return
-      const { animations, portraits } = await fs.scanProjectIndex(rootHandle.value)
-      globalAnimations.value = animations
-      globalPortraits.value = portraits
-    }
+    const globalAnimations = computed(() => Object.keys(currentModel.value?.customAnimation || {}))
+    const globalPortraits = computed(() => Object.keys(currentModel.value?.portrait || {}))
 
     const selectTreeNode = (node) => {
       selectedTreeNode.value = node
@@ -157,84 +174,131 @@ export const useChatBoxEditorStore = defineStore(
       return result
     }
 
-    const translatableSuggestions = computed(() => {
-      const currentActiveLang = i18nScope.activeLanguage || 'zh_cn'
-      const targetLang = currentActiveLang.toLowerCase().replace(/-/g, '_')
-      const colIndex = translatableKeyColumns.value.indexOf(targetLang)
+    const activePreviewLanguage = computed(() => bridge.connected
+      ? bridge.snapshot?.language : (i18nScope.activeLanguage || 'zh-cn').toLowerCase().replace(/-/g, '_'))
 
-      return translatableKeyRows.value.map((row) => {
-        let translatedText = ''
-        if (colIndex !== -1 && row.value[colIndex]) {
-          translatedText = row.value[colIndex]
-        }
-        if (!translatedText) {
-          translatedText = row.value.find((v) => v) || '无内容'
-        }
-        return {
-          label: translatedText,
-          value: row.key,
-        }
-      })
+    const translatableSuggestions = computed(() => {
+      const labels = new Map(bridge.connected ? Object.entries(bridge.snapshot?.translations || {}) : [])
+      const col = translatableKeyColumns.value.indexOf(activePreviewLanguage.value)
+      for (const row of translatableKeyRows.value) {
+        const label = row.value[col] || (!bridge.connected && row.value.find(Boolean))
+        if (label) labels.set(row.key, label)
+        else if (!labels.has(row.key)) labels.set(row.key, row.key)
+      }
+      return [...labels].map(([value, label]) => ({ label, value }))
     })
 
     const getTranslatableLabel = (key) => {
       if (!key) return ''
-      const currentLang = (i18nScope.activeLanguage || 'zh-cn').toLowerCase().replace(/-/g, '_')
-      const colIndex = translatableKeyColumns.value.indexOf(currentLang)
-      const value = translatableKeyRows.value.find((i) => i.key === key)
-      if (value && value.value[colIndex]) {
-        return value.value[colIndex]
-      }
-      return key
+      const col = translatableKeyColumns.value.indexOf(activePreviewLanguage.value)
+      const row = translatableKeyRows.value.find(row => row.key === key)
+      return row?.value[col] || (bridge.connected && bridge.snapshot?.translations[key]) || key
     }
+
+    const readEditorFile = async (node) => {
+      if (!bridge.connected) throw new Error('请先连接游戏')
+      const result = await bridge.request('files.read', gameFileRequest(node, bridge.serverSession), 60000)
+      Object.assign(node, result)
+      return result.content
+    }
+
+    const previewInGame = async ({ stream = false, isCurrent = () => true } = {}) => {
+      const serialized = _serializeCurrentContent()
+      if (!serialized) throw new Error('请先打开对话或主题文件')
+      const content = JSON.parse(serialized)
+      if (viewMode.value === 'theme') {
+        // Hierarchy visibility is a preview override; it never changes the saved theme.
+        const hideForPreview = (draft, model) => { if (draft && model?._hidden) draft.hidden = true }
+        for (const key of ['dialogBox', 'option', 'keyPrompt']) hideForPreview(content[key], currentModel.value[key])
+        for (const [key, portrait] of Object.entries(currentModel.value.portrait || {})) hideForPreview(content.portrait?.[key], portrait)
+        currentModel.value.functionalButton?.forEach((button, index) => hideForPreview(content.functionalButton?.[index], button))
+      }
+      const translations = {}
+      translatableKeyColumns.value.forEach((language, col) => {
+        const rows = translatableKeyRows.value.filter(row => row.key && row.value[col])
+        if (rows.length) translations[language] = Object.fromEntries(rows.map(row => [row.key, row.value[col]]))
+      })
+      await bridge.request('assets.commit', { images: [], translations }, 120000)
+      if (!isCurrent()) return
+      const group = activeDialogueGroupKey.value || Object.keys(content.dialogues || {})[0] || 'preview'
+      const frames = currentModel.value?.dialogues?.[group] || []
+      const selectedIndex = currentFrame.value ? frames.indexOf(currentFrame.value) : -1
+      return bridge.preview({ kind: viewMode.value, content, group, index: Math.max(0, selectedIndex), stream,
+        sample: viewMode.value === 'theme' ? { name: currentModel.value.dialogBox?._name, text: currentModel.value.dialogBox?._text, options: currentModel.value.option?._text || [] } : undefined })
+    }
+
+    const startDialogueDebug = async (group, index = 0) => {
+      if (!currentModel.value?.dialogues?.[group]?.[index]) throw new Error('请选择有效的对话节点')
+      const file = currentFile.value
+      await nextTick()
+      await dialogueThemeLoad
+      if (file !== currentFile.value) return
+      if (dialogueAnalysis.value.diagnostics.some(item => item.severity === 'error')) {
+        dialogueDiagnosticsOpen.value = true
+        throw new Error('对话存在无效跳转，请先修复检查面板中的错误')
+      }
+      if (!bridge.connected || !bridge.snapshot?.dialogueDebug) throw new Error('请更新并重启 ChatBox 模组以启用对话调试')
+      const translations = {}
+      translatableKeyColumns.value.forEach((language, col) => {
+        translations[language] = Object.fromEntries(translatableKeyRows.value.filter(row => row.key && row.value[col]).map(row => [row.key, row.value[col]]))
+      })
+      await bridge.request('assets.commit', { images: [], translations }, 120000)
+      if (file !== currentFile.value) return
+      debugLastSent = _serializeCurrentContent()
+      dialogueDebugIssue.value = ''
+      return bridge.startDebug({ resourceId: file.resourceId, content: debugLastSent, group, index })
+    }
+
+    const syncDialogueDebug = async () => {
+      clearTimeout(debugTimer)
+      if (!debuggingCurrentFile.value || bridge.debugStarting || debugSending) return
+      const content = _serializeCurrentContent()
+      if (!content || content === debugLastSent) { dialogueDebugPending.value = false; return }
+      if (dialogueAnalysis.value.diagnostics.some(item => item.severity === 'error')) {
+        dialogueDebugIssue.value = t('草稿存在无效跳转，调试保持上一个有效版本')
+        dialogueDebugPending.value = true
+        return
+      }
+      const session = bridge.debugSession
+      debugSending = true
+      try {
+        await bridge.updateDebug({ content })
+        if (bridge.debugSession === session) {
+          debugLastSent = content
+          dialogueDebugIssue.value = ''
+          dialogueDebugPending.value = _serializeCurrentContent() !== content
+        }
+      } catch (error) {
+        if (bridge.debugSession === session && bridge.debugActive) { dialogueDebugIssue.value = t(error.message); dialogueDebugPending.value = true }
+      } finally {
+        debugSending = false
+        // Coalesce edits made while an acknowledgement was in flight; a failed version waits for a new edit or explicit retry.
+        if (bridge.debugSession === session && debuggingCurrentFile.value && _serializeCurrentContent() !== content) debugTimer = setTimeout(syncDialogueDebug, 180)
+      }
+    }
+
+    watch(() => [debuggingCurrentFile.value, bridge.debugStarting, _serializeCurrentContent()], () => {
+      clearTimeout(debugTimer)
+      if (!debuggingCurrentFile.value) { dialogueDebugPending.value = false; return }
+      dialogueDebugPending.value = _serializeCurrentContent() !== debugLastSent
+      if (dialogueDebugPending.value) debugTimer = setTimeout(syncDialogueDebug, 180)
+    })
+    watch(currentFile, (file, previous) => {
+      if (previous && file !== previous && bridge.debugActive) bridge.stopDebug().catch(() => {})
+    })
 
     // === 动作 (Actions) ===
 
-    const hasRequiredChatBoxFolders = (nodes) => {
-      const folderNames = new Set(
-        (nodes || [])
-          .filter((node) => node.isFolder)
-          .map((node) => node.name.toLowerCase()),
-      )
-
-      if (folderNames.has('dialogues') && folderNames.has('theme')) return true
-
-      return (nodes || []).some(
-        (node) => node.isFolder && hasRequiredChatBoxFolders(node.children),
-      )
-    }
-
-    const openProject = async () => {
-      const result = await fs.openDirectory()
-      if (result) {
-        if (!hasRequiredChatBoxFolders(result.tree)) {
-          message.error(t('导入失败：请选择同时包含 dialogues 和 theme 文件夹的目录'))
-          return
-        }
-
-        fileTree.value = result.tree
-
-        rootHandle.value = result.handle
-        await refreshGlobalIndex()
-
-        currentFile.value = null
-        selectedTreeNode.value = null
-        currentModel.value = null
-        currentDialogue.value = ''
-        activeDialogueGroupKey.value = null
-        dialogueGroupOrder.value = []
-        viewMode.value = 'empty'
-        clearSelection()
-      }
-    }
-
     const loadFile = async (fileNode) => {
-      if (!fileNode.handle) return
+      if (fileNode.isFolder) return
 
       try {
         activeDialogueGroupKey.value = null
         dialogueGroupOrder.value = []
-        const textContent = await fs.readFile(fileNode.handle)
+        dialogueGraphGroupKey.value = null
+        dialogueDiagnosticsOpen.value = false
+        const textContent = await readEditorFile(fileNode)
+        currentModel.value = null
         const path = fileNode.path.toLowerCase()
         const name = fileNode.name.toLowerCase()
 
@@ -281,7 +345,7 @@ export const useChatBoxEditorStore = defineStore(
         _savedSnapshot.value = _serializeCurrentContent()
       } catch (err) {
         console.error(err)
-        message.error(t('加载失败: {}', err.message))
+        message.error(t('加载失败: {}', t(err.message)))
       }
     }
 
@@ -292,12 +356,14 @@ export const useChatBoxEditorStore = defineStore(
       }
 
       try {
+        const savingFile = currentFile.value
+        await nextTick()
+        if (viewMode.value === 'dialogue') await dialogueThemeLoad
+        if (currentFile.value !== savingFile) return false
         let contentToSave = ''
 
         if (viewMode.value === 'theme' && currentModel.value) {
           contentToSave = themeService.stringifyTheme(currentModel.value)
-          // 保存主题文件时，可能新增了动画，建议刷新一次全局缓存
-          await refreshGlobalIndex()
         } else if (viewMode.value === 'dialogue') {
           if (currentModel.value) {
             contentToSave = dialogueService.stringifyDialogue(currentModel.value)
@@ -307,179 +373,30 @@ export const useChatBoxEditorStore = defineStore(
         }
 
         if (contentToSave) {
-          await fs.saveFile(currentFile.value.handle, contentToSave)
+          if (viewMode.value === 'dialogue') {
+            const validation = analyzeDialogue(JSON.parse(contentToSave), flowOptions())
+            if (validation.diagnostics.some(item => item.severity === 'error')) {
+              dialogueDiagnosticsOpen.value = true
+              dialogueEditorView.value = 'graph'
+              message.error(t('对话存在无效跳转，请修复检查面板中的错误后保存'))
+              return false
+            }
+          }
+          const file = currentFile.value
+          if (!bridge.connected) throw new Error('请先连接游戏')
+          const result = await bridge.request('files.write', {
+            ...gameFileRequest(file, bridge.serverSession), revision: file.revision, content: contentToSave,
+          }, 120000)
+          Object.assign(file, result)
           _savedSnapshot.value = contentToSave
-          message.success(t('保存成功'))
+          message.success(t('已保存到游戏并重载：{}', result.savePath))
+          bridge.refresh().catch(() => {})
+          return true
         }
       } catch (err) {
         console.error('保存失败', err)
-        message.error(t('保存失败'))
-      }
-    }
-
-    const findNodeByPath = (nodes, targetPath) => {
-      for (const node of nodes || []) {
-        if (node.path === targetPath) return node
-        if (node.isFolder) {
-          const found = findNodeByPath(node.children, targetPath)
-          if (found) return found
-        }
-      }
-      return null
-    }
-
-    const collectFolderOpenStates = (nodes, states = new Map()) => {
-      for (const node of nodes || []) {
-        if (!node.isFolder) continue
-        states.set(node.path, node.isOpen)
-        collectFolderOpenStates(node.children, states)
-      }
-      return states
-    }
-
-    const restoreFolderOpenStates = (nodes, states, expandedPath = '') => {
-      for (const node of nodes || []) {
-        if (!node.isFolder) continue
-
-        const isExpandedPath =
-          expandedPath &&
-          (node.path === expandedPath || expandedPath.startsWith(`${node.path}/`))
-        const previousState = states.get(node.path)
-
-        // 新出现的目录保持收起；新建位置及其父级目录按需展开。
-        node.isOpen =
-          previousState === undefined ? !!isExpandedPath : previousState || !!isExpandedPath
-        restoreFolderOpenStates(node.children, states, expandedPath)
-      }
-    }
-
-    const refreshFileTree = async ({ expandedPath = '' } = {}) => {
-      if (!rootHandle.value) return
-
-      const openStates = collectFolderOpenStates(fileTree.value)
-      const selectedPath = selectedTreeNode.value?.path
-      const nextTree = await fs.scanDirectory(rootHandle.value)
-      restoreFolderOpenStates(nextTree, openStates, expandedPath)
-      fileTree.value = nextTree
-
-      // 刷新会重建节点对象，重新绑定当前选中项，避免选中状态指向旧树。
-      selectedTreeNode.value = selectedPath ? findNodeByPath(nextTree, selectedPath) : null
-    }
-
-    const getTargetDirFromNode = (node) => {
-      if (!rootHandle.value) return null
-      if (!node) return rootHandle.value
-      if (node.isFolder) return node.handle
-      return node.parentHandle || rootHandle.value
-    }
-
-    const getTargetDirPathFromNode = (node) => {
-      if (!node) return ''
-      if (node.isFolder) return node.path
-      const path = node.path || ''
-      const separatorIndex = path.lastIndexOf('/')
-      return separatorIndex === -1 ? '' : path.slice(0, separatorIndex)
-    }
-
-    const getTargetPathForChild = (baseNode, childName) => {
-      if (!baseNode) return childName
-      if (baseNode.isFolder) return `${baseNode.path}/${childName}`
-      const parentPath = baseNode.path?.includes('/') ? baseNode.path.split('/').slice(0, -1).join('/') : ''
-      return parentPath ? `${parentPath}/${childName}` : childName
-    }
-
-    const createFolder = async ({ baseNode, name }) => {
-      if (!rootHandle.value) {
-        message.warning(t('请先打开 data 文件夹'))
-        return
-      }
-      const dirName = (name || '').trim()
-      if (!dirName) return
-      if (dirName.includes('/') || dirName.includes('\\')) {
-        message.error(t('文件夹名不能包含斜杠'))
-        return
-      }
-
-      try {
-        const targetNode = baseNode || selectedTreeNode.value
-        const targetDir = getTargetDirFromNode(targetNode)
-        const targetDirPath = getTargetDirPathFromNode(targetNode)
-        await fs.createDirectory(targetDir, dirName)
-        await refreshFileTree({ expandedPath: targetDirPath })
-        message.success(t('已创建文件夹: {}', dirName))
-      } catch (err) {
-        console.error('创建文件夹失败', err)
-        message.error(t('创建失败: {}', err.message || err))
-      }
-    }
-
-    const createJsonFile = async ({ baseNode, name, openAfterCreate = true }) => {
-      if (!rootHandle.value) {
-        message.warning(t('请先打开 data 文件夹'))
-        return
-      }
-
-      let fileName = (name || '').trim()
-      if (!fileName) return
-      if (fileName.includes('/') || fileName.includes('\\')) {
-        message.error(t('文件名不能包含斜杠'))
-        return
-      }
-      if (!fileName.toLowerCase().endsWith('.json')) fileName += '.json'
-
-      try {
-        const targetNode = baseNode || selectedTreeNode.value
-        const targetDir = getTargetDirFromNode(targetNode)
-        const targetDirPath = getTargetDirPathFromNode(targetNode)
-        await fs.createFile(targetDir, fileName, '{\n}\n')
-        const targetPath = getTargetPathForChild(targetNode, fileName)
-        await refreshFileTree({ expandedPath: targetDirPath })
-        message.success(t('已创建文件: {}', fileName))
-
-        if (openAfterCreate) {
-          const newNode = findNodeByPath(fileTree.value, targetPath)
-          if (newNode) {
-            selectTreeNode(newNode)
-            await loadFile(newNode)
-          }
-        }
-      } catch (err) {
-        console.error('创建文件失败', err)
-        message.error(t('创建失败: {}', err.message || err))
-      }
-    }
-
-    const deleteTreeEntry = async ({ node }) => {
-      const target = node || selectedTreeNode.value
-      if (!rootHandle.value || !target) return
-      if (!target.parentHandle) {
-        message.error(t('无法删除根目录'))
-        return
-      }
-
-      try {
-        await fs.deleteEntry(target.parentHandle, target.name, { recursive: !!target.isFolder })
-
-        if (currentFile.value?.path === target.path) {
-          currentFile.value = null
-          currentModel.value = null
-          currentDialogue.value = ''
-          activeDialogueGroupKey.value = null
-          dialogueGroupOrder.value = []
-          viewMode.value = 'empty'
-          clearSelection()
-        }
-
-        if (selectedTreeNode.value?.path === target.path) {
-          selectedTreeNode.value = null
-        }
-
-        await refreshFileTree()
-        await refreshGlobalIndex()
-        message.success(t('已删除: {}', target.name))
-      } catch (err) {
-        console.error('删除失败', err)
-        message.error(t('删除失败: {}', err.message || err))
+        message.error(t('保存失败：{}', t(err.message)))
+        return false
       }
     }
 
@@ -568,11 +485,13 @@ export const useChatBoxEditorStore = defineStore(
       if (trimmedKey === oldKey) {
         return { ok: true, changed: false, key: oldKey }
       }
+      try { connectionTarget(trimmedKey) } catch {
+        message.warning(t('该组名是保留跳转值，请先重命名或手动编写指令'))
+        return { ok: false, reason: 'reserved' }
+      }
 
-      const newMap = {}
-      Object.entries(dialogues).forEach(([key, frames]) => {
-        newMap[key === oldKey ? trimmedKey : key] = frames
-      })
+      renameGroupReferences(currentModel.value, oldKey, trimmedKey, flowOptions())
+      const newMap = Object.fromEntries(Object.entries(dialogues).map(([key, frames]) => [key === oldKey ? trimmedKey : key, frames]))
       currentModel.value.dialogues = newMap
 
       const groupIndex = dialogueGroupOrder.value.indexOf(oldKey)
@@ -587,6 +506,7 @@ export const useChatBoxEditorStore = defineStore(
       if (activeDialogueGroupKey.value === oldKey) {
         activeDialogueGroupKey.value = trimmedKey
       }
+      if (dialogueGraphGroupKey.value === oldKey) dialogueGraphGroupKey.value = trimmedKey
 
       return { ok: true, changed: true, key: trimmedKey }
     }
@@ -599,33 +519,61 @@ export const useChatBoxEditorStore = defineStore(
       if (activeDialogueGroupKey.value === key) {
         activeDialogueGroupKey.value = null
       }
+      if (dialogueGraphGroupKey.value === key) dialogueGraphGroupKey.value = null
       return true
     }
 
-    const importAssets = async () => {
-      const result = await fs.openDirectory('chatbox-assets-dir')
-      if (!result) return
+    const replaceDialogueFrames = (groupKey, frames, confirmed = false) => {
+      const before = currentModel.value.dialogues[groupKey]
+      const movesExistingFrames = before.some((frame, index) => frames.indexOf(frame) !== index)
+      if (!confirmed && movesExistingFrames && dialogueAnalysis.value.diagnostics.some(item => ['mvel-ignored', 'dynamic-command', 'theme-unavailable', 'runtime-theme'].includes(item.code))) {
+        useDialog().warning({ title: t('检查动态跳转'), content: t('存在无法分析的脚本或主题。调整对话顺序后，请手动检查其中的序号引用。'), onPositiveClick: () => replaceDialogueFrames(groupKey, frames, true) })
+        return false
+      }
+      const problems = reindexFrameReferences(currentModel.value, groupKey, frames, flowOptions())
+      if (problems.length) {
+        message.warning(t('调整顺序会改变现有跳转，请先修改引用该对话的连线或指令'))
+        return false
+      }
+      currentModel.value.dialogues[groupKey] = frames
+      if (before.includes(currentFrame.value) && !frames.includes(currentFrame.value)) clearSelection()
+      return true
+    }
 
+    const connectDialogue = (sourceGroup, targetGroup, sourceIndex = null, targetIndex = null) => {
+      const frames = currentModel.value?.dialogues?.[sourceGroup]
+      const target = currentModel.value?.dialogues?.[targetGroup]
+      if (!frames?.length || !target?.length) {
+        message.warning(t('请先给两个对话组添加对话，再创建连线'))
+        return false
+      }
+      const index = sourceIndex ?? frames.length - 1
+      if (!frames[index]) return false
       try {
-        isProcessingResources.value = true
-        resourceService.disposeResources(textureMap.value)
-        const { textureMap: map, suggestions } = await resourceService.loadResourcePack(
-          result.handle,
-        )
-        textureMap.value = map
-        textureSuggestions.value = suggestions
-        message.success(t('资源包加载完成: {} 个文件', map.size))
-      } catch (err) {
-        console.error('资源导入失败', err)
-        message.error(t('资源导入失败'))
-      } finally {
-        isProcessingResources.value = false
+        const option = new DialogueOption()
+        option.text = t('继续')
+        option.next = connectionTarget(targetGroup, sourceGroup === targetGroup ? targetIndex : null)
+        frames[index].options.options.push(option)
+        activeDialogueGroupKey.value = sourceGroup
+        selectDialoguesComponent(option, DialogueOption, 'option', frames[index])
+        message.success(t('已添加继续选项，可在右侧编辑'))
+        return true
+      } catch (error) {
+        message.warning(t(error.message))
+        return false
       }
     }
 
     const getTextureUrl = (path) => {
-      if (!path) return ''
-      return resolveTexture(path, textureMap.value)
+      if (!path || !bridge.connected) return ''
+      const id = path.includes(':') ? path : `chatbox:${path}`
+      return bridge.imageUrl('texture', id)
+    }
+
+    const getItemUrl = (id, customModelData = 0) => {
+      if (!id || !bridge.connected) return ''
+      const normalized = id.includes(':') ? id : `minecraft:${id}`
+      return bridge.imageUrl('item', normalized, customModelData)
     }
 
     const triggerAnimation = (key) => {
@@ -635,30 +583,34 @@ export const useChatBoxEditorStore = defineStore(
       }, 0)
     }
 
-    const allTextureOptions = computed(() => {
-      const builtins = getBuiltinTextures() || []
-      const userImports = (textureSuggestions.value || []).map((item) => ({
-        label: item.label,
-        value: item.value,
-        icon: textureMap.value ? textureMap.value.get(item.value) : '',
-      }))
-      return [...userImports, ...builtins]
-    })
+    const allTextureOptions = computed(() => bridge.options('TEXTURE').map(item => ({ ...item, textureId: item.value })))
 
     return {
-      fileTree,
+      gameFiles,
       currentFile,
       selectedTreeNode,
       currentModel,
       currentDialogue,
       activeDialogueGroupKey,
       dialogueGroupOrder,
+      dialogueEditorView,
+      dialogueGraphGroupKey,
+      dialogueDiagnosticsOpen,
+      dialogueGraphFocus,
+      dialogueGraphLayouts,
+      dialogueAnalysis,
+      dialogueTheme,
+      debuggingCurrentFile,
+      dialogueDebugFollow,
+      dialogueDebugPending,
+      dialogueDebugIssue,
+      startDialogueDebug,
+      syncDialogueDebug,
+      replaceDialogueFrames,
+      connectDialogue,
       viewMode,
       selectedComponent,
       selectedComponentKey,
-      textureMap,
-      textureSuggestions,
-      isProcessingResources,
       previewAnimationKey,
       translatableKeyColumns,
       translatableKeyRows,
@@ -670,22 +622,17 @@ export const useChatBoxEditorStore = defineStore(
       lastDialogueFrameSectionKey,
       globalAnimations,
       globalPortraits,
-      rootHandle,
       checkDirty,
 
       allTextureOptions,
+      getItemUrl,
+      previewInGame,
 
-      openProject,
       loadFile,
       saveProject,
-      refreshFileTree,
       selectTreeNode,
-      createFolder,
-      createJsonFile,
-      deleteTreeEntry,
       selectComponent,
       clearSelection,
-      importAssets,
       getTextureUrl,
       triggerAnimation,
       addRow,
@@ -696,7 +643,6 @@ export const useChatBoxEditorStore = defineStore(
       getTranslatableJSON,
       selectDialoguesComponent,
       getTranslatableLabel,
-      refreshGlobalIndex,
       copyDialogueFrameToClipboard,
       getDialogueFrameFromClipboard,
       syncDialogueGroupOrder,

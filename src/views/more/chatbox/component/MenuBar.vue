@@ -14,6 +14,7 @@ import { useMessage } from '@/components/register/useMessage.js'
 import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import { t } from '@/languages/index.js'
 import { shortcutUtil } from '@/utils/shortcutUtil.js'
+import GameConnection from './GameConnection.vue'
 
 const store = useChatBoxEditorStore()
 const pageStore = usePageStore()
@@ -73,7 +74,7 @@ async function readJsonFile(file, resultObj) {
     const data = JSON.parse(text)
     const langCode = file.name.replace(/\.json$/i, '')
     resultObj[langCode] = data
-  } catch (e) {
+  } catch {
     message.error(t('读取文件 {} 失败', file.name))
   }
 }
@@ -119,7 +120,6 @@ const onDrop = async (e) => {
 // 保存项目
 const handleSave = async () => {
   await store.saveProject()
-  await store.refreshGlobalIndex()
 }
 </script>
 
@@ -187,6 +187,7 @@ const handleSave = async () => {
     </div>
 
     <div class="flex-1"></div>
+    <GameConnection />
     <a href="/" class="menu-item flex items-center gap-1.5"><Icon icon="lucide:arrow-left" width="13" />{{ t('返回首页') }}</a>
     <button type="button" class="menu-item" :aria-label="pageStore.isDark ? t('切换到亮色主题') : t('切换到暗色主题')" @click="pageStore.isDark = !pageStore.isDark"><Icon :icon="pageStore.isDark ? 'lucide:moon' : 'lucide:sun'" width="15" /></button>
 

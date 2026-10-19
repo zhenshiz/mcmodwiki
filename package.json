@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "test:chatbox-bridge": "node --test scripts/tests/chatbox-*.test.mjs"
   },
   "dependencies": {
     "@firstandthird/toc": "^2.1.0",
@@ -35,10 +36,14 @@
     "@voerkai18n/formatters": "^3.0.16",
     "@voerkai18n/runtime": "^3.0.16",
     "@voerkai18n/vue": "^3.0.16",
+    "@vue-flow/background": "^1.3.2",
+    "@vue-flow/core": "^1.48.2",
+    "@vue-flow/minimap": "^1.5.4",
     "@vueuse/core": "^14.1.0",
     "animate.css": "^4.1.1",
     "async-validator": "^4.2.5",
     "autoprefixer": "^10.4.20",
+    "elkjs": "^0.12.0",
     "gsap": "^3.12.5",
     "highlight.js": "^11.11.1",
     "iconify": "^1.4.0",

@@ -127,11 +127,9 @@ export class DialogueVideo extends Component {
     this.canControl = true
     this.canSkip = true
     this.loop = false
-    delete this.renderEvents
   }
 
   static {
-    DialogueVideo.excludeFields(['renderEvents'])
     DialogueVideo.defineField('path', {
       label: t('视频路径'),
       type: EditorTypes.INPUT,
@@ -275,7 +273,7 @@ export class DialogueFrame extends AutoClean {
     DialogueFrame.defineField('backgroundImage', {
       label: t('背景图片'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
 
     // === 立绘控制 ===

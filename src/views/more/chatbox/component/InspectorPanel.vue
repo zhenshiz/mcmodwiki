@@ -7,6 +7,7 @@ import Inspector from '@/components/form/Inspector.vue'
 const store = useChatBoxEditorStore()
 
 const target = computed(() => store.selectedComponent)
+const isArrayTarget = computed(() => Array.isArray(target.value))
 const clazz = computed(() => store.selectedComponentClass)
 const rootModel = computed(() => store.currentModel)
 </script>

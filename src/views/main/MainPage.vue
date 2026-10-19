@@ -4,12 +4,12 @@ import { RouterLink } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { visibleModList } from '@/assets/info/mod.js'
 import Button from '@/components/Button.vue'
-import grass from '@/assets/textures/item/grass_block.png'
-import book from '@/assets/textures/item/book.png'
-import craftingTable from '@/assets/textures/item/crafting_table.png'
-import emerald from '@/assets/textures/item/emerald.png'
-import diamond from '@/assets/textures/item/diamond.png'
-import sapling from '@/assets/textures/item/oak_sapling.png'
+import grass from '@/assets/textures/home/grass_block.png'
+import book from '@/assets/textures/home/book.png'
+import craftingTable from '@/assets/textures/home/crafting_table.png'
+import emerald from '@/assets/textures/home/emerald.png'
+import diamond from '@/assets/textures/home/diamond.png'
+import sapling from '@/assets/textures/home/oak_sapling.png'
 
 const mods = computed(() => visibleModList())
 const materials = [grass, book, craftingTable, emerald, diamond, sapling]

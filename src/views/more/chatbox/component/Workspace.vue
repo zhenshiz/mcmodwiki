@@ -1,28 +1,22 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useChatBoxEditorStore } from '@/stores'
+import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
 import { Icon } from '@iconify/vue'
 
 // 引入拆分后的组件
-import ThemeEditor from './editors/ThemeEditor.vue'
+import GamePreview from './editors/GamePreview.vue'
 import DialogueEditor from './editors/DialoguesEditor.vue'
 import { t } from '@/languages/index.js'
 
 const store = useChatBoxEditorStore()
+const bridge = useGameBridgeStore()
 
 const BASE_HEIGHT = 1080
 
-const currentRatio = ref('16:9')
-const ratios = [
-  { label: t('16:9 (标准)'), value: '16:9' },
-  { label: t('16:10 (宽屏)'), value: '16:10' },
-  { label: t('4:3 (旧式)'), value: '4:3' },
-  { label: t('21:9 (超宽)'), value: '21:9' }
-]
-
 const baseDimensions = computed(() => {
-  const [w, h] = currentRatio.value.split(':').map(Number)
-  const width = Math.round(BASE_HEIGHT * (w / h))
+  const ratio = bridge.streamFrame ? bridge.streamFrame.width / bridge.streamFrame.height : 16 / 9
+  const width = Math.round(BASE_HEIGHT * ratio)
   return { width, height: BASE_HEIGHT }
 })
 
@@ -35,14 +29,13 @@ const workspaceRef = ref(null)
 const resetView = () => {
   if (workspaceRef.value) {
     const rect = workspaceRef.value.getBoundingClientRect()
+    scale.value = Math.max(0.1, Math.min(1, (rect.width - 48) / baseDimensions.value.width, (rect.height - 100) / baseDimensions.value.height))
     translateX.value = (rect.width - baseDimensions.value.width * scale.value) / 2
     translateY.value = (rect.height - baseDimensions.value.height * scale.value) / 2
   }
 }
 
-watch(currentRatio, () => {
-  resetView()
-})
+watch(() => baseDimensions.value.width, resetView)
 
 const handleWheel = (e) => {
   if (e.ctrlKey || e.metaKey) {
@@ -101,14 +94,14 @@ onUnmounted(() => {
     <div v-if="store.viewMode === 'empty'"
          class="absolute inset-0 flex flex-col items-center justify-center text-ui-muted gap-2 pointer-events-none">
       <div class="text-4xl opacity-20">⌘</div>
-      <div>{{ t('请在左侧选择一个文件开始编辑') }}</div>
+      <div>{{ bridge.connected ? t('请在左侧选择一个文件开始编辑') : t('请先通过顶部「连接游戏」连接 Minecraft') }}</div>
     </div>
 
     <div v-else-if="store.viewMode === 'theme'"
          class="absolute origin-top-left will-change-transform"
          :style="{ transform: `translate(${translateX}px, ${translateY}px) scale(${scale})` }">
 
-      <ThemeEditor :initialScale="scale" :dimensions="baseDimensions" />
+      <GamePreview :scale="scale" :dimensions="baseDimensions" />
     </div>
 
     <div v-else-if="store.viewMode === 'dialogue'" class="w-full h-full">
@@ -131,15 +124,7 @@ onUnmounted(() => {
           @click="resetView">{{ Math.round(scale * 100) }}%</span>
       </div>
       <div class="w-px h-4 bg-ui-inset"></div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-ui-muted">{{ t('比例') }}</span>
-        <select v-model="currentRatio"
-                class="bg-transparent text-xs text-ui-text outline-none cursor-pointer hover:text-ui-text border-b border-transparent hover:border-ui-line transition-colors">
-          <option v-for="r in ratios" :key="r.value" :value="r.value" class="bg-ui-surface">
-            {{ r.label }}
-          </option>
-        </select>
-      </div>
+      <span class="text-xs text-ui-muted">{{ t('跟随游戏窗口') }} {{ bridge.streamFrame ? `${bridge.streamFrame.guiWidth} × ${bridge.streamFrame.guiHeight}` : '' }}</span>
     </div>
   </div>
 </template>

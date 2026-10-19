@@ -18,7 +18,7 @@ import { t } from '@/languages/index.js'
 
 const DEFAULT_FLOAT = 0.0
 
-const EDITOR_NONE = t('游戏内生效，本编辑器无效')
+const EDITOR_NONE = t('连接游戏后通过 Minecraft 实时预览')
 
 const showOnlyIn = (...types) => {
   return (model) => types.some((t) => formatUtil.equalsIgnoreCase(model.type, t))
@@ -35,6 +35,13 @@ export class BaseRenderEvent extends AutoClean {
     this.condition = ''
     this.type = ''
     this.value = ''
+  }
+
+  toJSON() {
+    const result = super.toJSON()
+    // The game treats a missing trigger as NONE, rather than start.
+    if (this.type) result.trigger = this.trigger
+    return result
   }
 
   static {
@@ -78,31 +85,8 @@ export class PortraitRenderEvent extends BaseRenderEvent {
   }
 }
 
-// 主题渲染事件不支持触发条件、指令或 MVEL。
-export class ThemeRenderEvent extends BaseRenderEvent {
-  constructor() {
-    super()
-    delete this.condition
-  }
-
-  static {
-    ThemeRenderEvent.excludeFields(['condition'])
-    ThemeRenderEvent.defineOverride('trigger', {})
-    ThemeRenderEvent.defineOverride('type', {
-      props: {
-        options: eventType.values().filter(
-          ({ value }) => value !== eventType.command && value !== eventType.mvel
-        )
-      }
-    })
-  }
-
-  toJSON() {
-    const result = super.toJSON()
-    delete result.condition
-    return result
-  }
-}
+// ChatBox 1.1.5 的主题事件与对话事件使用相同的条件和事件类型。
+export class ThemeRenderEvent extends BaseRenderEvent {}
 
 export class ThemePortraitRenderEvent extends ThemeRenderEvent {
   static {
@@ -141,7 +125,7 @@ export class Attachment extends AutoClean {
       modelKey: 'value',
       label: t('图片路径'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE },
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' },
       showIf: showOnlyIn(attachmentType.TEXTURE)
     })
     Attachment.defineField('text_value', {
@@ -289,7 +273,8 @@ export class Keyframe extends AutoClean {
     Keyframe.defineField('texture', {
       label: t('切换材质'),
       tips: EDITOR_NONE,
-      type: EditorTypes.INPUT
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.TEXTURE }
     })
   }
 }
@@ -472,13 +457,13 @@ export class KeyPrompt extends Component {
       label: t('右键图标'),
       tips: EDITOR_NONE,
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
     KeyPrompt.defineField('scrollTexture', {
       label: t('滚轮图标'),
       tips: EDITOR_NONE,
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
 
     KeyPrompt.excludeFields(['width', 'height', 'angle', 'opacity', 'brightness'])
@@ -535,14 +520,14 @@ export class Portrait extends Component {
       modelKey: 'texture',
       label: t('图片路径'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE },
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' },
       showIf: showOnlyIn(portraitType.TEXTURE)
     })
     Portrait.defineField('texture_hoverTexture', {
       modelKey: 'hoverTexture',
       label: t('鼠标悬浮时图片'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE },
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' },
       showIf: showOnlyIn(portraitType.TEXTURE)
     })
     Portrait.defineField('texture_isLock', {
@@ -555,7 +540,7 @@ export class Portrait extends Component {
       modelKey: 'lockTexture',
       label: t('上锁时的贴图'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE },
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' },
       showIf: showOnlyIn(portraitType.TEXTURE)
     })
     // 仅当类型为物品时
@@ -569,6 +554,20 @@ export class Portrait extends Component {
     Portrait.defineField('item_hoverTexture', {
       modelKey: 'hoverTexture',
       label: t('鼠标悬浮时物品'),
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.ITEM },
+      showIf: showOnlyIn(portraitType.ITEM)
+    })
+    Portrait.defineField('item_isLock', {
+      modelKey: 'isLock',
+      label: t('是否上锁'),
+      type: EditorTypes.SWITCH,
+      tips: t('开启后优先显示上锁时的物品；未设置时仍显示普通物品。预览不执行条件脚本，可手动切换检查效果。'),
+      showIf: showOnlyIn(portraitType.ITEM)
+    })
+    Portrait.defineField('item_lockTexture', {
+      modelKey: 'lockTexture',
+      label: t('上锁时的物品'),
       type: EditorTypes.AUTOCOMPLETE,
       props: { dataSource: autoCompleteDataSources.ITEM },
       showIf: showOnlyIn(portraitType.ITEM)
@@ -704,12 +703,12 @@ export class FunctionButton extends Portrait {
     FunctionButton.defineField('texture', {
       label: t('贴图'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
     FunctionButton.defineField('hoverTexture', {
       label: t('鼠标悬浮时或功能激活时的贴图'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
 
     FunctionButton.defineOverride('renderEvents', {
@@ -755,7 +754,7 @@ export class Option extends Portrait {
     Option.defineField('texture', {
       label: t('选项贴图'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
     Option.defineField('textAlign', {
       label: t('文字对齐'),
@@ -765,7 +764,7 @@ export class Option extends Portrait {
     Option.defineField('lockTexture', {
       label: t('锁定图标'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
     Option.defineField('optionChatX', {
       label: t('文字 X 偏移'),
@@ -828,7 +827,7 @@ export class DialogBox extends Portrait {
     DialogBox.defineField('texture', {
       label: t('对话框贴图'),
       type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TEXTURE }
+      props: { dataSource: autoCompleteDataSources.TEXTURE, placeholder: 'chatbox:textures/gui/dialogue.png' }
     })
     DialogBox.defineField('lineWidth', {
       label: t('换行宽度'),
@@ -921,10 +920,6 @@ export class ChatBoxTheme extends AutoClean {
   }
 
   static {
-    ChatBoxTheme.defineField('_bgColor', {
-      label: t('背景颜色'),
-      type: EditorTypes.COLOR
-    })
     ChatBoxTheme.defineField('customAnimation', {
       label: t('全局动画库'),
       type: EditorTypes.MAP,

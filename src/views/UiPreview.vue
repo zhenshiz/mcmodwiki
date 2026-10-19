@@ -7,11 +7,13 @@ import Switch from '@/components/form/Switch.vue'
 import Modal from '@/components/Modal.vue'
 import MarkdownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import MarkdownEditor from '@/components/markdown/Editor.vue'
+import InspectorItem from '@/components/form/InspectorItem.vue'
 const query = ref('')
 const sort = ref('updated')
 const enabled = ref(true)
 const modalVisible = ref(false)
 const editorMode = ref('preview')
+const previewName = ref('Steve')
 const editorSample = ref(
   '<h1>编辑器排版</h1><p>选中这段文字试试行内代码样式。</p><p>公式可以嵌入段落：<span data-type="inline-math" data-latex="E=mc^2"></span>，也可以单独成块。</p><div data-type="block-math" data-latex="\\sum_{i=1}^{n} x_i"></div><table><thead><tr><th>配置项</th><th>说明</th></tr></thead><tbody><tr><td>enabled</td><td>启用功能</td></tr></tbody></table><div data-type="mermaid" data-hide-code="false"><div class="mermaid">flowchart TD\n  A[开始] --&gt; B{是否满足条件}\n  B --&gt;|是| C[执行任务]\n  B --&gt;|否| D[结束]\n  C --&gt; D</div></div><p>这里继续编写文档。</p>',
 )
@@ -67,6 +69,16 @@ const sample =
           切换顶部明暗主题查看组件层级。使用 Tab 检查焦点，使用方向键操作下拉框，使用 Escape
           关闭菜单和弹窗。按钮按下时向右下移动。
         </p>
+      </section>
+      <section class="mc-panel p-6">
+        <h2 class="mb-4 font-bold">参数说明</h2>
+        <p class="mb-4 text-sm text-ui-muted">带问号的参数提供说明，悬停、点击或使用 Tab 聚焦问号即可查看。</p>
+        <InspectorItem label="预览名字" tips="仅用于预览名字位置，不保存">
+          <Input v-model="previewName" />
+        </InspectorItem>
+        <InspectorItem label="普通参数">
+          <Input placeholder="没有说明时不显示问号" />
+        </InspectorItem>
       </section>
     </div>
     <section class="mt-8">

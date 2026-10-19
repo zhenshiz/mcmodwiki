@@ -174,8 +174,8 @@ const handleResize = (e, type) => {
          class="absolute inset-0 border border-dashed border-white/30 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"></div>
 
     <div v-if="isSelected || isDragging"
-         class="absolute -top-6 left-0 bg-blue-600 text-white text-[10px] px-1 rounded whitespace-nowrap z-50"
-         :style="{ transform: `scale(${1/scale})`, transformOrigin: 'bottom left' }">
+         class="selection-label absolute left-0 bg-blue-600 text-white px-1 z-50"
+         :style="{ transform: `scale(${1/scale})`, transformOrigin: 'bottom left', bottom: 'calc(100% + 4px)'  }">
       {{ label }} ({{ Math.round(component.x) }}%, {{ Math.round(component.y) }}%)
       <span v-if="component.width" class="opacity-70">[{{Math.round(component.width)}}x{{Math.round(component.height)}}]</span>
     </div>
@@ -200,3 +200,8 @@ const handleResize = (e, type) => {
     </template>
   </div>
 </template>
+
+<style scoped>
+.selection-label { font-size: 11px !important; line-height: 16px !important; font-weight: 400; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.selection-label span { font-size: inherit !important; }
+</style>

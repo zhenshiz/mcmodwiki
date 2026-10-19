@@ -1,4 +1,5 @@
 <script setup>
+import { ref, useId } from 'vue'
 import { Icon } from '@iconify/vue'
 import Popover from '@/components/Popover.vue'
 
@@ -8,7 +9,9 @@ defineProps({
   isModified: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['reset'])
+defineEmits(['reset'])
+const tipsOpen = ref(false)
+const tipsId = useId()
 </script>
 
 <template>
@@ -23,24 +26,31 @@ const emit = defineEmits(['reset'])
 
       <Popover
         v-if="tips"
+        v-model:is-open="tipsOpen"
         trigger="hover"
         placement="top-start"
         :offset="10"
         class="flex-1 min-w-0"
       >
         <template #trigger>
-          <span
-            class="
-              block text-xs font-medium truncate transition-colors cursor-help
-              decoration-dashed underline underline-offset-4 decoration-slate-500/30
-            "
-            :class="isModified ? 'text-ui-link font-bold' : 'text-ui-muted dark:text-ui-muted group-hover:text-ui-text'"
-          >
-            {{ label }}
+          <span class="flex min-w-0 items-center gap-1 cursor-help">
+            <span
+              class="min-w-0 truncate text-xs font-medium transition-colors"
+              :class="isModified ? 'text-ui-link font-bold' : 'text-ui-muted dark:text-ui-muted group-hover:text-ui-text'"
+            >{{ label }}</span>
+            <button
+              type="button"
+              :aria-label="label"
+              :aria-describedby="tipsOpen ? tipsId : undefined"
+              class="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center border border-ui-link/40 bg-ui-link/5 text-ui-link hover:border-ui-link hover:bg-ui-link/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ui-link cursor-help"
+              @click.stop="tipsOpen = true"
+              @focus="tipsOpen = true"
+              @blur="tipsOpen = false"
+            ><span aria-hidden="true" class="text-[11px] font-bold leading-none">?</span></button>
           </span>
         </template>
 
-        <div class="max-w-[200px] text-xs leading-5 break-words">
+        <div :id="tipsId" role="tooltip" class="max-w-[240px] text-xs leading-5 break-words">
           {{ tips }}
         </div>
       </Popover>

@@ -3,6 +3,8 @@ import { computed, nextTick, ref, watch } from 'vue'
 import Popover from '@/components/Popover.vue'
 import { Icon } from '@iconify/vue'
 import { t } from '@/languages/index.js'
+import GameResourceImage from './GameResourceImage.vue'
+import { isTextureDrag, TEXTURE_DRAG_TYPE } from './textureDrag.js'
 
 const props = defineProps({
   // 双向绑定的值
@@ -14,6 +16,10 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
+  },
+  dataSource: {
+    type: String,
+    default: ''
   },
   placeholder: {
     type: String,
@@ -37,6 +43,8 @@ const emit = defineEmits(['update:modelValue', 'change', 'clear'])
 
 const isOpen = ref(false)
 const inputRef = ref(null)
+const isDragOver = ref(false)
+const acceptsTextureDrop = computed(() => props.dataSource === 'TEXTURE' && !props.disabled)
 
 // 内部维护的输入值
 const query = ref('')
@@ -55,7 +63,7 @@ const filteredOptions = computed(() => {
   )
 })
 
-watch(() => props.modelValue, (val) => {
+watch(() => [props.modelValue, props.options], ([val]) => {
   const opt = props.options.find(o => o.value === val)
 
   if (opt) {
@@ -94,6 +102,30 @@ const handleSelect = (option) => {
   isOpen.value = false
 }
 
+const handleDragOver = (event) => {
+  if (!isTextureDrag(event.dataTransfer)) return
+  event.preventDefault()
+  event.stopPropagation()
+  event.dataTransfer.dropEffect = acceptsTextureDrop.value ? 'copy' : 'none'
+  isDragOver.value = acceptsTextureDrop.value
+}
+
+const handleDragLeave = (event) => {
+  if (!event.currentTarget.contains(event.relatedTarget)) isDragOver.value = false
+}
+
+const handleDrop = (event) => {
+  isDragOver.value = false
+  if (!isTextureDrag(event.dataTransfer)) return
+  event.preventDefault()
+  event.stopPropagation()
+  if (!acceptsTextureDrop.value) return
+
+  const value = event.dataTransfer.getData(TEXTURE_DRAG_TYPE)
+  const option = props.options.find(item => item.value === value)
+  if (option) handleSelect(option)
+}
+
 const handleClear = (e) => {
   e.stopPropagation()
   emit('update:modelValue', '')
@@ -126,17 +158,18 @@ const handleClear = (e) => {
         :class="{
           'opacity-60 cursor-not-allowed': disabled,
           'border-ui-link ring-1 ring-blue-500/20': isOpen,
+          'outline outline-2 outline-ui-link outline-offset-2': isDragOver,
           'hover:border-ui-link dark:hover:border-ui-link': !disabled && !isOpen
         }"
         :style="{ width: width }"
+        :title="acceptsTextureDrop ? t('可将资源包图片拖到此处') : undefined"
+        @dragenter="handleDragOver"
+        @dragover="handleDragOver"
+        @dragleave="handleDragLeave"
+        @drop="handleDrop"
       >
         <div class="flex items-center gap-2 flex-1 overflow-hidden">
-          <img
-            v-if="selectedOption?.icon"
-            :src="selectedOption.icon"
-            class="w-5 h-5 object-contain flex-shrink-0"
-            alt="icon"
-          />
+          <GameResourceImage v-if="selectedOption && (selectedOption.icon || selectedOption.itemId || selectedOption.textureId)" :option="selectedOption" />
           <input
             ref="inputRef"
             v-model="query"
@@ -183,7 +216,7 @@ const handleClear = (e) => {
     >
       <template v-if="filteredOptions.length > 0">
         <div
-          v-for="item in filteredOptions"
+          v-for="item in filteredOptions.slice(0, 80)"
           :key="item.value"
           class="
             flex items-center gap-2 px-2 py-2 rounded-none cursor-pointer transition-colors text-sm
@@ -195,14 +228,9 @@ const handleClear = (e) => {
           }"
           @click="handleSelect(item)"
         >
-          <img
-            v-if="item.icon"
-            :src="item.icon"
-            class="w-5 h-5 object-contain"
-            alt="icon"
-          />
+          <GameResourceImage v-if="item.icon || item.itemId || item.textureId" :option="item" />
 
-          <span class="flex-1 truncate" v-html="item.label"></span>
+          <span class="flex-1 truncate">{{ item.label }}</span>
 
           <span v-if="item.value !== item.label"
                 class="text-xs text-ui-muted truncate max-w-[100px]">
@@ -215,6 +243,7 @@ const handleClear = (e) => {
             class="w-4 h-4 text-ui-link"
           />
         </div>
+        <div v-if="filteredOptions.length > 80" class="px-2 py-2 text-xs text-ui-muted">{{ t('请继续输入以缩小搜索范围') }}</div>
       </template>
 
       <div v-else class="text-center text-ui-muted py-2 text-xs">

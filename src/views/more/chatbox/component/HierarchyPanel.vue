@@ -192,6 +192,7 @@ const renameDialogueGroup = (e, oldKey) => {
 // 跳转到组 (切换到全局视图)
 const jumpToGroup = (key) => {
   store.activeDialogueGroupKey = key
+  store.dialogueGraphGroupKey = key
   selectDialoguesItem(model.value, ChatBoxDialogues, 'Global')
 }
 </script>

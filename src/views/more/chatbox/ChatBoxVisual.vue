@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onBeforeUnmount, onMounted } from 'vue'
 import { useChatBoxEditorStore } from '@/stores'
+import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
 import MenuBar from './component/MenuBar.vue'
 import FileExplorer from './component/FileExplorer.vue'
 import ResourcePanel from './component/ResourcePanel.vue'
@@ -9,12 +10,12 @@ import HierarchyPanel from './component/HierarchyPanel.vue'
 import InspectorPanel from './component/InspectorPanel.vue'
 
 const editorStore = useChatBoxEditorStore()
+const bridge = useGameBridgeStore()
 
 const handleGlobalKeydown = async (e) => {
   if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
     e.preventDefault()
     await editorStore.saveProject()
-    await editorStore.refreshGlobalIndex()
   }
 }
 
@@ -71,6 +72,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (bridge.debugActive) bridge.stopDebug().catch(() => {})
   window.removeEventListener('keydown', handleGlobalKeydown)
 })
 </script>

@@ -12,7 +12,6 @@ import {
   portraitType,
   USER_DEFINED_PRESETS
 } from '@/assets/more/chatbox/enumTypes.js'
-import { itemSuggestions } from '@/assets/textures/mcTextures'
 import gsap from 'gsap'
 import { t } from '../../../../../languages/index.js'
 
@@ -419,8 +418,8 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
             </template>
 
             <template v-else-if="formatUtil.equalsIgnoreCase(portrait.type, portraitType.ITEM)">
-              <img v-if="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', ''))"
-                   :src="itemSuggestions.find(item => item.value.replace('minecraft:', '') === portrait.texture.replace('minecraft:', '')).icon"
+              <img v-if="store.getItemUrl(portrait.texture, portrait.customItemData)"
+                   :src="store.getItemUrl(portrait.texture, portrait.customItemData)"
                    class="w-full h-full object-contain pixelated drop-shadow-sm" draggable="false" />
               <div v-else class="flex flex-col items-center justify-center p-1 text-center w-full h-full">
                 <span
