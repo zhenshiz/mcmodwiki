@@ -39,7 +39,7 @@ export class BaseRenderEvent extends AutoClean {
 
   toJSON() {
     const result = super.toJSON()
-    // The game treats a missing trigger as NONE, rather than start.
+    // 与游戏保持一致：未填写触发时机表示 NONE，不是开始时触发。
     if (this.type) result.trigger = this.trigger
     return result
   }
@@ -298,7 +298,6 @@ export class Component extends AutoClean {
     this.angle = 0
     this.hidden = false
 
-    // Java: public List<RenderEvent> renderEvents;
     this.renderEvents = []
 
     this._hidden = false
@@ -433,7 +432,6 @@ export class Component extends AutoClean {
 export class KeyPrompt extends Component {
   constructor() {
     super()
-    // Java Init Block
     this.renderOrder = 40
 
     this.visible = true
@@ -474,7 +472,6 @@ export class KeyPrompt extends Component {
 export class Portrait extends Component {
   constructor() {
     super()
-    // Java Init Block: { this.renderOrder = 20; }
     this.renderOrder = 20
 
     this.type = portraitType.TEXTURE
@@ -487,9 +484,7 @@ export class Portrait extends Component {
     this.animation = null
     this.loop = false
 
-    // Java: public List<Keyframe> customAnimation;
     this.customAnimation = []
-    // Java: public Attachment[] attachment;
     this.attachment = []
 
     //实体渲染相关参数
@@ -681,7 +676,6 @@ export class Portrait extends Component {
 export class FunctionButton extends Portrait {
   constructor() {
     super()
-    // Java Init Block 里的覆写
     this.width = 5.0
     this.height = 8.0
     this.alignX = alignXList.RIGHT
@@ -732,7 +726,6 @@ export class FunctionButton extends Portrait {
 export class Option extends Portrait {
   constructor() {
     super()
-    // Java Init Block: { this.renderOrder = 10; }
     this.renderOrder = 10
 
     this._text = []
@@ -797,7 +790,6 @@ export class Option extends Portrait {
 export class DialogBox extends Portrait {
   constructor() {
     super()
-    // Java Init Block: { this.renderOrder = 0; }
     this.renderOrder = 0
 
     this._name = 'Steve'
@@ -900,22 +892,16 @@ export class ChatBoxTheme extends AutoClean {
     super()
     this._bgColor = -16766400
 
-    // Java: public Map<String, Portrait> portrait = new HashMap<>();
     this.portrait = {}
 
-    // Java: public Option option = new Option();
     this.option = new Option()
 
-    // Java: public DialogBox dialogBox = new DialogBox();
     this.dialogBox = new DialogBox()
 
-    // Java: public List<FunctionButton> functionalButton = new ArrayList<>();
     this.functionalButton = []
 
-    // Java: public KeyPrompt keyPrompt = new KeyPrompt();
     this.keyPrompt = new KeyPrompt()
 
-    // Java: public Map<String, List<Keyframe>> customAnimation = new HashMap<>();
     this.customAnimation = {}
   }
 

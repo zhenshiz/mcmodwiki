@@ -61,7 +61,6 @@ export const themeService = {
 
       // 3. 恢复嵌套的类实例
 
-      // --- DialogBox ---
       if (jsonContent.dialogBox) {
         model.dialogBox = new DialogBox()
         Object.assign(model.dialogBox, jsonContent.dialogBox)
@@ -71,7 +70,6 @@ export const themeService = {
         )
       }
 
-      // --- Option ---
       if (jsonContent.option) {
         model.option = new Option()
         Object.assign(model.option, jsonContent.option)
@@ -81,7 +79,6 @@ export const themeService = {
         )
       }
 
-      // --- KeyPrompt ---
       if (jsonContent.keyPrompt) {
         model.keyPrompt = new KeyPrompt()
         Object.assign(model.keyPrompt, jsonContent.keyPrompt)
@@ -91,7 +88,6 @@ export const themeService = {
         )
       }
 
-      // --- FunctionalButton ---
       if (Array.isArray(jsonContent.functionalButton)) {
         model.functionalButton = jsonContent.functionalButton.map((btnData) => {
           const btn = new FunctionButton()

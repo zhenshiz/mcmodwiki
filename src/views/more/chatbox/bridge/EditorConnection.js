@@ -11,7 +11,6 @@ export function localEditorUrl(address) {
   return url.href
 }
 
-// This transport has no Vue dependency so request ordering and disconnects can be tested directly.
 export class EditorConnection {
   constructor({ WebSocketImpl = globalThis.WebSocket, onEvent = () => {}, onClose = () => {} } = {}) {
     this.WebSocketImpl = WebSocketImpl
@@ -45,7 +44,7 @@ export class EditorConnection {
           this.pending.delete(packet.id)
           clearTimeout(request.timer)
           packet.ok ? request.resolve(packet.data) : request.reject(new Error(packet.error || '游戏处理请求失败'))
-        } catch { /* Ignore messages that do not belong to this protocol. */ }
+        } catch { /* 忽略不属于当前协议的消息。 */ }
       }
       socket.onclose = () => {
         finish(new Error('游戏连接已断开'))

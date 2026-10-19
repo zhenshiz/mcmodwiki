@@ -116,7 +116,6 @@ export class DialogueOptionList extends AutoClean{
 export class DialogueVideo extends Component {
   constructor() {
     super()
-    // Java Init Block
     this.x = 0
     this.y = 0
     this.width = 100
@@ -145,7 +144,6 @@ export class DialogueVideo extends Component {
 export class DialogueReplacePortrait extends Portrait {
   constructor() {
     super()
-    //Java init
     this.type = null
     this.texture = null
     this.hoverTexture = null
@@ -240,9 +238,9 @@ export class DialogueFrame extends AutoClean {
     this._editorId = globalThis.crypto?.randomUUID?.()
       || `dialogue-frame-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
     this.dialogBox = new DialogueDialogBox()
-    this.portrait = new DialoguePortrait() // List<JsonElement>
-    this.options = new DialogueOptionList() // List<Option>
-    this.video = new DialogueVideo() // Video
+    this.portrait = new DialoguePortrait()
+    this.options = new DialogueOptionList()
+    this.video = new DialogueVideo()
 
     this.sound = ''
     this.bgm = ''
@@ -251,7 +249,7 @@ export class DialogueFrame extends AutoClean {
     this.backgroundImage = null
 
     this.clearOldPortrait = true
-    this.removePortrait = [] // List<String>
+    this.removePortrait = []
     this.renderEvents = []
   }
 
@@ -317,7 +315,6 @@ export class ChatBoxDialogues extends AutoClean {
     this.maxTriggerCount = -1
     this.criteria = null
 
-    // Map<String, List<DialogueFrame>>
     this.dialogues = {}
   }
 

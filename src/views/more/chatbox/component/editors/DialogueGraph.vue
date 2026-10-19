@@ -315,7 +315,7 @@ watch(() => [bridge.debugState, nodes.value, store.dialogueDebugFollow, store.de
   if (!store.debuggingCurrentFile || !store.dialogueDebugFollow || !currentRun.value) return
   const state = currentRun.value
   if (scope.value !== null && scope.value !== state.group && groups.value[state.group]) {
-    // Follow the runtime without stealing the inspector from a text field being edited.
+    // 跟随游戏进度时，保留正在编辑的输入框及其属性面板。
     store.dialogueGraphGroupKey = state.group
     return
   }
@@ -382,7 +382,7 @@ onBeforeUnmount(() => { generation++; elk.terminateWorker(); window.removeEventL
         </div>
         <p v-if="debugIssue" class="text-amber-600 mt-2">{{ debugIssue }} <button v-if="store.debuggingCurrentFile" class="story-button" @click="store.syncDialogueDebug">{{ t('重试同步') }}</button></p>
         <p v-if="bridge.debugActive && bridge.debugState && !currentRun" class="text-amber-600 mt-2">{{ t('游戏已跳到其他文件，当前图仅显示本文件') }}</p>
-        <p v-if="store.debuggingCurrentFile" class="text-[10px] text-ui-muted mt-1">{{ t('实心标记是当前对话，虚线标记是可能的下一步，条件仍由游戏判断。文本即时更新，其他参数再次进入对话后生效。') }}</p>
+        <p v-if="store.debuggingCurrentFile" class="text-[10px] text-ui-muted mt-1">{{ t('实心标记是当前对话，虚线标记是可能的下一步，条件仍由游戏判断。正文、选项和立绘即时更新，进入指令与开始事件不会重复执行。') }}</p>
         <details v-if="bridge.debugHistory.length" class="mt-2">
           <summary class="cursor-pointer text-ui-link">{{ t('运行路径') }} · {{ bridge.debugHistory.length }}</summary>
           <div class="flex flex-wrap gap-1 mt-2 max-h-20 overflow-auto"><code v-for="(step, index) in bridge.debugHistory" :key="step.sequence" class="story-trace">{{ index ? '→ ' : '' }}{{ step.group }} #{{ step.index }}</code></div>

@@ -8,8 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "test:chatbox-bridge": "node --test scripts/tests/chatbox-*.test.mjs"
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@firstandthird/toc": "^2.1.0",

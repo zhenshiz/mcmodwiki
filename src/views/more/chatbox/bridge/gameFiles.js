@@ -1,4 +1,4 @@
-// Server IDs, rather than browser filesystem paths, identify editable game resources.
+// 可编辑游戏资源通过服务端资源 ID 标识。
 export function gameFileTree(files = [], serverSession = '') {
   const roots = []
   const folders = new Map()

@@ -19,7 +19,7 @@ export const useChatBoxEditorStore = defineStore(
   () => {
     const bridge = useGameBridgeStore()
 
-    // === 状态 (State) ===
+    // 状态
     const currentFile = ref(null)
     const gameFiles = computed(() => gameFileTree(bridge.files, bridge.serverSession))
     const selectedTreeNode = ref(null)

@@ -1,5 +1,5 @@
-// Graphs are projections of the game's JSON. Paths always refer to that JSON,
-// including when the editor wraps options/portraits in model classes.
+// 流程图由游戏 JSON 投影生成，路径始终指向原始 JSON，
+// 即使编辑器将选项或立绘包装成模型类也不例外。
 export const normalizeId = value => String(value || '').includes(':') ? String(value) : `minecraft:${value}`
 const integer = value => /^[-+]?\d+$/.test(String(value)) && Number(value) >= -2147483648 && Number(value) <= 2147483647
 const commandInteger = value => /^-?\d+$/.test(String(value)) && integer(value)
@@ -19,8 +19,8 @@ export function fieldAt(root, path) {
   return { owner, key: path.at(-1), value: owner?.[path.at(-1)] }
 }
 
-// Token positions let rename/reorder replace only the argument, preserving the
-// original command, whitespace, conditions, selectors and unrelated commands.
+// 记录参数在原文中的位置，使重命名和排序只替换目标参数，
+// 保留原指令的空白、条件、选择器和无关命令。
 function tokensOf(command, offset) {
   const tokens = []
   let i = 0
@@ -53,7 +53,7 @@ export function parseJumpCommands(value) {
   if (typeof value !== 'string') return []
   const found = []
   let offset = 0
-  // The mod itself splits on EVERY semicolon, even inside quoted arguments.
+  // 与模组保持一致：所有分号都分隔命令，包括引号内的分号。
   for (const [commandIndex, command] of value.split(';').entries()) {
     const tokens = tokensOf(command, offset)
     offset += command.length + 1
@@ -156,7 +156,7 @@ export function analyzeDialogue(model, { fileId = '', theme = null, themeState =
         jump(option.next, source)
         const nextLink = transitions.at(-1)
         const type = String(option.click?.type || '').toUpperCase()
-        // setNext already installs JUMP; setClickEvent explicitly ignores custom JUMP.
+        // setNext 已注册跳转，setClickEvent 会忽略自定义 JUMP。
         if (type && type !== 'JUMP') {
           event({ ...option.click, trigger: 'click' }, { ...source, path: [...base.path, 'options', index, 'click', 'value'], origin: 'click', readonly: false,
             contextGroup: nextLink.group, contextIndex: nextLink.index, unknownContext: nextLink.kind !== 'frame' })
@@ -177,7 +177,7 @@ export function analyzeDialogue(model, { fileId = '', theme = null, themeState =
           events(theme[key], [key], context)
         }
         ;(theme.functionalButton || []).forEach((button, index) => events(button, ['functionalButton', index], context))
-        // Conservative: portraits can survive earlier frames or be shown by events.
+        // 立绘可能从上一句保留，也可能被事件显示，分析时保留这些可能性。
         Object.entries(theme.portrait || {}).forEach(([key, portrait]) => events(portrait, ['portrait', key], context))
       }
     })
@@ -193,8 +193,8 @@ function replaceTokens(value, edits) {
   return value
 }
 
-// All rewrites are collected before mutation: one command field may contain
-// several jumps, and their token offsets refer to the same original string.
+// 先收集所有替换操作再修改原文；同一字段可能包含多个跳转，
+// 这些跳转的参数偏移都以同一份原文为准。
 function rewrite(model, analysis, edit) {
   const fields = new Map()
   analysis.transitions.filter(link => !link.readonly).forEach(link => {
@@ -227,7 +227,7 @@ export function reindexFrameReferences(model, groupKey, nextFrames, options) {
     if (link.groupKey === groupKey && indexMap[link.frameIndex] < 0) return
     if (link.group !== groupKey || link.kind !== 'frame' || link.implicit || link.stay) return
     const target = indexMap[link.index]
-    // Removing a referenced frame must not silently retarget the following frame.
+    // 删除被引用的句子后，原跳转不能悄悄指向下一句。
     if (target < 0) { problems.push(link); return }
     if (!link.absolute && !link.relative) return
     const contextGroup = link.contextGroup ?? link.groupKey
@@ -244,7 +244,7 @@ export function reindexFrameReferences(model, groupKey, nextFrames, options) {
       changes.set(link.id, { token, text: String(link.relative ? target - sourceIndex : target) })
       return
     }
-    // Explicit blank JUMP/option next also has an index target; pin it on reorder.
+    // 空跳转参数也指向具体句子，排序时需要固定其目标。
     if (link.relative && ['event', 'click'].includes(link.origin)) {
       const type = fieldAt(model, [...link.path.slice(0, -1), 'type']).value
       changes.set(link.id, { text: String(String(type).toUpperCase() === 'GOTO_NEXT' ? target - sourceIndex : target) })
@@ -256,8 +256,8 @@ export function reindexFrameReferences(model, groupKey, nextFrames, options) {
   return problems
 }
 
-// Plan every source edit before mutating. Shared target nodes can represent several
-// commands or events; readonly sources must never leave a half-deleted bundle.
+// 共享目标节点可能对应多条命令或事件，先规划所有来源的修改，
+// 存在只读来源时不能只删除其中一部分。
 export function removeDialogueTransitions(model, links) {
   if (!links.length) return 0
   if (links.some(link => link.implicit)) throw new Error('顺序推进由游戏决定，不能删除；请修改对话或添加选项。')
@@ -288,8 +288,8 @@ export function removeDialogueTransitions(model, links) {
       write.next = write.value.split(';').filter((_, index) => !write.commands.has(index)).join(';')
       if (!write.next.trim()) {
         write.next = ''
-        // Removing the only condition must also remove its event, rather than
-        // turning the remaining action into an unconditional one.
+        // 删除唯一条件时同时删除所属事件，
+        // 避免剩余动作变成无条件执行。
         if (write.eventPath) removals.set(JSON.stringify(write.eventPath), write.eventPath)
         else if (write.path.at(-2) === 'click') write.clearClick = true
       }
@@ -302,7 +302,7 @@ export function removeDialogueTransitions(model, links) {
     if (write.clearClick) { write.owner.type = ''; write.owner.value = '' }
     else write.owner[write.key] = write.next
   }
-  // Descending indices preserve the original paths when multiple events share an array.
+  // 同一数组中的事件按索引倒序删除，避免后续路径偏移。
   for (const field of eventRemovals.sort((a, b) => b.key - a.key)) field.owner.splice(field.key, 1)
   return links.length
 }

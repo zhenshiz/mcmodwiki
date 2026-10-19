@@ -28,7 +28,7 @@ async function updatePreview() {
   pending = true
   const current = generation
   try { await store.previewInGame({ stream: true, isCurrent: () => !disposed && current === generation }) }
-  catch { /* The connection store exposes the error in the preview. */ }
+  catch { /* 连接状态仓库负责在预览中显示错误。 */ }
   finally {
     pending = false
     if (disposed && bridge.connected) { bridge.stopPreview().catch(() => {}) }
@@ -42,7 +42,7 @@ watch(() => [bridge.connected, bridge.snapshot?.previewStream, store.currentMode
   if (!dragging.value) timer = setTimeout(updatePreview, 220)
 }, { deep: true, immediate: true, flush: 'sync' })
 
-// Commit image and hit boxes together after decoding; metadata always matches the visible pixels.
+// 解码后同时提交画面与命中框，确保坐标元数据与显示内容一致。
 watch(() => bridge.streamFrame, async frame => {
   if (!frame) { displayed.value = null; return }
   const image = new window.Image()
@@ -50,7 +50,7 @@ watch(() => bridge.streamFrame, async frame => {
   try {
     await image.decode()
     if (!disposed && bridge.streamFrame === frame) displayed.value = frame
-  } catch { /* Keep the last complete frame until a newer frame arrives. */ }
+  } catch { /* 解码失败时保留上一张完整画面，等待新帧。 */ }
 })
 
 const components = computed(() => (displayed.value?.components || []).map(bounds => {
@@ -62,7 +62,7 @@ const components = computed(() => (displayed.value?.components || []).map(bounds
 function rectStyle(item, index, original = false) {
   let rect = original ? item : previewComponentRect(item, displayed.value)
   const feedback = dragFeedback.value
-  // Older mods still get immediate drop feedback, followed by a full preview on release.
+  // 旧版模组先显示本地落点反馈，松开后再刷新完整预览。
   if (!original && !Number.isFinite(item.positionX) && feedback?.target === item.target && feedback.revision === displayed.value.revision) {
     rect = { ...feedback.bounds, x: feedback.bounds.x + (item.target.x - feedback.x) / 100 * displayed.value.guiWidth, y: feedback.bounds.y + (item.target.y - feedback.y) / 100 * displayed.value.guiHeight }
   }
@@ -73,7 +73,7 @@ function rectStyle(item, index, original = false) {
   }
 }
 
-// Keep at most one request in flight and always send the newest pointer position.
+// 同一时间最多发送一个请求，并始终发送最新的指针位置。
 async function sendMove() {
   moveTimer = null
   if (!dragging.value || disposed || !bridge.connected || !bridge.snapshot?.previewMove) return
@@ -82,7 +82,7 @@ async function sendMove() {
   const x = target.x, y = target.y
   moving = true
   try { await bridge.movePreview({ kind, key, x, y }) }
-  catch { /* Keep the local drop target; the final full preview can recover the stream. */ }
+  catch { /* 保留本地落点，松开后的完整预览可恢复画面流。 */ }
   finally {
     moving = false
     if (dragging.value && !disposed && (dragFeedback.value.target !== target || target.x !== x || target.y !== y)) moveTimer = setTimeout(sendMove, 80)

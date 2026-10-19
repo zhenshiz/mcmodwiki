@@ -10,7 +10,7 @@ export function sameDebugPosition(a, b) {
   return a && b && a.resourceId === b.resourceId && a.group === b.group && a.index === b.index
 }
 
-// Runtime state is kept apart from editor selection, so inspecting another node never moves the game.
+// 运行位置与编辑器选中状态分开，查看其他节点不会改变游戏进度。
 export function debugNodeState(data, state, fileId, active) {
   if (!active || !state || state.resourceId !== fileId || data.group !== state.group) return false
   return data.kind === 'group' || data.kind === 'frame' && data.index === state.index

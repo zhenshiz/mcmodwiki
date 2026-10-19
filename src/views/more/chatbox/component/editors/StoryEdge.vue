@@ -10,8 +10,8 @@ const props = defineProps({
 const route = computed(() => {
   const { sourceX: x, sourceY: y, targetX: tx, targetY: ty } = props
   if (tx <= x && Math.abs(y - ty) < 80) {
-    // Return paths go above the cards, so opposite directions and self-loops
-    // remain distinct instead of sharing the same horizontal line.
+    // 回程连线从卡片上方绕行，使反向连线与自循环
+    // 保持可区分，不共用同一条水平线。
     const top = Math.min(y, ty) - 105
     return [`M ${x},${y} C ${x + 65},${y} ${x + 65},${top} ${x},${top} L ${tx},${top} C ${tx - 65},${top} ${tx - 65},${ty} ${tx},${ty}`, (x + tx) / 2, top]
   }

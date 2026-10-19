@@ -730,7 +730,7 @@ export default  {
     "1598": "Zoom out",
     "1599": "Tests the current draft interactively in game, including its commands and scripts.",
     "1600": "Locate current dialogue",
-    "1601": "The solid marker shows the current dialogue; dashed markers show possible next steps. The game evaluates conditions. Text updates live; other changes apply when re-entering a dialogue.",
+    "1601": "The solid marker shows the current dialogue; dashed markers show possible next steps. The game evaluates conditions. Text, options and portraits update live without repeating entry commands or start events.",
     "1602": "Fix the invalid jumps in the checks panel first.",
     "1603": "Syncing draft…",
     "1604": "Starting debug…",

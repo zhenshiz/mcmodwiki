@@ -1,4 +1,4 @@
-// Frames are scoped to a preview revision so an old encoder job cannot replace a newer draft.
+// 帧按预览版本隔离，避免旧编码任务覆盖新草稿的画面。
 export function acceptsPreviewFrame(packet, revision, previousSequence = -1) {
   return packet?.event === 'preview.frame' && packet.revision === revision &&
     Number.isSafeInteger(packet.sequence) && packet.sequence > previousSequence &&
@@ -7,7 +7,7 @@ export function acceptsPreviewFrame(packet, revision, previousSequence = -1) {
     Array.isArray(packet.components)
 }
 
-// Compensate for the round trip to Minecraft so the drop target follows the pointer immediately.
+// 补偿与游戏通信的延迟，让落点立即跟随指针。
 export function previewComponentRect(item, frame) {
   const dx = Number.isFinite(item.positionX) ? (item.target.x || 0) - item.positionX : 0
   const dy = Number.isFinite(item.positionY) ? (item.target.y || 0) - item.positionY : 0

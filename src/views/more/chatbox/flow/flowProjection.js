@@ -1,7 +1,7 @@
 export const groupNodeId = key => `group:${key}`
 export const frameNodeId = (group, index, frame) => `frame:${frame?._editorId || `${group}:${index}`}`
 
-// Stable IDs preserve layout when text or diagnostics change.
+// 节点 ID 保持稳定，避免正文或诊断变化时丢失布局。
 export function projectFlow(model, analysis, scope = null) {
   const groups = model.dialogues || {}
   const nodes = [], bundles = new Map()

@@ -4095,7 +4095,7 @@
     "缩小": {"en-US": "Zoom out", "$files": [], "$id": 1598},
     "使用当前草稿在游戏中交互测试，会执行对话中的指令与脚本。": {"en-US": "Tests the current draft interactively in game, including its commands and scripts.", "$files": [], "$id": 1599},
     "定位当前对话": {"en-US": "Locate current dialogue", "$files": [], "$id": 1600},
-    "实心标记是当前对话，虚线标记是可能的下一步，条件仍由游戏判断。文本即时更新，其他参数再次进入对话后生效。": {"en-US": "The solid marker shows the current dialogue; dashed markers show possible next steps. The game evaluates conditions. Text updates live; other changes apply when re-entering a dialogue.", "$files": [], "$id": 1601},
+    "实心标记是当前对话，虚线标记是可能的下一步，条件仍由游戏判断。正文、选项和立绘即时更新，进入指令与开始事件不会重复执行。": {"en-US": "The solid marker shows the current dialogue; dashed markers show possible next steps. The game evaluates conditions. Text, options and portraits update live without repeating entry commands or start events.", "$files": [], "$id": 1601},
     "对话存在无效跳转，请先修复检查面板中的错误": {"en-US": "Fix the invalid jumps in the checks panel first.", "$files": [], "$id": 1602},
     "正在同步草稿…": {"en-US": "Syncing draft…", "$files": [], "$id": 1603},
     "正在启动调试…": {"en-US": "Starting debug…", "$files": [], "$id": 1604},
