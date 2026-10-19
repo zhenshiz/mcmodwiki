@@ -1,1 +1,0 @@
-System.register([],function(s,t){"use strict";return{execute:function(){s("_","/assets/cahtbox-BrHhnoVX.png"),s("a","/assets/ViScriptShop-Btae07bK.png"),s("b","/assets/ViScriptRecipe-DQC3vGWJ.png"),s("c","/assets/ViScriptQuests-DDpX3J2t.png"),s("d","/assets/ViScriptTeam-Cr3QVLx1.png"),s("e","/assets/SmartPhone-Py1ofqQk.png")}}});
