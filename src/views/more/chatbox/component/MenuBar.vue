@@ -22,6 +22,7 @@ const prompt = usePrompt()
 const message = useMessage()
 
 const chatBoxVersion = '1.1.3'
+const primaryKey = shortcutUtil.getPrimaryModifierKeyLabel()
 const saveShortcutLabel = `${shortcutUtil.getPrimaryModifierKeyLabel()}+S`
 
 // === 状态定义 ===
@@ -162,6 +163,20 @@ const handleSave = async () => {
           <div class="menu-item">{{ t('编辑') }}</div>
         </template>
         <div class="flex flex-col py-1 min-w-[180px]">
+          <button class="menu-action" :disabled="!store.canUndo" @click="store.undo">
+            <span class="flex items-center gap-2"><Icon icon="lucide:undo-2" width="14" />{{ t('撤销') }}</span><span class="shortcut">{{ primaryKey }}+Z</span>
+          </button>
+          <button class="menu-action" :disabled="!store.canRedo" @click="store.redo">
+            <span class="flex items-center gap-2"><Icon icon="lucide:redo-2" width="14" />{{ t('重做') }}</span><span class="shortcut">{{ primaryKey }}+Y</span>
+          </button>
+          <div class="border-t border-ui-line/50 my-1"></div>
+          <button class="menu-action" :disabled="!store.canCopyPortrait" @click="store.copyPortrait()">
+            <span class="flex items-center gap-2"><Icon icon="lucide:copy" width="14" />{{ t('复制立绘') }}</span><span class="shortcut">{{ primaryKey }}+C</span>
+          </button>
+          <button class="menu-action" :disabled="!store.canPastePortrait" @click="store.pastePortrait">
+            <span class="flex items-center gap-2"><Icon icon="lucide:clipboard-paste" width="14" />{{ t('粘贴立绘') }}</span><span class="shortcut">{{ primaryKey }}+V</span>
+          </button>
+          <div class="border-t border-ui-line/50 my-1"></div>
           <button class="menu-action" @click="openTranslatableModal">
             <div class="flex items-center gap-2">
               <Icon icon="material-symbols:translate" width="14" />

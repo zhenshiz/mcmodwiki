@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { useGameBridgeStore } from './gameBridge.js'
 import { gameFileTree, gameFileRequest } from '@/views/more/chatbox/bridge/gameFiles.js'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, shallowRef, watch } from 'vue'
 import _ from 'lodash'
+import { Portrait } from '@/assets/more/chatbox/chatboxTheme.js'
 
 import { dialogueService, themeService } from '@/views/more/chatbox/component/tree/chatboxSerialization.js'
 import { useMessage } from '@/components/register/useMessage.js'
@@ -96,6 +97,119 @@ export const useChatBoxEditorStore = defineStore(
     // === 翻译键管理 ===
     const translatableKeyColumns = ref(['en_us', 'zh_cn'])
     const translatableKeyRows = ref([])
+
+    const portraitClipboard = shallowRef(null)
+    const canCopyPortrait = computed(() => viewMode.value === 'theme' &&
+      Object.values(currentModel.value?.portrait || {}).includes(selectedComponent.value))
+    const canPastePortrait = computed(() => viewMode.value === 'theme' && !!currentModel.value && !!portraitClipboard.value)
+    const undoStack = shallowRef([]), redoStack = shallowRef([])
+    const canUndo = computed(() => undoStack.value.length > 0)
+    const canRedo = computed(() => redoStack.value.length > 0)
+    let historyApplying = false, historyLoading = false, historyTransaction = 0, historyTime = 0, transactionRedo = []
+    const historyState = () => _.cloneDeep({ model: currentModel.value, text: currentDialogue.value,
+      columns: translatableKeyColumns.value, rows: translatableKeyRows.value, order: dialogueGroupOrder.value })
+    let historyPrevious = historyState()
+    const resetHistory = () => {
+      undoStack.value = []; redoStack.value = []
+      historyPrevious = historyState(); historyTime = 0; historyTransaction = 0
+    }
+    const recordHistory = () => {
+      const next = historyState()
+      if (historyApplying || historyLoading || !currentFile.value) { historyPrevious = next; return }
+      if (_.isEqual(historyPrevious, next)) return
+      const now = Date.now()
+      if (!historyTransaction && (!historyTime || now - historyTime > 600)) {
+        undoStack.value = [...undoStack.value.slice(-99), historyPrevious]
+      }
+      redoStack.value = []
+      historyPrevious = next
+      historyTime = now
+    }
+    watch([currentModel, currentDialogue, translatableKeyColumns, translatableKeyRows, dialogueGroupOrder], recordHistory,
+      { deep: true, flush: 'sync' })
+    watch(currentFile, resetHistory, { flush: 'sync' })
+    watch(selectedComponent, () => { historyTime = 0 }, { flush: 'sync' })
+
+    const beginHistoryTransaction = () => {
+      if (historyTransaction++ === 0) {
+        historyTime = 0
+        transactionRedo = redoStack.value
+        undoStack.value = [...undoStack.value.slice(-99), historyState()]
+      }
+    }
+    const endHistoryTransaction = () => {
+      if (!historyTransaction || --historyTransaction) return
+      if (_.isEqual(undoStack.value.at(-1), historyState())) {
+        undoStack.value = undoStack.value.slice(0, -1)
+        redoStack.value = transactionRedo
+      }
+      transactionRedo = []
+      historyPrevious = historyState(); historyTime = 0
+    }
+    const objectPath = (root, target, path = []) => {
+      if (root === target) return path
+      if (!root || typeof root !== 'object' || !target) return null
+      for (const key of Object.keys(root)) {
+        const found = objectPath(root[key], target, [...path, key])
+        if (found) return found
+      }
+      return null
+    }
+    const restoreHistory = snapshot => {
+      const selectedPath = objectPath(currentModel.value, selectedComponent.value)
+      const framePath = objectPath(currentModel.value, currentFrame.value)
+      historyApplying = true
+      try {
+        const restored = _.cloneDeep(snapshot)
+        currentModel.value = restored.model; currentDialogue.value = restored.text
+        translatableKeyColumns.value = restored.columns; translatableKeyRows.value = restored.rows
+        dialogueGroupOrder.value = restored.order
+        selectedComponent.value = selectedPath ? (selectedPath.length ? _.get(currentModel.value, selectedPath, null) : currentModel.value) : null
+        currentFrame.value = framePath ? (framePath.length ? _.get(currentModel.value, framePath, null) : currentModel.value) : null
+        if (!selectedComponent.value) { selectedComponentClass.value = null; selectedComponentKey.value = null }
+        if (activeDialogueGroupKey.value && !currentModel.value?.dialogues?.[activeDialogueGroupKey.value]) activeDialogueGroupKey.value = null
+        if (dialogueGraphGroupKey.value && !currentModel.value?.dialogues?.[dialogueGraphGroupKey.value]) dialogueGraphGroupKey.value = null
+        if (!currentFrame.value) isShowGlobal.value = true
+      } finally { historyApplying = false; historyPrevious = historyState(); historyTime = 0 }
+    }
+    const undo = () => {
+      if (!canUndo.value || historyTransaction) return false
+      redoStack.value = [...redoStack.value, historyState()]
+      const previous = undoStack.value.at(-1)
+      undoStack.value = undoStack.value.slice(0, -1)
+      restoreHistory(previous)
+      return true
+    }
+    const redo = () => {
+      if (!canRedo.value || historyTransaction) return false
+      undoStack.value = [...undoStack.value, historyState()]
+      const next = redoStack.value.at(-1)
+      redoStack.value = redoStack.value.slice(0, -1)
+      restoreHistory(next)
+      return true
+    }
+    const copyPortrait = (key = null) => {
+      const portrait = key == null ? selectedComponent.value : currentModel.value?.portrait?.[key]
+      const entry = Object.entries(currentModel.value?.portrait || {}).find(([, value]) => value === portrait)
+      if (viewMode.value !== 'theme' || !entry) return false
+      portraitClipboard.value = { key: entry[0], value: _.cloneDeep(entry[1]) }
+      message.success(t('立绘已复制'))
+      return true
+    }
+    const pastePortrait = () => {
+      if (!canPastePortrait.value) return false
+      const { key, value } = portraitClipboard.value
+      let nextKey = `${key}_copy`, suffix = 2
+      while (Object.hasOwn(currentModel.value.portrait || {}, nextKey)) nextKey = `${key}_copy_${suffix++}`
+      beginHistoryTransaction()
+      try {
+        currentModel.value.portrait ||= {}
+        currentModel.value.portrait[nextKey] = _.cloneDeep(value)
+        selectComponent(currentModel.value.portrait[nextKey], Portrait, nextKey)
+      } finally { endHistoryTransaction() }
+      message.success(t('已粘贴立绘：{}', nextKey))
+      return true
+    }
 
     const globalAnimations = computed(() => Object.keys(currentModel.value?.customAnimation || {}))
     const globalPortraits = computed(() => Object.keys(currentModel.value?.portrait || {}))
@@ -292,6 +406,7 @@ export const useChatBoxEditorStore = defineStore(
     const loadFile = async (fileNode) => {
       if (fileNode.isFolder) return
 
+      historyLoading = true
       try {
         activeDialogueGroupKey.value = null
         dialogueGroupOrder.value = []
@@ -346,7 +461,7 @@ export const useChatBoxEditorStore = defineStore(
       } catch (err) {
         console.error(err)
         message.error(t('加载失败: {}', t(err.message)))
-      }
+      } finally { historyLoading = false; resetHistory() }
     }
 
     const saveProject = async () => {
@@ -586,6 +701,8 @@ export const useChatBoxEditorStore = defineStore(
     const allTextureOptions = computed(() => bridge.options('TEXTURE').map(item => ({ ...item, textureId: item.value })))
 
     return {
+      canUndo, canRedo, undo, redo, beginHistoryTransaction, endHistoryTransaction,
+      canCopyPortrait, canPastePortrait, copyPortrait, pastePortrait,
       gameFiles,
       currentFile,
       selectedTreeNode,

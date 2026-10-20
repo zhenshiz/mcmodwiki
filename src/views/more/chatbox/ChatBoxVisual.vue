@@ -12,11 +12,29 @@ import InspectorPanel from './component/InspectorPanel.vue'
 const editorStore = useChatBoxEditorStore()
 const bridge = useGameBridgeStore()
 
+const isTextEditing = e => e.target?.closest?.('input, textarea, select, [contenteditable="true"], [role="textbox"]')
+
 const handleGlobalKeydown = async (e) => {
   if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
     e.preventDefault()
     await editorStore.saveProject()
+    return
   }
+  if (!(e.ctrlKey || e.metaKey) || e.altKey || e.isComposing || e.defaultPrevented) return
+  // 输入框继续使用原生文本复制和撤销，组件快捷键只作用于编辑画布。
+  if (isTextEditing(e)) return
+  const action = e.code === 'KeyZ' ? (e.shiftKey ? 'redo' : 'undo') :
+    e.code === 'KeyY' ? 'redo' : null
+  if (action && editorStore[action]()) e.preventDefault()
+}
+
+const handleCopy = e => {
+  if (e.defaultPrevented || isTextEditing(e) || !editorStore.copyPortrait()) return
+  e.clipboardData?.setData('text/plain', JSON.stringify(editorStore.selectedComponent, null, 2))
+  e.preventDefault()
+}
+const handlePaste = e => {
+  if (!e.defaultPrevented && !isTextEditing(e) && editorStore.pastePortrait()) e.preventDefault()
 }
 
 // === 布局拖拽逻辑 ===
@@ -69,11 +87,15 @@ const startResize = (direction, e) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
+  window.addEventListener('copy', handleCopy)
+  window.addEventListener('paste', handlePaste)
 })
 
 onBeforeUnmount(() => {
   if (bridge.debugActive) bridge.stopDebug().catch(() => {})
   window.removeEventListener('keydown', handleGlobalKeydown)
+  window.removeEventListener('copy', handleCopy)
+  window.removeEventListener('paste', handlePaste)
 })
 </script>
 

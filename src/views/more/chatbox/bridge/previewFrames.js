@@ -1,3 +1,5 @@
+import { transformedPreviewRect } from './previewTransforms.js'
+
 // 帧按预览版本隔离，避免旧编码任务覆盖新草稿的画面。
 export function acceptsPreviewFrame(packet, revision, previousSequence = -1) {
   return packet?.event === 'preview.frame' && packet.revision === revision &&
@@ -9,6 +11,7 @@ export function acceptsPreviewFrame(packet, revision, previousSequence = -1) {
 
 // 补偿与游戏通信的延迟，让落点立即跟随指针。
 export function previewComponentRect(item, frame) {
+  if (item.sizeMode) return transformedPreviewRect(item, frame)
   const dx = Number.isFinite(item.positionX) ? (item.target.x || 0) - item.positionX : 0
   const dy = Number.isFinite(item.positionY) ? (item.target.y || 0) - item.positionY : 0
   return { x: item.x + dx / 100 * frame.guiWidth, y: item.y + dy / 100 * frame.guiHeight, width: item.width, height: item.height }

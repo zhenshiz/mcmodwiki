@@ -271,10 +271,13 @@ const jumpToGroup = (key) => {
             <span>{{ t('立绘组') }}</span>
             <span class="text-ui-muted font-normal ml-1">{{ Object.keys(model.portrait || {}).length }}</span>
           </div>
+          <div class="flex items-center gap-1">
+          <button v-if="store.canPastePortrait" type="button" :title="t('粘贴立绘')" :aria-label="t('粘贴立绘')" class="p-0.5 hover:bg-ui-inset" @click.stop="store.pastePortrait"><Icon icon="lucide:clipboard-paste" width="13" /></button>
           <div
-            class="p-0.5 rounded-none hover:bg-ui-inset text-ui-muted hover:text-ui-text opacity-0 group-hover/header:opacity-100 transition-opacity"
+            class="p-0.5 rounded-none hover:bg-ui-inset text-ui-muted hover:text-ui-text"
             @click="addPortrait">
             <Icon icon="lucide:plus" width="12" />
+          </div>
           </div>
         </div>
 
@@ -283,7 +286,9 @@ const jumpToGroup = (key) => {
             <div
               class="group pl-5 pr-2 py-1 text-xs cursor-pointer rounded-none border border-transparent flex items-center justify-between transition-colors"
               :class="store.selectedComponent === portrait ? 'bg-ui-secondary text-ui-on-accent' : 'hover:bg-ui-inset hover:border-ui-link/30 text-ui-text'"
-              @click="selectItem(portrait, Portrait, key)">
+              tabindex="0" role="button" :aria-label="t('选择立绘：{}', key)"
+              @keydown.enter="selectItem(portrait, Portrait, key)"
+              @click="selectItem(portrait, Portrait, key); $event.currentTarget.focus({ preventScroll: true })">
               <div class="flex items-center gap-2 overflow-hidden">
                 <div class="w-3 h-3 flex items-center justify-center hover:bg-white/20 rounded-none cursor-pointer"
                   @click.stop="togglePortraitExpand(key)">
@@ -294,7 +299,7 @@ const jumpToGroup = (key) => {
                 <span class="truncate">{{ key }}</span>
               </div>
 
-              <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
                 <Icon icon="lucide:play" width="12" class="hover:text-green-400 text-ui-muted mr-1"
                   @click="playAnimation($event, key)" />
                 <Icon icon="lucide:paperclip" width="12"
@@ -302,7 +307,8 @@ const jumpToGroup = (key) => {
                   @click="addAttachment($event, portrait, key)" />
                 <Icon :icon="portrait._hidden ? 'lucide:eye-off' : 'lucide:eye'" width="12" class="hover:text-ui-text"
                   @click="toggleVisibility($event, portrait)" />
-                <Icon icon="lucide:trash-2" width="12" class="hover:text-red-400 text-ui-muted"
+                <button type="button" :title="t('复制立绘')" :aria-label="t('复制立绘')" class="hover:text-ui-link" @click.stop="store.copyPortrait(key)"><Icon icon="lucide:copy" width="12" /></button>
+              <Icon icon="lucide:trash-2" width="12" class="hover:text-red-400 text-ui-muted"
                   @click="deletePortrait($event, key)" />
               </div>
             </div>
