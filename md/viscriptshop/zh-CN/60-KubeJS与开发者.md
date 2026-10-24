@@ -1,6 +1,6 @@
 <h1 id="kubejs-与开发者" data-toc-id="kubejs-与开发者">KubeJS 与开发者</h1>
 <p>本页面向整合包脚本作者和其他模组开发者。只想配置商店的服主不需要编写代码，可直接阅读<a
-    href="?file=&quot;40-服务器管理.指令与配置.md&quot;">指令与配置</a>。</p>
+    href="?file=&quot;服务器管理.指令与配置&quot;">指令与配置</a>。</p>
 <h2 id="kubejs-绑定的作用域" data-toc-id="kubejs-绑定的作用域">KubeJS 绑定的作用域</h2>
 <p>安装 KubeJS 后，客户端脚本和服务端脚本都能使用名为 <code>ViScriptShopUtil</code>
   的全局绑定，但两端对应的工具类不同：</p>
@@ -170,4 +170,4 @@ implementation('com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}'
   <code>gradle.properties</code> 和 <code>build.gradle</code> 为准。</p>
 <h2 id="排查开发问题" data-toc-id="排查开发问题">排查开发问题</h2>
 <p>脚本没有触发、方法找不到或服务端结算异常时，参阅<a
-    href="?file=&quot;70-排错与维护.md&quot;">排错与维护</a>，并附带完整日志和最小复现商店。</p>
+    href="?file=&quot;排错与维护&quot;">排错与维护</a>，并附带完整日志和最小复现商店。</p>

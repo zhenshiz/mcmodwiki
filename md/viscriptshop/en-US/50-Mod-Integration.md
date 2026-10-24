@@ -155,4 +155,4 @@ isReplaceMoneyToMagicCoin = true</code></pre>
   <li><p>If Magic Coins balances are inconsistent, confirm the server and client use the same config and reconnect.</p></li>
 </ul>
 <h2 id="script-integration" data-toc-id="script-integration">Script Integration</h2>
-<p>To listen for completed trades, block purchases, or open shops from quest scripts, continue with <a href="?file=&quot;60-KubeJS-and-Developers.md&quot;">KubeJS and Developers</a>.</p>
+<p>To listen for completed trades, block purchases, or open shops from quest scripts, continue with <a href="?file=&quot;KubeJS-and-Developers&quot;">KubeJS and Developers</a>.</p>

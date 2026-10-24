@@ -25,30 +25,30 @@
 <ol>
   <li>
     <p>Building a shop for the first time: follow <a
-        href="?file=&quot;10-Quick-Start.Your-First-Shop.md&quot;">Your First Shop</a> to build a test shop that sells diamonds.
+        href="?file=&quot;Quick-Start.Your-First-Shop&quot;">Your First Shop</a> to build a test shop that sells diamonds.
     </p>
   </li>
   <li>
     <p>Getting players up to speed: read <a
-        href="?file=&quot;11-Quick-Start.Player-Buying-Guide.md&quot;">Player Buying Guide</a> to learn about search, the shopping cart, the staging area, output targets, and virtual currency payment.
+        href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a> to learn about search, the shopping cart, the staging area, output targets, and virtual currency payment.
     </p>
   </li>
   <li>
-    <p>Learning the editor properly: read <a href="?file=&quot;20-Editor-Tutorial.Shops-and-Categories.md&quot;">Shops and Categories</a> and <a
-        href="?file=&quot;21-Editor-Tutorial.Items-and-Trades.md&quot;">Items and Trades</a>.</p>
+    <p>Learning the editor properly: read <a href="?file=&quot;Editor-Tutorial.Shops-and-Categories&quot;">Shops and Categories</a> and <a
+        href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a>.</p>
   </li>
   <li>
-    <p>Building a full modpack: continue by configuring <a href="?file=&quot;30-Advanced.Stock-and-Phases.md&quot;">Stock and Phases</a>, <a
-        href="?file=&quot;31-Advanced.Promotions.md&quot;">Promotions</a>, and <a
-        href="?file=&quot;40-Server.Commands-and-Config.md&quot;">Commands and Config</a>.</p>
+    <p>Building a full modpack: continue by configuring <a href="?file=&quot;Advanced.Stock-and-Phases&quot;">Stock and Phases</a>, <a
+        href="?file=&quot;Advanced.Promotions&quot;">Promotions</a>, and <a
+        href="?file=&quot;Server.Commands-and-Config&quot;">Commands and Config</a>.</p>
   </li>
   <li>
-    <p>Connecting to the modpack ecosystem: read <a href="?file=&quot;50-Mod-Integration.md&quot;">Mod Integration</a>; if you need scripts or Java
-      events, continue with <a href="?file=&quot;60-KubeJS-and-Developers.md&quot;">KubeJS and Developers</a>.</p>
+    <p>Connecting to the modpack ecosystem: read <a href="?file=&quot;Mod-Integration&quot;">Mod Integration</a>; if you need scripts or Java
+      events, continue with <a href="?file=&quot;KubeJS-and-Developers&quot;">KubeJS and Developers</a>.</p>
   </li>
   <li>
     <p>When something goes wrong: follow <a
-        href="?file=&quot;70-Troubleshooting-and-Maintenance.md&quot;">Troubleshooting and Maintenance</a> to distinguish file, save data, UI, and server-side settlement issues.</p>
+        href="?file=&quot;Troubleshooting-and-Maintenance&quot;">Troubleshooting and Maintenance</a> to distinguish file, save data, UI, and server-side settlement issues.</p>
   </li>
 </ol>
 <h2 id="feature-overview" data-toc-id="feature-overview">Feature overview</h2>
@@ -112,5 +112,5 @@
 </div>
 <h2 id="next-steps" data-toc-id="next-steps">Next steps</h2>
 <p>If you are a shop author, head straight to <a
-    href="?file=&quot;10-Quick-Start.Your-First-Shop.md&quot;">Your First Shop</a>. If you only need to learn how to buy, jump to the <a
-    href="?file=&quot;11-Quick-Start.Player-Buying-Guide.md&quot;">Player Buying Guide</a>.</p>
+    href="?file=&quot;Quick-Start.Your-First-Shop&quot;">Your First Shop</a>. If you only need to learn how to buy, jump to the <a
+    href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a>.</p>

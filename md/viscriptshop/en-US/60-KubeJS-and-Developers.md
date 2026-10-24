@@ -1,6 +1,6 @@
 <h1 id="kubejs-and-developers" data-toc-id="kubejs-and-developers">KubeJS and Developers</h1>
 <p>This page is for modpack script authors and other mod developers. Server owners who only want to configure shops do not need to write any code and can go straight to <a
-    href="?file=&quot;40-Server.Commands-and-Config.md&quot;">Commands and Config</a>.</p>
+    href="?file=&quot;Server.Commands-and-Config&quot;">Commands and Config</a>.</p>
 <h2 id="scope-of-the-kubejs-bindings" data-toc-id="scope-of-the-kubejs-bindings">Scope of the KubeJS Bindings</h2>
 <p>With KubeJS installed, both client and server scripts can use the global binding named <code>ViScriptShopUtil</code>, but the underlying utility class differs on each side:</p>
 <table data-type="custom-table" data-with-header-row="true"
@@ -169,4 +169,4 @@ implementation('com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}'
     target="_blank" rel="noopener noreferrer nofollow">current project repository</a> as authoritative.</p>
 <h2 id="troubleshooting-development-issues" data-toc-id="troubleshooting-development-issues">Troubleshooting Development Issues</h2>
 <p>If a script never triggers, a method cannot be found, or server-side checkout misbehaves, see <a
-    href="?file=&quot;70-Troubleshooting-and-Maintenance.md&quot;">Troubleshooting and Maintenance</a>, and attach the full logs plus a minimal shop that reproduces the issue.</p>
+    href="?file=&quot;Troubleshooting-and-Maintenance&quot;">Troubleshooting and Maintenance</a>, and attach the full logs plus a minimal shop that reproduces the issue.</p>

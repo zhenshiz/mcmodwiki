@@ -1,12 +1,12 @@
 <h1 id="phone-and-apps" data-toc-id="phone-and-apps">Phone and Apps</h1>
-<p>This page covers the basic operation of the phone home screen, built-in apps, the App Store, and in-phone settings. For server configuration and administrator commands, see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>.</p>
+<p>This page covers the basic operation of the phone home screen, built-in apps, the App Store, and in-phone settings. For server configuration and administrator commands, see <a href="?file=&quot;Admin.Config-and-Commands&quot;">Configuration and Commands</a>.</p>
 
 <h2 id="opening-and-returning" data-toc-id="opening-and-returning">Opening and returning</h2>
 <p>With the default configuration, switching <code>smart_phone:phone</code> to your main hand starts the raise animation: the vanilla first-person item rendering hides, and the player's right hand reaches out from the lower right to grip the phone. The phone first shows the standby lock screen; after the animation ends and the phone profile has synced, swipe up with the mouse to unlock, then tap a home screen app. Press Esc to put the phone away; switching to another item and picking the phone up again shows the lock screen once more. The bottom return bar inside an app closes the current app and returns to the home screen.</p>
-<p>If <code>heldPhoneMode</code> is set to <code>false</code>, you must use the phone item to open the centered lock screen interface, then swipe up as prompted to unlock. For the configuration entries and offset tuning, see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>.</p>
+<p>If <code>heldPhoneMode</code> is set to <code>false</code>, you must use the phone item to open the centered lock screen interface, then swipe up as prompted to unlock. For the configuration entries and offset tuning, see <a href="?file=&quot;Admin.Config-and-Commands&quot;">Configuration and Commands</a>.</p>
 <p>On the server side, players with permission level 2 can also run <code>/smart_phone open</code> to open their own phone.</p>
 <p>The phone owner can be a real player or an administrator-registered virtual character. The item's <code>smart_phone:phone_owner</code> component accepts a player UUID or a character name. An unbound phone binds to its holder on first open; a bound phone reads the owner's wallpaper, apps, notes, official messages, preset chats, and passcode, and changes are saved under that owner. The item tooltip and standby page show the phone owner's name.</p>
-<p>When a character phone sends chat messages, the author uses the character name, and preset replies are saved to the character profile. Online friend relationships, direct message routing, and voice connections still depend on the actual online players; the local album reads the current client's photo directory. Map authors can register, edit, and create character phones by following the steps in <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;#character-phones">Character phones</a>.</p>
+<p>When a character phone sends chat messages, the author uses the character name, and preset replies are saved to the character profile. Online friend relationships, direct message routing, and voice connections still depend on the actual online players; the local album reads the current client's photo directory. Map authors can register, edit, and create character phones by following the steps in <a href="?file=&quot;Admin.Config-and-Commands#character-phones&quot;">Character phones</a>.</p>
 
 <h2 id="home-screen-operations" data-toc-id="home-screen-operations">Home screen operations</h2>
 <ul>
@@ -89,20 +89,20 @@
   </div>
 </div>
 <p>The mini-games currently installable from the App Store are Snake, 2048, Flappy Bird, Minesweeper, and Piano Tiles. Whether an app is visible also depends on the server's <code>disabledApps</code> configuration.</p>
-<p>For how to play after installing, see <a href="?file=&quot;15-Usage.Mini-Games.md&quot;">Mini-Games</a>.</p>
+<p>For how to play after installing, see <a href="?file=&quot;Usage.Mini-Games&quot;">Mini-Games</a>.</p>
 
 <h2 id="in-phone-settings" data-toc-id="in-phone-settings">In-phone settings</h2>
 <p>The Settings app on the home screen provides a wallpaper resource location input. Only resource locations that the current client resource manager can resolve are accepted; to restore the default wallpaper, use <code>smart_phone:textures/ui/default_wallpaper.png</code>.</p>
 <div type="info" data-type="admonition" data-admo-type="info">
   <div data-type="admonition-title">Time source</div>
   <div data-type="admonition-content">
-    <p>The phone profile supports three time sources: real time, Minecraft world time, and custom time segments. Administrators can adjust the time source on the Basics page of <code>/smart_phone editor</code>, and it takes effect after saving; the command requires permission level 2. For editing steps, see <a href="?file=&quot;45-Admin.Phone-Data-Editor.md&quot;">Phone Data Editor</a>.</p>
+    <p>The phone profile supports three time sources: real time, Minecraft world time, and custom time segments. Administrators can adjust the time source on the Basics page of <code>/smart_phone editor</code>, and it takes effect after saving; the command requires permission level 2. For editing steps, see <a href="?file=&quot;Admin.Phone-Data-Editor&quot;">Phone Data Editor</a>.</p>
   </div>
 </div>
 
 <h2 id="official-messages" data-toc-id="official-messages">Official messages</h2>
 <p>Server administrators can send official messages to players. When a new message arrives, a notification appears in the top-right corner of the client; inside the Messages app, messages can be marked as read or deleted.</p>
-<p>For the send command and permission details, see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;#admin-commands">Admin commands</a>.</p>
+<p>For the send command and permission details, see <a href="?file=&quot;Admin.Config-and-Commands#admin-commands&quot;">Admin commands</a>.</p>
 
 <h2 id="six-digit-passcode-lock-screen" data-toc-id="six-digit-passcode-lock-screen">Six-digit passcode lock screen</h2>
 <p>Open the phone's Settings and click "Enable six-digit passcode", then enter the same six digits twice in a row to enable it. Phones without a passcode keep the original swipe-up unlock.</p>

@@ -1,6 +1,6 @@
 <h1 id="shops-and-categories" data-toc-id="shops-and-categories">Shops and Categories</h1>
 <p>This page describes in detail the three main areas of the visual editor, shop-level fields, category fields, and the differences between saving, uploading, and reloading. If you have not yet built a shop successfully, it is recommended to first complete <a
-    href="?file=&quot;10-Quick-Start.Your-First-Shop.md&quot;">Your First Shop</a>.</p>
+    href="?file=&quot;Quick-Start.Your-First-Shop&quot;">Your First Shop</a>.</p>
 <h2 id="how-to-open" data-toc-id="how-to-open">How to Open</h2><pre language="plaintext" isclosed="false"><code class="language-plaintext">/viscript_shop editor
 /viscript_shop editor &lt;shop path&gt;</code></pre>
 <p>Without a shop path, an empty editor opens where you can create a new file or open a local one. With a path, the server reads the matching <code>.shop</code>
@@ -194,4 +194,4 @@
   </div>
 </div>
 <h2 id="start-configuring-items" data-toc-id="start-configuring-items">Start Configuring Items</h2>
-<p>Once the categories are ready, continue with <a href="?file=&quot;21-Editor-Tutorial.Items-and-Trades.md&quot;">Items and Trades</a>.</p>
+<p>Once the categories are ready, continue with <a href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a>.</p>

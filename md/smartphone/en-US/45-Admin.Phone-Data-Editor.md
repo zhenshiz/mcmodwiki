@@ -6,7 +6,7 @@
 /smart_phone editor Dev
 /smart_phone character register "Zhang San"
 /smart_phone editor "Zhang San"</code></pre>
-<p>With no target given, the editor opens the owner bound to the phone in your main hand; if that phone has no bound owner, it edits yourself. You can also specify a player name known to the server, a player UUID, or a registered virtual character name. Virtual characters must be registered first; this lets you preset a phone without knowing the future player's ID. For the complete steps to create a character phone, see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;#character-phones">Character phones</a>.</p>
+<p>With no target given, the editor opens the owner bound to the phone in your main hand; if that phone has no bound owner, it edits yourself. You can also specify a player name known to the server, a player UUID, or a registered virtual character name. Virtual characters must be registered first; this lets you preset a phone without knowing the future player's ID. For the complete steps to create a character phone, see <a href="?file=&quot;Admin.Config-and-Commands#character-phones&quot;">Character phones</a>.</p>
 
 <h2 id="preview-and-ui-scale" data-toc-id="preview-and-ui-scale">Preview and UI scale</h2>
 <p>The left side of the editor is an interactive phone preview, and the right side holds the parameter pages. On the left you can swipe, open apps, enter the chat or message list, and click the conversation or message you want to modify; the right side shows the matching fields for the selected object. Drag the divider in the middle to change the width of the preview and parameter areas. "Return to standby preview" shows the lock screen effect again.</p>
@@ -44,7 +44,7 @@
     <div data-type="admonition-content"><p>With a message selected, click "Choose image from album" to pick an existing photo from the left phone's album; you can also remove a chosen image. The image thumbnail data is saved, and it can be combined with text into an image-and-text message.</p></div>
   </div>
 </div>
-<p>The "avatar player ID" accepts up to 16 letters, digits, or underscores. After entering a valid Java player username, that message can show the skin avatar of that account; the account does not need to be online. When left empty, the sender's original avatar is used. The avatar source is independent of the message's display name. For more preset chat behavior, see <a href="?file=&quot;30-Features.Social-and-Chat.md&quot;#preset-conversations">Preset conversations</a>.</p>
+<p>The "avatar player ID" accepts up to 16 letters, digits, or underscores. After entering a valid Java player username, that message can show the skin avatar of that account; the account does not need to be online. When left empty, the sender's original avatar is used. The avatar source is independent of the message's display name. For more preset chat behavior, see <a href="?file=&quot;Features.Social-and-Chat#preset-conversations&quot;">Preset conversations</a>.</p>
 
 <h2 id="passcode-and-saving" data-toc-id="passcode-and-saving">Passcode and saving</h2>
 <p>The unlock passcode box on the Basics page accepts digits only, up to six; after entering a new passcode it must be exactly six digits to save, and leading zeros are allowed. An existing passcode is stored server-side only as a digest, so the editor never shows the original digits: leaving the new passcode empty keeps the current one; clicking "Clear passcode" and saving removes it. Setting or replacing a passcode in the editor requires no old passcode.</p>

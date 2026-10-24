@@ -1,1 +1,0 @@
-System.register(["./MarkDownReadOnly-legacy-BiWBNqy0.js"],function(t,s){"use strict";var e;return{setters:[t=>{e=t._}],execute:function(){t("I",class{constructor(t){this.init=t,this.records=this.init()}static{e(this,"ImperativeState")}reset(){this.records=this.init()}})}}});

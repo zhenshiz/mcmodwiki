@@ -247,5 +247,5 @@ com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerScreen</code></pre>
 <p>Once it is confirmed not to be a configuration issue, submit a report on the <a href="https://github.com/zhenshiz/ViScriptShop/issues"
     target="_blank" rel="noopener noreferrer nofollow">project issue tracker</a>.</p>
 <h2 id="back-to-the-documentation-home" data-toc-id="back-to-the-documentation-home">Back to the Documentation Home</h2>
-<p>Return to <a href="?file=&quot;00-Introduction.md&quot;">Introduction</a>, or redo a minimal config test following <a
-    href="?file=&quot;10-Quick-Start.Your-First-Shop.md&quot;">Your First Shop</a>.</p>
+<p>Return to <a href="?file=&quot;Introduction&quot;">Introduction</a>, or redo a minimal config test following <a
+    href="?file=&quot;Quick-Start.Your-First-Shop&quot;">Your First Shop</a>.</p>

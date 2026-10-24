@@ -247,4 +247,4 @@ Member discount (from item): -50%</code></pre>
   <li><p>After editing rules during a promotion, reopen the shop to make sure players receive the latest server data.</p></li>
 </ul>
 <h2 id="continuing-shop-management" data-toc-id="continuing-shop-management">Continuing Shop Management</h2>
-<p>Server commands, the FTB sidebar entry, and configuration files are covered in <a href="?file=&quot;40-Server.Commands-and-Config.md&quot;">Commands and Config</a>.</p>
+<p>Server commands, the FTB sidebar entry, and configuration files are covered in <a href="?file=&quot;Server.Commands-and-Config&quot;">Commands and Config</a>.</p>
