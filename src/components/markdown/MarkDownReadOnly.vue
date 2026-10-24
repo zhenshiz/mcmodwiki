@@ -2,7 +2,7 @@
 import { defineExpose, onBeforeUnmount, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
+import { ResizableImage } from '@/components/markdown/plugin/ResizableImage.js'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import TaskList from '@tiptap/extension-task-list'
@@ -18,7 +18,7 @@ import { HiddenText } from '@/components/markdown/plugin/HiddenText.js'
 import {
   Admonition,
   AdmonitionContent,
-  AdmonitionTitle
+  AdmonitionTitle,
 } from '@/components/markdown/plugin/Admonition.js'
 import { StepItem, Steps } from '@/components/markdown/plugin/Steps.js'
 
@@ -33,7 +33,7 @@ import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
 
 const props = defineProps({
-  content: { type: String, default: '' }
+  content: { type: String, default: '' },
 })
 
 const lowlight = createLowlight(common)
@@ -47,19 +47,19 @@ const editor = useEditor({
   editable: false,
   editorProps: {
     attributes: {
-      spellcheck: 'false'
+      spellcheck: 'false',
     },
   },
   extensions: [
     StarterKit.configure({
       codeBlock: false,
       link: false,
-      table: false
+      table: false,
     }),
     EnhancedCodeBlock,
     CodeBlockLowlight.configure({ lowlight }),
     BetterLink,
-    Image.configure({ allowBase64: true }),
+    ResizableImage.configure({ allowBase64: true }),
     CustomTable,
     Superscript,
     Subscript,
@@ -77,7 +77,7 @@ const editor = useEditor({
     Steps,
     StepItem,
     TextAlign.configure({
-      types: ['heading', 'paragraph']
+      types: ['heading', 'paragraph'],
     }),
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
@@ -88,40 +88,49 @@ const editor = useEditor({
           .replace(/\s+/g, '-')
           .replace(/[^\w\u4e00-\u9fa5-]/g, '')
       },
-      onUpdate: content => {
+      onUpdate: (content) => {
         headings.value = content
-      }
-    })
-  ]
+      },
+    }),
+  ],
 })
 
-const scrollToHeading = (id) => {
-  if (editor.value) {
-    const element = editor.value.view.dom.querySelector(`[data-toc-id="${id}"]`)
+const findHeadingElement = (id) => {
+  if (!editor.value || !id) return null
+  const headings = [...editor.value.view.dom.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+  return headings.find(element => element.id === id)
+    || headings.find(element => element.dataset.tocId === id)
+    || null
+}
 
-    if (element) {
-      // 1. 设置编辑器焦点与内部选区
-      const pos = editor.value.view.posAtDOM(element, 0)
-      const tr = editor.value.view.state.tr
-      tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
-      editor.value.view.dispatch(tr)
+const scrollToHeading = (id, { updateUrl = true } = {}) => {
+  const element = findHeadingElement(id)
+  if (!element) return false
 
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
+  // 1. 设置编辑器焦点与内部选区
+  const pos = editor.value.view.posAtDOM(element, 0)
+  const tr = editor.value.view.state.tr
+  tr.setSelection(new TextSelection(tr.doc.resolve(pos)))
+  editor.value.view.dispatch(tr)
 
-      history.pushState(null, null, `#${id}`)
-    }
-  }
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
+
+  if (updateUrl) history.pushState(null, null, `#${id}`)
+  return true
 }
 
 // 暴露给 ModWiki 使用
-defineExpose({ headings, scrollToHeading })
+defineExpose({ headings, scrollToHeading, findHeadingElement })
 
-watch(() => props.content, (newValue) => {
-  editor.value.commands.setContent(newValue, false)
-})
+watch(
+  () => props.content,
+  (newValue) => {
+    editor.value.commands.setContent(newValue, false)
+  },
+)
 
 onBeforeUnmount(() => {
   editor.value?.destroy()
@@ -155,7 +164,12 @@ onBeforeUnmount(() => {
       scroll-margin-top: 40px;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin-top: 15px;
       line-height: 1.5;
     }
@@ -256,13 +270,17 @@ onBeforeUnmount(() => {
       }
     }
 
-    ul, ol {
+    ul,
+    ol {
       margin: 0.5rem 0;
       padding-left: 1.5rem;
       list-style-position: inside;
     }
 
-    ul ul, ul ol, ol ul, ol ol {
+    ul ul,
+    ul ol,
+    ol ul,
+    ol ol {
       margin: 0.2rem 0 0.2rem 1.5rem;
     }
 
@@ -322,7 +340,7 @@ onBeforeUnmount(() => {
               border-color: var(--blue-5);
 
               &::before {
-                content: "";
+                content: '';
                 width: 10px;
                 height: 10px;
                 clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
@@ -342,7 +360,7 @@ onBeforeUnmount(() => {
           }
         }
 
-        &[data-checked="true"] {
+        &[data-checked='true'] {
           > div {
             text-decoration: line-through;
             color: var(--font-color-0);
@@ -376,11 +394,12 @@ onBeforeUnmount(() => {
       word-break: break-all;
 
       code {
-        font-family: SF Mono,
-        Menlo,
-        Consolas,
-        Liberation Mono,
-        monospace;
+        font-family:
+          SF Mono,
+          Menlo,
+          Consolas,
+          Liberation Mono,
+          monospace;
         margin: 0 4px;
         background-color: var(--trans-blue-1);
         padding: 2px 4px;
@@ -394,18 +413,20 @@ onBeforeUnmount(() => {
       padding: 17px;
       background-color: var(--trans-white-5);
       position: relative;
-      box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05),
-      0 1px 4px hsla(0, 0%, 0%, 0.05),
-      0 2px 8px hsla(0, 0%, 0%, 0.05);
+      box-shadow:
+        0 1px 2px hsla(0, 0%, 0%, 0.05),
+        0 1px 4px hsla(0, 0%, 0%, 0.05),
+        0 2px 8px hsla(0, 0%, 0%, 0.05);
       overflow-x: auto;
 
       code {
         font-size: 15px;
-        font-family: SF Mono,
-        Menlo,
-        Consolas,
-        Liberation Mono,
-        monospace;
+        font-family:
+          SF Mono,
+          Menlo,
+          Consolas,
+          Liberation Mono,
+          monospace;
         float: left;
         min-width: 100%;
 
@@ -490,7 +511,6 @@ onBeforeUnmount(() => {
     * &:not(.katex-html) {
       white-space: pre-wrap;
       word-break: break-word;
-
     }
 
     & > div:nth-child(1) {
@@ -530,7 +550,7 @@ onBeforeUnmount(() => {
       }
     }
 
-    span[data-type="hidden-text"] {
+    span[data-type='hidden-text'] {
       background-color: #333 !important;
       color: #333 !important;
       border-radius: 0;
@@ -538,7 +558,9 @@ onBeforeUnmount(() => {
       text-decoration-color: #333 !important;
       transition: all 0.3s ease;
 
-      s, del, u {
+      s,
+      del,
+      u {
         text-decoration-color: #333 !important;
       }
 
@@ -547,15 +569,17 @@ onBeforeUnmount(() => {
         color: inherit !important;
         text-decoration-color: currentColor !important;
 
-        s, del, u {
+        s,
+        del,
+        u {
           text-decoration-color: currentColor !important;
         }
       }
     }
 
-    s:has(> span[data-type="hidden-text"]),
-    del:has(> span[data-type="hidden-text"]),
-    u:has(> span[data-type="hidden-text"]) {
+    s:has(> span[data-type='hidden-text']),
+    del:has(> span[data-type='hidden-text']),
+    u:has(> span[data-type='hidden-text']) {
       text-decoration-color: #333 !important;
 
       &:hover {
@@ -572,8 +596,6 @@ onBeforeUnmount(() => {
         display: block;
       }
     }
-
-
   }
 }
 

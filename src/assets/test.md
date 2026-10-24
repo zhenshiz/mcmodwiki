@@ -17,7 +17,7 @@
 <p><a href="https://zh.minecraft.wiki/" target="_blank"
     rel="noopener noreferrer nofollow">McWiki</a></p>
 <p><a href="#锚点跳转">锚点跳转</a></p>
-<p><a href="?file=&quot;文件名.md&quot;">同页面其它文件跳转</a></p>
+<p><a href="?file=&quot;文件名&quot;">同页面其它文件跳转</a></p>
 <pre language="html" isclosed="false"><code class="language-html">&lt;p&gt;&lt;a target="_blank" rel="noopener noreferrer nofollow" href="https://zh.minecraft.wiki/"&gt;McWiki&lt;/a&gt;&lt;/p&gt;</code></pre>
 <p>
   可以通过点击菜单栏里的超链接按钮，然后编辑弹出的弹框添加；也可以通过选择选中一段文本弹出的浮动菜单中选择超链接按钮。选中超链接文本可以在弹出的浮动菜单中编辑该超链接指引的链接或者取消该文本的超链接状态

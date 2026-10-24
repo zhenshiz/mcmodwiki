@@ -1,7 +1,8 @@
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { modList } from '@/assets/info/mod.js'
+import resourceData from '@/assets/info/resources.js'
 import { Icon } from '@iconify/vue'
 import { usePageStore } from '@/stores/index.js'
 import MarkdownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
@@ -28,6 +29,14 @@ const pageInfo = ref({
 const currentFileName = ref('')
 const mdRenderer = ref(null)
 const mobileNavVisible = ref(false)
+const documentationPending = ref(false)
+const workshopResource = computed(() => resourceData.find(item => item.docs === `/wiki/${route.params.name}`))
+const findMod = () => modList().find(item => item.lang === route.params.name) || (workshopResource.value && {
+  lang: route.params.name,
+  modVersion: workshopResource.value.releases[0]?.version || '',
+  availableHere: [],
+  moreUtil: () => [],
+})
 
 // 扫描 public/md 下所有的 md 文件
 const allMdModules = import.meta.glob('/public/md/**/*.md')
@@ -37,6 +46,57 @@ const getFilesForMod = (modKey, lang) => {
   return Object.keys(allMdModules)
     .filter(path => path.startsWith(prefix))
     .map(path => path.replace(prefix, ''))
+}
+
+// 文档跳转链接只写文档名，序号和 .md 后缀可由文件名解析出来
+const stripOrderPrefix = (name) => name.replace(/^(\d+[.\-_])/, '')
+
+const normalizeDocName = (name) => stripOrderPrefix(
+  String(name).trim().replace(/^["']|["']$/g, '').replace(/\.md$/i, '')
+)
+
+// 支持 ?file=模组介绍 和旧写法 ?file=00-模组介绍.md
+const resolveDocFile = (files, rawName) => {
+  if (!rawName) return null
+  const target = normalizeDocName(rawName)
+  return files.find(file => file === rawName)
+    || files.find(file => normalizeDocName(file) === target)
+    || null
+}
+
+// 锚点建议写在引号外：?file="文档"#锚点；写在引号内也能识别
+const trimQuote = (value) => String(value ?? '').trim().replace(/^["']/, '').replace(/["']$/, '')
+
+const splitDocTarget = (rawName) => {
+  const [name, ...rest] = trimQuote(rawName).split('#')
+  return { name, anchor: rest.length ? decodeAnchor(rest.join('#')) : '' }
+}
+
+const decodeAnchor = (anchor) => {
+  const value = trimQuote(anchor).replace(/^#/, '')
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
+
+const routeAnchor = () => decodeAnchor(route.hash)
+
+const scrollToAnchor = async (anchor) => {
+  if (!anchor) return
+  await nextTick()
+  const renderer = mdRenderer.value
+  if (!renderer?.scrollToHeading) return
+  // 文档切换后编辑器内容可能还在渲染，最多重试约 20 帧
+  for (let attempt = 0; attempt < 20; attempt++) {
+    if (renderer.scrollToHeading(anchor, { updateUrl: false })) {
+      // 锚点写在引号内时，浏览器会把收尾引号并进 hash，这里还原成干净地址
+      if (route.hash !== `#${anchor}`) router.replace({ hash: `#${anchor}` })
+      return
+    }
+    await new Promise(resolve => requestAnimationFrame(resolve))
+  }
 }
 
 // --- 核心：解析文件名树 ---
@@ -52,7 +112,7 @@ const buildFileTree = (files) => {
     parts.forEach((part, index) => {
       const isLast = index === parts.length - 1
 
-      const displayLabel = part.replace(/^(\d+[.\-_])/, '')
+      const displayLabel = stripOrderPrefix(part)
 
       let node = currentLevel.find(p => p.label === displayLabel)
       if (!node) {
@@ -82,7 +142,7 @@ const loadMarkdown = async (mod, lang, fileName) => {
       throw new Error('Not Found')
     }
     return text
-  } catch (err) {
+  } catch {
     message.warning(t('当前语言没有文档哦，请使用其它语言'))
     return ''
   }
@@ -91,7 +151,7 @@ const loadMarkdown = async (mod, lang, fileName) => {
 const selectFile = async (fileName) => {
   mobileNavVisible.value = false
   currentFileName.value = fileName
-  const mod = modList().find(item => item.lang === route.params.name)
+  const mod = findMod()
   if (!mod) return
 
   const modKey = (mod.name || route.params.name).toLowerCase()
@@ -109,11 +169,12 @@ const loadModInfo = async () => {
   pageInfo.value.markdown = ''
   pageInfo.value.name = ''
   pageInfo.value.treeData = []
+  documentationPending.value = false
   if (mdRenderer.value) {
     mdRenderer.value.headings = []
   }
 
-  const mod = modList().find(item => item.lang === route.params.name)
+  const mod = findMod()
   if (!mod) return
 
   pageInfo.value.name = mod.lang
@@ -126,7 +187,8 @@ const loadModInfo = async () => {
 
   // ⚠️ 核心修改：如果当前语言和默认配置都没有文件，说明该模组确实没文档
   if (files.length === 0) {
-    message.warning(t('当前语言没有文档哦，请使用其它语言'))
+    if (workshopResource.value) documentationPending.value = true
+    else message.warning(t('当前语言没有文档哦，请使用其它语言'))
     currentFileName.value = ''
     return
   }
@@ -136,18 +198,18 @@ const loadModInfo = async () => {
   pageInfo.value.treeData = buildFileTree(finalFiles)
 
   if (finalFiles.length > 0) {
-    const rawQuery = route.query.file
-    const queryFile = rawQuery ? rawQuery.replace(/^["']|["']$/g, '') : null
-    const hasQueryFile = queryFile && finalFiles.includes(queryFile)
+    const { name: rawFile, anchor: inlineAnchor } = splitDocTarget(route.query.file)
+    const queryFile = resolveDocFile(finalFiles, rawFile)
 
     let targetFile = finalFiles[0]
-    if (hasQueryFile) {
+    if (queryFile) {
       targetFile = queryFile
     } else if (currentFileName.value && finalFiles.includes(currentFileName.value)) {
       targetFile = currentFileName.value
     }
 
     await selectFile(targetFile)
+    await scrollToAnchor(routeAnchor() || inlineAnchor)
   }
 }
 
@@ -157,9 +219,17 @@ const openWeb = href => {
 
 onMounted(() => loadModInfo())
 watch(() => route.query.file, (newFile) => {
-  if (newFile && newFile !== currentFileName.value) {
-    loadModInfo()
-  }
+  if (!newFile) return
+  const { name: rawFile, anchor: inlineAnchor } = splitDocTarget(newFile)
+  const files = getFilesForMod((findMod()?.name || route.params.name).toLowerCase(), language.value)
+  const targetFile = resolveDocFile(files, rawFile)
+  if (!targetFile) return
+  if (targetFile === currentFileName.value) scrollToAnchor(routeAnchor() || inlineAnchor)
+  else loadModInfo()
+})
+watch(() => route.hash, () => {
+  const anchor = routeAnchor()
+  if (anchor) scrollToAnchor(anchor)
 })
 watch([language, () => route.params.name], () => loadModInfo())
 </script>
@@ -246,7 +316,15 @@ watch([language, () => route.params.name], () => loadModInfo())
       </div>
 
       <div class="mx-auto max-w-[980px] min-h-full px-5 sm:px-8 lg:px-12">
-        <MarkdownReadOnly :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer"
+        <div v-if="documentationPending" class="flex flex-col items-start gap-5 py-16">
+          <span class="mc-tag"><Icon icon="lucide:book-open" width="16" />{{ pageInfo.name }} Wiki</span>
+          <h2 class="text-2xl font-bold">{{ t('文档整理中') }}</h2>
+          <p class="text-ui-muted leading-8">{{ t('模组已开放下载，Wiki 文档稍后补充。') }}</p>
+          <RouterLink to="/resources" class="download-return">
+            <Icon icon="lucide:arrow-left" width="16" />{{ t('返回资源工坊下载') }}
+          </RouterLink>
+        </div>
+        <MarkdownReadOnly v-else :key="`${route.params.name}-${currentFileName}`" ref="mdRenderer"
                           :content="pageInfo.markdown" />
       </div>
     </main>
@@ -278,6 +356,21 @@ watch([language, () => route.params.name], () => loadModInfo())
 </template>
 
 <style scoped>
+.download-return {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid rgb(var(--ui-border));
+  box-shadow: 3px 3px 0 rgb(var(--ui-shadow));
+  background: rgb(var(--ui-primary));
+  color: rgb(var(--ui-on-accent));
+  font-size: 14px;
+  font-weight: 700;
+}
+.download-return:hover {
+  background: rgb(var(--ui-secondary));
+}
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }

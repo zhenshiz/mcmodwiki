@@ -5,6 +5,7 @@ const routes = [
   {
     path: '/', component: () => import('@/views/LayoutIndex.vue'), children: [
       { path: '/', component: () => import('@/views/main/MainPage.vue') },
+      { path: '/resources', component: () => import('@/views/resources/ResourcePage.vue') },
       { path: '/author', component: () => import('@/views/author/AuthorPage.vue') },
       { path: '/editor', component: () => import('@/views/editor/EditorPage.vue') },
       { path: '/wiki/:name', component: () => import('@/views/wiki/ModWiki.vue') },

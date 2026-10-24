@@ -182,5 +182,5 @@
   </div>
 </div>
 <h2 id="what-to-learn-next" data-toc-id="what-to-learn-next">What to learn next</h2>
-<p>Read <a href="?file=&quot;20-Editor-Tutorial.Shops-and-Categories.md&quot;">Shops and Categories</a> to understand all top-level fields, then use <a
-    href="?file=&quot;21-Editor-Tutorial.Items-and-Trades.md&quot;">Items and Trades</a> to create barter and sell-type items.</p>
+<p>Read <a href="?file=&quot;Editor-Tutorial.Shops-and-Categories&quot;">Shops and Categories</a> to understand all top-level fields, then use <a
+    href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a> to create barter and sell-type items.</p>

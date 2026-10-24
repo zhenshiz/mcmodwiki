@@ -5,6 +5,7 @@ import ViScriptQuests from '@/assets/textures/mod/ViScriptQuests.png'
 import ViScriptTeam from '@/assets/textures/mod/ViScriptTeam.png'
 import ViScriptLib from '@/assets/textures/mod/ViScriptLib.png'
 import SmartPhone from '@/assets/textures/mod/SmartPhone.png'
+import Flashlight from '@/assets/textures/mod/Flashlight.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -175,12 +176,24 @@ export const modList = () => {
       description: t('ViScript 通用模组：LDLib2 编辑器改造与使用指南'),
       availableHere: [
         {
+          icon: availableHere.CURSE_FORGE,
+          href: 'https://www.curseforge.com/minecraft/mc-mods/viscriptlib'
+        },
+        {
           icon: availableHere.GITHUB,
           href: 'https://github.com/zhenshiz/ViScriptLib'
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.1.8.3'
+    },
+    {
+      lang: 'Flashlight',
+      icon: Flashlight,
+      description: t('基于 Photon 的动态手电筒与舞台灯'),
+      availableHere: [],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.0'
     }
   ]
 }

@@ -215,7 +215,7 @@ effect give @s minecraft:speed 30 0</code></pre>
 <h2 id="costs-in-external-containers" data-toc-id="costs-in-external-containers">Costs in External Containers</h2>
 <p>Regular item costs and the "hold specified item" discount condition are counted and deducted through the container helpers registered by ViScriptLib.
   Besides the player inventory, with the matching mods installed it can also read Sophisticated Backpacks, the Beyond Dimensions network, Lightman’s Currency
-  wallets, plus the extra inventories and the Piggy Bank from Confluence: Otherworld. See <a href="?file=&quot;50-Mod-Integration.md&quot;">Mod Integration</a> for details.</p>
+  wallets, plus the extra inventories and the Piggy Bank from Confluence: Otherworld. See <a href="?file=&quot;Mod-Integration&quot;">Mod Integration</a> for details.</p>
 <h2 id="safe-handling-of-missing-items" data-toc-id="safe-handling-of-missing-items">Safe Handling of Missing Items</h2>
 <p>If a <code>.shop</code>
   file references items, components, or enchantments the current client cannot resolve, the editor displays them with a barrier placeholder while preserving the original data. Before a forced open, it attempts to create a backup next to the original file.</p>
@@ -226,5 +226,5 @@ effect give @s minecraft:speed 30 0</code></pre>
   </div>
 </div>
 <h2 id="next-steps" data-toc-id="next-steps">Next Steps</h2>
-<p>Once the basic trades are done, use <a href="?file=&quot;30-Advanced.Stock-and-Phases.md&quot;">Stock and Phases</a> to control visibility and supply, then use <a
-    href="?file=&quot;31-Advanced.Promotions.md&quot;">Promotions</a> to build events.</p>
+<p>Once the basic trades are done, use <a href="?file=&quot;Advanced.Stock-and-Phases&quot;">Stock and Phases</a> to control visibility and supply, then use <a
+    href="?file=&quot;Advanced.Promotions&quot;">Promotions</a> to build events.</p>

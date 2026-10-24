@@ -87,7 +87,7 @@ jobs:
           test -z "$(find "$BUILT_DIR" -type l -print -quit)"
           # Stop if a new top-level output needs an explicit deployment decision.
           test -z "$(find "$BUILT_DIR" -mindepth 1 -maxdepth 1 \
-            ! -name index.html ! -name assets ! -name md ! -name favicon.ico -print -quit)"
+            ! -name index.html ! -name assets ! -name md ! -name downloads ! -name favicon.ico -print -quit)"
           remote_ref="$(git ls-remote --heads origin refs/heads/deploy-static)"
           if [[ -n "$remote_ref" ]]; then
             git fetch --no-tags origin refs/heads/deploy-static:refs/remotes/origin/deploy-static

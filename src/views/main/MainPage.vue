@@ -40,6 +40,9 @@ const browseMods = () => document.getElementById('mods')?.scrollIntoView({ behav
           <RouterLink to="/chatbox/visual" class="hero-tool-link"
             >{{ t('打开 ChatBox 编辑器') }}<Icon icon="lucide:arrow-up-right" width="17"
           /></RouterLink>
+          <RouterLink to="/resources" class="hero-tool-link"
+            >{{ t('资源工坊') }}<Icon icon="lucide:download" width="17"
+          /></RouterLink>
         </div>
         <div class="hero-notes">
           <span><Icon icon="lucide:book-open" width="15" />{{ t('模组文档') }}</span

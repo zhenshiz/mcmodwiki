@@ -163,6 +163,9 @@ useEventListener('scroll', handleScroll)
               >
             </div></Dropdown
           >
+          <RouterLink to="/resources" class="nav-link" active-class="nav-link--active">{{
+            t('资源工坊')
+          }}</RouterLink>
           <RouterLink to="/editor" class="nav-link" active-class="nav-link--active">{{
             t('文档编辑器')
           }}</RouterLink>
@@ -251,6 +254,9 @@ useEventListener('scroll', handleScroll)
         class="mc-panel absolute inset-x-4 top-3 max-h-[calc(100dvh-6rem)] overflow-y-auto p-2"
       >
         <RouterLink to="/" class="mc-menu-item" @click="closeMobileMenu">{{ t('首页') }}</RouterLink
+        ><RouterLink to="/resources" class="mc-menu-item" @click="closeMobileMenu">{{
+          t('资源工坊')
+        }}</RouterLink
         ><RouterLink to="/editor" class="mc-menu-item" @click="closeMobileMenu">{{
           t('文档编辑器')
         }}</RouterLink

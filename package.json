@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/validate-resources.mjs && vite build",
+    "validate:resources": "node scripts/validate-resources.mjs",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"

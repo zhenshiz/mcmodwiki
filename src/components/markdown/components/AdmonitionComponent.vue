@@ -4,8 +4,8 @@
       class="admonition-container border border-ui-line border-l-4 transition-colors"
       :class="[theme.container, theme.textColor]"
     >
-      <div class="admo-icon-fixed flex items-center px-4 py-2 pointer-events-none">
-        <Icon :icon="theme.icon" class="w-5 h-5 mr-2" />
+      <div class="admo-icon-fixed pointer-events-none">
+        <Icon :icon="theme.icon" class="w-5 h-5" />
       </div>
 
       <node-view-content class="admo-editor-root" />
@@ -45,6 +45,11 @@ const theme = computed(() => themeMap[props.node.attrs.type] || themeMap.info)
   top: 0;
   left: 0;
   z-index: 10;
+  /* 与标题行（min-height 2.5rem、垂直居中）同高同轴线，保证图标中心对齐标题文字中心 */
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
   color: currentColor;
 }
 
@@ -54,10 +59,12 @@ const theme = computed(() => themeMap[props.node.attrs.type] || themeMap.info)
   color: inherit;
 
   & > [data-type="admonition-title"] {
-    padding: 0.5rem 1rem 0.5rem 3rem;
+    /* 固定 2.5rem 高、纯 flex 居中：文字中心恒在 1.25rem 处，与图标层（同高居中）严格同轴线，
+       不再受页面继承的 line-height / font-size 影响 */
+    height: 2.5rem;
+    padding: 0 1rem 0 3rem;
     font-weight: bold;
     outline: none;
-    min-height: 2.5rem;
     display: flex;
     align-items: center;
     color: inherit;

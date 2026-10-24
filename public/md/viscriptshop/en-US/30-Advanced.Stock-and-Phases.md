@@ -1,5 +1,5 @@
 <h1 id="stock-and-phases" data-toc-id="stock-and-phases">Stock and Phases</h1>
-<p>Stock controls how many more units can be sold, while phases control which players can see or buy them. Both are evaluated server-side, making them ideal for limited-quantity items, chapter shops, reputation gates, and member-only areas. Before starting, complete <a href="?file=&quot;21-Editor-Tutorial.Items-and-Trades.md&quot;">Items and Trades</a>.</p>
+<p>Stock controls how many more units can be sold, while phases control which players can see or buy them. Both are evaluated server-side, making them ideal for limited-quantity items, chapter shops, reputation gates, and member-only areas. Before starting, complete <a href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a>.</p>
 <h2 id="what-stock-values-mean" data-toc-id="what-stock-values-mean">What Stock Values Mean</h2>
 <table data-type="custom-table" data-with-header-row="true" style="min-width: 100px;">
   <tbody>
@@ -205,4 +205,4 @@
   </div>
 </div>
 <h2 id="next-steps" data-toc-id="next-steps">Next Steps</h2>
-<p>For discounts, gifts with purchase, or coupons, continue with <a href="?file=&quot;31-Advanced.Promotions.md&quot;">Promotions</a>. For changing stock or phases during operation, see <a href="?file=&quot;40-Server.Commands-and-Config.md&quot;">Commands and Config</a>.</p>
+<p>For discounts, gifts with purchase, or coupons, continue with <a href="?file=&quot;Advanced.Promotions&quot;">Promotions</a>. For changing stock or phases during operation, see <a href="?file=&quot;Server.Commands-and-Config&quot;">Commands and Config</a>.</p>

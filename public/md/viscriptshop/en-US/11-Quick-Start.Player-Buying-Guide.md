@@ -116,7 +116,7 @@
     <p>If Just Enough Characters is installed, the item search box supports Pinyin input.</p>
   </li>
   <li>
-    <p>For detailed purchase-condition filtering, see <a href="?file=&quot;01-Search-Optimization.md&quot;">Search Optimization</a></p>
+    <p>For detailed purchase-condition filtering, see <a href="?file=&quot;Search-Optimization&quot;">Search Optimization</a></p>
   </li>
 </ul>
 <h2 id="stash-and-clear" data-toc-id="stash-and-clear">Stash and Clear</h2>

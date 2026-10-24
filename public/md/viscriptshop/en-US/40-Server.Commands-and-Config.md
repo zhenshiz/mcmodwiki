@@ -1,5 +1,5 @@
 <h1 id="commands-and-config" data-toc-id="commands-and-config">Commands and Config</h1>
-<p>This page is for modpack authors and server administrators, covering all built-in commands, configuration files, the FTB sidebar entry, and the safe update workflow. For everyday player operations, see the <a href="?file=&quot;11-Quick-Start.Player-Buying-Guide.md&quot;">Player Buying Guide</a>.</p>
+<p>This page is for modpack authors and server administrators, covering all built-in commands, configuration files, the FTB sidebar entry, and the safe update workflow. For everyday player operations, see the <a href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a>.</p>
 <h2 id="permission-overview" data-toc-id="permission-overview">Permission Overview</h2>
 <p>The <code>/viscript_shop</code> root command requires permission level 2, while the editor subcommand requires level 4. The open-shop, open-editor, and modify-own-stage subcommands can only be executed by player entities, not directly from the server console.</p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
@@ -81,7 +81,7 @@
 /viscript_shop stage remove &lt;flag&gt;</code></pre>
 <p>These two commands only affect the executor. To modify other players, admins can have the target player run a fixed command, or use the vanilla <code>execute as</code>:</p>
 <pre language="plaintext" isclosed="false"><code class="language-plaintext">/execute as Steve run viscript_shop stage add chapter_2</code></pre>
-<p>Stage flags are case-sensitive; it is recommended to consistently use lowercase letters, digits, and underscores, such as <code>chapter_2</code> and <code>reputation_mage</code>. For the full configuration method, see <a href="?file=&quot;30-Advanced.Stock-and-Phases.md&quot;">Stock and Phases</a>.</p>
+<p>Stage flags are case-sensitive; it is recommended to consistently use lowercase letters, digits, and underscores, such as <code>chapter_2</code> and <code>reputation_mage</code>. For the full configuration method, see <a href="?file=&quot;Advanced.Stock-and-Phases&quot;">Stock and Phases</a>.</p>
 <h2 id="virtual-currency-commands" data-toc-id="virtual-currency-commands">Virtual Currency Commands</h2>
 <table data-type="custom-table" data-with-header-row="true" style="min-width: 100px;">
   <tbody>
@@ -234,4 +234,4 @@ shopUiTheme = "GLASS_DARK"</code></pre>
   </div>
 </div>
 <h2 id="related-pages" data-toc-id="related-pages">Related Pages</h2>
-<p>For more compatible-mod configuration, see <a href="?file=&quot;50-Mod-Integration.md&quot;">Mod Integration</a>; when shops fail to open or trades misbehave, see <a href="?file=&quot;70-Troubleshooting-and-Maintenance.md&quot;">Troubleshooting and Maintenance</a>.</p>
+<p>For more compatible-mod configuration, see <a href="?file=&quot;Mod-Integration&quot;">Mod Integration</a>; when shops fail to open or trades misbehave, see <a href="?file=&quot;Troubleshooting-and-Maintenance&quot;">Troubleshooting and Maintenance</a>.</p>

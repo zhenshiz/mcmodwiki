@@ -3,7 +3,6 @@ import { defineAsyncComponent, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 //插件
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
 import Superscript from '@tiptap/extension-superscript'
 import Subscript from '@tiptap/extension-subscript'
 import TaskList from '@tiptap/extension-task-list'
@@ -18,7 +17,7 @@ import { HiddenText } from '@/components/markdown/plugin/HiddenText.js'
 import {
   Admonition,
   AdmonitionContent,
-  AdmonitionTitle
+  AdmonitionTitle,
 } from '@/components/markdown/plugin/Admonition.js'
 import { StepItem, Steps } from '@/components/markdown/plugin/Steps.js'
 import TextAlign from '@tiptap/extension-text-align'
@@ -30,13 +29,17 @@ import 'highlight.js/styles/atom-one-dark.css'
 import MarkDownMenu from '@/components/markdown/MarkDownMenu.vue'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
 import LinkUpdatePopup from '@/components/markdown/components/LinkUpdatePopup.vue'
+import ImageResizeMenu from '@/components/markdown/components/ImageResizeMenu.vue'
 import { html as beautifyHtml } from 'js-beautify'
 import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table-of-contents'
-import { TextSelection } from '@tiptap/pm/state'
+import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
+import { ResizableImage } from '@/components/markdown/plugin/ResizableImage.js'
 
-const LatexEditor = defineAsyncComponent(() => import('@/components/markdown/components/LatexEditor.vue'))
+const LatexEditor = defineAsyncComponent(
+  () => import('@/components/markdown/components/LatexEditor.vue'),
+)
 const latexDialog = ref(null)
 const openLatex = (node = null, pos = null) => {
   if (!editor.value) return
@@ -45,7 +48,7 @@ const openLatex = (node = null, pos = null) => {
     latex: node?.attrs.latex ?? '',
     displayMode: node ? node.type.name === 'blockMath' : true,
     pos,
-    selection: { from, to }
+    selection: { from, to },
   }
 }
 
@@ -55,9 +58,9 @@ const props = defineProps({
   valueMarkdown: String,
   isShowMenu: {
     type: Boolean,
-    default: true
+    default: true,
   },
-  mode: String
+  mode: String,
 })
 const emit = defineEmits(['update:valueMarkdown', 'update:mode'])
 const lowlight = createLowlight(common)
@@ -71,25 +74,31 @@ const editor = useEditor({
     StarterKit.configure({
       codeBlock: false,
       link: false,
-      table: false
+      table: false,
     }),
     EnhancedCodeBlock,
     CodeBlockLowlight.configure({
-      lowlight
+      lowlight,
     }),
     BetterLink,
-    Image.configure({
-      allowBase64: true
+    ResizableImage.configure({
+      allowBase64: true,
     }),
     CustomTable,
     Superscript,
     Subscript,
     TaskList,
     TaskItem.configure({
-      nested: true
+      nested: true,
     }),
-    InlineMath.configure({ onClick: (node, pos) => openLatex(node, pos), katexOptions: { trust: false } }),
-    BlockMath.configure({ onClick: (node, pos) => openLatex(node, pos), katexOptions: { displayMode: true, trust: false } }),
+    InlineMath.configure({
+      onClick: (node, pos) => openLatex(node, pos),
+      katexOptions: { trust: false },
+    }),
+    BlockMath.configure({
+      onClick: (node, pos) => openLatex(node, pos),
+      katexOptions: { displayMode: true, trust: false },
+    }),
     Youtube,
     BiliBili,
     Mermaid,
@@ -100,7 +109,7 @@ const editor = useEditor({
     Steps,
     StepItem,
     TextAlign.configure({
-      types: ['heading', 'paragraph']
+      types: ['heading', 'paragraph'],
     }),
     TableOfContents.configure({
       getIndex: getHierarchicalIndexes,
@@ -111,10 +120,10 @@ const editor = useEditor({
           .replace(/\s+/g, '-')
           .replace(/[^\w\u4e00-\u9fa5-]/g, '')
       },
-      onUpdate: content => {
+      onUpdate: (content) => {
         headings.value = content
-      }
-    })
+      },
+    }),
   ],
   onUpdate: ({ editor }) => {
     const rawHtml = editor.getHTML()
@@ -124,14 +133,14 @@ const editor = useEditor({
       preserve_newlines: true,
       unformatted: ['code', 'pre', 'em', 'strong', 'span'],
       // 单元格文本由 CustomTable 自己管理，格式化器不能向其中注入换行和缩进
-      content_unformatted: ['pre', 'textarea', 'td', 'th']
+      content_unformatted: ['pre', 'textarea', 'td', 'th'],
     })
     lastEmittedHtml.value = formattedHtml
     emit('update:valueMarkdown', formattedHtml)
   },
   editorProps: {
     attributes: {
-      spellcheck: 'false'
+      spellcheck: 'false',
     },
     handleKeyDown: (view, event) => {
       if (event.key === 'Tab') {
@@ -155,7 +164,7 @@ const editor = useEditor({
       }
       return false
     },
-  }
+  },
 })
 
 watch(
@@ -170,15 +179,24 @@ watch(
     if (editor.value.getHTML() === html) return
 
     editor.value.commands.setContent(html, false)
-  }
+  },
 )
 
 const shouldShowMenu = ({ editor, state }) => {
   const { selection } = state
   // Only text formatting belongs here; atom selections (tables/formulas) have their own controls.
-  return editor.isEditable && selection instanceof TextSelection &&
-    ((!selection.empty && !!state.doc.textBetween(selection.from, selection.to).trim()) || editor.isActive('link'))
+  return (
+    editor.isEditable &&
+    selection instanceof TextSelection &&
+    ((!selection.empty && !!state.doc.textBetween(selection.from, selection.to).trim()) ||
+      editor.isActive('link'))
+  )
 }
+
+const shouldShowImageMenu = ({ editor, state }) =>
+  editor.isEditable &&
+  state.selection instanceof NodeSelection &&
+  state.selection.node?.type.name === 'image'
 
 const editorContainer = ref(null)
 const menuContainer = () => document.fullscreenElement || document.body
@@ -192,7 +210,7 @@ const bubbleOptions = {
 
 const handleFullscreen = () => {
   if (!document.fullscreenElement) {
-    editorContainer.value?.requestFullscreen().catch(err => {
+    editorContainer.value?.requestFullscreen().catch((err) => {
       console.error(`全屏失败: ${err.message}`)
     })
   } else {
@@ -218,13 +236,13 @@ defineExpose({
 
         element.scrollIntoView({
           behavior: 'smooth',
-          block: 'start'
+          block: 'start',
         })
 
         history.pushState(null, null, `#${id}`)
       }
     }
-  }
+  },
 })
 </script>
 
@@ -236,7 +254,7 @@ defineExpose({
       @create-latex="openLatex()"
       @toggle-fullscreen="handleFullscreen"
       :mode="mode"
-      @update:mode="arg=>emit('update:mode',arg)"
+      @update:mode="(arg) => emit('update:mode', arg)"
       class="sticky top-0 z-30 border-b dark:border-ui-line shadow-sm"
     />
     <BubbleMenu
@@ -249,8 +267,23 @@ defineExpose({
     >
       <LinkUpdatePopup :editor="editor" />
     </BubbleMenu>
+    <BubbleMenu
+      v-if="editor"
+      :editor="editor"
+      :append-to="menuContainer"
+      :options="{ ...bubbleOptions, placement: 'bottom' }"
+      :should-show="shouldShowImageMenu"
+      class="editor-image-bubble-menu"
+    >
+      <ImageResizeMenu :editor="editor" />
+    </BubbleMenu>
     <EditorContent class="dark:text-ui-text" :editor="editor" />
-    <LatexEditor v-if="latexDialog" :editor="editor" :initial="latexDialog" @close="latexDialog = null" />
+    <LatexEditor
+      v-if="latexDialog"
+      :editor="editor"
+      :initial="latexDialog"
+      @close="latexDialog = null"
+    />
   </div>
 </template>
 
@@ -271,7 +304,12 @@ defineExpose({
     scroll-margin-top: 40px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: 15px;
     line-height: 1.5;
   }
@@ -372,13 +410,17 @@ defineExpose({
     }
   }
 
-  ul, ol {
+  ul,
+  ol {
     margin: 0.5rem 0;
     padding-left: 1.5rem;
     list-style-position: inside;
   }
 
-  ul ul, ul ol, ol ul, ol ol {
+  ul ul,
+  ul ol,
+  ol ul,
+  ol ol {
     margin: 0.2rem 0 0.2rem 1.5rem;
   }
 
@@ -438,7 +480,7 @@ defineExpose({
             border-color: var(--blue-5);
 
             &::before {
-              content: "";
+              content: '';
               width: 10px;
               height: 10px;
               clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
@@ -458,7 +500,7 @@ defineExpose({
         }
       }
 
-      &[data-checked="true"] {
+      &[data-checked='true'] {
         > div {
           text-decoration: line-through;
           color: var(--font-color-0);
@@ -492,11 +534,12 @@ defineExpose({
     word-break: break-all;
 
     code {
-      font-family: SF Mono,
-      Menlo,
-      Consolas,
-      Liberation Mono,
-      monospace;
+      font-family:
+        SF Mono,
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
       margin: 0 4px;
       background-color: var(--trans-blue-1);
       padding: 2px 4px;
@@ -510,18 +553,20 @@ defineExpose({
     padding: 17px;
     background-color: var(--trans-white-5);
     position: relative;
-    box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05),
-    0 1px 4px hsla(0, 0%, 0%, 0.05),
-    0 2px 8px hsla(0, 0%, 0%, 0.05);
+    box-shadow:
+      0 1px 2px hsla(0, 0%, 0%, 0.05),
+      0 1px 4px hsla(0, 0%, 0%, 0.05),
+      0 2px 8px hsla(0, 0%, 0%, 0.05);
     overflow-x: auto;
 
     code {
       font-size: 15px;
-      font-family: SF Mono,
-      Menlo,
-      Consolas,
-      Liberation Mono,
-      monospace;
+      font-family:
+        SF Mono,
+        Menlo,
+        Consolas,
+        Liberation Mono,
+        monospace;
       float: left;
       min-width: 100%;
 
@@ -606,7 +651,6 @@ defineExpose({
   * &:not(.katex-html) {
     white-space: pre-wrap;
     word-break: break-word;
-
   }
 
   & > div:nth-child(1) {
@@ -646,7 +690,7 @@ defineExpose({
     }
   }
 
-  span[data-type="hidden-text"] {
+  span[data-type='hidden-text'] {
     background-color: #333 !important;
     color: #333 !important;
     border-radius: 0;
@@ -654,7 +698,9 @@ defineExpose({
     text-decoration-color: #333 !important;
     transition: all 0.3s ease;
 
-    s, del, u {
+    s,
+    del,
+    u {
       text-decoration-color: #333 !important;
     }
 
@@ -663,15 +709,17 @@ defineExpose({
       color: inherit !important;
       text-decoration-color: currentColor !important;
 
-      s, del, u {
+      s,
+      del,
+      u {
         text-decoration-color: currentColor !important;
       }
     }
   }
 
-  s:has(> span[data-type="hidden-text"]),
-  del:has(> span[data-type="hidden-text"]),
-  u:has(> span[data-type="hidden-text"]) {
+  s:has(> span[data-type='hidden-text']),
+  del:has(> span[data-type='hidden-text']),
+  u:has(> span[data-type='hidden-text']) {
     text-decoration-color: #333 !important;
 
     &:hover {
@@ -688,8 +736,6 @@ defineExpose({
       display: block;
     }
   }
-
-
 }
 
 aside {

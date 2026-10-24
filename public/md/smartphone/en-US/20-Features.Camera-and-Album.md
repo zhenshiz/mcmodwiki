@@ -1,5 +1,5 @@
 <h1 id="camera-and-album" data-toc-id="camera-and-album">Camera and Album</h1>
-<p>The Camera takes photos from the current player's perspective, and the Album browses, doodle-edits, deletes, and imports photos. Photos in the Album can also be sent as chat room image messages; see <a href="?file=&quot;30-Features.Social-and-Chat.md&quot;#sending-image-messages">Sending image messages</a>.</p>
+<p>The Camera takes photos from the current player's perspective, and the Album browses, doodle-edits, deletes, and imports photos. Photos in the Album can also be sent as chat room image messages; see <a href="?file=&quot;Features.Social-and-Chat#sending-image-messages&quot;">Sending image messages</a>.</p>
 
 <h2 id="taking-photos" data-toc-id="taking-photos">Taking photos</h2>
 <div currentstep="0" data-type="steps">

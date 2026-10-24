@@ -6,19 +6,19 @@
   <div data-type="admonition-title">Version and dependencies</div>
   <div data-type="admonition-content">
     <p>The current project version is SmartPhone 1.0.3, targeting Minecraft 1.21.1 with NeoForge 21.1.248; the mod metadata requires NeoForge 21 or higher.</p>
-    <p>Simple Voice Chat API is declared as a required dependency, with a version range of 2.6.0 or higher. Only voice calls require an active voice chat connection; see <a href="?file=&quot;40-Features.Voice-Call.md&quot;">Voice Call</a> for details.</p>
+    <p>Simple Voice Chat API is declared as a required dependency, with a version range of 2.6.0 or higher. Only voice calls require an active voice chat connection; see <a href="?file=&quot;Features.Voice-Call&quot;">Voice Call</a> for details.</p>
   </div>
 </div>
 
 <h2 id="table-of-contents" data-toc-id="table-of-contents">Table of contents</h2>
 <ul>
-  <li><p><a href="?file=&quot;10-Usage.Phone-and-Apps.md&quot;">Phone and Apps</a>: opening, unlocking, home screen, App Store, and in-phone settings.</p></li>
-  <li><p><a href="?file=&quot;15-Usage.Mini-Games.md&quot;">Mini-Games</a>: controls, Piano Tiles rules, and Minesweeper rules.</p></li>
-  <li><p><a href="?file=&quot;20-Features.Camera-and-Album.md&quot;">Camera and Album</a>: taking photos, managing photos, and importing PNG/JPEG from external files.</p></li>
-  <li><p><a href="?file=&quot;30-Features.Social-and-Chat.md&quot;">Social and Chat</a>: public channels, friend requests, direct messages, and image messages.</p></li>
-  <li><p><a href="?file=&quot;40-Features.Voice-Call.md&quot;">Voice Call</a>: starting, answering, and ending two-person calls through Simple Voice Chat.</p></li>
-  <li><p><a href="?file=&quot;45-Admin.Phone-Data-Editor.md&quot;">Phone Data Editor</a>: preview and preset phone profiles for specific players or virtual characters.</p></li>
-  <li><p><a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>: server administrator configuration, disabling apps, and management commands.</p></li>
+  <li><p><a href="?file=&quot;Usage.Phone-and-Apps&quot;">Phone and Apps</a>: opening, unlocking, home screen, App Store, and in-phone settings.</p></li>
+  <li><p><a href="?file=&quot;Usage.Mini-Games&quot;">Mini-Games</a>: controls, Piano Tiles rules, and Minesweeper rules.</p></li>
+  <li><p><a href="?file=&quot;Features.Camera-and-Album&quot;">Camera and Album</a>: taking photos, managing photos, and importing PNG/JPEG from external files.</p></li>
+  <li><p><a href="?file=&quot;Features.Social-and-Chat&quot;">Social and Chat</a>: public channels, friend requests, direct messages, and image messages.</p></li>
+  <li><p><a href="?file=&quot;Features.Voice-Call&quot;">Voice Call</a>: starting, answering, and ending two-person calls through Simple Voice Chat.</p></li>
+  <li><p><a href="?file=&quot;Admin.Phone-Data-Editor&quot;">Phone Data Editor</a>: preview and preset phone profiles for specific players or virtual characters.</p></li>
+  <li><p><a href="?file=&quot;Admin.Config-and-Commands&quot;">Configuration and Commands</a>: server administrator configuration, disabling apps, and management commands.</p></li>
 </ul>
 
 <h2 id="obtaining-and-opening-the-phone" data-toc-id="obtaining-and-opening-the-phone">Obtaining and opening the phone</h2>
@@ -87,8 +87,8 @@
 
 <h2 id="downloadable-apps" data-toc-id="downloadable-apps">Downloadable apps</h2>
 <p>The App Store lists installable apps that are not disabled by the server configuration. The currently registered mini-games are Snake, 2048, Flappy Bird, Minesweeper, and Piano Tiles.</p>
-<p>For each game's start method, controls, and failure conditions, see <a href="?file=&quot;15-Usage.Mini-Games.md&quot;">Mini-Games</a>.</p>
-<p>System apps cannot be uninstalled through the App Store; downloadable apps can be installed or uninstalled in the App Store. Administrators can also hide specific apps through configuration; see <a href="?file=&quot;50-Admin.Config-and-Commands.md&quot;">Configuration and Commands</a>.</p>
+<p>For each game's start method, controls, and failure conditions, see <a href="?file=&quot;Usage.Mini-Games&quot;">Mini-Games</a>.</p>
+<p>System apps cannot be uninstalled through the App Store; downloadable apps can be installed or uninstalled in the App Store. Administrators can also hide specific apps through configuration; see <a href="?file=&quot;Admin.Config-and-Commands&quot;">Configuration and Commands</a>.</p>
 
 <h2 id="data-persistence" data-toc-id="data-persistence">Data persistence</h2>
 <p>Phone profiles are saved per owner into the Overworld SavedData on the server; the owner can be a real player or a registered virtual character. A profile includes installed apps, app layout, wallpaper, time source, notepad, official messages, and other phone information. Chat rooms and friend relationships are also saved in the server Overworld data.</p>
