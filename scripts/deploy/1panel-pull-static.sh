@@ -67,7 +67,7 @@ awk '
     if (root !~ /^mcmodwiki-/ || part[1] != root) exit 1
     for (i = 1; i <= n; i++) if (part[i] == "." || part[i] == "..") exit 1
     if (n == 1 || (n == 2 && part[2] == "")) next
-    if (part[2] != "assets" && part[2] != "md" && part[2] != "index.html" && part[2] != "favicon.ico") exit 1
+    if (part[2] != "assets" && part[2] != "md" && part[2] != "downloads" && part[2] != "index.html" && part[2] != "favicon.ico") exit 1
     if ((part[2] == "index.html" || part[2] == "favicon.ico") && n != 2) exit 1
   }
   END { if (NR == 0) exit 1 }
