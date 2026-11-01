@@ -23,6 +23,8 @@ import { useChatBoxEditorStore } from '@/stores'
 import Inspector from '@/components/form/Inspector.vue'
 import ObjectDialog from '@/components/form/ObjectDialog.vue'
 import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
+import { Keyframe } from '@/assets/more/chatbox/chatboxTheme.js'
+import AnimationField from '@/views/more/chatbox/component/editors/AnimationField.vue'
 
 const props = defineProps({
   model: { type: Object, default: null },
@@ -58,29 +60,16 @@ const COMPONENT_MAP = {
 
 const allAnimationOptions = computed(() => {
   const options = [...builtinAnimations]
-  const allKeys = new Set()
-  store.globalAnimations.forEach(key => allKeys.add(key))
-  if (store.currentModel && store.currentModel.customAnimation) {
-    Object.keys(store.currentModel.customAnimation).forEach(key => allKeys.add(key))
+  for (const option of store.animationOptions) {
+    if (!options.some(item => item.value === option.value)) options.push(option)
   }
-  allKeys.forEach(key => {
-    if (!options.some(opt => opt.value === key)) {
-      options.push({ label: `${key} (自定义)`, value: key })
-    }
-  })
   return options
-})
-
-const allPortraitsOptions = computed(() => {
-  return store.globalPortraits.map(i => {
-    return { label: i, value: i }
-  })
 })
 
 const dataSourceMap = computed(() => ({
   [autoCompleteDataSources.PRESET_ANIMATION]: allAnimationOptions.value,
   [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions,
-  [autoCompleteDataSources.PORTRAIT]: allPortraitsOptions.value,
+  [autoCompleteDataSources.PORTRAIT]: store.portraitOptions,
   [autoCompleteDataSources.TEXTURE]: store.allTextureOptions,
 }))
 
@@ -176,12 +165,14 @@ const handleUpdate = (field, val) => {
         @reset="resetField(field.modelKey || field.key)"
       >
         <component
-          :is="COMPONENT_MAP[field.type] || 'input'"
+          :is="field.props?.itemConstructor === Keyframe ? AnimationField : COMPONENT_MAP[field.type] || 'input'"
+          @update:loop="value => handleUpdate({ key: 'loop' }, value)"
           :model-value="getBindValue(field)"
           @update:modelValue="(val) => handleUpdate(field, val)"
           @init="(val) => handleUpdate(field, val)"
           v-bind="{
             ...field.props,
+            ...(field.props?.itemConstructor === Keyframe ? { owner: currentModel } : {}),
             options: getDynamicOptions(field) || field.props?.options,
             optionsResolver: (key) => getDynamicOptions({ props: { dataSource: key } })
           }"

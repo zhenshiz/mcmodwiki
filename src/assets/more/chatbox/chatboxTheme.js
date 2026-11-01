@@ -641,7 +641,7 @@ export class Portrait extends Component {
     Portrait.defineField('animation', {
       label: t('预设动画'),
       type: EditorTypes.AUTOCOMPLETE,
-      tips: t('只能获取当前主题文件的预设动画补全，但是你可以使用其它主题文件的预设动画'),
+      tips: t('补全来自游戏已加载的主题文件，也可手动填写动画 ID；ID 区分大小写。'),
       props: { dataSource: autoCompleteDataSources.PRESET_ANIMATION },
       showIf: hideIn(portraitType.ENTITY)
     })

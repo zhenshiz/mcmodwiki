@@ -183,7 +183,9 @@ export const useGameBridgeStore = defineStore('gameBridge', () => {
   }
 
   async function stopPreview() {
+    const revision = previewRevision
     await connection.request('preview.stop')
+    if (revision !== previewRevision) return
     previewing.value = false
     streamFrame.value = null
     previewRevision = ''
@@ -191,6 +193,11 @@ export const useGameBridgeStore = defineStore('gameBridge', () => {
 
   async function movePreview(payload) {
     try { return await connection.request('preview.move', { ...payload, revision: previewRevision }) }
+    catch (cause) { error.value = cause.message; throw cause }
+  }
+
+  async function seekAnimation(payload) {
+    try { return await connection.request('preview.animation', { ...payload, revision: previewRevision }) }
     catch (cause) { error.value = cause.message; throw cause }
   }
 
@@ -236,6 +243,6 @@ export const useGameBridgeStore = defineStore('gameBridge', () => {
 
   return { status, error, snapshot, files, serverSession, images, imageErrors, connected, previewing, streamFrame, syncing,
     debugActive, debugStarting, debugSyncing, debugState, debugHistory, debugSession, debugFileId, debugError, startDebug, updateDebug, stopDebug,
-    connect, disconnect, refresh, options, ensureImage, imageKey, imageUrl, preview, movePreview, stopPreview,
+    connect, disconnect, refresh, options, ensureImage, imageKey, imageUrl, preview, movePreview, seekAnimation, stopPreview,
     request: (type, payload, timeout) => connection.request(type, payload, timeout) }
 })

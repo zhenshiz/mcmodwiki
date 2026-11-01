@@ -15,6 +15,7 @@ const bridge = useGameBridgeStore()
 const isTextEditing = e => e.target?.closest?.('input, textarea, select, [contenteditable="true"], [role="textbox"]')
 
 const handleGlobalKeydown = async (e) => {
+  if (editorStore.animationEditorOpen) return
   if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
     e.preventDefault()
     await editorStore.saveProject()
@@ -29,11 +30,13 @@ const handleGlobalKeydown = async (e) => {
 }
 
 const handleCopy = e => {
+  if (editorStore.animationEditorOpen) return
   if (e.defaultPrevented || isTextEditing(e) || !editorStore.copyPortrait()) return
   e.clipboardData?.setData('text/plain', JSON.stringify(editorStore.selectedComponent, null, 2))
   e.preventDefault()
 }
 const handlePaste = e => {
+  if (editorStore.animationEditorOpen) return
   if (!e.defaultPrevented && !isTextEditing(e) && editorStore.pastePortrait()) e.preventDefault()
 }
 

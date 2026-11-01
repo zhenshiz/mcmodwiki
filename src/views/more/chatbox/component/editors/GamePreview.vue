@@ -28,7 +28,7 @@ let dragCleanup
 async function updatePreview() {
   if (pending || moving || dragging.value) { queued = true; return }
   queued = false
-  if (!bridge.connected || !bridge.snapshot?.previewStream || store.viewMode !== 'theme' || disposed) return
+  if (!bridge.connected || !bridge.snapshot?.previewStream || store.viewMode !== 'theme' || store.animationEditorOpen || disposed) return
   pending = true
   const current = generation
   try { await store.previewInGame({ stream: true, isCurrent: () => !disposed && current === generation }) }
@@ -40,7 +40,7 @@ async function updatePreview() {
   }
 }
 
-watch(() => [bridge.connected, bridge.snapshot?.previewStream, store.currentModel, store.previewAnimationKey], () => {
+watch(() => [bridge.connected, bridge.snapshot?.previewStream, store.currentModel, store.previewAnimationKey, store.animationEditorOpen], () => {
   generation++
   clearTimeout(timer)
   if (!dragging.value) timer = setTimeout(updatePreview, 220)

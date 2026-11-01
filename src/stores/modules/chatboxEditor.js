@@ -11,6 +11,9 @@ import { useDialog } from '@/components/register/useDialog.js'
 import { ChatBoxDialogues, DialogueFrame, DialogueOption } from '@/assets/more/chatbox/chatboxDialogues'
 import { analyzeDialogue, connectionTarget, renameGroupReferences, reindexFrameReferences } from '@/views/more/chatbox/flow/dialogueFlow.js'
 import { i18nScope, t } from '@/languages'
+import { useLocalResourcePacksStore } from './localResourcePacks.js'
+import { mergeTextureOptions } from '@/views/more/chatbox/resources/localResourcePacks.js'
+import { readThemeCatalog, themeSuggestions } from '@/views/more/chatbox/bridge/themeSuggestions.js'
 
 const message = useMessage()
 const DIALOGUE_FRAME_SECTION_KEYS = new Set(['basic', 'dialogBox', 'option', 'portrait', 'video'])
@@ -19,6 +22,7 @@ export const useChatBoxEditorStore = defineStore(
   'chatBoxEditor',
   () => {
     const bridge = useGameBridgeStore()
+    const localResources = useLocalResourcePacksStore()
 
     // 状态
     const currentFile = ref(null)
@@ -71,6 +75,8 @@ export const useChatBoxEditorStore = defineStore(
     const selectedComponentClass = ref(null)
 
     const previewAnimationKey = ref(null)
+    const animationEditorSession = ref('')
+    const animationEditorOpen = computed(() => !!animationEditorSession.value)
     const _savedSnapshot = ref(null)
     const dialogueFrameClipboard = ref(null)
 
@@ -211,8 +217,26 @@ export const useChatBoxEditorStore = defineStore(
       return true
     }
 
-    const globalAnimations = computed(() => Object.keys(currentModel.value?.customAnimation || {}))
-    const globalPortraits = computed(() => Object.keys(currentModel.value?.portrait || {}))
+    const themeCatalog = shallowRef({})
+    watch(() => [bridge.files, bridge.connected, bridge.serverSession], async (_, __, onCleanup) => {
+      let cancelled = false
+      onCleanup(() => { cancelled = true })
+      themeCatalog.value = {}
+      if (!bridge.connected) return
+      const serverSession = bridge.serverSession
+      const result = await readThemeCatalog(bridge.files,
+        file => bridge.request('files.read', { kind: 'theme', resourceId: file.resourceId, serverSession }, 60000), () => !cancelled)
+      if (!cancelled) themeCatalog.value = result.catalog
+    }, { immediate: true })
+    const themeCompletion = computed(() => {
+      const id = viewMode.value === 'theme' ? currentFile.value?.resourceId : currentModel.value?.theme
+      const activeId = id ? id.includes(':') ? id : `minecraft:${id}` : ''
+      return themeSuggestions(themeCatalog.value, activeId, viewMode.value === 'theme' ? currentModel.value : dialogueTheme.value)
+    })
+    const portraitOptions = computed(() => themeCompletion.value.portraits)
+    const animationOptions = computed(() => themeCompletion.value.animations)
+    const globalAnimations = computed(() => animationOptions.value.map(option => option.value))
+    const globalPortraits = computed(() => portraitOptions.value.map(option => option.value))
 
     const selectTreeNode = (node) => {
       selectedTreeNode.value = node
@@ -333,7 +357,7 @@ export const useChatBoxEditorStore = defineStore(
         if (rows.length) translations[language] = Object.fromEntries(rows.map(row => [row.key, row.value[col]]))
       })
       await bridge.request('assets.commit', { images: [], translations }, 120000)
-      if (!isCurrent()) return
+      if (!isCurrent() || animationEditorOpen.value) return
       const group = activeDialogueGroupKey.value || Object.keys(content.dialogues || {})[0] || 'preview'
       const frames = currentModel.value?.dialogues?.[group] || []
       const selectedIndex = currentFrame.value ? frames.indexOf(currentFrame.value) : -1
@@ -680,9 +704,9 @@ export const useChatBoxEditorStore = defineStore(
     }
 
     const getTextureUrl = (path) => {
-      if (!path || !bridge.connected) return ''
+      if (!path) return ''
       const id = path.includes(':') ? path : `chatbox:${path}`
-      return bridge.imageUrl('texture', id)
+      return localResources.imageUrl(id) || bridge.imageUrl('texture', id)
     }
 
     const getItemUrl = (id, customModelData = 0) => {
@@ -698,7 +722,7 @@ export const useChatBoxEditorStore = defineStore(
       }, 0)
     }
 
-    const allTextureOptions = computed(() => bridge.options('TEXTURE').map(item => ({ ...item, textureId: item.value })))
+    const allTextureOptions = computed(() => mergeTextureOptions(bridge.options('TEXTURE'), localResources.options))
 
     return {
       canUndo, canRedo, undo, redo, beginHistoryTransaction, endHistoryTransaction,
@@ -729,6 +753,8 @@ export const useChatBoxEditorStore = defineStore(
       selectedComponent,
       selectedComponentKey,
       previewAnimationKey,
+      animationEditorOpen,
+      animationEditorSession,
       translatableKeyColumns,
       translatableKeyRows,
       translatableSuggestions,
@@ -739,6 +765,8 @@ export const useChatBoxEditorStore = defineStore(
       lastDialogueFrameSectionKey,
       globalAnimations,
       globalPortraits,
+      portraitOptions,
+      animationOptions,
       checkDirty,
 
       allTextureOptions,

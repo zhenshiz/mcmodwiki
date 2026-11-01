@@ -218,6 +218,7 @@ const handleClear = (e) => {
         <div
           v-for="item in filteredOptions.slice(0, 80)"
           :key="item.value"
+          :title="item.source"
           class="
             flex items-center gap-2 px-2 py-2 rounded-none cursor-pointer transition-colors text-sm
             hover:bg-ui-secondary dark:hover:bg-ui-inset
