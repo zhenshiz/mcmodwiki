@@ -333,7 +333,8 @@ export class ChatBoxDialogues extends AutoClean {
     ChatBoxDialogues.defineField('isScreen', { label: t('是否为屏幕主题'), type: EditorTypes.SWITCH })
     ChatBoxDialogues.defineField('theme', {
       label: t('绑定的主题文件'),
-      type: EditorTypes.INPUT,
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.THEME },
       tips: t('进入对话时会自动设置为这个主题')
     })
     ChatBoxDialogues.defineField('animationFPS', {

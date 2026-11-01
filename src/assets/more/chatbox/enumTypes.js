@@ -128,6 +128,7 @@ export const easing = formatUtil.createEnum({
 })
 
 export const autoCompleteDataSources = formatUtil.createEnum({
+  THEME: 'THEME',
   TEXTURE: 'TEXTURE',
   ITEM: 'ITEM',
   BLOCK: 'BLOCK',

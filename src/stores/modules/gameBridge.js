@@ -168,7 +168,8 @@ export const useGameBridgeStore = defineStore('gameBridge', () => {
   }
 
   function options(type) {
-    return connected.value ? snapshot.value?.registries[type] || [] : []
+    if (!connected.value) return []
+    return (type === 'THEME' ? snapshot.value?.themes : snapshot.value?.registries[type]) || []
   }
 
   async function preview(payload) {
