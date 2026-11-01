@@ -51,12 +51,14 @@ const tipsId = useId()
         </template>
 
         <div :id="tipsId" role="tooltip" class="max-w-[240px] text-xs leading-5 break-words">
-          {{ tips }}
+          <div class="font-semibold text-ui-text">{{ label }}</div>
+          <div>{{ tips }}</div>
         </div>
       </Popover>
 
       <span
         v-else
+        :title="label"
         class="text-xs font-medium truncate transition-colors cursor-default"
         :class="isModified ? 'text-ui-link font-bold' : 'text-ui-muted dark:text-ui-muted group-hover:text-ui-text'"
       >
