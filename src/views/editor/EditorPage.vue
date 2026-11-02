@@ -9,6 +9,8 @@ import Input from '@/components/form/Input.vue'
 import MarkDownReadOnly from '@/components/markdown/MarkDownReadOnly.vue'
 import Modal from '@/components/Modal.vue'
 import Test from '@/assets/test.md?raw'
+import { t } from '@/languages'
+import { documentFilename, documentMediaSources, exportDocumentPackage, importDocumentPackage } from '@/components/markdown/media/documentMedia.js'
 
 const visible = ref(false)
 const message = useMessage()
@@ -19,6 +21,9 @@ const textarea = ref(null)
 
 const mdEditor = ref(null)
 const lastScrollTop = ref(0)
+const fileBusy = ref(false)
+const hasLocalMedia = computed(() => documentMediaSources(form.value.content).length > 0)
+const exportLabel = computed(() => hasLocalMedia.value ? t('导出文档与媒体（ZIP）') : t('生成Markdown文件'))
 
 const saveMarkdown = (markdown) => {
   editTopicStore.setTopicInfo({
@@ -40,7 +45,7 @@ const handleInputCodeMarkdown = (event) => {
 const openMarkdownFilePicker = () => {
   const input = document.createElement('input')
   input.type = 'file'
-  input.accept = '.md,.markdown,text/markdown,text/plain'
+  input.accept = '.md,.markdown,.zip,text/markdown,text/plain,application/zip'
   input.onchange = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -49,27 +54,16 @@ const openMarkdownFilePicker = () => {
       message.warning(t('文件过大（>10MB），可能会导致页面卡顿'))
     }
 
-    const reader = new FileReader()
-    reader.onload = () => {
-      const content = String(reader.result || '')
-
-      const filename = file.name
-        .replace(/\.markdown$/i, '')
-        .replace(/\.md$/i, '')
-
-      editTopicStore.setTopicInfo({
-        filename,
-        content,
-        mode: 'preview'
-      })
-
+    fileBusy.value = true
+    try {
+      const imported = /\.zip$/i.test(file.name)
+        ? await importDocumentPackage(file)
+        : { filename: file.name.replace(/\.(?:markdown|md)$/i, ''), content: await file.text() }
+      editTopicStore.setTopicInfo({ ...imported, mode: 'preview' })
       lastScrollTop.value = 0
-      message.success(t('已导入Markdown文件'))
-    }
-    reader.onerror = () => {
-      message.error(t('读取文件失败'))
-    }
-    reader.readAsText(file)
+      message.success(t('已导入文档'))
+    } catch (cause) { message.error(t(cause.message)) }
+    finally { fileBusy.value = false }
   }
   input.click()
 }
@@ -77,7 +71,7 @@ const openMarkdownFilePicker = () => {
 const importMd = () => {
   if (form.value.content && String(form.value.content).trim().length > 0) {
     dialog.warning({
-      title: t('导入Markdown文件'),
+      title: t('导入文档（MD / ZIP）'),
       content: t('导入会覆盖当前编辑器内容，是否继续？'),
       onPositiveClick: () => openMarkdownFilePicker()
     })
@@ -87,27 +81,33 @@ const importMd = () => {
   openMarkdownFilePicker()
 }
 
-// 下载 MD 逻辑保持不变
 const downloadMd = async () => {
   dialog.warning({
-    title: t('生成Markdown文件'),
-    content: t('请确定是否要生成Markdown文件'),
+    title: exportLabel.value,
+    content: hasLocalMedia.value ? t('文档将与本地视频和封面一起导出为 ZIP，导出后可继续编辑。') : t('请确定是否要生成Markdown文件'),
     onPositiveClick: async () => {
-      if (form.value.filename === '') {
+      const filename = documentFilename(form.value.filename)
+      if (!filename) {
         message.warning(t('生成文件需要的信息缺失，请检查你的文件名是否提供'))
         return
       }
-      const blob = new Blob([form.value.content], { type: 'text/markdown' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${form.value.filename}.md`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-      message.success(t('已成功生成文件'))
-      editTopicStore.resetTopicInfo()
+      fileBusy.value = true
+      try {
+        const packaged = hasLocalMedia.value
+        const blob = packaged ? await exportDocumentPackage(form.value.content, filename)
+          : new Blob([form.value.content], { type: 'text/markdown' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `${filename}.${packaged ? 'zip' : 'md'}`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        setTimeout(() => URL.revokeObjectURL(url), 1000)
+        message.success(t('已成功生成文件'))
+        if (!packaged) editTopicStore.resetTopicInfo()
+      } catch (cause) { message.error(t(cause.message)) }
+      finally { fileBusy.value = false }
     }
   })
 }
@@ -184,11 +184,11 @@ watch(
             <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="() => visible = true" is-toggle-color>
               {{ t('功能展示') }}
             </Button>
-            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" variant="primary" @click="downloadMd" is-toggle-color>
-              {{ t('生成Markdown文件') }}
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" variant="primary" :disabled="fileBusy" @click="downloadMd" is-toggle-color>
+              {{ exportLabel }}
             </Button>
-            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" @click="importMd" is-toggle-color>
-              {{ t('导入Markdown文件') }}
+            <Button class="w-full lg:w-48 h-10 text-sm sm:text-base lg:text-lg center" :disabled="fileBusy" @click="importMd" is-toggle-color>
+              {{ t('导入文档（MD / ZIP）') }}
             </Button>
           </div>
         </div>

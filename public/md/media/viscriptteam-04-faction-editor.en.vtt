@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:03.600
+Admins open the faction editor with /viscript_team faction
+
+00:00:03.600 --> 00:00:11.333
+The ID is fixed after creation; the display name can be changed
+
+00:00:11.333 --> 00:00:17.000
+Faction color is a representative color; name tags still use attitude colors
+
+00:00:17.000 --> 00:00:20.633
+Click Save after editing; entity membership and reputation use separate commands

@@ -1,0 +1,16 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:02.733
+Example: add travel supplies and bread; this clip uses controlled local replies
+
+00:00:02.733 --> 00:00:07.900
+Inspect actual categories and products; preview pauses saving, upload and manual edits
+
+00:00:07.900 --> 00:00:11.433
+Discard restores the project without adding history
+
+00:00:11.433 --> 00:00:16.367
+Apply keeps the edits and adds one native history entry for the whole turn
+
+00:00:16.367 --> 00:00:22.033
+Native history undoes/redoes the turn; applying AI edits does not publish them

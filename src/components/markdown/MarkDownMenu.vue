@@ -10,6 +10,7 @@ import ModeToggle from '@/components/markdown/ModeToggle.vue'
 import { t } from '@/languages'
 import { formatUtil } from '@/utils/formatUtil'
 import NumberInput from '@/components/form/NumberInput.vue'
+import LocalVideoDialog from '@/components/markdown/components/LocalVideoDialog.vue'
 
 const message = useMessage()
 const props = defineProps({
@@ -25,6 +26,7 @@ const isShowInsertLink = ref(false)
 const isShowUploadPic = ref(false)
 const isShowTable = ref(false)
 const isShowVideo = ref(false)
+const isShowLocalVideo = ref(false)
 const isFullscreen = ref(false)
 
 const url = ref({ href: '', text: '' })
@@ -202,6 +204,11 @@ const commandList = computed(() => [
     click: () => isShowVideo.value = true
   },
   {
+    icon: 'lucide:file-video',
+    lang: t('本地视频 / MP4'),
+    click: () => isShowLocalVideo.value = true
+  },
+  {
     icon: 'material-symbols:schema-outline',
     lang: t('图表'),
     click: () => props.editor.chain().focus().setMermaid({
@@ -316,6 +323,9 @@ onUnmounted(() => {
       <NumberInput :min="0" v-model="video.height" />
     </div>
   </Dialog>
+  <LocalVideoDialog v-if="isShowLocalVideo"
+    @save="attrs => { editor.chain().focus().setLocalVideo(attrs).run(); isShowLocalVideo = false }"
+    @close="isShowLocalVideo = false" />
 </template>
 
 <style lang="scss" scoped>

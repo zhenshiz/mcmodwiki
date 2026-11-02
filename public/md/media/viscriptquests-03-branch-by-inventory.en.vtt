@@ -1,0 +1,16 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:06.633
+Scenario: deliver with three iron ingots, otherwise gather them first
+
+00:00:06.633 --> 00:00:12.300
+Connect inventory count to A; B is 3 and the comparison is &gt;=
+
+00:00:12.300 --> 00:00:18.033
+The comparison feeds condition; flow wires decide when it is evaluated
+
+00:00:18.033 --> 00:00:21.067
+The first grant has no iron, so only the gather route activates
+
+00:00:21.067 --> 00:00:23.967
+Granting again with three ingots selects the true delivery route

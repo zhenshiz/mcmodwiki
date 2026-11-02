@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:05.733
+The item objective is required; countdown is a failure condition in seconds
+
+00:00:05.733 --> 00:00:09.367
+Connect failure to a recovery subquest instead of ending everything
+
+00:00:09.367 --> 00:00:17.200
+Leave the materials unsubmitted and watch the eight-second timer
+
+00:00:17.200 --> 00:00:20.967
+Timeout activates recovery; it does not count as delivery success

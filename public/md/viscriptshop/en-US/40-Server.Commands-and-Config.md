@@ -177,8 +177,10 @@ isPersonalStock = false</code></pre>
   </tbody>
 </table>
 <pre language="toml" isclosed="false"><code class="language-toml">[client]
-shopUiTheme = "GLASS_DARK"</code></pre>
+shopUiTheme = "GLASS_DARK"
+shopContentScale = 1.0</code></pre>
 <p>After changing the theme, close and reopen the relevant screens so that all widgets are recreated with the new theme.</p>
+<p><code>shopContentScale</code> controls shop content scale: default <code>1.0</code>, range <code>0.5</code>–<code>1.5</code>. It is independent of vanilla GUI scale. Smaller values fit more content; larger values improve readability. Reopen the shop to apply theme and scale changes. Neither changes prices, stock, or trade rules.</p>
 <h2 id="ftb-sidebar-entry-tutorial" data-toc-id="ftb-sidebar-entry-tutorial">FTB Sidebar Entry Tutorial</h2>
 <div currentstep="0" data-type="steps">
   <div data-type="step-item">

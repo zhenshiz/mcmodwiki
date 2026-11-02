@@ -1,0 +1,16 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:06.367
+Two start wires activate wood and stone tasks in parallel
+
+00:00:06.367 --> 00:00:12.600
+ALL waits for both, ANY for one, COUNT for at least N arrivals
+
+00:00:12.600 --> 00:00:17.633
+ALL: finishing wood alone does not unlock the next stage
+
+00:00:17.633 --> 00:00:24.067
+After both routes complete, the certificate stage activates
+
+00:00:24.067 --> 00:00:28.133
+ANY: wood alone advances the flow and skips the other route

@@ -84,7 +84,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.2.2'
+      modVersion: '1.2.5'
     },
     {
       lang: 'ViScriptRecipe',
@@ -105,7 +105,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.8 beta'
+      modVersion: '1.1.8'
     },
     {
       lang: 'ViScriptQuests',
@@ -126,7 +126,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.0.2 beta'
+      modVersion: '1.0.4 beta'
     },
     {
       lang: 'ViScriptTeam',
@@ -185,7 +185,7 @@ export const modList = () => {
         }
       ],
       moreUtil: EMPTY_MORE_UTIL,
-      modVersion: '1.1.8.3'
+      modVersion: '1.1.9'
     },
     {
       lang: 'Flashlight',

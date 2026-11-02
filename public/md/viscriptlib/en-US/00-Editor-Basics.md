@@ -1,12 +1,11 @@
 <h1 id="editor-basics" data-toc-id="editor-basics">Editor basics</h1>
+<p>Window and AI features: <a href="?file=&quot;Editor.Desktop Windows and Layout&quot;">Desktop Windows and Layout</a> · <a href="?file=&quot;AI.Connection and Edit Preferences&quot;">Connection and Edit Preferences</a> · <a href="?file=&quot;AI.Chat and Images&quot;">Chat and Images</a> · <a href="?file=&quot;AI.Preview Apply and Undo&quot;">Preview Apply and Undo</a></p>
+
 <p>This page explains how to use the LDLib2 editors that follow the ViScriptLib (VSL) file workflow: getting to know the interface, opening and saving files, exporting runtime data, uploading to a server, and handling items that cannot be resolved. It applies to the editors of several add-on mods; nodes, fields, and business rules are documented by each mod itself.</p>
 <p>Editor tutorials of other ViScript-family mods reference this page as their basics guide: it only covers the file and window operations shared by all editors, so you can read it once before opening any mod's tutorial.</p>
-<div type="info" data-type="admonition" data-admo-type="info">
-  <div data-type="admonition-title">Applicable environment</div>
-  <div data-type="admonition-content">
-    <p>This tutorial is written against the current VSL workspace: Minecraft 1.21.1, the NeoForge 21.1 series, and the LDLib2 2.2.40 editor. Add-on mods may adjust the layout, add menus, or hide some windows, so the actual interface is defined by that mod.</p>
-  </div>
-</div>
+<div type="info" data-type="admonition" data-admo-type="info"><div data-type="admonition-title">Shared editor workflow</div><div data-type="admonition-content"><p>Addons can arrange, add or hide views and menus. Use the owning mod’s entry point and domain tutorial alongside these common file operations.</p>
+</div></div>
+
 
 <h2 id="know-the-two-editor-types-first" data-toc-id="know-the-two-editor-types-first">Know the two editor types first</h2>
 <p>Before you start, check which kind of file the editor saves. The canvas or forms of the two editor types can look similar, but "save" means different things.</p>
@@ -21,7 +20,7 @@
 
 <h2 id="getting-to-know-the-editor-interface" data-toc-id="getting-to-know-the-editor-interface">Getting to know the editor interface</h2>
 <ul>
-  <li><p><strong>Top menus</strong>: usually "File" and "View"; editors that follow the VSL file workflow also show "Abnormal Items" and, depending on the mode, an "Upload" menu.</p></li>
+  <li><p><strong>Top menus</strong>: usually "File", "View" and "AI"; editors that follow the VSL file workflow also show "Abnormal Items" and, depending on the mode, an "Upload" menu.</p></li>
   <li><p><strong>Main editing area</strong>: where the current project is edited. It may be a node graph, a form, or another view, depending on the add-on mod.</p></li>
   <li><p><strong>Inspector</strong>: shows the parameters of the selected editable object; some mods place it on the right or replace it with their own property area.</p></li>
   <li><p><strong>Resource and history views</strong>: LDLib2 editors can provide resource browsing and edit history; add-on mods may remove views they do not need, so not seeing them is not a malfunction.</p></li>
@@ -44,7 +43,7 @@
   </tbody>
 </table>
 <p>"Open", "Save", and "Save As" operate on <strong>local files of the current client</strong>. On a multiplayer server they never touch server files automatically; data used by the server must be submitted through the matching "Upload" menu.</p>
-<p>LDLib2 editors also provide configurable shortcuts: by default <code>Ctrl+S</code> saves, <code>Ctrl+Shift+S</code> saves as, <code>Ctrl+Z</code> undoes, and <code>Ctrl+Y</code> or <code>Ctrl+Shift+Z</code> redoes. Copy, cut, and paste use <code>Ctrl+C</code>, <code>Ctrl+X</code>, and <code>Ctrl+V</code>. Shortcuts apply to the view that currently has focus; the actual bindings can be viewed and changed in the editor's "File → Settings".</p>
+<p>LDLib2 editors also provide configurable shortcuts: by default <code>Ctrl/Cmd+S</code> saves, <code>Ctrl/Cmd+Shift+S</code> saves as, <code>Ctrl/Cmd+Z</code> undoes, and <code>Ctrl/Cmd+Y</code> or <code>Ctrl/Cmd+Shift+Z</code> redoes. Copy, cut, and paste use <code>Ctrl/Cmd+C</code>, <code>Ctrl/Cmd+X</code>, and <code>Ctrl/Cmd+V</code>. Shortcuts apply to the view that currently has focus; the actual bindings can be viewed and changed in the editor's "File → Settings".</p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
   <div data-type="admonition-title">Importing from the clipboard replaces the current content</div>
   <div data-type="admonition-content">
@@ -110,3 +109,8 @@
 <p>When no project is open, or the current project is not linked to a local file yet, the menu may only show "Save As". Create or open a project first, then use "Save As" to establish the local file; "Save" becomes available afterwards.</p>
 <h3 id="why-does-the-upload-menu-have-no-matching-action" data-toc-id="why-does-the-upload-menu-have-no-matching-action">Why does the Upload menu have no matching action?</h3>
 <p>The Upload menu is generated from the actions the current project and add-on mod provide. Confirm a project is open; if a function-file editor still has no upload option, that mod may not provide the common upload — follow that mod's own publishing process.</p>
+<h2 id="ai-and-desktop-window-entry-points" data-toc-id="ai-and-desktop-window-entry-points">AI and desktop window entry points</h2>
+<p>Open <strong>File → Settings → AI</strong> to configure the connection. Open <strong>AI → Open AI chat window</strong> to send messages. The chat window is independent of whether the main editor is in the game or in its own desktop window.</p>
+<p>Use the host-switch button at the top right to open the whole editor in an OS window, and the corresponding dock button to return it to the game. A view tab can also be floated by itself through its context menu. Each detached window has its own scale settings; see <a href="?file=&quot;Editor.Desktop Windows and Layout&quot;">Desktop Windows and Layout</a>.</p>
+<p>During an AI preview, you can browse the project while manual edits, saving, uploading and history shortcuts are paused. Apply or discard the preview before continuing. Applying AI edits does not save or publish the file.</p>
+<p>Related guides: <a href="?file=&quot;Learning Path&quot;">Learning Path</a> · <a href="?file=&quot;Editor-Basics&quot;">Editor-Basics</a> · <a href="?file=&quot;Editor.Desktop Windows and Layout&quot;">Desktop Windows and Layout</a> · <a href="?file=&quot;AI.Connection and Edit Preferences&quot;">Connection and Edit Preferences</a> · <a href="?file=&quot;Troubleshooting and Saving&quot;">Troubleshooting and Saving</a></p>

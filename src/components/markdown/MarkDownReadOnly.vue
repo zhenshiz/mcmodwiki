@@ -31,6 +31,7 @@ import TableOfContents, { getHierarchicalIndexes } from '@tiptap/extension-table
 import { TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
+import { LocalVideo } from '@/components/markdown/plugin/LocalVideo.js'
 
 const props = defineProps({
   content: { type: String, default: '' },
@@ -69,6 +70,7 @@ const editor = useEditor({
     BlockMath.configure({ katexOptions: { displayMode: true, trust: false } }),
     Youtube.configure({ controls: true, nocookie: true }),
     BiliBili,
+    LocalVideo,
     Mermaid,
     HiddenText,
     Admonition,

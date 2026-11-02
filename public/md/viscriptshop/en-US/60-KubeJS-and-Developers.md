@@ -79,7 +79,8 @@
       <td>setMerchantStock(shop, categoryId, merchantId, stock)</td>
       <td>Changes an item's stock in the current world; returns whether it succeeded</td>
     </tr>
-    <tr>
+    <tr><td>addMerchantStock(shop, categoryId, merchantId, amount)</td><td>Add a positive amount to remaining stock without resetting sales</td></tr>
+<tr>
       <td>removeMerchant(shop, categoryId, merchantId)</td>
       <td>Removes an item from the current world data; returns whether it succeeded</td>
     </tr>
@@ -149,8 +150,10 @@ ViScriptShopEvents.closing(event =&gt; {
 console.info('ViScriptShop UI closed')
 })</code></pre>
 <p><code>tick</code> fires frequently while a shop UI is active. Do not scan large amounts of data, write files, or send high-frequency network messages inside it.</p>
+<p>Worked example: <a href="?file=&quot;KubeJS.Order-Details-Buttons&quot;">add order details buttons</a>, with a complete client script and list/grid checks.</p>
+<p>More examples: <a href="?file=&quot;KubeJS.Open-Shop-with-a-Keybind&quot;">register a keybind to open the shop</a>, with complete startup, client, and server scripts.</p>
 <h2 id="as-a-development-dependency" data-toc-id="as-a-development-dependency">As a Development Dependency</h2>
-<p>The current release coordinates are defined by the project's build configuration as <code>com:ViScriptShop-neoforge-1.21.1:1.2.1</code>, published to
+<p>The current release coordinates are defined by the project's build configuration as <code>com:ViScriptShop-neoforge-1.21.1:&lt;viscriptshop_version&gt;</code>, published to
   Sighs Maven. The POM does not carry transitive dependencies; developers must explicitly add LDLib2, plus ViScriptLib or optional integration dependencies depending on their use.</p><pre language="groovy" isclosed="false"><code class="language-groovy">repositories {
   maven { url = 'https://maven.sighs.cc/repository/maven-releases/' }
   maven { url = 'https://maven.sighs.cc/repository/maven-public/' }
@@ -158,11 +161,11 @@ console.info('ViScriptShop UI closed')
 }
 
 dependencies {
-implementation('com:ViScriptShop-neoforge-1.21.1:${viscriptshop_version}') {
-transitive = false
-}
-implementation('com.lowdragmc.ldlib2:ldlib2-neoforge-1.21.1:${ldlib2_version}:all')
-implementation('com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}')
+  implementation("com:ViScriptShop-neoforge-1.21.1:${viscriptshop_version}") {
+    transitive = false
+  }
+  implementation("com.lowdragmc.ldlib2:ldlib2-neoforge-1.21.1:${ldlib2_version}:all")
+  implementation("com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}")
 }</code></pre>
 <p>Versions change between releases. Before copying dependencies, treat the
   <code>gradle.properties</code> and <code>build.gradle</code> in the <a href="https://github.com/zhenshiz/ViScriptShop"

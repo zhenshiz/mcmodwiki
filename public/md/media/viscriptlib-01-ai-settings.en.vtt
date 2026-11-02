@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:08.067
+Open File &gt; Settings; VSL editors on this client share AI preferences
+
+00:00:08.067 --> 00:00:14.500
+Set protocol, endpoint and exact model ID; saving settings sends no request
+
+00:00:14.500 --> 00:00:16.900
+Project editing is off by default; confirmation is on
+
+00:00:16.900 --> 00:00:22.533
+Apply saves preferences; Cancel restores changes since the last Apply

@@ -1,4 +1,5 @@
 <script setup>
+defineOptions({ name: 'McMarkdownEditor' })
 import { defineAsyncComponent, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 //插件
@@ -36,6 +37,10 @@ import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { BetterLink } from '@/components/markdown/plugin/betterLink.js'
 import { CustomTable } from '@/components/markdown/plugin/CustomTable.js'
 import { ResizableImage } from '@/components/markdown/plugin/ResizableImage.js'
+import { LocalVideo } from '@/components/markdown/plugin/LocalVideo.js'
+import { discardMediaAsset, importMediaFile } from '@/components/markdown/media/documentMedia.js'
+import { useMessage } from '@/components/register/useMessage.js'
+import { t } from '@/languages'
 
 const LatexEditor = defineAsyncComponent(
   () => import('@/components/markdown/components/LatexEditor.vue'),
@@ -101,6 +106,7 @@ const editor = useEditor({
     }),
     Youtube,
     BiliBili,
+    LocalVideo,
     Mermaid,
     HiddenText,
     Admonition,
@@ -163,6 +169,24 @@ const editor = useEditor({
         return true
       }
       return false
+    },
+    handleDrop: (view, event, _slice, moved) => {
+      const files = [...(event.dataTransfer?.files || [])].filter(file => /\.mp4$/i.test(file.name))
+      if (moved || !files.length) return false
+      event.preventDefault()
+      const position = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from
+      ;(async () => {
+        const nodes = []
+        let inserted = false
+        try {
+          for (const file of files) nodes.push({ type: 'localVideo', attrs: { src: await importMediaFile(file) } })
+          if (!editor.value?.isDestroyed) inserted = editor.value.chain().focus().insertContentAt(Math.min(position, editor.value.state.doc.content.size), nodes).run()
+        } catch (cause) { useMessage().error(t(cause.message)) }
+        finally {
+          if (!inserted) for (const node of nodes) discardMediaAsset(node.attrs.src).catch(() => {})
+        }
+      })()
+      return true
     },
   },
 })

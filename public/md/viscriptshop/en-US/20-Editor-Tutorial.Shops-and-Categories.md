@@ -194,4 +194,4 @@
   </div>
 </div>
 <h2 id="start-configuring-items" data-toc-id="start-configuring-items">Start Configuring Items</h2>
-<p>Once the categories are ready, continue with <a href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a>.</p>
+<p>Once the categories are ready, continue with <a href="?file=&quot;Editor-Tutorial.Items-and-Trades&quot;">Items and Trades</a>.</p><p>For batch changes, use <a href="?file=&quot;Editor-Tutorial.Writing-Shop-Files-with-AI&quot;">the built-in AI assistant</a>. Review and apply its local preview, then save or upload as described above.</p>

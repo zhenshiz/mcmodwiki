@@ -1,4 +1,5 @@
 <h1 id="quest-blueprint-operation-tutorial" data-toc-id="quest-blueprint-operation-tutorial">Quest blueprint operation tutorial</h1>
+<p><a href="?file=&quot;Learning Path&quot;">Start here: structure, six recordings and practical examples</a></p>
 <p>This article introduces the project files, root diagram and small-quest subgraphs, node connections, dynamic values, the player item count expression, variables, sequential goals, shortcuts, as well as the export and distribution workflow of quests in the ViScriptQuests quest editor.</p>
 <h2 id="core-concept" data-toc-id="core-concept">Core concept</h2>
 <p>The quest editor saves two types of files:</p>
@@ -148,29 +149,21 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 <p>Once you understand the overall structure of the quest system, you can officially start writing the quest.</p>
 <h2 id="write-the-quest" data-toc-id="write-the-quest">Write the quest</h2>
 <h3 id="open-the-editor" data-toc-id="open-the-editor">Open the editor</h3>
-<p>
-  Players with server permission level 4 can open the editor with <code>/viscript_quests editor [project id]</code>. The project ID is optional; when specified, it is read from the <code>.questproj</code> project files already on the server, and the command provides completion. The project ID may contain subdirectories and does not need the file extension.
-</p>
+<p> Players with server permission level 4 can open the editor with <code>/viscript_quests editor [project id]</code>. The project ID is optional; when specified, it is read from the <code>.questproj</code> project files already on the server, and the command provides completion. The project ID may contain subdirectories and does not need the file extension. </p>
 <h3 id="understand-the-editors-infrastructure" data-toc-id="understand-the-editors-infrastructure">Understand the editor's infrastructure</h3>
 <p>Editors are mainly divided into:</p>
 <ol>
   <li>
-    <p>
-      The menu list in the upper left corner is divided into File, View, and Export. Files are used to operate local project files and runtime files; they are only for simple backups. They do not mean you can use these files directly after saving. You can also edit project files by exporting and importing them into JSON.<span data-type="hidden-text">However, having AI write such complex engineering documents as blueprints is not easy.</span>
-    </p>
+    <p> The menu list in the upper left corner is divided into File, View, and Export. Files are used to operate local project files and runtime files; they are only for simple backups. They do not mean you can use these files directly after saving. You can also edit project files by exporting and importing them into JSON.<span data-type="hidden-text">However, having AI write such complex engineering documents as blueprints is not easy.</span> </p>
   </li>
   <li>
-    <p>
-      The three buttons in the top right corner are used to minimize, toggle editor size, and close the editor. Minimizing and recovering is handled by the LDLib2 editor's built-in screen management and does not create a separate set of project caches. After switching to smaller sizes, you can expose item managers like JEI, allowing you to drag items into drag-and-drop item components. Before closing the editor, save the project; do not treat minimizing as a saving operation.
-    </p>
+    <p> The three buttons in the top right corner are used to minimize, toggle editor size, and close the editor. Minimizing and recovering is handled by the LDLib2 editor's built-in screen management and does not create a separate set of project caches. After switching to smaller sizes, you can expose item managers like JEI, allowing you to drag items into drag-and-drop item components. Before closing the editor, save the project; do not treat minimizing as a saving operation. </p>
   </li>
   <li>
     <p>The lower left is the blueprint view, where the logic of the quest after creating the project is edited there.</p>
   </li>
   <li>
-    <p>
-      The bottom right is the attribute form. Although each node in the blueprint can be edited directly by entering parameters within the node, you can also choose to edit in this view after clicking the node, which is more user-friendly for large List components.
-    </p>
+    <p> The bottom right is the attribute form. Select a node to edit its parameters in the right inspector. List controls are maintained in the inspector too; the exact fields depend on the node type.</p>
   </li>
 </ol>
 <h3 id="create-a-project" data-toc-id="create-a-project">Create a project</h3>
@@ -194,9 +187,13 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
 </div>
 <p>This example can be used directly as a template for creating quests, saving or exporting.</p>
 <h3 id="blueprint-operation" data-toc-id="blueprint-operation">Blueprint operation</h3>
-<p>
-  The blueprint view is where the quest editor truly writes the quest logic. RootTu is responsible for arranging the process of major quests, such as which small quest to go from the start, where to go after success or failure, and how to end it; The sub-quest is responsible for filling in the internal goals, rewards, and actions taken after completing the quest. When creating quests, it's recommended to first build the flow in the root map, then double-click the small quests to enter sub-maps to supplement goals and rewards.
-</p>
+<h3 id="wiring-moving-and-undo-recording" data-toc-id="wiring-moving-and-undo-recording">Wiring, moving and undo recording</h3>
+<figure data-type="local-video" data-width="960" style="width: 960px; max-width: 100%;"><video src="/md/media/viscriptquests-06-connect-move-undo.mp4" poster="/md/media/viscriptquests-06-connect-move-undo.png" controls playsinline preload="metadata"><a href="/md/media/viscriptquests-06-connect-move-undo.mp4">Download demonstration video</a></video><figcaption>Drag real connectors, move a node and undo.</figcaption></figure>
+<p>Video uses Chinese UI and burned-in Chinese captions; the English text below describes every connection and parameter.</p>
+<p><a href="/md/media/viscriptquests-06-connect-move-undo.mp4">Download MP4</a> · <a href="/md/media/viscriptquests-06-connect-move-undo.zh.vtt">Chinese subtitles</a> · <a href="/md/media/viscriptquests-06-connect-move-undo.en.vtt">English subtitles</a></p>
+<p>Drag from an output dot to an input dot; drag a title to move a node. After undo, recheck the wires. Recording begins with prepared nodes; node creation and saving are described below.</p>
+
+<p> The blueprint view is where the quest editor truly writes the quest logic. RootTu is responsible for arranging the process of major quests, such as which small quest to go from the start, where to go after success or failure, and how to end it; The sub-quest is responsible for filling in the internal goals, rewards, and actions taken after completing the quest. When creating quests, it's recommended to first build the flow in the root map, then double-click the small quests to enter sub-maps to supplement goals and rewards. </p>
 <h4 id="root-and-sub-diagrams" data-toc-id="root-and-sub-diagrams">Root and sub-diagrams</h4>
 <table data-type="custom-table" data-with-header-row="true">
   <tbody>
@@ -217,9 +214,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tr>
   </tbody>
 </table>
-<p>
-  Double-clicking the small quest node in the root graph can enter its own small quest subgraph. After entering the subgraph, you can return to the root image via the breadcrumb path in the middle of the top. When creating a small quest, an independent subgraph will be automatically created for it and placed as the unique starting point for the small quest. The author only needs to connect to the target node from the starting point to the target exit and the fixed reward exit to the reward node. When copying a small quest, it will simultaneously copy an independent subimage; the two small quests will not share the same content.
-</p>
+<p> Double-clicking the small quest node in the root graph can enter its own small quest subgraph. After entering the subgraph, you can return to the root image via the breadcrumb path in the middle of the top. When creating a small quest, an independent subgraph will be automatically created for it and placed as the unique starting point for the small quest. The author only needs to connect to the target node from the starting point to the target exit and the fixed reward exit to the reward node. When copying a small quest, it will simultaneously copy an independent subimage; the two small quests will not share the same content. </p>
 <div type="info" data-type="admonition" data-admo-type="info">
   <div data-type="admonition-title">A subgraph of a small quest is a managed subgraph</div>
   <div data-type="admonition-content">
@@ -241,9 +236,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
     <p>Click the node you want to create; it will appear near the spot you just right-clicked.</p>
   </li>
 </ol>
-<p>
-  The node database automatically filters nodes based on the current diagram. For example, the root map will not display nodes for small quests like obtaining items or item rewards; In the subgraph of small quests, root diagram flow nodes such as quest start, small quest, quest end, and merge nodes will not be displayed. This filtering is designed to avoid invalid structures during export.
-</p>
+<p> The node database automatically filters nodes based on the current diagram. For example, the root map will not display nodes for small quests like obtaining items or item rewards; In the subgraph of small quests, root diagram flow nodes such as quest start, small quest, quest end, and merge nodes will not be displayed. This filtering is designed to avoid invalid structures during export. </p>
 <h4 id="choose-and-move" data-toc-id="choose-and-move">Choose and move</h4>
 <table data-type="custom-table" data-with-header-row="true">
   <tbody>
@@ -285,8 +278,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tbody>
 </table>
 <h4 id="connection-nodes" data-toc-id="connection-nodes">Connection nodes</h4>
-<p>When connecting, hold down the left mouse button from one node's output port to drag it to the input port of another node, then release the mouse. During dragging, the connectable ports will be highlighted; If the port type does not match, releasing will not create a connection.
-</p>
+<p>When connecting, hold down the left mouse button from one node's output port to drag it to the input port of another node, then release the mouse. During dragging, the connectable ports will be highlighted; If the port type does not match, releasing will not create a connection. </p>
 <table data-type="custom-table" data-with-header-row="true">
   <tbody>
   <tr>
@@ -316,9 +308,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tr>
   </tbody>
 </table>
-<p>
-  The most common connection in root maps is connecting the next step at the start of a quest to the entry point of the small quest, then connecting the successful exit of the small quest to the entry point of the quest end. The most common connection in small quest subgraphs is to connect the target exit of the small quest starting point to the quest objective, and the fixed reward exit to the quest reward.
-</p>
+<p> The most common connection in root maps is connecting the next step at the start of a quest to the entry point of the small quest, then connecting the successful exit of the small quest to the entry point of the quest end. The most common connection in small quest subgraphs is to connect the target exit of the small quest starting point to the quest objective, and the fixed reward exit to the quest reward. </p>
 <div code="flowchart LR
     A[&quot;Quest Start&quot;] -- Next --&gt; B[&quot;Small Quest&quot;]
     B -- Success --&gt; C[&quot;Quest End&quot;]
@@ -364,14 +354,10 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tbody>
 </table>
 <h4 id="edit-parameters" data-toc-id="edit-parameters">Edit parameters</h4>
-<p>
-  After selecting a single node, the properties form on the right will display its editable parameters. The UUIDs of small quest nodes and target nodes are also displayed here, which can be used for precise location in commands, KubeJS, and the NeoForge API. The current quest blueprint hides the inline parameter editor inside the node, so you mainly use the right attribute form to change the title, item, entity type, coordinates, and other content. After modifying parameters, the node ports in the blueprint may change dynamically. For example, when a mathematical node switches to the limit range, it will display three input ports: value, minimum value, and maximum value. The merge node switches to at least
-  When there are N options, the required quantity input ports will be displayed.</p>
+<p> After selecting a single node, the properties form on the right will display its editable parameters. The UUIDs of small quest nodes and target nodes are also displayed here, which can be used for precise location in commands, KubeJS, and the NeoForge API. The current quest blueprint hides the inline parameter editor inside the node, so you mainly use the right attribute form to change the title, item, entity type, coordinates, and other content. After modifying parameters, the node ports in the blueprint may change dynamically. For example, when a mathematical node switches to the limit range, it will display three input ports: value, minimum value, and maximum value. The merge node switches to at least When there are N options, the required quantity input ports will be displayed.</p>
 <p>If you want to set item parameters, you can first switch the editor to a smaller window to display the item manager interface, then drag the item into the corresponding item configuration item. This makes it more intuitive than manually filling in item IDs.</p>
 <h4 id="variable-system" data-toc-id="variable-system">Variable system</h4>
-<p>
-  Variables are used to store temporary states within the same quest flow, such as recording scores, stage counts, whether a branch has been triggered, or leaving the calculation result after a goal is completed for subsequent processes. Variables represent the player's current quest status and are not shared server-wide; When the same quest is assigned to different players, each player has their own variable value.
-</p>
+<p> Variables are used to store temporary states within the same quest flow, such as recording scores, stage counts, whether a branch has been triggered, or leaving the calculation result after a goal is completed for subsequent processes. Variables represent the player's current quest status and are not shared server-wide; When the same quest is assigned to different players, each player has their own variable value. </p>
 <table data-type="custom-table" data-with-header-row="true">
   <tbody>
   <tr>
@@ -396,9 +382,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tr>
   </tbody>
 </table>
-<p>
-  When exporting a quest, the default value of the blackboard variable is written to the runtime quest file. After receiving a quest, the player will run these default values into their own quest variable table. In subsequent processes, the setting variable node will modify this runtime variable; Numerical comparisons, mathematical operations, and printing variables can read these variables.
-</p>
+<p> When exporting a quest, the default value of the blackboard variable is written to the runtime quest file. After receiving a quest, the player will run these default values into their own quest variable table. In subsequent processes, the setting variable node will modify this runtime variable; Numerical comparisons, mathematical operations, and printing variables can read these variables. </p>
 <ol>
   <li>
     <p>First, create a variable in the blackboard or variable panel, and set its name, type, and default value. For variables that require numerical calculations or conditional judgment, it is recommended to use integers, floating-point numbers, or boolean values.</p>
@@ -413,9 +397,7 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
     <p>When branching based on variables, connect the variable to the numerical comparison, then connect the result of the comparison to the conditional branch.</p>
   </li>
 </ol>
-<p>
-  Setting variables are action nodes with execution flows; variables are only written when the flow actually passes through them. When the variable name is empty, no write action is generated; If the variable name is spelled inconsistently, it will be used as another runtime variable. If a numeric expression cannot read a variable, it will press the button <code>0</code> Therefore, when debugging complex processes, it is recommended to first confirm the variable values with printed variables.
-</p>
+<p> Setting variables are action nodes with execution flows; variables are only written when the flow actually passes through them. When the variable name is empty, no write action is generated; If the variable name is spelled inconsistently, it will be used as another runtime variable. If a numeric expression cannot read a variable, it will press the button <code>0</code> Therefore, when debugging complex processes, it is recommended to first confirm the variable values with printed variables. </p>
 <h5 id="pass-the-main-map-variable-into-the-subtask-subgraph" data-toc-id="pass-the-main-map-variable-into-the-subtask-subgraph">Pass the main map variable into the subtask subgraph</h5>
 <p>Small quest subgraphs can expose variable ports via LDLib2 Blackboard. After creating variables and setting read/write modifiers in the subgraph variable panel, the outer subtask node will automatically generate the corresponding port:</p>
 <table data-type="custom-table" data-with-header-row="true">
@@ -616,21 +598,17 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </tr>
   </tbody>
 </table>
-<p>On macOS, this editor follows Minecraft's shortcut key judgment, and commonly used key combinations are generally used<code>Cmd</code>Instead of Windows and Linux
-  Above<code>Ctrl</code>。 Note that saving a project and exporting runtime quests are not the same thing. Save the project mainly for those that can continue editing<code>.questproj</code>Engineering; To enable the server to actually use the quest, it also needs to upload or export the runtime via the menu<code>.quest</code>Documents.
-</p>
+<p>On macOS, this editor follows Minecraft's shortcut key judgment, and commonly used key combinations are generally used<code>Cmd</code>Instead of Windows and Linux Above<code>Ctrl</code>。 Note that saving a project and exporting runtime quests are not the same thing. Save the project mainly for those that can continue editing<code>.questproj</code>Engineering; To enable the server to actually use the quest, it also needs to upload or export the runtime via the menu<code>.quest</code>Documents. </p>
 <h4 id="minimal-connection-process" data-toc-id="minimal-connection-process">Minimal connection process</h4>
 <ol>
   <li>
     <p>Retain or create in the root diagram<code>任务开始</code>、<code>小任务</code>、<code>任务结束</code>Three nodes.</p>
   </li>
   <li>
-    <p>Handle<code>任务开始</code><code>下一步</code>Connected<code>小任务</code><code>入口</code>。
-    </p>
+    <p>Handle<code>任务开始</code><code>下一步</code>Connected<code>小任务</code><code>入口</code>。 </p>
   </li>
   <li>
-    <p>Handle<code>小任务</code><code>成功</code>Connected<code>任务结束</code><code>入口</code>。
-    </p>
+    <p>Handle<code>小任务</code><code>成功</code>Connected<code>任务结束</code><code>入口</code>。 </p>
   </li>
   <li>
     <p>Double tap<code>小任务</code>Enter its independent subgraph and confirm it is automatically generated<code>小任务起点</code>It still exists.</p>
@@ -648,13 +626,9 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
     <p>Save the project, then upload or export the runtime quest file.</p>
   </li>
 </ol>
-<p>
-  If the export fails, first check whether the root map can proceed from the quest start along the execution flow to the end, then check whether each subtask retains a unique small quest starting point and connects to at least one quest objective from the starting point exit. Missing execution streams, deleting automatic starting points, or targets not reaching the starting point will all result in invalid structures.
-</p>
+<p> If the export fails, first check whether the root map can proceed from the quest start along the execution flow to the end, then check whether each subtask retains a unique small quest starting point and connects to at least one quest objective from the starting point exit. Missing execution streams, deleting automatic starting points, or targets not reaching the starting point will all result in invalid structures. </p>
 <h3 id="save-the-quest" data-toc-id="save-the-quest">Save the quest</h3>
-<p>
-  In the top-left menu, you can save the current project locally or upload it to the server. After opening a local project file in the editor, you can save it directly to local storage; after opening a server project file via command, you must re-upload the project file once editing is done to overwrite the server's <code>.questproj</code>. For the updated quests to run on the server, you also need to compile and upload the <code>.quest</code>. Both project file and runtime file uploads require server permission level 4; uploading overwrites at the file level, so use Git for versioning when collaborating.
-</p>
+<p> In the top-left menu, you can save the current project locally or upload it to the server. After opening a local project file in the editor, you can save it directly to local storage; after opening a server project file via command, you must re-upload the project file once editing is done to overwrite the server's <code>.questproj</code>. For the updated quests to run on the server, you also need to compile and upload the <code>.quest</code>. Both project file and runtime file uploads require server permission level 4; uploading overwrites at the file level, so use Git for versioning when collaborating. </p>
 <div type="warning" data-type="admonition" data-admo-type="warning">
   <div data-type="admonition-title">The current Beta does not retain compatibility with the old format</div>
   <div data-type="admonition-content">
@@ -662,19 +636,13 @@ style A fill:#4a90e2,stroke:#333,stroke-width:2px,color:#fff
   </div>
 </div>
 <h2 id="create-categories" data-toc-id="create-categories">Create categories</h2>
-<p>
-  To make quests easier for players to find, you can create or organize quest categories before granting them; uncategorized quests remain visible in the quest book's "All" view. Players with server permission level 2 can use <code>/viscript_quests category config</code> to open the category configuration page, where you can edit the category ID, display name, icon, default tab background, selected tab background, and the major quest IDs contained in the category, as well as adjust the category order by dragging. When tab backgrounds are not customized, this mod's blue default and selected textures are used.
-</p>
+<p> Before granting, add the quest file ID to a category. Grant fails for uncategorized quests. The All view groups quests already granted to the player. Players with server permission level 2 can use <code>/viscript_quests category config</code> to open the category configuration page, where you can edit the category ID, display name, icon, default tab background, selected tab background, and the major quest IDs contained in the category, as well as adjust the category order by dragging. When tab backgrounds are not customized, this mod's blue default and selected textures are used. </p>
 <div type="info" data-type="admonition" data-admo-type="info">
   <div data-type="admonition-title">Did you know?</div>
   <div data-type="admonition-content">
-    <p>
-      When the quest classification information was initially designed, it was placed inside the quest. When facing multiple quests, setting a foreign key on the side with the more is very common<span data-type="hidden-text">(Infected by database)</span>However, if you design it this way, reusing and spreading quest files will be much more troublesome, because when placed in other environments, the category may not exist. In most cases, even if you want to reuse quests, the information in this category will usually need to be redesigned, requiring players to modify the information in each category one quest at a time, which is quite troublesome. So later on, the design changed to place this index in the category configuration file, which makes modifications much more convenient.
-    </p>
+    <p> When the quest classification information was initially designed, it was placed inside the quest. When facing multiple quests, setting a foreign key on the side with the more is very common<span data-type="hidden-text">(Infected by database)</span>However, if you design it this way, reusing and spreading quest files will be much more troublesome, because when placed in other environments, the category may not exist. In most cases, even if you want to reuse quests, the information in this category will usually need to be redesigned, requiring players to modify the information in each category one quest at a time, which is quite troublesome. So later on, the design changed to place this index in the category configuration file, which makes modifications much more convenient. </p>
   </div>
 </div>
 <h2 id="issue-quests" data-toc-id="issue-quests">Issue quests</h2>
-<p>
-  Administrators with server permission level 2 can grant quests with <code>/viscript_quests grant &lt;player&gt; &lt;quest id&gt; [autoTrack]</code>; when <code>autoTrack</code> is omitted or <code>true</code>, the quest is tracked automatically, and when it is <code>false</code>, the player's current tracking choice is preserved. Use <code>/viscript_quests book</code> to open the quest book for yourself. Administrators can also use <code>revoke</code> to revoke a quest, <code>complete</code> to force-complete a major quest, <code>submit &lt;player&gt; &lt;quest id&gt; &lt;step id&gt;</code> to submit the current objectives of the specified step, and <code>trigger &lt;player&gt; &lt;trigger_id&gt;</code> to complete matching custom trigger objectives. Successfully triggering a custom objective sends no chat message to the player or the command executor; the failure message is only kept when there is no matching objective.
-</p>
+<p> Administrators with server permission level 2 can grant quests with <code>/viscript_quests grant &lt;player&gt; &lt;quest id&gt; [autoTrack]</code>; when <code>autoTrack</code> is omitted or <code>true</code>, the quest is tracked automatically, and when it is <code>false</code>, the player's current tracking choice is preserved. Use <code>/viscript_quests book</code> to open the quest book for yourself. Administrators can also use <code>revoke</code> to revoke a quest, <code>complete</code> to force-complete a major quest, <code>submit &lt;player&gt; &lt;quest id&gt; &lt;step id&gt;</code> to submit the current objectives of the specified step, and <code>trigger &lt;player&gt; &lt;trigger_id&gt;</code> to complete matching custom trigger objectives. Successfully triggering a custom objective sends no chat message to the player or the command executor; the failure message is only kept when there is no matching objective. </p>
 <p>When a small or large quest is completed, the HUD will display a prompt that includes icons, titles, and a "Completed" indicator by default. Players can disable "Show Quest Completion Prompt" in the client configuration; the default value is  <code>true</code>。 The actual pixel size of this HUD does not change with the zoom of the Minecraft GUI.</p>
