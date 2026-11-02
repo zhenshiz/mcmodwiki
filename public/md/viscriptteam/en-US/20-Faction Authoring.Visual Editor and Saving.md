@@ -1,0 +1,19 @@
+<h1 id="visual-faction-editing-and-saving" data-toc-id="visual-faction-editing-and-saving">Visual faction editing and saving</h1>
+<p><a href="?file=&quot;Learning Path&quot;">Learning path and videos</a> · <a href="?file=&quot;Troubleshooting and Data&quot;">Troubleshooting</a></p>
+<p>Goal: create wiki_guards, change its display name to Patrol Guards and save. Both the editor and faction admin commands require permission level 2.</p>
+<pre language="plaintext" isclosed="false"><code class="language-plaintext">/viscript_team faction
+/viscript_team faction open</code></pre>
+<ol><li><p>Click Create Faction and enter an ID and optional display name. Editor IDs allow 1–64 letters, digits, underscores, hyphens or dots; trimming and lowercasing apply.</p>
+</li><li><p>Select the faction on the left and edit its name, color, friendly fire, targeting switch or enemy list on the right. Clear the old name before entering its replacement. The fixed ID cannot be renamed and remains the command identifier.</p>
+</li><li><p>Click Save Faction Settings and wait for confirmation before switching factions. Editing a form alone does not save it.</p>
+</li></ol>
+<figure data-type="local-video" data-width="960" style="width: 960px; max-width: 100%;"><video src="/md/media/viscriptteam-04-faction-editor.mp4" poster="/md/media/viscriptteam-04-faction-editor.png" controls playsinline preload="metadata"><a href="/md/media/viscriptteam-04-faction-editor.mp4">Download demonstration video</a></video><figcaption>Create, rename and save a faction while retaining its fixed ID.</figcaption></figure>
+<p>Videos use Chinese UI and burned-in Chinese captions. All steps and commands are also explained below.</p>
+<p><a href="/md/media/viscriptteam-04-faction-editor.mp4">Download MP4</a> · <a href="/md/media/viscriptteam-04-faction-editor.zh.vtt">Chinese subtitles</a> · <a href="/md/media/viscriptteam-04-faction-editor.en.vtt">English subtitles</a></p>
+<h2 id="what-each-setting-changes" data-toc-id="what-each-setting-changes">What each setting changes</h2>
+<table data-type="custom-table" data-with-header-row="true"><tbody><tr><th>Setting</th><th>Effect</th><th>Common confusion</th></tr><tr><td>Display name</td><td>Label used by the editor/integrations, up to 64 characters.</td><td>Not the fixed command ID; empty uses the ID.</td></tr><tr><td>Faction color</td><td>Representative color for maps, scripts and integrations.</td><td>Does not replace attitude name-tag colors.</td></tr><tr><td>Faction friendly fire</td><td>Allows the relevant same-faction/friendly-player damage.</td><td>Independent from party friendly fire.</td></tr><tr><td>Attack enemy factions</td><td>Lets faction mobs seek entities in its enemy list.</td><td>Does not replace player reputation or grant an attack ability.</td></tr><tr><td>Enemy faction IDs</td><td>Add an entry and search/select another existing faction ID; self/duplicates are invalid.</td><td>Directional; edit and save both sides for mutual hostility.</td></tr></tbody></table>
+<h2 id="what-happens-outside-this-editor" data-toc-id="what-happens-outside-this-editor">What happens outside this editor</h2>
+<p>This form does not edit entity assignments, player reputation or reputation thresholds. Assignments and reputation use commands/server scripts; global configuration supplies new-faction threshold defaults.</p>
+<p><a href="?file=&quot;Faction Authoring.Guards and Rival Factions&quot;">Continue with a reproducible guard scenario</a></p>
+<div type="warning" data-type="admonition" data-admo-type="warning"><div data-type="admonition-title">Check references before deletion</div><div data-type="admonition-content"><p>Deleting clears entity assignments, player standings and enemy references. Rename the display name when retaining the ID; recreating a deleted faction does not restore its old relationships.</p>
+</div></div>
