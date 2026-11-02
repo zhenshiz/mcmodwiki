@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:03.300
+Open the party screen with /viscript_team party
+
+00:00:03.300 --> 00:00:08.500
+Enter a name; the creator becomes party leader
+
+00:00:08.500 --> 00:00:15.400
+Chat is party-only; its history does not survive a server restart
+
+00:00:15.400 --> 00:00:24.800
+Party friendly fire is off by default; the switch applies immediately

@@ -112,7 +112,7 @@ com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerScreen</code></pre>
 <p>The top-right of the editor provides window controls such as minimize, zoom or restore, and close. When editing fullscreen, shrink the editor window first so the JEI
   item list is visible, then drag items onto the item selection widget in the editor. Inside player shops, hover the mouse over an item icon and use JEI's recipe or uses keybinds.</p>
 <h2 id="item-counts-or-costs-look-wrong" data-toc-id="item-counts-or-costs-look-wrong">Item Counts or Costs Look Wrong</h2>
-<div currentstep="3" data-type="steps">
+<div currentstep="0" data-type="steps">
   <div data-type="step-item">
     <div data-type="admonition-title">Check the actual item</div>
     <div data-type="admonition-content">
@@ -139,6 +139,7 @@ com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerScreen</code></pre>
     </div>
   </div>
 </div>
+<h2 id="quantity-shortcuts-and-content-scale" data-toc-id="quantity-shortcuts-and-content-scale">Quantity Shortcuts and Content Scale</h2><p>Ctrl (Cmd on macOS) + click on + selects the maximum affordable quantity within stock. Missing money or matching items can result in 0. Regular clicks may still increase quantity while the cost panel shows a shortage. Shift + click changes quantity by 10. See <a href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a>.</p><p>If content is too large, check your <code>shopContentScale</code>: range <code>0.5</code>–<code>1.5</code>, default <code>1.0</code>. It is independent of vanilla GUI scale; close and reopen the shop after changing it.</p>
 <h2 id="cart-offsetting-rules" data-toc-id="cart-offsetting-rules">Cart Offsetting Rules</h2>
 <p>Virtual currency income and expenses in the same cart are settled by net amount. For example, if a player first buys items for 100◎ and then sells another item for 60◎, the existing balance only needs to cover the net expense of 40◎.</p>
 <p>Regular items do not use this offsetting. Even if one item in the cart produces diamonds and another requires diamonds, before checkout the player must still hold the full cost of the latter in an available container; the server deducts costs first, then grants outputs.

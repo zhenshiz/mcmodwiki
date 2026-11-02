@@ -80,7 +80,8 @@
       <td>setMerchantStock(shop, categoryId, merchantId, stock)</td>
       <td>修改当前世界中的商品库存，返回是否成功</td>
     </tr>
-    <tr>
+    <tr><td>addMerchantStock(shop, categoryId, merchantId, amount)</td><td>在当前剩余库存上补充正整数数量，不重置已经售出的数量</td></tr>
+<tr>
       <td>removeMerchant(shop, categoryId, merchantId)</td>
       <td>从当前世界数据中移除商品，返回是否成功</td>
     </tr>
@@ -150,8 +151,10 @@ ViScriptShopEvents.closing(event =&gt; {
 console.info('ViScriptShop UI closed')
 })</code></pre>
 <p><code>tick</code> 在商店界面活动期间频繁触发。不要在其中扫描大量数据、写文件或发送高频网络消息。</p>
+<p>具体案例：<a href="?file=&quot;KubeJS.订单商品详情按钮&quot;">给订单商品添加详情按钮</a>，包含完整客户端脚本和列表、网格验证步骤。</p>
+<p>更多案例：<a href="?file=&quot;KubeJS.按键绑定一键打开商店&quot;">注册按键绑定，一键打开商店</a>，包含启动、客户端与服务端三份完整脚本。</p>
 <h2 id="作为开发依赖" data-toc-id="作为开发依赖">作为开发依赖</h2>
-<p>当前发布坐标由项目构建配置定义为 <code>com:ViScriptShop-neoforge-1.21.1:1.2.1</code>，发布仓库为
+<p>当前发布坐标由项目构建配置定义为 <code>com:ViScriptShop-neoforge-1.21.1:&lt;viscriptshop_version&gt;</code>，发布仓库为
   Sighs Maven。POM 不携带传递依赖，开发者需要显式加入 LDLib2，并按用途加入 ViScriptLib 或可选联动依赖。</p><pre language="groovy" isclosed="false"><code class="language-groovy">repositories {
   maven { url = 'https://maven.sighs.cc/repository/maven-releases/' }
   maven { url = 'https://maven.sighs.cc/repository/maven-public/' }
@@ -159,11 +162,11 @@ console.info('ViScriptShop UI closed')
 }
 
 dependencies {
-implementation('com:ViScriptShop-neoforge-1.21.1:${viscriptshop_version}') {
-transitive = false
-}
-implementation('com.lowdragmc.ldlib2:ldlib2-neoforge-1.21.1:${ldlib2_version}:all')
-implementation('com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}')
+  implementation("com:ViScriptShop-neoforge-1.21.1:${viscriptshop_version}") {
+    transitive = false
+  }
+  implementation("com.lowdragmc.ldlib2:ldlib2-neoforge-1.21.1:${ldlib2_version}:all")
+  implementation("com.zhenshiz:ViScriptLib-neoforge-1.21.1:${viscriptlib_version}")
 }</code></pre>
 <p>版本会随发布变化。复制依赖前请以<a href="https://github.com/zhenshiz/ViScriptShop"
     target="_blank" rel="noopener noreferrer nofollow">当前项目仓库</a>中的

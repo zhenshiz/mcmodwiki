@@ -113,4 +113,4 @@
 <h2 id="next-steps" data-toc-id="next-steps">Next steps</h2>
 <p>If you are a shop author, head straight to <a
     href="?file=&quot;Quick-Start.Your-First-Shop&quot;">Your First Shop</a>. If you only need to learn how to buy, jump to the <a
-    href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a>.</p>
+    href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">Player Buying Guide</a>.</p><p>For batch authoring, see <a href="?file=&quot;Editor-Tutorial.Writing-Shop-Files-with-AI&quot;">the AI assistant and clipboard JSON</a> for local edit previews. Players can find quantity shortcuts and content scale in <a href="?file=&quot;Quick-Start.Player-Buying-Guide&quot;">the buying guide</a>.</p>

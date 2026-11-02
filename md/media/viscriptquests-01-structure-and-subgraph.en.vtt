@@ -1,0 +1,16 @@
+WEBVTT
+
+00:00:00.067 --> 00:00:04.033
+The root graph orders stages: wood, stone, then finish
+
+00:00:04.033 --> 00:00:07.200
+Double-click a subquest title to edit its objectives and rewards
+
+00:00:07.200 --> 00:00:11.633
+Objectives connect to objectives; stage rewards connect to rewards
+
+00:00:11.633 --> 00:00:17.733
+Select a node to edit its parameters on the right
+
+00:00:17.733 --> 00:00:21.433
+Use the root breadcrumb to return; a subgraph is not a separate quest

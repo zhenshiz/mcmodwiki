@@ -1,4 +1,5 @@
 <h1 id="summary-of-blueprint-nodes" data-toc-id="summary-of-blueprint-nodes">Summary of blueprint nodes</h1>
+<p><a href="?file=&quot;Learning Path&quot;">Start here: structure, six recordings and practical examples</a></p>
 <p>Before introducing all the nodes in the blueprint in detail, let's first briefly summarize the types of nodes in this blueprint and which diagram they are used:</p>
 <table data-type="custom-table" data-with-header-row="true">
   <tbody>
@@ -76,6 +77,8 @@
 <h2 id="process-control" data-toc-id="process-control">Process control</h2>
 
 <h3 id="the-mission-begins" data-toc-id="the-mission-begins">The mission begins</h3>
+<p><strong>Quest scenario:</strong> Name Village Supplies here and connect next to the first subquest; the title is not the quest file ID.</p>
+
 <p>This marks the beginning of a major quest, and all root map logic starts from this node.</p>
 <h4 id="quest-start-node-overview" data-toc-id="quest-start-node-overview">Quest Start Node Overview</h4>
 <ul>
@@ -107,6 +110,8 @@
 <p>When compiling quests, the title, subtitle, and icons are read as major quest information. The root diagram must have and can only have one quest start node; otherwise, an error will be reported when exporting the quest.</p>
 
 <h3 id="small-quests" data-toc-id="small-quests">Small quests</h3>
+<p><strong>Quest scenario:</strong> Use separate wood and stone stages connected by success; double-click each for its objectives.</p>
+
 <p>Small quests are steps in the root map workflow and serve as containers for quest goals and rewards.</p>
 <h4 id="overview-of-small-quests-and-nodes" data-toc-id="overview-of-small-quests-and-nodes">Overview of small quests and nodes</h4>
 <ul>
@@ -145,6 +150,8 @@
 <p>Zitu Zhong Dai <code>READ</code>、<code>WRITE</code> Or <code>READ_WRITE</code> The Blackboard variables of modifiers are mapped to the input, output, or bidirectional ports of the outer small quest nodes. Therefore, root graph variables can be connected to small quest nodes and passed into subgraphs; Subgraph variables use independent scope and do not chain between different small quests.</p>
 
 <h3 id="a-small-quest-starting-point" data-toc-id="a-small-quest-starting-point">A small quest starting point</h3>
+<p><strong>Quest scenario:</strong> Use objectives for stage objectives and rewards for fixed stage rewards.</p>
+
 <p>The starting point of the small quest is the entry point of the sub-map, used to divide the content of small quests into goal lines and fixed reward lines.</p>
 <h4 id="small-quest-starting-point-node-overview" data-toc-id="small-quest-starting-point-node-overview">Small quest starting point, node overview</h4>
 <ul>
@@ -170,6 +177,8 @@
 <p>When creating a small quest, it automatically creates subgraphs and places them as the unique starting point for the small quest. The compiler only collects content accessible from the two output lines: "Goal" and "Fixed Reward"; Deleting starting points, adding multiple starting points, or leaving objectives and rewards in unconnected areas will all create invalid structures. The quest blueprint does not provide the LDLib2 general "Create Subgraph" command; please enter the subgraph only through small quest nodes.</p>
 
 <h3 id="mission-complete" data-toc-id="mission-complete">Mission complete</h3>
+<p><strong>Quest scenario:</strong> Use success=true for a normal ending; false ends the whole quest as failure.</p>
+
 <p>The quest end node indicates the root map flow reaches its endpoint.</p>
 <h4 id="quest-end-node-overview" data-toc-id="quest-end-node-overview">Quest End Node Overview</h4>
 <ul>
@@ -199,6 +208,8 @@
 <p>After compilation, a runtime termination node will be generated. All accessible root map flow nodes must be able to continue to the quest end node; otherwise, an error will occur when exporting.</p>
 
 <h3 id="conditional-branch" data-toc-id="conditional-branch">Conditional branch</h3>
+<p><strong>Quest scenario:</strong> Feed inventory comparison into condition for delivery versus gathering.</p>
+
 <p>Conditional branches divide the process into two routes: true and false based on Boolean conditions.</p>
 <h4 id="conditional-branch-node-overview" data-toc-id="conditional-branch-node-overview">Conditional branch node overview</h4>
 <ul>
@@ -230,6 +241,8 @@
 <p>When exporting, the condition branch compiles the numerical comparison node into runtime conditions. The current compiler only recognizes the numerical comparison results connected to the conditional port; If there are no valid conditions, or if neither the real nor fake outputs are connected, the export will fail.</p>
 
 <h3 id="merge-node" data-toc-id="merge-node">Merge node</h3>
+<p><strong>Quest scenario:</strong> Use ALL for wood and stone, ANY for alternatives or COUNT for a required number of routes.</p>
+
 <p>Merge nodes are used to reconge multiple flow branches in the root diagram.</p>
 <h4 id="merge-node-overview" data-toc-id="merge-node-overview">Merge node overview</h4>
 <ul>
@@ -280,6 +293,8 @@
 <p>The goal that can be directly reached from the starting point of the small quest is  <code>ACTIVE</code>。 The "next" link from the previous goal is initially connected to the subsequent goal <code>LOCKED</code>, does not display, detect, or accept submissions; it only activates after the preset goal is completed. The target runtime state is  <code>LOCKED</code>、<code>ACTIVE</code>、<code>COMPLETED</code> Or <code>SKIPPED</code>。</p>
 
 <h3 id="obtain-items" data-toc-id="obtain-items">Obtain items</h3>
+<p><strong>Quest scenario:</strong> Hand over four oak logs with MANUAL and consume_item=true; disable consumption for possession checks.</p>
+
 <p>Item acquisition objectives require players to hold or submit specified items.</p>
 <h4 id="get-an-item-node-overview" data-toc-id="get-an-item-node-overview">Get an item node overview</h4>
 <ul>
@@ -320,6 +335,8 @@
 <p>After compilation, an item target is generated. The item component only determines which items to match; the quantity comes only from the "Item Quantity" input port; Whether deductions, commit patterns, and component matching rules affect runtime detection and commit logic.</p>
 
 <h3 id="currency-objective" data-toc-id="currency-objective">Currency objective</h3>
+<p><strong>Quest scenario:</strong> Configure currency, amount and submit mode for an entry fee; no consumption makes it a balance gate.</p>
+
 <p>The currency objective requires players to own or submit a specified whole-number amount of ViScriptShop currency. The node only appears in the node library when ViScriptShop is installed.</p>
 <h4 id="currency-objective-node-overview" data-toc-id="currency-objective-node-overview">Currency objective node overview</h4>
 <ul>
@@ -358,6 +375,8 @@
 <p>When deduction is enabled, auto submission attempts to deduct the full requirement at once; manual submission allows paying in batches and accumulates the actual deductions. When deduction is disabled, only the balance is checked. Quest progress counts whole currency only, and the fractional part of the player's wallet is preserved.</p>
 
 <h3 id="arrival-location" data-toc-id="arrival-location">Arrival location</h3>
+<p><strong>Quest scenario:</strong> Require arrival at the village gate before activating entity interaction.</p>
+
 <p>Arrival location targets support three types of objectives: specific coordinates, biomes, and structures, and can generate mod HUD tags or Xaero's Minimap waypoints.</p>
 <h4 id="arrival-location-node-overview" data-toc-id="arrival-location-node-overview">Arrival Location Node Overview</h4>
 <ul>
@@ -402,6 +421,8 @@
 <p><code>COORDINATES</code> Determine by dimension and three-dimensional radius.<code>BIOME</code> Using the original biome checkpoint, only completed when the player's current biome matches the player;<code>STRUCTURE</code> Use the original structure management API to determine whether a player is currently in a valid structure fragment of the target structure. Biome and structural modes do not use the arrival radius, but runtime searches for corresponding targets to generate navigation points; The searched horizontal coordinates are converted into surface coordinates suitable for players to stand on. Xaero is in sync <code>ModList</code> After confirming the mod is loaded, directly call the official API without using reflection.</p>
 
 <h3 id="kill-entities" data-toc-id="kill-entities">Kill entities</h3>
+<p><strong>Quest scenario:</strong> Use this for five player kills; entity tags can include a family of mobs.</p>
+
 <p>Killing entities requires players to kill a specified type of entity.</p>
 <h4 id="kill-entity-node-overview" data-toc-id="kill-entity-node-overview">Kill Entity Node Overview</h4>
 <ul>
@@ -440,6 +461,8 @@
 <p>Progress accumulates when players kill matched entities. After reaching the number of kills, the objective is completed and the chain of actions connected from the next port continues.</p>
 
 <h3 id="entity-dies" data-toc-id="entity-dies">Entity dies</h3>
+<p><strong>Quest scenario:</strong> Use its death-event conditions; use Kill Entity when the player must make the kill.</p>
+
 <p>Entity death targets monitor specified entity deaths, without requiring the death source to be a player; by default, this is used as a failure condition.</p>
 <h4 id="entity-death-node-overview" data-toc-id="entity-death-node-overview">Entity Death node overview</h4>
 <ul>
@@ -478,6 +501,8 @@
 <p>Progress accumulates whenever a matched entity dies from any source. Since the default target type is a failure condition, it is often used for quests like NPC protection and timed escort.</p>
 
 <h3 id="countdown" data-toc-id="countdown">Countdown</h3>
+<p><strong>Quest scenario:</strong> Use FAILURE for a deadline or REQUIRED for a wait; timing starts at objective activation.</p>
+
 <p>The countdown target is triggered after a specified time; by default, it is used for timeout failure.</p>
 <h4 id="countdown-node-overview" data-toc-id="countdown-node-overview">Countdown node overview</h4>
 <ul>
@@ -514,6 +539,8 @@
 <p>The countdown records the start of the world game time after the target is activated. This timer status is saved along with the player's mission progress. When the player exits and re-enters, the countdown will not reset or freeze the countdown in an uninitialized state. Trigger the target after reaching the duration; Default is a failure condition, so it is often used to limit the completion time of small quests.</p>
 
 <h3 id="break-the-block" data-toc-id="break-the-block">Break the block</h3>
+<p><strong>Quest scenario:</strong> Count actual block-breaking events; existing ore in inventory is insufficient.</p>
+
 <p>The block destruction objective requires players to break specified blocks.</p>
 <h4 id="destruction-block-node-overview" data-toc-id="destruction-block-node-overview">Destruction block node overview</h4>
 <ul>
@@ -551,6 +578,8 @@
 <p>Progress accumulates when players destroy matching blocks. Reach the number of destroyed targets to complete the objective.</p>
 
 <h3 id="access-dimensions" data-toc-id="access-dimensions">Access dimensions</h3>
+<p><strong>Quest scenario:</strong> Require entering a dimension, using its dimension ID rather than block/biome IDs.</p>
+
 <p>Access dimension objectives require players to enter a specified dimension.</p>
 <h4 id="access-the-dimension-node-overview" data-toc-id="access-the-dimension-node-overview">Access the Dimension node overview</h4>
 <ul>
@@ -587,6 +616,8 @@
 <p>After entering a specified dimension, the player completes the objective. It only examines dimensions, not specific locations.</p>
 
 <h3 id="entity-interaction" data-toc-id="entity-interaction">Entity interaction</h3>
+<p><strong>Quest scenario:</strong> Use entity/tag interaction after a location objective for an ordered visit.</p>
+
 <p>Entity interaction objectives require players to right-click to interact with a specified type of entity.</p>
 <h4 id="overview-of-entity-interaction-nodes" data-toc-id="overview-of-entity-interaction-nodes">Overview of entity interaction nodes</h4>
 <ul>
@@ -624,6 +655,8 @@
 <p>Objectives are completed when players interact with matched entities. When the label is empty, only the entity type is used to determine the character.</p>
 
 <h3 id="progress-targets" data-toc-id="progress-targets">Progress targets</h3>
+<p><strong>Quest scenario:</strong> Gate on a registered advancement ID rather than its displayed title.</p>
+
 <p>Progress objectives require players to complete specified Minecraft Advancement.</p>
 <h4 id="progress-goals-node-overview" data-toc-id="progress-goals-node-overview">Progress Goals Node Overview</h4>
 <ul>
@@ -660,6 +693,8 @@
 <p>After the player completes the specified progress, the objective is completed. The progress ID comes from the server-synchronized Advancement list.</p>
 
 <h3 id="custom-triggers" data-toc-id="custom-triggers">Custom triggers</h3>
+<p><strong>Quest scenario:</strong> Trigger the matching trigger_id after script/NPC dialogue to complete an active objective.</p>
+
 <p>Define the trigger target, and reserve a business identifier for commands, scripts, or other code.</p>
 <h4 id="custom-trigger-node-overview" data-toc-id="custom-trigger-node-overview">Custom trigger node overview</h4>
 <ul>
@@ -696,6 +731,8 @@
 <p>The runtime does not automatically complete this goal; it needs to be done by <code>viscript_quests trigger &lt;玩家&gt; &lt;trigger_id&gt;</code>、<code>ViScriptQuestsUtil.triggerCustom(player, triggerId)</code>、<code>QuestManager.triggerCustom(...)</code> Or other linkage logic triggered by the identification ID. When triggered successfully, only the number of successful results or Boolean results is returned, and no chat messages are sent to the target player or the executor of the command; The failure prompt is only retained when there is no matching activity goal.</p>
 
 <h3 id="examine-and-reflect" data-toc-id="examine-and-reflect">Examine and reflect</h3>
+<p><strong>Quest scenario:</strong> Require a specific Ponder scene before activating a practical objective.</p>
+
 <p>View Thinking Objectives is used to get players to open the specified Ponder tutorial from the questbook.</p>
 <h4 id="view-the-thinking-node-overview" data-toc-id="view-the-thinking-node-overview">View the Thinking Node Overview</h4>
 <ul>
@@ -730,6 +767,15 @@
 <h4 id="review-the-reflection-behavior-description" data-toc-id="review-the-reflection-behavior-description">Review the Reflection Behavior Description</h4>
 <p>The quest will display a "View" button after the objective. When players click the button, they open the corresponding Ponder tutorial and immediately complete the goal, with no limit on viewing time; After completing a goal, you can still click "View" again, but you will not complete the goal again or receive rewards. If Ponder is not installed, ID is invalid, or the corresponding scenario cannot be found, the client will give a failure message.</p>
 
+<h3 id="eat-food" data-toc-id="eat-food">Eat Food</h3>
+<p><strong>Quest scenario:</strong> require two completed eating/drinking actions; merely holding the item does not add progress.</p>
+<table data-type="custom-table" data-with-header-row="true"><tbody><tr><th>Parameter</th><th>Purpose</th></tr>
+<tr><td>any_food</td><td>true accepts native food or drink-animation items; false exposes item and matching controls.</td></tr>
+<tr><td>item_stack / item_match_rule</td><td>Restrict to bread, a specific potion or components, when any_food=false.</td></tr>
+<tr><td>use_hand</td><td>Restrict the hand using the available ANY/main/off-hand options.</td></tr>
+<tr><td>eat_count</td><td>Completed eating/drinking actions after activation; each finish event counts once, not stack count.</td></tr>
+</tbody></table>
+<p>Connect from Subquest Start.objectives; next can activate a later practical objective. Actions before activation are not retroactively counted.</p>
 <h2 id="mission-rewards" data-toc-id="mission-rewards">Mission rewards</h2>
 <p>Quest reward nodes can only be placed in sub-map of small quests. Except for the reward placeholder, reward nodes are compiled into the actual rewards distributed.</p>
 <h3 id="a-universal-option-for-all-actual-rewards" data-toc-id="a-universal-option-for-all-actual-rewards">A universal option for all actual rewards</h3>
@@ -746,6 +792,8 @@
 <p>"Show in reward bar" only controls the UI, not the reward switch. When closed, icons and floating text components are hidden from the form, but reopen to restore them; Form rebuilding does not repeatedly add components or lose already filled values.</p>
 
 <h3 id="item-rewards" data-toc-id="item-rewards">Item rewards</h3>
+<p><strong>Quest scenario:</strong> Grant two bread after the wood stage, connected to the start rewards output.</p>
+
 <p>Item rewards will be given to players when the quest rewards are distributed.</p>
 <h4 id="item-reward-node-overview" data-toc-id="item-reward-node-overview">Item Reward Node Overview</h4>
 <ul>
@@ -784,6 +832,8 @@
 <p>Item rewards are generated after compilation. The item component retains the item identity and data component, and the quantity is parsed when distributed when entering the "item quantity".</p>
 
 <h3 id="experience-rewards" data-toc-id="experience-rewards">Experience rewards</h3>
+<p><strong>Quest scenario:</strong> Grant combat-training experience, choosing the node&#x27;s points/levels mode carefully.</p>
+
 <p>Experience rewards will be given to players when quest rewards are distributed.</p>
 <h4 id="experience-reward-node-overview" data-toc-id="experience-reward-node-overview">Experience Reward Node Overview</h4>
 <ul>
@@ -821,6 +871,8 @@
 <p>Experience rewards are generated after compilation. Experience points are protected as non-negative to avoid negative experience rewards.</p>
 
 <h3 id="instruction-rewards" data-toc-id="instruction-rewards">Instruction rewards</h3>
+<p><strong>Quest scenario:</strong> Unlock content with an existing command; check execution identity, substitutions and permissions.</p>
+
 <p>Command rewards execute one or more server commands when quest rewards are issued.</p>
 <h4 id="command-reward-node-overview" data-toc-id="command-reward-node-overview">Command Reward Node Overview</h4>
 <ul>
@@ -858,6 +910,8 @@
 <p>Rewards are issued according to English semicolons <code>;</code> Split instructions, remove blank starting and ending lines one by one and skipping empty instructions. For example <code>give @s minecraft:diamond 1;say 完成任务</code> Two orders will be executed in sequence. This reward is suitable for granting permissions, triggering packet functions, or linking with other systems.</p>
 
 <h3 id="loot-table-rewards" data-toc-id="loot-table-rewards">Loot Table Rewards</h3>
+<p><strong>Quest scenario:</strong> Roll an existing loot table for exploration rewards; repeated rolls can differ.</p>
+
 <p>Loot Table rewards can be drawn from loot table packets, or you can use the built-in simple drop list.</p>
 <h4 id="loot-table-reward-node-overview" data-toc-id="loot-table-reward-node-overview">Loot Table Reward Node Overview</h4>
 <ul>
@@ -895,6 +949,8 @@
 <p>In packet mode, rewards are drawn based on the loot table ID you provide. Custom mode independently draws from each item configuration based on probability, with a probability range limited from 0 to 1.</p>
 
 <h3 id="monetary-rewards" data-toc-id="monetary-rewards">Monetary rewards</h3>
+<p><strong>Quest scenario:</strong> Grant the chosen currency and keep its type consistent with objectives/shops.</p>
+
 <p>Currency rewards are used for ViScriptShop integration, issuing a specified amount of currency.</p>
 <h4 id="currency-rewards-node-overview" data-toc-id="currency-rewards-node-overview">Currency Rewards Node Overview</h4>
 <ul>
@@ -933,6 +989,8 @@
 <p>This node only appears in the node library when ViScriptShop is loaded. After compilation, currency rewards are generated, and whether the distribution is successful depends on the runtime linkage layer.</p>
 
 <h3 id="reward-placeholders" data-toc-id="reward-placeholders">Reward placeholders</h3>
+<p><strong>Quest scenario:</strong> Display an external-script reward; this node itself grants no items.</p>
+
 <p>Reward placeholders are only used for quest book display and do not distribute actual rewards.</p>
 <h4 id="reward-placeholder-node-overview" data-toc-id="reward-placeholder-node-overview">Reward placeholder node overview</h4>
 <ul>
@@ -970,6 +1028,8 @@
 <h2 id="logic" data-toc-id="logic">Logic</h2>
 
 <h3 id="numerical-comparison" data-toc-id="numerical-comparison">Numerical comparison</h3>
+<p><strong>Quest scenario:</strong> Use count as A, B=3 and GE for at least three, then connect result to condition.</p>
+
 <p>Numerical comparison compares two numerical expressions into a boolean result and is commonly used for conditional branching.</p>
 <h4 id="numerical-comparison-node-overview" data-toc-id="numerical-comparison-node-overview">Numerical Comparison Node Overview</h4>
 <ul>
@@ -1007,6 +1067,8 @@
 <h2 id="mathematics" data-toc-id="mathematics">Mathematics</h2>
 
 <h3 id="mathematical-operations" data-toc-id="mathematical-operations">Mathematical operations</h3>
+<p><strong>Quest scenario:</strong> Multiply a scoreboard level by two for an objective amount; data output does not replace flow.</p>
+
 <p>Mathematical operations compile one or more numeric inputs into runtime numerical expressions.</p>
 <h4 id="overview-of-mathematical-operations-nodes" data-toc-id="overview-of-mathematical-operations-nodes">Overview of Mathematical Operations Nodes</h4>
 <ul>
@@ -1046,6 +1108,8 @@
 <h2 id="player-data" data-toc-id="player-data">Player data</h2>
 
 <h3 id="get-player-item-count" data-toc-id="get-player-item-count">Get player item count</h3>
+<p><strong>Quest scenario:</strong> Query iron for route selection without submitting or consuming it.</p>
+
 <p>Get player item count reads at runtime the total number of matching items owned by the current quest player, for use as a numeric expression; the node only reads the count and never consumes items.</p>
 <h4 id="get-player-item-count-node-overview" data-toc-id="get-player-item-count-node-overview">Get player item count node overview</h4>
 <ul>
@@ -1078,6 +1142,8 @@
 <h2 id="scoreboard" data-toc-id="scoreboard">Scoreboard</h2>
 
 <h3 id="get-scoreboard-values" data-toc-id="get-scoreboard-values">Get scoreboard values</h3>
+<p><strong>Quest scenario:</strong> Compare faction reputation from an existing objective and correct score holder.</p>
+
 <p>Get scoreboard values and read the specified scoreboard targets and objects into numerical expressions.</p>
 <h4 id="get-the-scoreboard-value-node-overview" data-toc-id="get-the-scoreboard-value-node-overview">Get the scoreboard value node overview</h4>
 <ul>
@@ -1108,6 +1174,8 @@
 <p>When the scoreboard objective is empty, it will not be compiled into a valid expression. It is usually connected to numerical comparison, mathematical operations, or variable writing nodes.</p>
 
 <h3 id="modify-scoreboard-values" data-toc-id="modify-scoreboard-values">Modify scoreboard values</h3>
+<p><strong>Quest scenario:</strong> Increase reputation along an executed flow path after a side quest.</p>
+
 <p>Modifying scoreboard values is an execution stream node with side effects, used to set or calculate scoreboard scores.</p>
 <h4 id="modify-the-scoreboard-value-node-overview" data-toc-id="modify-the-scoreboard-value-node-overview">Modify the scoreboard value node overview</h4>
 <ul>
@@ -1147,6 +1215,8 @@
 <h2 id="variable" data-toc-id="variable">variable</h2>
 
 <h3 id="set-variables" data-toc-id="set-variables">Set variables</h3>
+<p><strong>Quest scenario:</strong> Record choices/counters in quest runtime variables for later comparisons/expressions.</p>
+
 <p>Set variables are execution stream nodes with side effects, used to write values to quest variables.</p>
 <h4 id="set-the-variable-node-overview" data-toc-id="set-the-variable-node-overview">Set the variable node overview</h4>
 <ul>
@@ -1185,6 +1255,8 @@
 <h2 id="debugging" data-toc-id="debugging">Debugging</h2>
 
 <h3 id="debug-printing" data-toc-id="debug-printing">Debug printing</h3>
+<p><strong>Quest scenario:</strong> Print at each route output to distinguish missing execution from a false condition.</p>
+
 <p>Debug print is used to output fixed text during process runtime.</p>
 <h4 id="debug-and-print-node-overview" data-toc-id="debug-and-print-node-overview">Debug and print node overview</h4>
 <ul>
@@ -1220,6 +1292,8 @@
 <p>During compilation, debug print actions are generated and hung on the corresponding flow edge or the action chain after the goal is completed. Suitable for checking whether the process passes through a certain node as expected.</p>
 
 <h3 id="print-variables" data-toc-id="print-variables">Print variables</h3>
+<p><strong>Quest scenario:</strong> Connect a numeric expression to value to inspect its value when execution reaches it.</p>
+
 <p>Print variables are used to output the current value of a variable or expression during process runtime.</p>
 <h4 id="print-variable-node-overview" data-toc-id="print-variable-node-overview">Print variable node overview</h4>
 <ul>
