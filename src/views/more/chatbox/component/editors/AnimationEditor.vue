@@ -7,6 +7,7 @@ import { useChatBoxEditorStore } from '@/stores'
 import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
 import { t } from '@/languages/index.js'
 import { animationNumberFields, animationPreviewTheme, animationSegments, validAnimation } from '../../animation/animationTimeline.js'
+import PreviewComponents from './PreviewComponents.vue'
 
 const props = defineProps({ modelValue: { type: [Array, null], default: () => [] }, portrait: { type: Object, default: null } })
 const emit = defineEmits(['apply', 'close'])
@@ -76,6 +77,7 @@ async function syncPreview() {
       pose.value = null
       await bridge.preview({ kind: 'theme', stream: true,
         content: animationPreviewTheme(sourceTheme.value, previewPortrait.value, draft.value, portraitKey.value),
+        sample: { name: sourceTheme.value?.dialogBox?._name, text: sourceTheme.value?.dialogBox?._text, options: sourceTheme.value?.option?._text || [] },
         animation: { key: portraitKey.value, frame } })
       if (version === generation && !disposed) { ready.value = true; queued = true }
     } else if (ready.value) {
@@ -92,7 +94,7 @@ async function syncPreview() {
   }
 }
 
-watch([draft, portraitKey, sourceTheme, supported], () => {
+watch([draft, portraitKey, previewPortrait, sourceTheme, supported], () => {
   generation++
   rebuild = true
   ready.value = false
@@ -302,6 +304,7 @@ onBeforeUnmount(() => {
         </header>
 
         <div class="editor-content">
+          <PreviewComponents :theme="sourceTheme" :portrait="previewPortrait" :portrait-key="portraitKey" />
           <main class="preview-column">
             <div class="preview-toolbar">
               <span class="live-dot" :class="{ active: ready }" />{{ t('MC 实时画面') }}
@@ -400,7 +403,7 @@ button { display: inline-flex; align-items: center; justify-content: center; gap
 button:hover:not(:disabled) { border-color: rgb(var(--ui-link)); color: rgb(var(--ui-link)); }
 button:disabled { opacity: .4; cursor: default; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid rgb(var(--ui-link)); outline-offset: 2px; }
-.editor-content { display: grid; grid-template-columns: minmax(0, 1fr) 285px; min-height: 120px; flex: 1; }
+.editor-content { display: grid; grid-template-columns: 200px minmax(0, 1fr) 285px; min-height: 120px; flex: 1; }
 .preview-column { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
 .preview-toolbar { min-height: 42px; background: rgb(var(--ui-surface)); padding: 6px 12px; }
 .live-dot { width: 7px; height: 7px; background: rgb(var(--ui-muted)); border-radius: 50%; }
@@ -445,5 +448,5 @@ input[type=checkbox] { accent-color: #3b82f6; }
 .playhead > span { position: absolute; top: 0; left: -7px; color: #f59e0b; cursor: ew-resize; pointer-events: auto; touch-action: none; }
 .empty-track { display: block; padding: 23px; color: rgb(var(--ui-muted)); }
 .editor-footer { border-top: 1px solid rgb(var(--ui-line)); border-bottom: 0; }
-@media (max-width: 900px) { .animation-overlay { padding: 0; overflow: auto; } .editor-content { grid-template-columns: minmax(0, 1fr) 240px; } .editor-footer > .text-ui-muted, .timeline-actions > .text-ui-muted { display: none; } }
+@media (max-width: 900px) { .animation-overlay { padding: 0; overflow: auto; } .editor-content { grid-template-columns: 150px minmax(0, 1fr) 240px; } .editor-footer > .text-ui-muted, .timeline-actions > .text-ui-muted { display: none; } }
 </style>

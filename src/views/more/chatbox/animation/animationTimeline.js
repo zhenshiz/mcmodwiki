@@ -1,3 +1,5 @@
+import { applyThemePreviewVisibility } from '../bridge/themePreview.js'
+
 export const animationNumberFields = ['x', 'y', 'xOffset', 'yOffset', 'scale', 'angle', 'opacity', 'brightness']
 
 export function animationSegments(keyframes) {
@@ -24,8 +26,10 @@ export function animationPreviewTheme(theme, portrait, keyframes, key) {
   const result = JSON.parse(JSON.stringify(theme || {}))
   result.portrait ||= {}
   const target = { ...result.portrait[key], ...JSON.parse(JSON.stringify(portrait || {})),
-    customAnimation: JSON.parse(JSON.stringify(keyframes)), loop: false, hidden: false }
+    customAnimation: JSON.parse(JSON.stringify(keyframes)), loop: false }
   delete target.animation
   result.portrait[key] = target
-  return result
+  return applyThemePreviewVisibility(result, {
+    ...theme, portrait: { ...theme?.portrait, [key]: portrait || theme?.portrait?.[key] },
+  })
 }

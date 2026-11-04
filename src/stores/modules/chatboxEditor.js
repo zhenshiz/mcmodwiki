@@ -14,6 +14,7 @@ import { i18nScope, t } from '@/languages'
 import { useLocalResourcePacksStore } from './localResourcePacks.js'
 import { mergeTextureOptions, mergeSoundOptions } from '@/views/more/chatbox/resources/localResourcePacks.js'
 import { readThemeCatalog, themeSuggestions } from '@/views/more/chatbox/bridge/themeSuggestions.js'
+import { applyThemePreviewVisibility } from '@/views/more/chatbox/bridge/themePreview.js'
 
 const message = useMessage()
 const DIALOGUE_FRAME_SECTION_KEYS = new Set(['basic', 'dialogBox', 'option', 'portrait', 'video'])
@@ -345,11 +346,7 @@ export const useChatBoxEditorStore = defineStore(
       if (!serialized) throw new Error('请先打开对话或主题文件')
       const content = JSON.parse(serialized)
       if (viewMode.value === 'theme') {
-        // Hierarchy visibility is a preview override; it never changes the saved theme.
-        const hideForPreview = (draft, model) => { if (draft && model?._hidden) draft.hidden = true }
-        for (const key of ['dialogBox', 'option', 'keyPrompt']) hideForPreview(content[key], currentModel.value[key])
-        for (const [key, portrait] of Object.entries(currentModel.value.portrait || {})) hideForPreview(content.portrait?.[key], portrait)
-        currentModel.value.functionalButton?.forEach((button, index) => hideForPreview(content.functionalButton?.[index], button))
+        applyThemePreviewVisibility(content, currentModel.value)
       }
       const translations = {}
       translatableKeyColumns.value.forEach((language, col) => {
