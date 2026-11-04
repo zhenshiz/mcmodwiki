@@ -24,6 +24,9 @@ export const useLocalResourcePacksStore = defineStore('chatboxLocalResourcePacks
   const options = computed(() => [...textures.value].map(([resourceId, texture]) => ({
     value: resourceId, label: resourceId, textureId: resourceId, source: texture.source, local: true,
   })))
+  const soundOptions = computed(() => [...new Map(packs.value.flatMap(pack => (pack.sounds || []).map(id => [id, {
+    value: id, label: id, source: pack.name, local: true,
+  }]))).values()])
 
   function replacePacks(next) {
     const keep = new Set(next.flatMap(pack => pack.textures.map(texture => texture.blob)))
@@ -55,9 +58,9 @@ export const useLocalResourcePacksStore = defineStore('chatboxLocalResourcePacks
       for (const group of groups) {
         const name = directory ? group[0].webkitRelativePath.split('/')[0] : group[0].name
         const result = directory ? await readResourcePackFiles(group) : await readResourcePackArchive(group[0])
-        if (!result.textures.length) throw new Error('资源包中未找到 assets/命名空间/textures 下的 PNG 或 JPEG 图片')
-        replacePacks([...packs.value.filter(pack => pack.name !== name), { id: crypto.randomUUID(), name, textures: result.textures }])
-        imported.push({ name, count: result.textures.length, skipped: result.skipped })
+        if (!result.textures.length && !result.sounds.length) throw new Error('资源包中未找到贴图或 assets/命名空间/sounds.json 声音定义')
+        replacePacks([...packs.value.filter(pack => pack.name !== name), { id: crypto.randomUUID(), name, textures: result.textures, sounds: result.sounds }])
+        imported.push({ name, count: result.textures.length, soundCount: result.sounds.length })
       }
       return imported
     } finally { await persist(); importing.value = false }
@@ -77,5 +80,5 @@ export const useLocalResourcePacksStore = defineStore('chatboxLocalResourcePacks
   }
 
   restore()
-  return { packs, loading, importing, storageError, options, restore, importPack, removePack, imageUrl }
+  return { packs, loading, importing, storageError, options, soundOptions, restore, importPack, removePack, imageUrl }
 })

@@ -65,7 +65,13 @@ export class BaseRenderEvent extends AutoClean {
     })
     BaseRenderEvent.defineField('value', {
       label: t('事件参数'),
-      type: EditorTypes.INPUT
+      type: EditorTypes.INPUT,
+      showIf: hideIn('PLAY_SOUND', 'PLAY_VOICE', 'STOP_SOUND')
+    })
+    BaseRenderEvent.defineField('sound_value', {
+      modelKey: 'value', label: t('事件参数'), type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.SOUND },
+      showIf: showOnlyIn('PLAY_SOUND', 'PLAY_VOICE', 'STOP_SOUND')
     })
   }
 }

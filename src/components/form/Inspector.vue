@@ -71,6 +71,7 @@ const dataSourceMap = computed(() => ({
   [autoCompleteDataSources.TRANSLATABLE_KEYS]: store.translatableSuggestions,
   [autoCompleteDataSources.PORTRAIT]: store.portraitOptions,
   [autoCompleteDataSources.TEXTURE]: store.allTextureOptions,
+  [autoCompleteDataSources.SOUND]: store.allSoundOptions,
 }))
 
 const getDynamicOptions = (field) => {

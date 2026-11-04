@@ -27,12 +27,16 @@ function tokensOf(command, offset) {
   while (i < command.length) {
     if (/\s/.test(command[i])) { i++; continue }
     const start = i
-    let quote = false, escaped = false, depth = 0
+    let quote = '', escaped = false, depth = 0
     for (; i < command.length; i++) {
       const c = command[i]
       if (escaped) { escaped = false; continue }
       if (c === '\\' && quote) { escaped = true; continue }
-      if (c === '"') quote = !quote
+      if (quote) {
+        if (c === quote) quote = ''
+        continue
+      }
+      if (c === '"' || c === "'") { quote = c; continue }
       if (!quote) {
         if ('[{'.includes(c)) depth++
         if (']}'.includes(c)) depth--
@@ -49,12 +53,30 @@ function tokensOf(command, offset) {
   return tokens
 }
 
+// 与模组保持一致，SNBT 字符串、复合标签和列表内部的分号属于参数。
+export function splitCommands(value) {
+  const commands = []
+  let start = 0, depth = 0, quote = '', escaped = false
+  for (let i = 0; i < value.length; i++) {
+    const c = value[i]
+    if (quote) {
+      if (escaped) escaped = false
+      else if (c === '\\') escaped = true
+      else if (c === quote) quote = ''
+    } else if (c === '"' || c === "'") quote = c
+    else if ('{['.includes(c)) depth++
+    else if ('}]'.includes(c)) depth = Math.max(0, depth - 1)
+    else if (c === ';' && depth === 0) { commands.push(value.slice(start, i)); start = i + 1 }
+  }
+  commands.push(value.slice(start))
+  return commands
+}
+
 export function parseJumpCommands(value) {
   if (typeof value !== 'string') return []
   const found = []
   let offset = 0
-  // 与模组保持一致：所有分号都分隔命令，包括引号内的分号。
-  for (const [commandIndex, command] of value.split(';').entries()) {
+  for (const [commandIndex, command] of splitCommands(value).entries()) {
     const tokens = tokensOf(command, offset)
     offset += command.length + 1
     let at = 0, conditional = false
@@ -285,7 +307,7 @@ export function removeDialogueTransitions(model, links) {
   }
   for (const write of writes.values()) {
     if (write.commands.size) {
-      write.next = write.value.split(';').filter((_, index) => !write.commands.has(index)).join(';')
+      write.next = splitCommands(write.value).filter((_, index) => !write.commands.has(index)).join(';')
       if (!write.next.trim()) {
         write.next = ''
         // 删除唯一条件时同时删除所属事件，

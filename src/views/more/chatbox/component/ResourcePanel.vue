@@ -33,8 +33,7 @@ async function importPack(event, directory = false) {
   try {
     const imported = await localResources.importPack(input.files, directory)
     for (const pack of imported) {
-      message.success(t('已导入资源包 {}：{} 张贴图', [pack.name, pack.count]))
-      if (pack.skipped) message.warning(t('已跳过 {} 张超过 8 MiB 的贴图', pack.skipped))
+      message.success(t('已导入资源包 {}：{} 张贴图，{} 个声音', [pack.name, pack.count, pack.soundCount]))
     }
   } catch (error) { importError.value = t(error.message) }
   finally { input.value = '' }
@@ -86,12 +85,13 @@ const copyPath = async (path) => {
     <p class="px-3 py-1 text-xs text-ui-muted border-b border-ui-line">
       {{ t('合并显示游戏贴图和本地导入资源，同名资源优先显示后导入的图片。') }}
       {{ t('将图片拖到贴图字段可直接选用。') }}
+      {{ t('sounds.json 中的声音会加入音效、背景音乐和声音事件的补全。') }}
     </p>
 
     <div v-if="localResources.packs.length" class="flex items-center flex-wrap gap-2 px-3 py-1 text-xs border-b border-ui-line text-ui-muted">
       <span>{{ t('本地资源包') }}</span>
       <span v-for="pack in localResources.packs" :key="pack.id" class="inline-flex gap-1 items-center bg-ui-inset border border-ui-line px-1.5 py-0.5" :title="pack.name">
-        <span class="max-w-40 truncate">{{ pack.name }}</span><span>({{ pack.textures.length }})</span>
+        <span class="max-w-40 truncate">{{ pack.name }}</span><span>{{ t('（{} 张贴图，{} 个声音）', [pack.textures.length, pack.sounds?.length || 0]) }}</span>
         <button type="button" :disabled="localResources.importing" :title="t('移除本地资源包')" :aria-label="t('移除资源包：{}', pack.name)" class="hover:text-red-400" @click="localResources.removePack(pack.id)"><Icon icon="lucide:x" width="12" /></button>
       </span>
       <span>{{ t('本地导入用于浏览和补全，游戏预览需加载相同资源包。') }}</span>
@@ -111,7 +111,8 @@ const copyPath = async (path) => {
            class="flex flex-col items-center justify-center h-full text-ui-muted gap-2 border-2 border-dashed border-ui-line rounded-none m-2">
         <div class="text-center">
           <div class="text-2xl mb-2 opacity-50">📦</div>
-          <div class="text-xs">{{ t('连接游戏获取贴图，或导入本地资源包文件夹、ZIP、JAR。') }}</div>
+          <div v-if="store.allSoundOptions.length" class="text-xs">{{ t('已载入 {} 个声音，可在音频字段中输入名称补全。', store.allSoundOptions.length) }}</div>
+          <div v-else class="text-xs">{{ t('连接游戏获取贴图，或导入本地资源包文件夹、ZIP、JAR。') }}</div>
         </div>
       </div>
 

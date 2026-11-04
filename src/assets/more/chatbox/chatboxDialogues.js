@@ -45,7 +45,15 @@ export class Click extends AutoClean {
       type: EditorTypes.SELECT,
       props: { options: eventType.values() }
     })
-    Click.defineField('value', { label: t('事件参数'), type: EditorTypes.INPUT })
+    Click.defineField('value', {
+      label: t('事件参数'), type: EditorTypes.INPUT,
+      showIf: model => !['PLAY_SOUND', 'PLAY_VOICE', 'STOP_SOUND'].includes(String(model.type).toUpperCase())
+    })
+    Click.defineField('sound_value', {
+      modelKey: 'value', label: t('事件参数'), type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.SOUND },
+      showIf: model => ['PLAY_SOUND', 'PLAY_VOICE', 'STOP_SOUND'].includes(String(model.type).toUpperCase())
+    })
   }
 }
 
@@ -256,11 +264,13 @@ export class DialogueFrame extends AutoClean {
   static {
     DialogueFrame.defineField('sound', {
       label: t('播放音效'),
-      type: EditorTypes.INPUT
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.SOUND }
     })
     DialogueFrame.defineField('bgm', {
       label: t('背景音乐'),
-      type: EditorTypes.INPUT
+      type: EditorTypes.AUTOCOMPLETE,
+      props: { dataSource: autoCompleteDataSources.SOUND }
     })
     DialogueFrame.defineField('stayTick', {
       label: t('强制玩家在该对话停留时长'),

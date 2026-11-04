@@ -12,7 +12,7 @@ import { ChatBoxDialogues, DialogueFrame, DialogueOption } from '@/assets/more/c
 import { analyzeDialogue, connectionTarget, renameGroupReferences, reindexFrameReferences } from '@/views/more/chatbox/flow/dialogueFlow.js'
 import { i18nScope, t } from '@/languages'
 import { useLocalResourcePacksStore } from './localResourcePacks.js'
-import { mergeTextureOptions } from '@/views/more/chatbox/resources/localResourcePacks.js'
+import { mergeTextureOptions, mergeSoundOptions } from '@/views/more/chatbox/resources/localResourcePacks.js'
 import { readThemeCatalog, themeSuggestions } from '@/views/more/chatbox/bridge/themeSuggestions.js'
 
 const message = useMessage()
@@ -723,6 +723,7 @@ export const useChatBoxEditorStore = defineStore(
     }
 
     const allTextureOptions = computed(() => mergeTextureOptions(bridge.options('TEXTURE'), localResources.options))
+    const allSoundOptions = computed(() => mergeSoundOptions(bridge.options('SOUND'), localResources.soundOptions))
 
     return {
       canUndo, canRedo, undo, redo, beginHistoryTransaction, endHistoryTransaction,
@@ -770,6 +771,7 @@ export const useChatBoxEditorStore = defineStore(
       checkDirty,
 
       allTextureOptions,
+      allSoundOptions,
       getItemUrl,
       previewInGame,
 
