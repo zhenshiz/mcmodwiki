@@ -1,0 +1,1 @@
+import{_ as a,d as o}from"./MarkDownReadOnly-B7p2NNTR.js";var d=a((t,e)=>{let n;return e==="sandbox"&&(n=o("#i"+t)),(e==="sandbox"?o(n.nodes()[0].contentDocument.body):o("body")).select('[id="'.concat(t,'"]'))},"getDiagramElement");export{d as g};
