@@ -24,6 +24,7 @@ import Inspector from '@/components/form/Inspector.vue'
 import ObjectDialog from '@/components/form/ObjectDialog.vue'
 import { useGameBridgeStore } from '@/stores/modules/gameBridge.js'
 import { Keyframe } from '@/assets/more/chatbox/chatboxTheme.js'
+import MinecraftTextField from '@/views/more/chatbox/text/MinecraftTextField.vue'
 import AnimationField from '@/views/more/chatbox/component/editors/AnimationField.vue'
 
 const props = defineProps({
@@ -41,6 +42,7 @@ const bridge = useGameBridgeStore()
 // 组件映射表
 const COMPONENT_MAP = {
   [EditorTypes.INPUT]: Input,
+  [EditorTypes.MINECRAFT_TEXT]: MinecraftTextField,
   [EditorTypes.NUMBER_INPUT]: NumberInput,
   [EditorTypes.SLIDER]: Slider,
   [EditorTypes.COLOR]: ColorPicker,
@@ -173,6 +175,7 @@ const handleUpdate = (field, val) => {
           @init="(val) => handleUpdate(field, val)"
           v-bind="{
             ...field.props,
+            ...(field.type === EditorTypes.MINECRAFT_TEXT ? { owner: currentModel, label: field.label } : {}),
             ...(field.props?.itemConstructor === Keyframe ? { owner: currentModel } : {}),
             options: getDynamicOptions(field) || field.props?.options,
             optionsResolver: (key) => getDynamicOptions({ props: { dataSource: key } })

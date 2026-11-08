@@ -20,13 +20,13 @@ export class DialogueDialogBox extends AutoClean {
   static {
     DialogueDialogBox.defineField('name', {
       label: t('名称'),
-      type: EditorTypes.AUTOCOMPLETE,
+      type: EditorTypes.MINECRAFT_TEXT,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
     })
     DialogueDialogBox.defineField('text', {
       label: t('对话内容'),
-      type: EditorTypes.AUTOCOMPLETE,
-      props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
+      type: EditorTypes.MINECRAFT_TEXT,
+      props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS, defaultTypewriter: true }
     })
   }
 }
@@ -73,7 +73,7 @@ export class DialogueOption extends AutoClean {
   static {
     DialogueOption.defineField('text', {
       label: t('选项内容'),
-      type: EditorTypes.AUTOCOMPLETE,
+      type: EditorTypes.MINECRAFT_TEXT,
       props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS }
     })
     DialogueOption.defineField('isLock', { label: t('是否锁定'), type: EditorTypes.SWITCH })

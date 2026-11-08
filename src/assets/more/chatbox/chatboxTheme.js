@@ -137,7 +137,8 @@ export class Attachment extends AutoClean {
     Attachment.defineField('text_value', {
       modelKey: 'value',
       label: t('文本内容'),
-      type: EditorTypes.INPUT,
+      type: EditorTypes.MINECRAFT_TEXT,
+      props: { dataSource: autoCompleteDataSources.TRANSLATABLE_KEYS },
       showIf: showOnlyIn(attachmentType.TEXT)
     })
     Attachment.defineField('x', { label: t('X 坐标 (%)'), type: EditorTypes.NUMBER_INPUT })

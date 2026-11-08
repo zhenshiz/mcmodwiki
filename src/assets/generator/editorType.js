@@ -1,6 +1,7 @@
 export const EditorTypes = {
   // 普通文本框
   INPUT: 'input',
+  MINECRAFT_TEXT: 'minecraft_text',
   // 数字输入框
   NUMBER_INPUT: 'number_input',
   // 滑块

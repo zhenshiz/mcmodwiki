@@ -232,6 +232,9 @@ export const dialogueService = {
                   Object.assign(p, pData)
 
                   formatUtil.migrateLegacyProperties(p, pData, PORTRAIT_MIGRATION_MAP)
+                  if (Array.isArray(pData.attachment)) {
+                    p.attachment = pData.attachment.map(data => Object.assign(new Attachment(), data))
+                  }
                   if (Array.isArray(pData.renderEvents)) {
                     p.renderEvents = this._hydrateRenderEvents(pData.renderEvents, PortraitRenderEvent)
                   }

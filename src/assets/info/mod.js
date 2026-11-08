@@ -6,6 +6,7 @@ import ViScriptTeam from '@/assets/textures/mod/ViScriptTeam.png'
 import ViScriptLib from '@/assets/textures/mod/ViScriptLib.png'
 import SmartPhone from '@/assets/textures/mod/SmartPhone.png'
 import Flashlight from '@/assets/textures/mod/Flashlight.png'
+import defaultImage from '@/assets/defaultImage.png'
 import { t } from '@/languages/index.js'
 
 const EMPTY_MORE_UTIL = () => []
@@ -194,6 +195,14 @@ export const modList = () => {
       availableHere: [],
       moreUtil: EMPTY_MORE_UTIL,
       modVersion: '1.0.0'
+    },
+    {
+      lang: 'MapLib',
+      icon: defaultImage,
+      description: t('为地图制作提供实体编辑、剧情控制、过场动画、计划任务和路线导航，支持 KubeJS 脚本接入。'),
+      availableHere: [],
+      moreUtil: EMPTY_MORE_UTIL,
+      modVersion: '1.0.2'
     }
   ]
 }

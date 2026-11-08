@@ -1,3 +1,4 @@
+import { componentLabel } from '@/views/more/chatbox/text/textComponent.js'
 import { defineStore } from 'pinia'
 import { useGameBridgeStore } from './gameBridge.js'
 import { gameFileTree, gameFileRequest } from '@/views/more/chatbox/bridge/gameFiles.js'
@@ -327,12 +328,12 @@ export const useChatBoxEditorStore = defineStore(
       return [...labels].map(([value, label]) => ({ label, value }))
     })
 
-    const getTranslatableLabel = (key) => {
+    const getTranslatableLabel = (value) => componentLabel(value, key => {
       if (!key) return ''
       const col = translatableKeyColumns.value.indexOf(activePreviewLanguage.value)
       const row = translatableKeyRows.value.find(row => row.key === key)
       return row?.value[col] || (bridge.connected && bridge.snapshot?.translations[key]) || key
-    }
+    })
 
     const readEditorFile = async (node) => {
       if (!bridge.connected) throw new Error('请先连接游戏')

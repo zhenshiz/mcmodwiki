@@ -22,6 +22,28 @@ export default [
       },
     ],
   },
+  {
+    id: 'maplib',
+    title: 'MapLib',
+    category: 'mod',
+    icon: 'lucide:map',
+    description: '为地图制作提供实体编辑、剧情控制、过场动画、计划任务和路线导航，支持 KubeJS 脚本接入。',
+    tags: ['地图制作', 'NeoForge', '1.21.1'],
+    docs: '/wiki/MapLib',
+    usage: '需要 LDLib2 2.2.41+，客户端和服务端均需安装。Baritone 1.11.3 已内嵌；KubeJS、Simple Voice Chat 和 ViScriptQuests 按需安装。MapLib 使用 MIT 许可证，内嵌 Baritone 使用 LGPL-3.0-or-later。',
+    releases: [
+      {
+        version: '1.0.2',
+        minecraft: ['1.21.1'],
+        loaders: ['NeoForge'],
+        dependencies: ['LDLib2'],
+        optionalDependencies: ['KubeJS', 'Simple Voice Chat', 'ViScriptQuests'],
+        filename: 'MapLib-neoforge-1.21.1-1.0.2.jar',
+        url: '/downloads/maplib/MapLib-neoforge-1.21.1-1.0.2.jar',
+        size: '5.07 MiB',
+      },
+    ],
+  },
 ]
 
 // 前置/联动模组的 CurseForge 页面 slug，下载弹窗按名称生成跳转按钮；新增依赖时在此维护。
@@ -32,6 +54,9 @@ const curseforgeSlugs = {
   TaCZ: 'timeless-and-classics-zero',
   Curios: 'curios',
   'Create Aeronautics': 'create-aeronautics',
+  KubeJS: 'kubejs',
+  'Simple Voice Chat': 'simple-voice-chat',
+  ViScriptQuests: 'viscriptquests',
 }
 
 export const curseforgeModUrl = (name) =>

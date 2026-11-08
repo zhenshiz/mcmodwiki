@@ -453,7 +453,7 @@ const labelClass = 'text-[30px] text-white font-bold drop-shadow-md ml-0.5'
               </template>
               <template v-else-if="formatUtil.equalsIgnoreCase(att.type, attachmentType.TEXT)">
                 <div class="w-full h-full p-1" :style="getAttachmentTextStyle(att)">
-                  {{ att.value || 'Text' }}
+                  {{ store.getTranslatableLabel(att.value) || 'Text' }}
                 </div>
               </template>
               <span v-else
