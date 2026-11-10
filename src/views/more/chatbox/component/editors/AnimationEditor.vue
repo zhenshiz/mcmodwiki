@@ -29,6 +29,8 @@ const sourceTheme = computed(() => store.viewMode === 'theme' ? store.currentMod
 const portraitKeys = computed(() => Object.keys(sourceTheme.value?.portrait || {}))
 const portraitKey = ref(Object.entries(sourceTheme.value?.portrait || {}).find(([, p]) => p === props.portrait)?.[0] || props.portrait?.id || portraitKeys.value[0] || '__animation_editor__')
 const previewPortrait = computed(() => props.portrait || sourceTheme.value?.portrait?.[portraitKey.value])
+const portraitVisibility = ref({})
+watch([portraitKey, () => props.portrait, sourceTheme], () => { portraitVisibility.value = {} })
 const segments = computed(() => animationSegments(draft.value))
 const total = computed(() => segments.value.at(-1)?.end || 0)
 const selectedFrame = computed(() => draft.value[selected.value])
@@ -76,7 +78,7 @@ async function syncPreview() {
       ready.value = false
       pose.value = null
       await bridge.preview({ kind: 'theme', stream: true,
-        content: animationPreviewTheme(sourceTheme.value, previewPortrait.value, draft.value, portraitKey.value),
+        content: animationPreviewTheme(sourceTheme.value, previewPortrait.value, draft.value, portraitKey.value, portraitVisibility.value),
         sample: { name: sourceTheme.value?.dialogBox?._name, text: sourceTheme.value?.dialogBox?._text, options: sourceTheme.value?.option?._text || [] },
         animation: { key: portraitKey.value, frame } })
       if (version === generation && !disposed) { ready.value = true; queued = true }
@@ -94,7 +96,7 @@ async function syncPreview() {
   }
 }
 
-watch([draft, portraitKey, previewPortrait, sourceTheme, supported], () => {
+watch([draft, portraitKey, previewPortrait, sourceTheme, portraitVisibility, supported], () => {
   generation++
   rebuild = true
   ready.value = false
@@ -304,7 +306,7 @@ onBeforeUnmount(() => {
         </header>
 
         <div class="editor-content">
-          <PreviewComponents :theme="sourceTheme" :portrait="previewPortrait" :portrait-key="portraitKey" />
+          <PreviewComponents v-model:portrait-visibility="portraitVisibility" :theme="sourceTheme" :portrait="previewPortrait" :portrait-key="portraitKey" />
           <main class="preview-column">
             <div class="preview-toolbar">
               <span class="live-dot" :class="{ active: ready }" />{{ t('MC 实时画面') }}

@@ -22,14 +22,23 @@ export function validAnimation(keyframes) {
     animationSegments(keyframes).at(-1)?.end <= 2147483647
 }
 
-export function animationPreviewTheme(theme, portrait, keyframes, key) {
+export function animationPortraitVisible(key, activeKey, visibility = {}) {
+  return Object.hasOwn(visibility, key) ? visibility[key] : key === activeKey
+}
+
+export function animationPreviewTheme(theme, portrait, keyframes, key, portraitVisibility = {}) {
   const result = JSON.parse(JSON.stringify(theme || {}))
   result.portrait ||= {}
   const target = { ...result.portrait[key], ...JSON.parse(JSON.stringify(portrait || {})),
     customAnimation: JSON.parse(JSON.stringify(keyframes)), loop: false }
   delete target.animation
   result.portrait[key] = target
-  return applyThemePreviewVisibility(result, {
+  applyThemePreviewVisibility(result, {
     ...theme, portrait: { ...theme?.portrait, [key]: portrait || theme?.portrait?.[key] },
   })
+  // Animation sessions start with only their target visible, independently of the theme editor.
+  for (const [portraitKey, component] of Object.entries(result.portrait)) {
+    component.hidden = !animationPortraitVisible(portraitKey, key, portraitVisibility)
+  }
+  return result
 }

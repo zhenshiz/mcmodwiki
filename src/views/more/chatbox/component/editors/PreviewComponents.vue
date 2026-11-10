@@ -2,12 +2,15 @@
 import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { t } from '@/languages/index.js'
+import { animationPortraitVisible } from '../../animation/animationTimeline.js'
 
 const props = defineProps({
   theme: { type: Object, default: null },
   portrait: { type: Object, default: null },
   portraitKey: { type: String, default: '' },
+  portraitVisibility: { type: Object, default: () => ({}) },
 })
+const emit = defineEmits(['update:portraitVisibility'])
 
 const groups = computed(() => {
   const theme = props.theme || {}
@@ -20,7 +23,7 @@ const groups = computed(() => {
       { key: 'keyPrompt', label: t('按键提示'), icon: 'lucide:keyboard', component: theme.keyPrompt, usesVisible: true },
     ].filter(item => item.component) },
     { label: t('立绘组'), items: Object.entries(portraits).map(([key, component]) => ({
-      key, label: key, icon: 'lucide:user', component, active: key === props.portraitKey,
+      key, label: key, icon: 'lucide:user', component, isPortrait: true, active: key === props.portraitKey,
     })) },
     { label: t('功能按钮'), items: (theme.functionalButton || []).map((component, index) => ({
       key: String(index), label: component.id || `Button ${index + 1}`, icon: 'lucide:mouse-pointer-2', component,
@@ -29,11 +32,13 @@ const groups = computed(() => {
 })
 
 function isHidden(item) {
+  if (item.isPortrait) return !animationPortraitVisible(item.key, props.portraitKey, props.portraitVisibility)
   return item.usesVisible ? !item.component.visible : !!item.component._hidden
 }
 
 function toggle(item) {
-  if (item.usesVisible) item.component.visible = !item.component.visible
+  if (item.isPortrait) emit('update:portraitVisibility', { ...props.portraitVisibility, [item.key]: isHidden(item) })
+  else if (item.usesVisible) item.component.visible = !item.component.visible
   else item.component._hidden = !item.component._hidden
 }
 </script>
